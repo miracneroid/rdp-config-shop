@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCart } from '@/context/CartContext';
 
 interface Configuration {
@@ -17,6 +18,7 @@ interface Configuration {
   region: string;
   applications: string[];
   duration: number;
+  cpanelIncluded: boolean;
 }
 
 const ConfigBuilder = () => {
@@ -36,7 +38,8 @@ const ConfigBuilder = () => {
     os: 'windows-10-pro',
     region: 'us-east',
     applications: [],
-    duration: 1
+    duration: 1,
+    cpanelIncluded: false
   });
   
   // Set initial configuration based on URL plan parameter
@@ -99,6 +102,11 @@ const ConfigBuilder = () => {
       basePrice += 20;
     }
     
+    // C Panel price
+    if (configuration.cpanelIncluded) {
+      basePrice += 15;
+    }
+    
     // Applications
     basePrice += configuration.applications.length * 5;
     
@@ -158,8 +166,8 @@ const ConfigBuilder = () => {
   };
   
   return (
-    <div className="rdp-card p-6 w-full max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold text-rdp-dark mb-6">Configure Your RDP</h2>
+    <div className="rdp-card p-6 w-full max-w-4xl mx-auto dark:bg-rdp-dark-light/50 dark:backdrop-blur-md dark:border-gray-700">
+      <h2 className="text-2xl font-bold text-rdp-dark dark:text-white mb-6">Configure Your RDP</h2>
       
       <Tabs defaultValue="specs" value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-3 mb-8">
@@ -171,8 +179,8 @@ const ConfigBuilder = () => {
         <TabsContent value="specs" className="space-y-6">
           <div>
             <div className="flex justify-between mb-2">
-              <label className="text-sm font-medium text-gray-700">CPU Cores: {configuration.cpu}</label>
-              <span className="text-sm text-gray-500">${configuration.cpu * 5}/mo</span>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">CPU Cores: {configuration.cpu}</label>
+              <span className="text-sm text-gray-500 dark:text-gray-400">${configuration.cpu * 5}/mo</span>
             </div>
             <Slider 
               value={[configuration.cpu]} 
@@ -181,7 +189,7 @@ const ConfigBuilder = () => {
               step={1} 
               onValueChange={(value) => setConfiguration({...configuration, cpu: value[0]})}
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
               <span>1 Core</span>
               <span>32 Cores</span>
             </div>
@@ -189,8 +197,8 @@ const ConfigBuilder = () => {
           
           <div>
             <div className="flex justify-between mb-2">
-              <label className="text-sm font-medium text-gray-700">RAM: {configuration.ram}GB</label>
-              <span className="text-sm text-gray-500">${configuration.ram * 2}/mo</span>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">RAM: {configuration.ram}GB</label>
+              <span className="text-sm text-gray-500 dark:text-gray-400">${configuration.ram * 2}/mo</span>
             </div>
             <Slider 
               value={[configuration.ram]} 
@@ -199,7 +207,7 @@ const ConfigBuilder = () => {
               step={1} 
               onValueChange={(value) => setConfiguration({...configuration, ram: value[0]})}
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
               <span>1GB</span>
               <span>64GB</span>
             </div>
@@ -207,8 +215,8 @@ const ConfigBuilder = () => {
           
           <div>
             <div className="flex justify-between mb-2">
-              <label className="text-sm font-medium text-gray-700">Storage: {configuration.storage}GB SSD</label>
-              <span className="text-sm text-gray-500">${(configuration.storage * 0.2).toFixed(2)}/mo</span>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Storage: {configuration.storage}GB SSD</label>
+              <span className="text-sm text-gray-500 dark:text-gray-400">${(configuration.storage * 0.2).toFixed(2)}/mo</span>
             </div>
             <Slider 
               value={[configuration.storage]} 
@@ -217,7 +225,7 @@ const ConfigBuilder = () => {
               step={32} 
               onValueChange={(value) => setConfiguration({...configuration, storage: value[0]})}
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
               <span>32GB</span>
               <span>1TB</span>
             </div>
@@ -230,7 +238,7 @@ const ConfigBuilder = () => {
         
         <TabsContent value="os" className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Operating System</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Operating System</label>
             <Select 
               value={configuration.os} 
               onValueChange={(value) => setConfiguration({...configuration, os: value})}
@@ -251,8 +259,32 @@ const ConfigBuilder = () => {
             </Select>
           </div>
           
+          <div className="mt-6">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">Control Panel Options</label>
+            <div className="flex items-center space-x-2 p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+              <Checkbox 
+                id="cpanel" 
+                checked={configuration.cpanelIncluded} 
+                onCheckedChange={(checked) => 
+                  setConfiguration({...configuration, cpanelIncluded: checked === true})
+                }
+              />
+              <div>
+                <label 
+                  htmlFor="cpanel" 
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-white"
+                >
+                  Add C Panel ($15/mo)
+                </label>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Includes web hosting control panel with easy site management, email, databases and more
+                </p>
+              </div>
+            </div>
+          </div>
+          
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Region</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Region</label>
             <Select 
               value={configuration.region} 
               onValueChange={(value) => setConfiguration({...configuration, region: value})}
@@ -284,7 +316,7 @@ const ConfigBuilder = () => {
         
         <TabsContent value="software" className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-4">Applications</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">Applications</label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {applications.map((app) => (
                 <div key={app.id} className="flex items-center space-x-2">
@@ -295,7 +327,7 @@ const ConfigBuilder = () => {
                   />
                   <label 
                     htmlFor={app.id} 
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-gray-300"
                   >
                     {app.label}
                   </label>
@@ -305,7 +337,7 @@ const ConfigBuilder = () => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Duration (Save with longer terms)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Duration (Save with longer terms)</label>
             <Select 
               value={configuration.duration.toString()} 
               onValueChange={(value) => setConfiguration({...configuration, duration: parseInt(value)})}
