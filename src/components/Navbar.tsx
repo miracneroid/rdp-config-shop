@@ -2,13 +2,16 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Monitor, Menu, X, ShoppingCart } from 'lucide-react';
+import { Monitor, Menu, X, ShoppingCart, LogIn, UserCircle } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import ThemeToggle from './ThemeToggle';
+import UserMenu from './UserMenu';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { cart } = useCart();
+  // Mock auth state - would be replaced with actual auth state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   
   const totalItems = cart.reduce((total, item) => total + 1, 0);
   
@@ -51,6 +54,17 @@ const Navbar = () => {
                 )}
               </Button>
             </Link>
+            
+            {isLoggedIn ? (
+              <UserMenu />
+            ) : (
+              <Link to="/login">
+                <Button variant="default" size="sm" className="flex items-center gap-2">
+                  <LogIn className="h-4 w-4" />
+                  <span>Login</span>
+                </Button>
+              </Link>
+            )}
           </div>
           
           <div className="md:hidden flex items-center">
@@ -65,6 +79,18 @@ const Navbar = () => {
                 )}
               </Button>
             </Link>
+            {isLoggedIn ? (
+              <div className="mr-4">
+                <UserMenu />
+              </div>
+            ) : (
+              <Link to="/login" className="mr-4">
+                <Button variant="default" size="sm" className="flex items-center gap-1">
+                  <LogIn className="h-4 w-4" />
+                  <span className="sr-only md:not-sr-only">Login</span>
+                </Button>
+              </Link>
+            )}
             <button
               onClick={toggleMenu}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light focus:outline-none"
@@ -111,6 +137,24 @@ const Navbar = () => {
             >
               FAQ
             </Link>
+            {!isLoggedIn && (
+              <Link 
+                to="/login" 
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Login
+              </Link>
+            )}
+            {!isLoggedIn && (
+              <Link 
+                to="/register" 
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Register
+              </Link>
+            )}
           </div>
         </div>
       )}
