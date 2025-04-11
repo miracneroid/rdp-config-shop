@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Monitor, Menu, X, ShoppingCart, LogIn, ShieldAlert } from 'lucide-react';
+import { Monitor, Menu, X, ShoppingCart, LogIn } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import ThemeToggle from './ThemeToggle';
 import UserMenu from './UserMenu';
@@ -65,12 +65,6 @@ const Navbar = () => {
                     <span>Login</span>
                   </Button>
                 </Link>
-                <Link to="/admin-login">
-                  <Button variant="outline" size="sm" className="flex items-center gap-2">
-                    <ShieldAlert className="h-4 w-4" />
-                    <span>Admin</span>
-                  </Button>
-                </Link>
               </div>
             )}
           </div>
@@ -97,12 +91,6 @@ const Navbar = () => {
                   <Button variant="default" size="sm" className="flex items-center gap-1">
                     <LogIn className="h-4 w-4" />
                     <span className="sr-only md:not-sr-only">Login</span>
-                  </Button>
-                </Link>
-                <Link to="/admin-login">
-                  <Button variant="outline" size="sm" className="flex items-center gap-1">
-                    <ShieldAlert className="h-4 w-4" />
-                    <span className="sr-only md:not-sr-only">Admin</span>
                   </Button>
                 </Link>
               </div>
@@ -166,13 +154,6 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Register
-            </Link>
-            <Link 
-              to="/admin-login" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Admin Portal
             </Link>
           </div>
         </div>
