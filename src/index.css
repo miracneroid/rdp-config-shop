@@ -92,6 +92,15 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Force body to have theme classes */
+  body.dark {
+    @apply bg-rdp-dark text-white;
+  }
+  
+  body:not(.dark) {
+    @apply bg-white text-rdp-dark;
+  }
 }
 
 @layer components {
@@ -100,7 +109,7 @@
   }
   
   .rdp-card {
-    @apply bg-white/70 backdrop-blur-md border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300;
+    @apply bg-white/70 dark:bg-rdp-dark-light/30 backdrop-blur-md border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300;
   }
   
   .rdp-btn-primary {
@@ -108,6 +117,6 @@
   }
   
   .rdp-btn-secondary {
-    @apply bg-white text-rdp-dark font-medium rounded-lg px-6 py-3 border border-gray-200 shadow-sm hover:shadow hover:bg-gray-50 transition-all duration-300;
+    @apply bg-white dark:bg-rdp-dark-light text-rdp-dark dark:text-white font-medium rounded-lg px-6 py-3 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300;
   }
 }

@@ -70,21 +70,21 @@ const pricingPlans: PricingPlan[] = [
 
 const Index = () => {
   return (
-    <div>
+    <div className="min-h-screen dark:bg-rdp-dark">
       <Navbar />
       <main>
         <Hero />
         <Features />
         
         {/* Pricing Section */}
-        <div className="bg-white py-16 sm:py-24">
+        <div className="bg-white dark:bg-rdp-dark py-16 sm:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="sm:text-center">
               <h2 className="text-base font-semibold uppercase tracking-wide text-rdp-blue">Pricing</h2>
-              <p className="mt-2 text-3xl font-bold tracking-tight text-rdp-dark sm:text-4xl">
+              <p className="mt-2 text-3xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-4xl">
                 Choose your RDP plan
               </p>
-              <p className="mx-auto mt-4 max-w-2xl text-xl text-gray-500">
+              <p className="mx-auto mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-400">
                 Select from our pre-configured plans or customize your own.
               </p>
             </div>
