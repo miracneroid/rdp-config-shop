@@ -9,11 +9,11 @@ import UserMenu from './UserMenu';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { cart } = useCart();
+  const { cart, getTotalItems } = useCart();
   // Mock auth state - would be replaced with actual auth state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   
-  const totalItems = cart.reduce((total, item) => total + 1, 0);
+  const totalItems = getTotalItems();
   
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);

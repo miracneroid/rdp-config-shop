@@ -41,6 +41,11 @@ const ForgotPassword = () => {
     setTimeout(() => {
       setIsLoading(false);
       setSubmitted(true);
+      
+      // In a real app, this would trigger an actual email send
+      // Here we're just simulating the process with a console log and toast
+      console.log(`[Password Reset] Sending reset link to ${values.email}`);
+      
       toast({
         title: "Reset link sent",
         description: `We've sent a password reset link to ${values.email}`,
@@ -49,11 +54,11 @@ const ForgotPassword = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen dark:bg-gray-900">
       <Navbar />
       <div className="flex-1 container max-w-md mx-auto px-4 py-8">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold mb-2">Reset Your Password</h1>
+          <h1 className="text-3xl font-bold mb-2 dark:text-white">Reset Your Password</h1>
           <p className="text-muted-foreground">
             Enter your email address and we'll send you a link to reset your password
           </p>
@@ -64,11 +69,14 @@ const ForgotPassword = () => {
             <div className="rounded-full bg-green-100 dark:bg-green-900/20 w-16 h-16 flex items-center justify-center mx-auto">
               <Mail className="h-8 w-8 text-green-600 dark:text-green-400" />
             </div>
-            <h2 className="text-xl font-medium">Check your email</h2>
+            <h2 className="text-xl font-medium dark:text-white">Check your email</h2>
             <p className="text-muted-foreground">
               We've sent a password reset link to your email address. Please check your inbox and follow the instructions.
             </p>
             <div className="pt-4">
+              <p className="text-sm text-muted-foreground mb-2">
+                (In a real app, an actual email would be sent. For this demo, we're simulating the email sending process.)
+              </p>
               <Link 
                 to="/login" 
                 className="text-rdp-blue dark:text-rdp-blue-light hover:underline"
@@ -85,13 +93,13 @@ const ForgotPassword = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className="dark:text-white">Email</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                         <Input 
                           placeholder="Enter your email" 
-                          className="pl-10" 
+                          className="pl-10 dark:bg-gray-800 dark:border-gray-700 dark:text-white" 
                           autoComplete="email"
                           {...field} 
                         />

@@ -9,6 +9,7 @@ import { ThemeProvider } from "next-themes";
 import Index from "./pages/Index";
 import Configure from "./pages/Configure";
 import Cart from "./pages/Cart";
+import About from "./pages/About";
 import FAQPage from "./pages/FAQ";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -31,6 +32,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/configure" element={<Configure />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/about" element={<About />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />

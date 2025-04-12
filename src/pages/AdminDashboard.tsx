@@ -16,7 +16,9 @@ import {
   ArrowUpDown,
   Plus,
   PencilLine,
-  Trash
+  Trash,
+  Download,
+  Mail
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -53,6 +55,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { generateInvoice } from "@/utils/invoiceGenerator";
 
 // Mock data
 const mockUsers = [
@@ -68,22 +71,30 @@ const mockRdps = [
 ];
 
 const mockOrders = [
-  { id: 1001, user: "John Doe", rdp: "Basic RDP", date: "2023-04-08", status: "Completed", amount: "$25.00" },
-  { id: 1002, user: "Jane Smith", rdp: "Premium RDP", date: "2023-04-07", status: "Processing", amount: "$85.00" },
-  { id: 1003, user: "Bob Johnson", rdp: "Standard RDP", date: "2023-04-05", status: "Cancelled", amount: "$45.00" },
+  { id: 1001, user: "John Doe", email: "john@example.com", rdp: "Basic RDP", date: "2023-04-08", status: "Completed", amount: "$25.00", rdpCredentials: { username: "john_rdp", password: "S3cur3P@ss!" } },
+  { id: 1002, user: "Jane Smith", email: "jane@example.com", rdp: "Premium RDP", date: "2023-04-07", status: "Processing", amount: "$85.00", rdpCredentials: null },
+  { id: 1003, user: "Bob Johnson", email: "bob@example.com", rdp: "Standard RDP", date: "2023-04-05", status: "Cancelled", amount: "$45.00", rdpCredentials: null },
 ];
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [users, setUsers] = useState(mockUsers);
   const [rdps, setRdps] = useState(mockRdps);
   const [orders, setOrders] = useState(mockOrders);
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const [isAddRdpOpen, setIsAddRdpOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [newUser, setNewUser] = useState({ name: "", email: "", role: "Customer", status: "Active" });
   const [newRdp, setNewRdp] = useState({ name: "", cpu: "", ram: "", storage: "", price: "", status: "Available" });
+  const [systemSettings, setSystemSettings] = useState({
+    emailNotifications: true,
+    automaticProvisioning: true,
+    maintenanceMode: false,
+    backupFrequency: "daily",
+    defaultCurrency: "USD"
+  });
 
   // Stats
   const stats = {
@@ -96,8 +107,12 @@ const AdminDashboard = () => {
   // Check authentication status
   useEffect(() => {
     const checkAuth = () => {
+      // In a real app, this would check a secure JWT or session cookie
+      // For demo, we're just using localstorage
       const isAdmin = localStorage.getItem("isAdmin") === "true";
-      if (!isAdmin) {
+      if (isAdmin) {
+        setIsAuthenticated(true);
+      } else {
         setIsAuthenticated(false);
         navigate("/admin-login");
       }
@@ -189,14 +204,85 @@ const AdminDashboard = () => {
 
   // Handle order actions
   const handleUpdateOrderStatus = (id: number, status: string) => {
-    setOrders(orders.map(order => 
-      order.id === id ? { ...order, status } : order
-    ));
+    setOrders(orders.map(order => {
+      if (order.id === id) {
+        // If changing to completed, generate RDP credentials
+        if (status === "Completed" && order.rdpCredentials === null) {
+          const username = order.user.toLowerCase().replace(' ', '_') + "_rdp";
+          const password = Math.random().toString(36).slice(-8) + "!A9";
+          
+          // In a real app, this would actually provision an RDP and then email credentials
+          // For demo, we're just generating mock credentials
+          setTimeout(() => {
+            if (systemSettings.emailNotifications) {
+              sendRdpCredentials(order.email, username, password, order);
+            }
+          }, 500);
+          
+          return { 
+            ...order, 
+            status, 
+            rdpCredentials: { 
+              username, 
+              password 
+            } 
+          };
+        }
+        return { ...order, status };
+      }
+      return order;
+    }));
     
     toast({
       title: "Order updated",
       description: `Order #${id} status changed to ${status}`,
     });
+  };
+
+  const handleGenerateInvoice = (order: any) => {
+    const invoiceData = {
+      orderNumber: order.id,
+      customer: {
+        name: order.user,
+        email: order.email
+      },
+      items: [{
+        description: order.rdp,
+        price: order.amount
+      }],
+      total: order.amount,
+      date: order.date
+    };
+    
+    // Generate an invoice and download it
+    const pdfBlob = generateInvoice(invoiceData);
+    
+    // In a real app, this would also email the invoice
+    if (systemSettings.emailNotifications) {
+      // Mock sending email
+      toast({
+        title: "Invoice generated",
+        description: `Invoice for order #${order.id} has been generated and emailed to ${order.email}`,
+      });
+    }
+  };
+
+  const sendRdpCredentials = (email: string, username: string, password: string, order: any) => {
+    // In a real app, this would send an actual email
+    // For demo purposes, we just show a toast notification
+    toast({
+      title: "RDP Credentials Sent",
+      description: `Credentials for order #${order.id} have been sent to ${email}`,
+    });
+  };
+
+  // Handle settings update
+  const handleUpdateSettings = () => {
+    toast({
+      title: "Settings updated",
+      description: "System settings have been updated successfully",
+    });
+    setIsSettingsOpen(false);
   };
 
   // Quick actions
@@ -214,10 +300,7 @@ const AdminDashboard = () => {
     { 
       name: "System Settings", 
       icon: Settings, 
-      action: () => toast({ 
-        title: "System Settings", 
-        description: "Settings panel will be available in the next update" 
-      }) 
+      action: () => setIsSettingsOpen(true)
     },
   ];
 
@@ -348,7 +431,7 @@ const AdminDashboard = () => {
                         <TableCell>{user.role}</TableCell>
                         <TableCell>
                           <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
-                            user.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                            user.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
                           }`}>
                             {user.status}
                           </span>
@@ -427,7 +510,7 @@ const AdminDashboard = () => {
                         <TableCell>{rdp.price}</TableCell>
                         <TableCell>
                           <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
-                            rdp.status === 'Available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                            rdp.status === 'Available' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
                           }`}>
                             {rdp.status}
                           </span>
@@ -497,27 +580,51 @@ const AdminDashboard = () => {
                         <TableCell>{order.amount}</TableCell>
                         <TableCell>
                           <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
-                            order.status === 'Completed' ? 'bg-green-100 text-green-800' : 
-                            order.status === 'Processing' ? 'bg-blue-100 text-blue-800' : 
-                            'bg-red-100 text-red-800'
+                            order.status === 'Completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
+                            order.status === 'Processing' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' : 
+                            'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
                           }`}>
                             {order.status}
                           </span>
                         </TableCell>
                         <TableCell>
-                          <Select 
-                            defaultValue={order.status}
-                            onValueChange={(value) => handleUpdateOrderStatus(order.id, value)}
-                          >
-                            <SelectTrigger className="w-[130px]">
-                              <SelectValue placeholder="Update" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Completed">Complete</SelectItem>
-                              <SelectItem value="Processing">Processing</SelectItem>
-                              <SelectItem value="Cancelled">Cancel</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <div className="flex space-x-2">
+                            <Select 
+                              defaultValue={order.status}
+                              onValueChange={(value) => handleUpdateOrderStatus(order.id, value)}
+                            >
+                              <SelectTrigger className="w-[130px]">
+                                <SelectValue placeholder="Update" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Completed">Complete</SelectItem>
+                                <SelectItem value="Processing">Processing</SelectItem>
+                                <SelectItem value="Cancelled">Cancel</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() => handleGenerateInvoice(order)}
+                              title="Generate Invoice"
+                            >
+                              <Download className="h-4 w-4" />
+                            </Button>
+                            
+                            {order.rdpCredentials && (
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() => sendRdpCredentials(order.email, order.rdpCredentials.username, order.rdpCredentials.password, order)}
+                                title="Resend Credentials"
+                              >
+                                <Mail className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -732,6 +839,110 @@ const AdminDashboard = () => {
           </div>
           <DialogFooter>
             <Button type="submit" onClick={handleAddRdp}>Add RDP</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* System Settings Dialog */}
+      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>System Settings</DialogTitle>
+            <DialogDescription>
+              Configure global system settings and preferences.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="email-notifications" className="flex-1">
+                Email Notifications
+                <p className="text-sm text-muted-foreground">Send email notifications to users and administrators</p>
+              </Label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="email-notifications"
+                  checked={systemSettings.emailNotifications}
+                  onChange={(e) => setSystemSettings({...systemSettings, emailNotifications: e.target.checked})}
+                  className="form-checkbox h-5 w-5 text-rdp-blue"
+                />
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <Label htmlFor="auto-provisioning" className="flex-1">
+                Automatic RDP Provisioning
+                <p className="text-sm text-muted-foreground">Automatically provision RDPs when orders are completed</p>
+              </Label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="auto-provisioning"
+                  checked={systemSettings.automaticProvisioning}
+                  onChange={(e) => setSystemSettings({...systemSettings, automaticProvisioning: e.target.checked})}
+                  className="form-checkbox h-5 w-5 text-rdp-blue"
+                />
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <Label htmlFor="maintenance-mode" className="flex-1">
+                Maintenance Mode
+                <p className="text-sm text-muted-foreground">Put the site in maintenance mode (users will see a maintenance message)</p>
+              </Label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="maintenance-mode"
+                  checked={systemSettings.maintenanceMode}
+                  onChange={(e) => setSystemSettings({...systemSettings, maintenanceMode: e.target.checked})}
+                  className="form-checkbox h-5 w-5 text-rdp-blue"
+                />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="backup-frequency" className="text-right">
+                Backup Frequency
+              </Label>
+              <Select 
+                defaultValue={systemSettings.backupFrequency}
+                onValueChange={(value) => setSystemSettings({...systemSettings, backupFrequency: value})}
+              >
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select frequency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="hourly">Hourly</SelectItem>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="default-currency" className="text-right">
+                Default Currency
+              </Label>
+              <Select 
+                defaultValue={systemSettings.defaultCurrency}
+                onValueChange={(value) => setSystemSettings({...systemSettings, defaultCurrency: value})}
+              >
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select currency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="USD">USD ($)</SelectItem>
+                  <SelectItem value="EUR">EUR (€)</SelectItem>
+                  <SelectItem value="GBP">GBP (£)</SelectItem>
+                  <SelectItem value="JPY">JPY (¥)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit" onClick={handleUpdateSettings}>Save Settings</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
