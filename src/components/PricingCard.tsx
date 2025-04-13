@@ -37,7 +37,7 @@ const PricingCard = ({ plan }: PricingCardProps) => {
         ram: ramGB,
         storage: storageGB,
         os: "Windows 10 Pro",
-        region: "North America",
+        region: "India",
         applications: [],
         duration: 1 // 1 month duration
       }
@@ -57,7 +57,7 @@ const PricingCard = ({ plan }: PricingCardProps) => {
       )}
       <h3 className="text-xl font-bold text-rdp-dark dark:text-white">{plan.name}</h3>
       <div className="mt-4 flex items-baseline">
-        <span className="text-4xl font-bold text-rdp-dark dark:text-white">${plan.price}</span>
+        <span className="text-4xl font-bold text-rdp-dark dark:text-white">₹{plan.price}</span>
         <span className="ml-1 text-gray-500 dark:text-gray-400">/month</span>
       </div>
       

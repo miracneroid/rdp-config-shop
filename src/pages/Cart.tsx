@@ -1,9 +1,8 @@
-
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, ArrowLeft, ShoppingCart, ArrowRight, Plus, Minus } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from '@/context/CartContext';
@@ -13,6 +12,10 @@ const Cart = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
+  
+  const formatCurrency = (amount: number) => {
+    return `₹${amount.toFixed(2)}`;
+  };
   
   const handleCheckout = () => {
     setIsProcessing(true);
@@ -172,7 +175,7 @@ const Cart = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right">
                             <div className="text-sm font-medium text-rdp-dark dark:text-white">
-                              ${item.price}
+                              {formatCurrency(item.price)}
                               {item.configuration.duration > 1 && (
                                 <span className="text-gray-500 dark:text-gray-400 text-xs ml-1">
                                   ({item.configuration.duration} months)
@@ -182,7 +185,7 @@ const Cart = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right">
                             <div className="text-sm font-medium text-rdp-dark dark:text-white">
-                              ${(item.price * item.quantity).toFixed(2)}
+                              {formatCurrency(item.price * item.quantity)}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right">
@@ -218,7 +221,9 @@ const Cart = () => {
                 <div className="mt-8 md:mt-0">
                   <div className="text-right mb-4">
                     <span className="text-lg text-gray-600 dark:text-gray-300">Total:</span>
-                    <span className="text-2xl font-bold text-rdp-dark dark:text-white ml-2">${getTotal().toFixed(2)}</span>
+                    <span className="text-2xl font-bold text-rdp-dark dark:text-white ml-2">
+                      {formatCurrency(getTotal())}
+                    </span>
                   </div>
                   <Button 
                     onClick={handleCheckout}
