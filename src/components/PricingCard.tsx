@@ -2,6 +2,7 @@
 import { CheckCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
+import { useSettings } from '@/context/SettingsContext';
 
 export interface PricingPlan {
   name: string;
@@ -20,6 +21,7 @@ interface PricingCardProps {
 const PricingCard = ({ plan }: PricingCardProps) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { settings } = useSettings();
   
   const handleChoosePlan = () => {
     // Extract numeric values for CPU cores and RAM
@@ -57,7 +59,7 @@ const PricingCard = ({ plan }: PricingCardProps) => {
       )}
       <h3 className="text-xl font-bold text-rdp-dark dark:text-white">{plan.name}</h3>
       <div className="mt-4 flex items-baseline">
-        <span className="text-4xl font-bold text-rdp-dark dark:text-white">₹{plan.price}</span>
+        <span className="text-4xl font-bold text-rdp-dark dark:text-white">{settings.currency.symbol}{plan.price}</span>
         <span className="ml-1 text-gray-500 dark:text-gray-400">/month</span>
       </div>
       

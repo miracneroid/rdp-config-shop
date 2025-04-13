@@ -6,15 +6,17 @@ import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from '@/context/CartContext';
+import { useSettings } from '@/context/SettingsContext';
 
 const Cart = () => {
   const { cart, removeFromCart, clearCart, getTotal, updateQuantity } = useCart();
+  const { settings } = useSettings();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
   
   const formatCurrency = (amount: number) => {
-    return `₹${amount.toFixed(2)}`;
+    return `${settings.currency.symbol}${amount.toFixed(2)}`;
   };
   
   const handleCheckout = () => {
