@@ -39,10 +39,26 @@ const AdminLogin = () => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    // Simulate admin login - in a real app this would call an authentication API
+    // Check admin login credentials
     setTimeout(() => {
-      // Mock admin credentials - in a real app, these would be validated on the server
-      if (values.adminId === "admin" && values.password === "admin12345") {
+      if (values.adminId === "miracneroid" && values.password === "Jarus@2803") {
+        // Set super admin status in localStorage
+        localStorage.setItem("isAdmin", "true");
+        localStorage.setItem("adminType", "super");
+        localStorage.setItem("adminName", values.adminId);
+        
+        toast({
+          title: "Super Admin login successful",
+          description: "Welcome to the admin dashboard",
+          variant: "default",
+        });
+        navigate('/admin');
+      } else if (values.adminId === "admin" && values.password === "admin12345") {
+        // Set regular admin status in localStorage
+        localStorage.setItem("isAdmin", "true");
+        localStorage.setItem("adminType", "regular");
+        localStorage.setItem("adminName", values.adminId);
+        
         toast({
           title: "Admin login successful",
           description: "Welcome to the admin dashboard",

@@ -18,7 +18,11 @@ import {
   PencilLine,
   Trash,
   Download,
-  Mail
+  Mail,
+  Shield,
+  KeyRound,
+  ShieldCheck,
+  ShieldX
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -56,6 +60,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { generateInvoice } from "@/utils/invoiceGenerator";
+import { 
+  Checkbox,
+  CheckboxItem,
+} from "@/components/ui/checkbox";
 
 // Mock data
 const mockUsers = [
@@ -76,18 +84,89 @@ const mockOrders = [
   { id: 1003, user: "Bob Johnson", email: "bob@example.com", rdp: "Standard RDP", date: "2023-04-05", status: "Cancelled", amount: "$45.00", rdpCredentials: null },
 ];
 
+// Initial admin accounts
+const initialAdmins = [
+  { 
+    id: 1, 
+    username: "miracneroid", 
+    password: "Jarus@2803", 
+    type: "super", 
+    status: "Active", 
+    lastLogin: "2023-04-12",
+    permissions: {
+      manageAdmins: true,
+      manageUsers: true,
+      manageRdps: true,
+      manageOrders: true,
+      viewAnalytics: true,
+      systemSettings: true,
+    }
+  },
+  { 
+    id: 2, 
+    username: "admin", 
+    password: "admin12345", 
+    type: "regular", 
+    status: "Active", 
+    lastLogin: "2023-04-11",
+    permissions: {
+      manageAdmins: false,
+      manageUsers: true,
+      manageRdps: true,
+      manageOrders: true,
+      viewAnalytics: true,
+      systemSettings: false,
+    }
+  },
+];
+
+// Generate a secure admin key
+const generateAdminKey = () => {
+  const keyChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const keyLength = 20;
+  let key = "";
+  
+  for (let i = 0; i < keyLength; i++) {
+    key += keyChars.charAt(Math.floor(Math.random() * keyChars.length));
+  }
+  
+  return key;
+};
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [adminType, setAdminType] = useState("");
+  const [adminName, setAdminName] = useState("");
   const [users, setUsers] = useState(mockUsers);
   const [rdps, setRdps] = useState(mockRdps);
   const [orders, setOrders] = useState(mockOrders);
+  const [admins, setAdmins] = useState(initialAdmins);
+  const [adminKey, setAdminKey] = useState("");
+  const [isKeyGenerated, setIsKeyGenerated] = useState(false);
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
   const [isAddRdpOpen, setIsAddRdpOpen] = useState(false);
+  const [isAddAdminOpen, setIsAddAdminOpen] = useState(false);
+  const [isViewKeyOpen, setIsViewKeyOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [newUser, setNewUser] = useState({ name: "", email: "", role: "Customer", status: "Active" });
   const [newRdp, setNewRdp] = useState({ name: "", cpu: "", ram: "", storage: "", price: "", status: "Available" });
+  const [newAdmin, setNewAdmin] = useState({ 
+    username: "", 
+    password: "", 
+    type: "regular", 
+    status: "Active",
+    adminKey: "",
+    permissions: {
+      manageAdmins: false,
+      manageUsers: true,
+      manageRdps: true,
+      manageOrders: true,
+      viewAnalytics: true,
+      systemSettings: false,
+    }
+  });
   const [systemSettings, setSystemSettings] = useState({
     emailNotifications: true,
     automaticProvisioning: true,
@@ -101,17 +180,22 @@ const AdminDashboard = () => {
     users: users.length,
     orders: orders.length,
     revenue: `$${orders.reduce((sum, order) => sum + parseFloat(order.amount.replace('$', '')), 0).toFixed(2)}`,
-    rdps: rdps.length
+    rdps: rdps.length,
+    admins: admins.length
   };
 
   // Check authentication status
   useEffect(() => {
     const checkAuth = () => {
-      // In a real app, this would check a secure JWT or session cookie
-      // For demo, we're just using localstorage
+      // Check admin status
       const isAdmin = localStorage.getItem("isAdmin") === "true";
+      const storedAdminType = localStorage.getItem("adminType");
+      const storedAdminName = localStorage.getItem("adminName");
+      
       if (isAdmin) {
         setIsAuthenticated(true);
+        setAdminType(storedAdminType || "");
+        setAdminName(storedAdminName || "");
       } else {
         setIsAuthenticated(false);
         navigate("/admin-login");
@@ -124,11 +208,139 @@ const AdminDashboard = () => {
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("isAdmin");
+    localStorage.removeItem("adminType");
+    localStorage.removeItem("adminName");
     toast({
       title: "Logged out",
       description: "You have been successfully logged out of the admin portal.",
     });
     navigate("/admin-login");
+  };
+
+  // Handle admin key generation
+  const handleGenerateKey = () => {
+    const newKey = generateAdminKey();
+    setAdminKey(newKey);
+    setIsKeyGenerated(true);
+    setIsViewKeyOpen(true);
+    
+    toast({
+      title: "Admin key generated",
+      description: "A new admin key has been generated successfully.",
+    });
+  };
+
+  // Handle admin actions
+  const handleAddAdmin = () => {
+    if (!newAdmin.username || !newAdmin.password) {
+      toast({
+        title: "Error",
+        description: "Please fill all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Verify admin key if adding a new admin
+    if (newAdmin.adminKey !== adminKey) {
+      toast({
+        title: "Invalid admin key",
+        description: "The provided admin key is incorrect.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    const newAdminId = admins.length > 0 ? Math.max(...admins.map(a => a.id)) + 1 : 1;
+    const admin = {
+      id: newAdminId,
+      username: newAdmin.username,
+      password: newAdmin.password,
+      type: newAdmin.type,
+      status: newAdmin.status,
+      lastLogin: "Never",
+      permissions: newAdmin.permissions
+    };
+    
+    setAdmins([...admins, admin]);
+    setNewAdmin({ 
+      username: "", 
+      password: "", 
+      type: "regular", 
+      status: "Active",
+      adminKey: "",
+      permissions: {
+        manageAdmins: false,
+        manageUsers: true,
+        manageRdps: true,
+        manageOrders: true,
+        viewAnalytics: true,
+        systemSettings: false,
+      }
+    });
+    setIsAddAdminOpen(false);
+    
+    toast({
+      title: "Admin added",
+      description: `${admin.username} has been added successfully`,
+    });
+    
+    // Reset the admin key after use for security
+    setAdminKey("");
+    setIsKeyGenerated(false);
+  };
+
+  const handleUpdateAdminPermissions = (id: number, permissionKey: string, value: boolean) => {
+    setAdmins(admins.map(admin => {
+      if (admin.id === id) {
+        return {
+          ...admin,
+          permissions: {
+            ...admin.permissions,
+            [permissionKey]: value
+          }
+        };
+      }
+      return admin;
+    }));
+    
+    toast({
+      title: "Permissions updated",
+      description: "Admin permissions have been updated successfully",
+    });
+  };
+
+  const handleUpdateAdminStatus = (id: number, status: string) => {
+    setAdmins(admins.map(admin => {
+      if (admin.id === id) {
+        return { ...admin, status };
+      }
+      return admin;
+    }));
+    
+    toast({
+      title: "Admin status updated",
+      description: `Admin status changed to ${status}`,
+    });
+  };
+
+  const handleDeleteAdmin = (id: number) => {
+    // Prevent deleting your own account
+    const currentAdmin = admins.find(admin => admin.username === adminName);
+    if (currentAdmin && currentAdmin.id === id) {
+      toast({
+        title: "Action denied",
+        description: "You cannot delete your own admin account",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setAdmins(admins.filter(admin => admin.id !== id));
+    toast({
+      title: "Admin deleted",
+      description: "Admin has been removed from the system",
+    });
   };
 
   // Handle user actions
@@ -286,23 +498,58 @@ const AdminDashboard = () => {
   };
 
   // Quick actions
-  const quickActions = [
-    { 
-      name: "Add New RDP", 
-      icon: PlusSquare, 
-      action: () => setIsAddRdpOpen(true) 
-    },
-    { 
+  const getQuickActions = () => {
+    const actions = [];
+    
+    // All admins can view orders
+    actions.push({ 
       name: "View Orders", 
       icon: PackageOpen, 
       action: () => document.getElementById('orders-tab')?.click() 
-    },
-    { 
-      name: "System Settings", 
-      icon: Settings, 
-      action: () => setIsSettingsOpen(true)
-    },
-  ];
+    });
+    
+    // Super admin or admin with RDP management permission can add new RDPs
+    const currentAdmin = admins.find(admin => admin.username === adminName);
+    if (adminType === "super" || (currentAdmin && currentAdmin.permissions.manageRdps)) {
+      actions.push({ 
+        name: "Add New RDP", 
+        icon: PlusSquare, 
+        action: () => setIsAddRdpOpen(true) 
+      });
+    }
+    
+    // Super admin or admin with system settings permission can access settings
+    if (adminType === "super" || (currentAdmin && currentAdmin.permissions.systemSettings)) {
+      actions.push({ 
+        name: "System Settings", 
+        icon: Settings, 
+        action: () => setIsSettingsOpen(true)
+      });
+    }
+    
+    // Only super admin can generate admin key and manage admins
+    if (adminType === "super") {
+      actions.push({ 
+        name: "Generate Admin Key", 
+        icon: KeyRound, 
+        action: handleGenerateKey
+      });
+    }
+    
+    return actions;
+  };
+
+  const quickActions = getQuickActions();
+
+  // Check if admin has permission
+  const hasPermission = (permissionKey: string): boolean => {
+    if (adminType === "super") return true;
+    
+    const currentAdmin = admins.find(admin => admin.username === adminName);
+    if (!currentAdmin) return false;
+    
+    return currentAdmin.permissions[permissionKey as keyof typeof currentAdmin.permissions];
+  };
 
   if (!isAuthenticated) {
     return null;
@@ -315,8 +562,16 @@ const AdminDashboard = () => {
         <div className="flex items-center gap-2">
           <ShieldAlert className="h-6 w-6 text-rdp-blue dark:text-rdp-blue-light" />
           <h1 className="text-xl font-bold">Admin Dashboard</h1>
+          {adminType === "super" && (
+            <span className="ml-2 inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900/30 dark:text-amber-500">
+              Super Admin
+            </span>
+          )}
         </div>
         <div className="ml-auto flex items-center gap-4">
+          <span className="text-sm text-muted-foreground">
+            Logged in as: <span className="font-medium">{adminName}</span>
+          </span>
           <Button 
             variant="destructive" 
             size="sm" 
@@ -372,7 +627,7 @@ const AdminDashboard = () => {
 
         {/* Quick Actions */}
         <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
-        <div className="grid gap-4 md:grid-cols-3 mb-8">
+        <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 mb-8">
           {quickActions.map((action, index) => (
             <Card key={index} className="cursor-pointer hover:bg-accent transition-colors" onClick={action.action}>
               <CardContent className="flex items-center p-6">
@@ -384,294 +639,476 @@ const AdminDashboard = () => {
         </div>
 
         {/* Admin Tabs */}
-        <Tabs defaultValue="users" className="mt-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="users">Users</TabsTrigger>
-            <TabsTrigger value="rdps">RDP Configurations</TabsTrigger>
-            <TabsTrigger value="orders" id="orders-tab">Orders</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        <Tabs defaultValue="orders" className="mt-6">
+          <TabsList className={`grid w-full ${adminType === "super" ? "grid-cols-5" : "grid-cols-4"}`}>
+            {hasPermission("manageUsers") && <TabsTrigger value="users">Users</TabsTrigger>}
+            {hasPermission("manageRdps") && <TabsTrigger value="rdps">RDP Configurations</TabsTrigger>}
+            {hasPermission("manageOrders") && <TabsTrigger value="orders" id="orders-tab">Orders</TabsTrigger>}
+            {hasPermission("viewAnalytics") && <TabsTrigger value="analytics">Analytics</TabsTrigger>}
+            {adminType === "super" && <TabsTrigger value="admins">Admin Management</TabsTrigger>}
           </TabsList>
 
           {/* Users Tab */}
-          <TabsContent value="users" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Users className="mr-2 h-5 w-5" /> User Management
-                  </div>
-                  <Button onClick={() => setIsAddUserOpen(true)} className="flex items-center gap-2">
-                    <Plus className="h-4 w-4" />
-                    Add User
-                  </Button>
-                </CardTitle>
-                <CardDescription>
-                  Manage user accounts, permissions, and activity.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Last Login</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {users.map((user) => (
-                      <TableRow key={user.id}>
-                        <TableCell className="font-medium">{user.id}</TableCell>
-                        <TableCell>{user.name}</TableCell>
-                        <TableCell>{user.email}</TableCell>
-                        <TableCell>{user.role}</TableCell>
-                        <TableCell>
-                          <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
-                            user.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                          }`}>
-                            {user.status}
-                          </span>
-                        </TableCell>
-                        <TableCell>{user.lastLogin}</TableCell>
-                        <TableCell>
-                          <div className="flex space-x-2">
-                            <Button 
-                              variant="outline" 
-                              size="icon" 
-                              className="h-8 w-8" 
-                              onClick={() => toast({
-                                title: "Edit User",
-                                description: "Edit functionality will be available in the next update"
-                              })}
-                            >
-                              <PencilLine className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                              variant="destructive" 
-                              size="icon" 
-                              className="h-8 w-8" 
-                              onClick={() => handleDeleteUser(user.id)}
-                            >
-                              <Trash className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
+          {hasPermission("manageUsers") && (
+            <TabsContent value="users" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Users className="mr-2 h-5 w-5" /> User Management
+                    </div>
+                    <Button onClick={() => setIsAddUserOpen(true)} className="flex items-center gap-2">
+                      <Plus className="h-4 w-4" />
+                      Add User
+                    </Button>
+                  </CardTitle>
+                  <CardDescription>
+                    Manage user accounts, permissions, and activity.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Role</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Last Login</TableHead>
+                        <TableHead>Actions</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    </TableHeader>
+                    <TableBody>
+                      {users.map((user) => (
+                        <TableRow key={user.id}>
+                          <TableCell className="font-medium">{user.id}</TableCell>
+                          <TableCell>{user.name}</TableCell>
+                          <TableCell>{user.email}</TableCell>
+                          <TableCell>{user.role}</TableCell>
+                          <TableCell>
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              user.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                            }`}>
+                              {user.status}
+                            </span>
+                          </TableCell>
+                          <TableCell>{user.lastLogin}</TableCell>
+                          <TableCell>
+                            <div className="flex space-x-2">
+                              <Button 
+                                variant="outline" 
+                                size="icon" 
+                                className="h-8 w-8" 
+                                onClick={() => toast({
+                                  title: "Edit User",
+                                  description: "Edit functionality will be available in the next update"
+                                })}
+                              >
+                                <PencilLine className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="destructive" 
+                                size="icon" 
+                                className="h-8 w-8" 
+                                onClick={() => handleDeleteUser(user.id)}
+                              >
+                                <Trash className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
 
           {/* RDPs Tab */}
-          <TabsContent value="rdps" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Server className="mr-2 h-5 w-5" /> RDP Management
-                  </div>
-                  <Button onClick={() => setIsAddRdpOpen(true)} className="flex items-center gap-2">
-                    <Plus className="h-4 w-4" />
-                    Add RDP
-                  </Button>
-                </CardTitle>
-                <CardDescription>
-                  Configure and manage RDP instances and settings.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>CPU</TableHead>
-                      <TableHead>RAM</TableHead>
-                      <TableHead>Storage</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {rdps.map((rdp) => (
-                      <TableRow key={rdp.id}>
-                        <TableCell className="font-medium">{rdp.id}</TableCell>
-                        <TableCell>{rdp.name}</TableCell>
-                        <TableCell>{rdp.cpu}</TableCell>
-                        <TableCell>{rdp.ram}</TableCell>
-                        <TableCell>{rdp.storage}</TableCell>
-                        <TableCell>{rdp.price}</TableCell>
-                        <TableCell>
-                          <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
-                            rdp.status === 'Available' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                          }`}>
-                            {rdp.status}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex space-x-2">
-                            <Button 
-                              variant="outline" 
-                              size="icon" 
-                              className="h-8 w-8" 
-                              onClick={() => toast({
-                                title: "Edit RDP",
-                                description: "Edit functionality will be available in the next update"
-                              })}
-                            >
-                              <PencilLine className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                              variant="destructive" 
-                              size="icon" 
-                              className="h-8 w-8" 
-                              onClick={() => handleDeleteRdp(rdp.id)}
-                            >
-                              <Trash className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
+          {hasPermission("manageRdps") && (
+            <TabsContent value="rdps" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Server className="mr-2 h-5 w-5" /> RDP Management
+                    </div>
+                    <Button onClick={() => setIsAddRdpOpen(true)} className="flex items-center gap-2">
+                      <Plus className="h-4 w-4" />
+                      Add RDP
+                    </Button>
+                  </CardTitle>
+                  <CardDescription>
+                    Configure and manage RDP instances and settings.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>CPU</TableHead>
+                        <TableHead>RAM</TableHead>
+                        <TableHead>Storage</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Actions</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    </TableHeader>
+                    <TableBody>
+                      {rdps.map((rdp) => (
+                        <TableRow key={rdp.id}>
+                          <TableCell className="font-medium">{rdp.id}</TableCell>
+                          <TableCell>{rdp.name}</TableCell>
+                          <TableCell>{rdp.cpu}</TableCell>
+                          <TableCell>{rdp.ram}</TableCell>
+                          <TableCell>{rdp.storage}</TableCell>
+                          <TableCell>{rdp.price}</TableCell>
+                          <TableCell>
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              rdp.status === 'Available' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                            }`}>
+                              {rdp.status}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-2">
+                              <Button 
+                                variant="outline" 
+                                size="icon" 
+                                className="h-8 w-8" 
+                                onClick={() => toast({
+                                  title: "Edit RDP",
+                                  description: "Edit functionality will be available in the next update"
+                                })}
+                              >
+                                <PencilLine className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="destructive" 
+                                size="icon" 
+                                className="h-8 w-8" 
+                                onClick={() => handleDeleteRdp(rdp.id)}
+                              >
+                                <Trash className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
 
           {/* Orders Tab */}
-          <TabsContent value="orders" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Package className="mr-2 h-5 w-5" /> Order Management
-                </CardTitle>
-                <CardDescription>
-                  View and manage customer orders and subscriptions.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Order ID</TableHead>
-                      <TableHead>Customer</TableHead>
-                      <TableHead>RDP Package</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {orders.map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell className="font-medium">#{order.id}</TableCell>
-                        <TableCell>{order.user}</TableCell>
-                        <TableCell>{order.rdp}</TableCell>
-                        <TableCell>{order.date}</TableCell>
-                        <TableCell>{order.amount}</TableCell>
-                        <TableCell>
-                          <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
-                            order.status === 'Completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
-                            order.status === 'Processing' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' : 
-                            'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                          }`}>
-                            {order.status}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex space-x-2">
-                            <Select 
-                              defaultValue={order.status}
-                              onValueChange={(value) => handleUpdateOrderStatus(order.id, value)}
-                            >
-                              <SelectTrigger className="w-[130px]">
-                                <SelectValue placeholder="Update" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="Completed">Complete</SelectItem>
-                                <SelectItem value="Processing">Processing</SelectItem>
-                                <SelectItem value="Cancelled">Cancel</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-8 w-8"
-                              onClick={() => handleGenerateInvoice(order)}
-                              title="Generate Invoice"
-                            >
-                              <Download className="h-4 w-4" />
-                            </Button>
-                            
-                            {order.rdpCredentials && (
+          {hasPermission("manageOrders") && (
+            <TabsContent value="orders" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Package className="mr-2 h-5 w-5" /> Order Management
+                  </CardTitle>
+                  <CardDescription>
+                    View and manage customer orders and subscriptions.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Order ID</TableHead>
+                        <TableHead>Customer</TableHead>
+                        <TableHead>RDP Package</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {orders.map((order) => (
+                        <TableRow key={order.id}>
+                          <TableCell className="font-medium">#{order.id}</TableCell>
+                          <TableCell>{order.user}</TableCell>
+                          <TableCell>{order.rdp}</TableCell>
+                          <TableCell>{order.date}</TableCell>
+                          <TableCell>{order.amount}</TableCell>
+                          <TableCell>
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              order.status === 'Completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
+                              order.status === 'Processing' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' : 
+                              'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                            }`}>
+                              {order.status}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-2">
+                              <Select 
+                                defaultValue={order.status}
+                                onValueChange={(value) => handleUpdateOrderStatus(order.id, value)}
+                              >
+                                <SelectTrigger className="w-[130px]">
+                                  <SelectValue placeholder="Update" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="Completed">Complete</SelectItem>
+                                  <SelectItem value="Processing">Processing</SelectItem>
+                                  <SelectItem value="Cancelled">Cancel</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              
                               <Button
                                 variant="outline"
                                 size="icon"
                                 className="h-8 w-8"
-                                onClick={() => sendRdpCredentials(order.email, order.rdpCredentials.username, order.rdpCredentials.password, order)}
-                                title="Resend Credentials"
+                                onClick={() => handleGenerateInvoice(order)}
+                                title="Generate Invoice"
                               >
-                                <Mail className="h-4 w-4" />
+                                <Download className="h-4 w-4" />
                               </Button>
-                            )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                              
+                              {order.rdpCredentials && (
+                                <Button
+                                  variant="outline"
+                                  size="icon"
+                                  className="h-8 w-8"
+                                  onClick={() => sendRdpCredentials(order.email, order.rdpCredentials.username, order.rdpCredentials.password, order)}
+                                  title="Resend Credentials"
+                                >
+                                  <Mail className="h-4 w-4" />
+                                </Button>
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
 
           {/* Analytics Tab */}
-          <TabsContent value="analytics" className="mt-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <BarChart3 className="mr-2 h-5 w-5" /> Analytics Dashboard
-                </CardTitle>
-                <CardDescription>
-                  View detailed performance analytics and reports.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-8">
-                  <div>
-                    <h3 className="text-lg font-medium mb-2">Sales Performance</h3>
-                    <div className="h-[200px] w-full bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
-                      <p className="text-muted-foreground">Sales chart visualization would appear here</p>
+          {hasPermission("viewAnalytics") && (
+            <TabsContent value="analytics" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BarChart3 className="mr-2 h-5 w-5" /> Analytics Dashboard
+                  </CardTitle>
+                  <CardDescription>
+                    View detailed performance analytics and reports.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-8">
+                    <div>
+                      <h3 className="text-lg font-medium mb-2">Sales Performance</h3>
+                      <div className="h-[200px] w-full bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
+                        <p className="text-muted-foreground">Sales chart visualization would appear here</p>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-lg font-medium mb-2">User Growth</h3>
+                      <div className="h-[200px] w-full bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
+                        <p className="text-muted-foreground">User growth chart would appear here</p>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div>
-                    <h3 className="text-lg font-medium mb-2">User Growth</h3>
-                    <div className="h-[200px] w-full bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
-                      <p className="text-muted-foreground">User growth chart would appear here</p>
+                </CardContent>
+                <CardFooter>
+                  <Button variant="outline" className="w-full" onClick={() => toast({
+                    title: "Generate Reports",
+                    description: "Report generation will be available in the next update"
+                  })}>
+                    Generate Reports
+                  </Button>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+          )}
+
+          {/* Admin Management Tab - Only visible to super admins */}
+          {adminType === "super" && (
+            <TabsContent value="admins" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Shield className="mr-2 h-5 w-5" /> Admin Management
                     </div>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full" onClick={() => toast({
-                  title: "Generate Reports",
-                  description: "Report generation will be available in the next update"
-                })}>
-                  Generate Reports
-                </Button>
-              </CardFooter>
-            </Card>
-          </TabsContent>
+                    <div className="flex space-x-2">
+                      <Button 
+                        variant="outline" 
+                        onClick={handleGenerateKey} 
+                        className="flex items-center gap-2"
+                      >
+                        <KeyRound className="h-4 w-4" />
+                        Generate Admin Key
+                      </Button>
+                      <Button 
+                        onClick={() => {
+                          if (!isKeyGenerated) {
+                            toast({
+                              title: "No key generated",
+                              description: "Please generate an admin key first",
+                              variant: "destructive",
+                            });
+                            return;
+                          }
+                          setIsAddAdminOpen(true);
+                        }} 
+                        className="flex items-center gap-2"
+                      >
+                        <Plus className="h-4 w-4" />
+                        Add Admin
+                      </Button>
+                    </div>
+                  </CardTitle>
+                  <CardDescription>
+                    Manage administrator accounts and permissions.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Username</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Last Login</TableHead>
+                        <TableHead>Permissions</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {admins.map((admin) => (
+                        <TableRow key={admin.id}>
+                          <TableCell className="font-medium">{admin.id}</TableCell>
+                          <TableCell>{admin.username}</TableCell>
+                          <TableCell>
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              admin.type === 'super' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-500' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                            }`}>
+                              {admin.type === 'super' ? 'Super Admin' : 'Regular Admin'}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              admin.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                            }`}>
+                              {admin.status}
+                            </span>
+                          </TableCell>
+                          <TableCell>{admin.lastLogin}</TableCell>
+                          <TableCell>
+                            <div className="flex flex-wrap gap-1">
+                              {Object.entries(admin.permissions).map(([key, value]) => 
+                                value && (
+                                  <span key={key} className="inline-flex px-1.5 py-0.5 text-[10px] bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300 rounded">
+                                    {key.replace(/([A-Z])/g, ' $1').trim()}
+                                  </span>
+                                )
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-2">
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <Button 
+                                    variant="outline" 
+                                    size="icon" 
+                                    className="h-8 w-8"
+                                    disabled={admin.username === adminName} // Can't edit yourself
+                                  >
+                                    <PencilLine className="h-4 w-4" />
+                                  </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                  <DialogHeader>
+                                    <DialogTitle>Edit Admin Permissions</DialogTitle>
+                                    <DialogDescription>
+                                      Update permissions for {admin.username}
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <div className="grid gap-4 py-4">
+                                    <div className="space-y-4">
+                                      {Object.entries(admin.permissions).map(([key, value]) => (
+                                        <div key={key} className="flex items-center space-x-2">
+                                          <input
+                                            type="checkbox" 
+                                            id={`perm-${admin.id}-${key}`}
+                                            checked={value}
+                                            onChange={(e) => handleUpdateAdminPermissions(admin.id, key, e.target.checked)}
+                                            className="form-checkbox h-4 w-4 text-rdp-blue"
+                                            disabled={admin.type === 'super' && key === 'manageAdmins'} // Super admins always have manageAdmins
+                                          />
+                                          <Label htmlFor={`perm-${admin.id}-${key}`}>
+                                            {key.replace(/([A-Z])/g, ' $1').trim()}
+                                          </Label>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                      <Label htmlFor={`status-${admin.id}`} className="text-right">
+                                        Status
+                                      </Label>
+                                      <Select 
+                                        defaultValue={admin.status}
+                                        onValueChange={(value) => handleUpdateAdminStatus(admin.id, value)}
+                                      >
+                                        <SelectTrigger className="col-span-3">
+                                          <SelectValue placeholder="Select status" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectItem value="Active">Active</SelectItem>
+                                          <SelectItem value="Inactive">Inactive</SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
+                                  </div>
+                                  <DialogFooter>
+                                    <Button onClick={() => toast({
+                                      title: "Permissions updated",
+                                      description: `Permissions for ${admin.username} have been updated`
+                                    })}>
+                                      Save Changes
+                                    </Button>
+                                  </DialogFooter>
+                                </DialogContent>
+                              </Dialog>
+                              
+                              <Button 
+                                variant="destructive" 
+                                size="icon" 
+                                className="h-8 w-8" 
+                                onClick={() => handleDeleteAdmin(admin.id)}
+                                disabled={admin.username === adminName} // Can't delete yourself
+                              >
+                                <Trash className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
         </Tabs>
       </div>
 
@@ -839,6 +1276,141 @@ const AdminDashboard = () => {
           </div>
           <DialogFooter>
             <Button type="submit" onClick={handleAddRdp}>Add RDP</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Admin Dialog */}
+      <Dialog open={isAddAdminOpen} onOpenChange={setIsAddAdminOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add New Admin</DialogTitle>
+            <DialogDescription>
+              Create a new administrator account in the system.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="admin-username" className="text-right">
+                Username
+              </Label>
+              <Input
+                id="admin-username"
+                value={newAdmin.username}
+                onChange={(e) => setNewAdmin({...newAdmin, username: e.target.value})}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="admin-password" className="text-right">
+                Password
+              </Label>
+              <Input
+                id="admin-password"
+                type="password"
+                value={newAdmin.password}
+                onChange={(e) => setNewAdmin({...newAdmin, password: e.target.value})}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="admin-key" className="text-right">
+                Admin Key
+              </Label>
+              <Input
+                id="admin-key"
+                value={newAdmin.adminKey}
+                onChange={(e) => setNewAdmin({...newAdmin, adminKey: e.target.value})}
+                className="col-span-3"
+                placeholder="Enter the generated admin key"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="admin-type" className="text-right">
+                Admin Type
+              </Label>
+              <Select 
+                defaultValue={newAdmin.type}
+                onValueChange={(value) => {
+                  // If super, ensure manageAdmins is true
+                  const updatedPermissions = {...newAdmin.permissions};
+                  if (value === "super") {
+                    updatedPermissions.manageAdmins = true;
+                  }
+                  
+                  setNewAdmin({
+                    ...newAdmin, 
+                    type: value,
+                    permissions: updatedPermissions
+                  });
+                }}
+              >
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="regular">Regular Admin</SelectItem>
+                  <SelectItem value="super">Super Admin</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="col-span-4 mt-2">
+              <Label className="font-medium mb-2 block">Permissions</Label>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                {Object.entries(newAdmin.permissions).map(([key, value]) => (
+                  <div key={key} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox" 
+                      id={`new-perm-${key}`}
+                      checked={value}
+                      onChange={(e) => setNewAdmin({
+                        ...newAdmin,
+                        permissions: {
+                          ...newAdmin.permissions,
+                          [key]: e.target.checked
+                        }
+                      })}
+                      className="form-checkbox h-4 w-4 text-rdp-blue"
+                      disabled={newAdmin.type === 'super' && key === 'manageAdmins'} // Super admins always have manageAdmins
+                    />
+                    <Label htmlFor={`new-perm-${key}`}>
+                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit" onClick={handleAddAdmin}>Add Admin</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Admin Key Dialog */}
+      <Dialog open={isViewKeyOpen} onOpenChange={setIsViewKeyOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Generated Admin Key</DialogTitle>
+            <DialogDescription>
+              Save this key securely. It will be required to create new admin accounts.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-md font-mono text-center break-all">
+            {adminKey}
+          </div>
+          <DialogFooter>
+            <Button onClick={() => {
+              // Copy to clipboard
+              navigator.clipboard.writeText(adminKey);
+              toast({
+                title: "Copied to clipboard",
+                description: "Admin key has been copied to your clipboard",
+              });
+            }}>
+              Copy to Clipboard
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

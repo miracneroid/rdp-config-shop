@@ -38,7 +38,7 @@ const App = () => (
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/admin-login" element={<AdminLogin />} />
-              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/*" element={<AdminDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
