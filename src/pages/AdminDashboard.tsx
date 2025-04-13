@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -62,7 +61,6 @@ import {
 import { generateInvoice } from "@/utils/invoiceGenerator";
 import { 
   Checkbox,
-  CheckboxItem,
 } from "@/components/ui/checkbox";
 
 // Mock data

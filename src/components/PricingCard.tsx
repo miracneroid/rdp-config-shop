@@ -22,21 +22,29 @@ const PricingCard = ({ plan }: PricingCardProps) => {
   const { addToCart } = useCart();
   
   const handleChoosePlan = () => {
+    // Extract numeric values for CPU cores and RAM
+    const cpuCores = parseInt(plan.cpu.split(' ')[0]) || 2;
+    const ramGB = parseInt(plan.ram.split(' ')[0]) || 4;
+    const storageGB = parseInt(plan.storage.split(' ')[0]) || 64;
+    
     // Create a configured RDP item based on the plan
-    const rdpConfig = {
+    const rdpItem = {
       id: `plan-${plan.name.toLowerCase().replace(' ', '-')}`,
       name: `${plan.name} RDP`,
       price: plan.price,
-      cpu: plan.cpu,
-      ram: plan.ram,
-      storage: plan.storage,
-      operatingSystem: "Windows 10 Pro",
-      region: "North America",
-      quantity: 1
+      configuration: {
+        cpu: cpuCores,
+        ram: ramGB,
+        storage: storageGB,
+        os: "Windows 10 Pro",
+        region: "North America",
+        applications: [],
+        duration: 1 // 1 month duration
+      }
     };
     
     // Add to cart and navigate to cart page
-    addToCart(rdpConfig);
+    addToCart(rdpItem);
     navigate('/cart');
   };
   
