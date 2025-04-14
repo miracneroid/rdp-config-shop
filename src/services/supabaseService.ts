@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { asUUID, processArrayResult, processQueryResult } from "@/utils/typeGuards";
+import { asSupabaseUUID, processArrayResult, processQueryResult, safeSupabaseCast } from "@/utils/typeGuards";
 import { PostgrestError } from "@supabase/supabase-js";
 
 /**
@@ -24,8 +24,8 @@ export async function fetchData<T>(
     // Apply filters
     if (options.match) {
       Object.entries(options.match).forEach(([key, value]) => {
-        // Use asUUID for string IDs to help with TypeScript
-        const safeValue = typeof value === 'string' ? asUUID(value) : value;
+        // Use asSupabaseUUID for string IDs to help with TypeScript
+        const safeValue = typeof value === 'string' ? asSupabaseUUID(value) : value;
         query = query.eq(key, safeValue);
       });
     }
@@ -51,12 +51,11 @@ export async function fetchData<T>(
     
     // For single results, return as is
     if (options.single) {
-      return processQueryResult<T>(data, null);
+      return { data: safeSupabaseCast<T>(data), error: null };
     }
     
     // For array results, ensure we return the proper type
-    const processedData = processArrayResult<T>(data);
-    return { data: processedData as T, error: null };
+    return { data: safeSupabaseCast<T>(data || []), error: null };
   } catch (error: any) {
     console.error(`Error in fetchData(${tableName}):`, error);
     return { data: null, error: error.message || 'Unknown error occurred' };
@@ -74,7 +73,7 @@ export async function insertData<T>(
     // Convert any string IDs to UUID format
     const processedData = Object.entries(data).reduce((acc, [key, value]) => {
       if (key.endsWith('_id') && typeof value === 'string') {
-        acc[key] = asUUID(value);
+        acc[key] = asSupabaseUUID(value);
       } else {
         acc[key] = value;
       }
@@ -83,11 +82,13 @@ export async function insertData<T>(
     
     const { data: result, error } = await supabase
       .from(tableName)
-      .insert(processedData)
+      .insert(processedData as any)
       .select()
       .single();
 
-    return processQueryResult<T>(result, error);
+    if (error) throw error;
+    
+    return { data: safeSupabaseCast<T>(result), error: null };
   } catch (error: any) {
     console.error(`Error in insertData(${tableName}):`, error);
     return { data: null, error: error.message || 'Unknown error occurred' };
@@ -103,18 +104,20 @@ export async function updateData<T>(
   data: Record<string, any>
 ): Promise<{ data: T | null; error: string | null }> {
   try {
-    let query = supabase.from(tableName).update(data);
+    let query = supabase.from(tableName).update(data as any);
     
     // Apply match criteria for the update
     Object.entries(match).forEach(([key, value]) => {
       // Convert string IDs to UUID format
-      const safeValue = typeof value === 'string' ? asUUID(value) : value;
+      const safeValue = typeof value === 'string' ? asSupabaseUUID(value) : value;
       query = query.eq(key, safeValue);
     });
     
     const { data: result, error } = await query.select().single();
     
-    return processQueryResult<T>(result, error);
+    if (error) throw error;
+    
+    return { data: safeSupabaseCast<T>(result), error: null };
   } catch (error: any) {
     console.error(`Error in updateData(${tableName}):`, error);
     return { data: null, error: error.message || 'Unknown error occurred' };
@@ -134,7 +137,7 @@ export async function deleteData(
     // Apply match criteria for the delete
     Object.entries(match).forEach(([key, value]) => {
       // Convert string IDs to UUID format
-      const safeValue = typeof value === 'string' ? asUUID(value) : value;
+      const safeValue = typeof value === 'string' ? asSupabaseUUID(value) : value;
       query = query.eq(key, safeValue);
     });
     
@@ -158,7 +161,10 @@ export async function runFunction<T>(
 ): Promise<{ data: T | null; error: string | null }> {
   try {
     const { data, error } = await supabase.rpc(functionName, params);
-    return processQueryResult<T>(data, error);
+    
+    if (error) throw error;
+    
+    return { data: safeSupabaseCast<T>(data), error: null };
   } catch (error: any) {
     console.error(`Error in runFunction(${functionName}):`, error);
     return { data: null, error: error.message || 'Unknown error occurred' };

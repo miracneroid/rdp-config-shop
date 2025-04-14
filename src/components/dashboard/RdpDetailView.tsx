@@ -1,6 +1,4 @@
-
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import {
   Card,
@@ -72,6 +70,9 @@ import {
   KeyRound
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { supabaseHelper } from "@/utils/supabaseHelpers";
+import { fetchData, insertData, updateData } from "@/services/supabaseService";
+import { safeSupabaseCast } from "@/utils/typeGuards";
 
 interface PlanDetails {
   cpu: string;
@@ -117,6 +118,10 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [systemLogs, setSystemLogs] = useState<SystemLog[]>([]);
   const { toast } = useToast();
+  
+  const rdpHelper = supabaseHelper<RdpInstance>('rdp_instances');
+  const systemLogHelper = supabaseHelper<SystemLog>('system_logs');
+  const sharedAccessHelper = supabaseHelper('shared_access');
 
   useEffect(() => {
     fetchSystemLogs();
@@ -124,18 +129,8 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
 
   const fetchSystemLogs = async () => {
     try {
-      const { data, error } = await supabase
-        .from("system_logs")
-        .select("*")
-        .eq("rdp_instance_id", rdp.id)
-        .order("performed_at", { ascending: false })
-        .limit(10);
-
-      if (error) throw error;
-      
-      if (data) {
-        setSystemLogs(data as SystemLog[]);
-      }
+      const logs = await systemLogHelper.getByField('rdp_instance_id', rdp.id);
+      setSystemLogs(logs);
     } catch (error: any) {
       console.error("Error fetching system logs:", error.message);
     }
@@ -152,26 +147,20 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
     
     setIsLoading(true);
     try {
-      const updateData: {
-        username?: string;
-        password?: string;
-        updated_at: string;
-      } = {
+      const updateData: Partial<RdpInstance> = {
         updated_at: new Date().toISOString(),
       };
       
       if (newUsername) updateData.username = newUsername;
       if (newPassword) updateData.password = newPassword;
       
-      const { error } = await supabase
-        .from("rdp_instances")
-        .update(updateData)
-        .eq("id", rdp.id);
-
-      if (error) throw error;
+      const updated = await rdpHelper.update(rdp.id, updateData);
       
-      // Add a system log entry
-      await supabase.from("system_logs").insert({
+      if (!updated) {
+        throw new Error("Failed to update credentials");
+      }
+      
+      await systemLogHelper.insert({
         rdp_instance_id: rdp.id,
         action: "update_credentials",
         status: "completed",
@@ -183,7 +172,6 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
         description: "Your RDP credentials have been updated successfully.",
       });
       
-      // Refresh the page to get updated data
       window.location.reload();
     } catch (error: any) {
       toast({
@@ -207,19 +195,21 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
     
     setIsLoading(true);
     try {
-      const { error } = await supabase
-        .from("shared_access")
-        .insert({
-          rdp_instance_id: rdp.id,
-          owner_id: (await supabase.auth.getUser()).data.user?.id,
-          shared_with_email: shareEmail,
-          permissions: { view: true, control: false },
-        });
-
-      if (error) throw error;
+      const { data: sessionData } = await fetch('/.supabase/auth').then(res => res.json());
+      const userId = sessionData?.user?.id;
       
-      // Add a system log entry
-      await supabase.from("system_logs").insert({
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+      
+      await sharedAccessHelper.insert({
+        rdp_instance_id: rdp.id,
+        owner_id: userId,
+        shared_with_email: shareEmail,
+        permissions: { view: true, control: false },
+      });
+      
+      await systemLogHelper.insert({
         rdp_instance_id: rdp.id,
         action: "share_access",
         status: "completed",
@@ -288,18 +278,12 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
   const shutdownRdp = async () => {
     setIsLoading(true);
     try {
-      const { error } = await supabase
-        .from("rdp_instances")
-        .update({
-          status: "offline",
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", rdp.id);
-
-      if (error) throw error;
+      await rdpHelper.update(rdp.id, {
+        status: "offline",
+        updated_at: new Date().toISOString(),
+      });
       
-      // Add a system log entry
-      await supabase.from("system_logs").insert({
+      await systemLogHelper.insert({
         rdp_instance_id: rdp.id,
         action: "shutdown",
         status: "completed",
@@ -311,7 +295,6 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
         description: "Your RDP has been shut down successfully.",
       });
       
-      // Refresh the page to get updated data
       window.location.reload();
     } catch (error: any) {
       toast({
@@ -327,18 +310,12 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
   const startRdp = async () => {
     setIsLoading(true);
     try {
-      const { error } = await supabase
-        .from("rdp_instances")
-        .update({
-          status: "active",
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", rdp.id);
-
-      if (error) throw error;
+      await rdpHelper.update(rdp.id, {
+        status: "active",
+        updated_at: new Date().toISOString(),
+      });
       
-      // Add a system log entry
-      await supabase.from("system_logs").insert({
+      await systemLogHelper.insert({
         rdp_instance_id: rdp.id,
         action: "start",
         status: "completed",
@@ -350,7 +327,6 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
         description: "Your RDP has been started successfully.",
       });
       
-      // Refresh the page to get updated data
       window.location.reload();
     } catch (error: any) {
       toast({
@@ -366,18 +342,12 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
   const restartRdp = async () => {
     setIsLoading(true);
     try {
-      const { error } = await supabase
-        .from("rdp_instances")
-        .update({
-          status: "restarting",
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", rdp.id);
-
-      if (error) throw error;
+      await rdpHelper.update(rdp.id, {
+        status: "restarting",
+        updated_at: new Date().toISOString(),
+      });
       
-      // Add a system log entry
-      await supabase.from("system_logs").insert({
+      await systemLogHelper.insert({
         rdp_instance_id: rdp.id,
         action: "restart",
         status: "in-progress",
@@ -389,24 +359,19 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
         description: "Your RDP is restarting. This may take a few moments.",
       });
       
-      // Simulate the restart process
       setTimeout(async () => {
-        await supabase
-          .from("rdp_instances")
-          .update({
-            status: "active",
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", rdp.id);
+        await rdpHelper.update(rdp.id, {
+          status: "active",
+          updated_at: new Date().toISOString(),
+        });
           
-        await supabase.from("system_logs").insert({
+        await systemLogHelper.insert({
           rdp_instance_id: rdp.id,
           action: "restart",
           status: "completed",
           details: { initiated_by: "user", reason: "user-initiated" },
         });
         
-        // Refresh the page to get updated data
         window.location.reload();
       }, 3000);
     } catch (error: any) {

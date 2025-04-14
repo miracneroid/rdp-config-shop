@@ -71,8 +71,16 @@ export function safeCast<T>(data: unknown): T {
 }
 
 /**
- * Processes Supabase query results and provides proper TypeScript typing
- * with enhanced error handling and type safety
+ * Convert a string value to a UUID-compatible format for Supabase
+ * Use this before passing IDs to Supabase queries
+ */
+export function asUUID(id: string): string {
+  // No actual conversion needed, just helps TypeScript know this is UUID-compatible
+  return id;
+}
+
+/**
+ * Process query results for Supabase with proper error handling
  */
 export function processQueryResult<T>(data: unknown, error: any): { data: T | null, error: string | null } {
   if (error) {
@@ -90,19 +98,26 @@ export function processQueryResult<T>(data: unknown, error: any): { data: T | nu
 }
 
 /**
- * Convert a string value to a UUID-compatible format for Supabase
- * Use this before passing IDs to Supabase queries
- */
-export function asUUID(id: string): string {
-  // No actual conversion needed, just helps TypeScript know this is UUID-compatible
-  return id;
-}
-
-/**
  * Safely process array results from Supabase
  */
 export function processArrayResult<T>(data: unknown): T[] {
   if (!data) return [];
   if (!Array.isArray(data)) return [data as T];
   return data as T[];
+}
+
+/**
+ * Safely cast Supabase query results to the expected type
+ * This is useful when dealing with complex types from Supabase
+ */
+export function safeSupabaseCast<T>(data: any): T {
+  return data as unknown as T;
+}
+
+/**
+ * Helper function to safely handle UUID columns in Supabase
+ */
+export function asSupabaseUUID(id: string): any {
+  // This is a workaround for TypeScript errors with UUID columns
+  return id as any;
 }

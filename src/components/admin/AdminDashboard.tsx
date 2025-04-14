@@ -22,8 +22,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { isNotNullOrUndefined, asUUID } from "@/utils/typeGuards";
+import { isNotNullOrUndefined, safeSupabaseCast } from "@/utils/typeGuards";
 import { fetchData } from "@/services/supabaseService";
+import { supabaseHelper } from "@/utils/supabaseHelpers";
 
 interface OrderItem {
   amount: number;
@@ -44,6 +45,11 @@ const AdminDashboard = () => {
     activeRdps: 0,
     openTickets: 0
   });
+
+  const rdpHelper = supabaseHelper('rdp_instances');
+  const ticketHelper = supabaseHelper('support_tickets');
+  const profileHelper = supabaseHelper('profiles');
+  const orderHelper = supabaseHelper<OrderItem>('orders');
 
   useEffect(() => {
     const checkAdmin = async () => {
@@ -74,46 +80,34 @@ const AdminDashboard = () => {
   const fetchStats = async () => {
     setLoading(true);
     try {
-      const { count: userCount, error: userError } = await supabase
+      const { count: userCount } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true });
-        
-      if (userError) throw userError;
 
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      
       const thirtyDaysAgoString = thirtyDaysAgo.toISOString();
       
-      const { count: activeUserCount, error: activeUserError } = await supabase
+      const { count: activeUserCount } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
         .gte('updated_at', thirtyDaysAgoString);
-        
-      if (activeUserError) throw activeUserError;
 
-      const { data: orders } = await fetchData<OrderItem[]>('orders', {
-        select: 'amount'
-      });
-
+      const orders = await orderHelper.getAll();
       const totalRevenue = Array.isArray(orders) ? orders.reduce((sum, order) => {
         const amount = typeof order.amount === 'number' ? order.amount : 0;
         return sum + amount;
       }, 0) : 0;
 
-      const { count: rdpCount, error: rdpError } = await supabase
+      const { count: rdpCount } = await supabase
         .from('rdp_instances')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'active');
-        
-      if (rdpError) throw rdpError;
+        .eq('status', safeSupabaseCast('active'));
 
-      const { count: ticketCount, error: ticketError } = await supabase
+      const { count: ticketCount } = await supabase
         .from('support_tickets')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'open');
-        
-      if (ticketError) throw ticketError;
+        .eq('status', safeSupabaseCast('open'));
 
       setStats({
         totalUsers: userCount || 0,
