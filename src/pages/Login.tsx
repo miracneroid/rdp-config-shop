@@ -79,7 +79,7 @@ const Login = () => {
       } else {
         toast({
           title: "Error",
-          description: result.error,
+          description: result.error || "Unknown error occurred",
           variant: "destructive",
         });
       }

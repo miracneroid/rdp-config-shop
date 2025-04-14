@@ -20,7 +20,7 @@ export const generateTestUser = async (email: string, password: string) => {
     return { success: true, data };
   } catch (error) {
     console.error("Error generating test data:", error);
-    return { success: false, error };
+    return { success: false, error: error.message || "Unknown error occurred" };
   }
 };
 
@@ -40,13 +40,13 @@ export const addTestRdp = async (email: string) => {
     
     if (error) {
       console.error("Error from edge function:", error);
-      return { success: false, error };
+      return { success: false, error: error.message || "Edge function error" };
     }
     
     return { success: true, data };
   } catch (error) {
     console.error("Error adding test RDP:", error);
-    return { success: false, error };
+    return { success: false, error: error.message || "Unknown error occurred" };
   }
 };
 

@@ -48,11 +48,14 @@ serve(async (req) => {
       );
     }
 
-    // Get the user ID for test@gmail.com using admin rights
-    // This avoids the "permission denied for table users" error since we're using admin privileges
-    const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserByEmail(email);
+    // Get the user ID using a query instead of admin.getUserByEmail
+    const { data: userData, error: userError } = await supabaseAdmin
+      .from('auth.users')
+      .select('id')
+      .eq('email', email)
+      .single();
     
-    if (userError || !userData?.user) {
+    if (userError || !userData) {
       console.error("Error finding test user:", userError);
       return new Response(
         JSON.stringify({ error: "Failed to find test user", details: userError }),
@@ -63,7 +66,7 @@ serve(async (req) => {
       );
     }
     
-    const userId = userData.user.id;
+    const userId = userData.id;
     
     // First check if an RDP instance already exists for the user
     const { data: existingRdp } = await supabaseAdmin
