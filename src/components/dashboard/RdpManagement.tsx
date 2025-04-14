@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -115,9 +116,19 @@ const RdpManagement = () => {
   const fetchRdpInstances = async () => {
     setLoading(true);
     try {
+      // Get current user id from the session
+      const { data: sessionData } = await supabase.auth.getSession();
+      const userId = sessionData.session?.user.id;
+
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+
+      // Fetch RDP instances for the current user only
       const { data, error } = await supabase
         .from("rdp_instances")
         .select("*")
+        .eq("user_id", userId)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
@@ -156,9 +167,33 @@ const RdpManagement = () => {
 
   const fetchSystemLogs = async () => {
     try {
+      // Get current user id from the session
+      const { data: sessionData } = await supabase.auth.getSession();
+      const userId = sessionData.session?.user.id;
+
+      if (!userId) {
+        return; // Don't throw an error here, just exit early
+      }
+
+      // First get the user's RDP instance IDs
+      const { data: rdpData } = await supabase
+        .from("rdp_instances")
+        .select("id")
+        .eq("user_id", userId);
+
+      if (!rdpData || rdpData.length === 0) {
+        setSystemLogs([]);
+        return;
+      }
+
+      // Get the IDs as an array
+      const rdpIds = rdpData.map(rdp => rdp.id);
+
+      // Then fetch logs for those instances
       const { data, error } = await supabase
         .from("system_logs")
         .select("*")
+        .in("rdp_instance_id", rdpIds)
         .order("performed_at", { ascending: false })
         .limit(5);
 
