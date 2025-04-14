@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Card,
@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, User, Shield, Users } from "lucide-react";
+import { Loader2, User, Shield, Users, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const AddAdminForm = () => {
@@ -32,40 +32,51 @@ const AddAdminForm = () => {
   const { toast } = useToast();
 
   // Load existing admins on component mount
-  useState(() => {
+  useEffect(() => {
     loadAdmins();
-  });
+  }, []);
 
   const loadAdmins = async () => {
     try {
       setLoadingAdmins(true);
       
       // Find all users with admin role
-      const { data, error } = await supabase
+      const { data: userRoles, error: rolesError } = await supabase
         .from('user_roles')
-        .select(`
-          user_id,
-          role,
-          profiles(
-            display_name,
-            first_name,
-            last_name,
-            avatar_url
-          )
-        `)
+        .select('user_id, role')
         .eq('role', 'admin');
       
-      if (error) throw error;
+      if (rolesError) throw rolesError;
       
-      // Format the admin data
-      const formattedAdmins = (data || []).map(admin => ({
-        id: admin.user_id,
-        role: admin.role,
-        name: admin.profiles?.display_name || 
-              `${admin.profiles?.first_name || ''} ${admin.profiles?.last_name || ''}`.trim() || 
-              'Unknown Admin',
-        avatar: admin.profiles?.avatar_url
-      }));
+      if (!userRoles || userRoles.length === 0) {
+        setAdmins([]);
+        setLoadingAdmins(false);
+        return;
+      }
+      
+      // Get user IDs to fetch profile information
+      const userIds = userRoles.map(admin => admin.user_id);
+      
+      // Fetch profiles for these user IDs
+      const { data: profiles, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, display_name, first_name, last_name, avatar_url')
+        .in('id', userIds);
+        
+      if (profilesError) throw profilesError;
+      
+      // Combine the data
+      const formattedAdmins = userRoles.map(role => {
+        const profile = profiles?.find(p => p.id === role.user_id) || {};
+        return {
+          id: role.user_id,
+          role: role.role,
+          name: profile.display_name || 
+                `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 
+                'Unknown Admin',
+          avatar: profile.avatar_url
+        };
+      });
       
       setAdmins(formattedAdmins);
     } catch (error: any) {
@@ -95,7 +106,7 @@ const AddAdminForm = () => {
     setLoading(true);
     
     try {
-      // First, check if the user exists in auth.users
+      // First, check if the user exists in profiles table
       const { data: userData, error: userCheckError } = await supabase
         .from('profiles')
         .select('id')

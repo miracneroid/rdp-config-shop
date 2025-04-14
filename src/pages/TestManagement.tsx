@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -5,10 +6,11 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, RefreshCw, Users, AlertCircle } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import AddAdminForm from "@/components/admin/AddAdminForm";
 
 const TestManagement = () => {
   const [userList, setUserList] = useState<any[]>([]);
@@ -60,25 +62,24 @@ const TestManagement = () => {
       
       if (error) throw error;
       
-      // Fetch user emails from auth.users table (this requires admin privileges)
-      const usersWithEmail = await Promise.all(
+      // Fetch user roles information
+      const usersWithRoles = await Promise.all(
         (users || []).map(async (user) => {
-          // Get email from auth - note: this requires admin privileges and proper RLS policies
-          const { data: authUser, error: authError } = await supabase
+          const { data: roleData, error: roleError } = await supabase
             .from('user_roles')
-            .select('*')
+            .select('role')
             .eq('user_id', user.id)
-            .single();
+            .maybeSingle();
           
           return {
             ...user,
             email: user.display_name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Unknown user',
-            role: authUser?.role || 'user'
+            role: roleData?.role || 'user'
           };
         })
       );
       
-      setUserList(usersWithEmail || []);
+      setUserList(usersWithRoles || []);
       toast({
         title: "Users Loaded",
         description: `Loaded ${users?.length || 0} users`,
@@ -103,7 +104,7 @@ const TestManagement = () => {
           Admin User Management
         </h1>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg">
             <CardHeader>
               <div className="flex justify-between items-center">
@@ -126,7 +127,7 @@ const TestManagement = () => {
                 </Button>
               </div>
               <CardDescription className="text-muted-foreground">
-                Manage existing users
+                View registered users
               </CardDescription>
             </CardHeader>
             
@@ -162,6 +163,8 @@ const TestManagement = () => {
             </CardContent>
           </Card>
         </div>
+        
+        <AddAdminForm />
       </div>
       <Footer />
     </div>
