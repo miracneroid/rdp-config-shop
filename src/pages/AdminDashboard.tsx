@@ -949,4 +949,860 @@ const AdminDashboard = () => {
                                   description: "Edit functionality will be available in the next update"
                                 })}
                               >
-                                <PencilLine
+                                <PencilLine className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() => handleDeleteUser(user.id)}
+                              >
+                                <Trash className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+                <CardFooter className="border-t px-6 py-4">
+                  <p className="text-sm text-muted-foreground">
+                    Total {users.length} users in the system.
+                  </p>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+          )}
+
+          {/* RDP Configurations Tab */}
+          {hasPermission("manageRdps") && (
+            <TabsContent value="rdps" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Server className="mr-2 h-5 w-5" /> RDP Configurations
+                    </div>
+                    <Button onClick={() => setIsAddRdpOpen(true)} className="flex items-center gap-2">
+                      <Plus className="h-4 w-4" />
+                      Add RDP
+                    </Button>
+                  </CardTitle>
+                  <CardDescription>
+                    Manage RDP configurations, resources, and availability.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>CPU</TableHead>
+                        <TableHead>RAM</TableHead>
+                        <TableHead>Storage</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {rdps.map((rdp) => (
+                        <TableRow key={rdp.id}>
+                          <TableCell className="font-medium">{rdp.id}</TableCell>
+                          <TableCell>{rdp.name}</TableCell>
+                          <TableCell>{rdp.cpu}</TableCell>
+                          <TableCell>{rdp.ram}</TableCell>
+                          <TableCell>{rdp.storage}</TableCell>
+                          <TableCell>{rdp.price}</TableCell>
+                          <TableCell>
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              rdp.status === 'Available' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+                            }`}>
+                              {rdp.status}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-2">
+                              <Button 
+                                variant="outline" 
+                                size="icon" 
+                                className="h-8 w-8" 
+                                onClick={() => toast({
+                                  title: "Edit RDP",
+                                  description: "Edit functionality will be available in the next update"
+                                })}
+                              >
+                                <PencilLine className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() => handleDeleteRdp(rdp.id)}
+                              >
+                                <Trash className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+                <CardFooter className="border-t px-6 py-4">
+                  <p className="text-sm text-muted-foreground">
+                    Total {rdps.length} RDP configurations in the system.
+                  </p>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+          )}
+
+          {/* Orders Tab */}
+          {hasPermission("manageOrders") && (
+            <TabsContent value="orders" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <PackageOpen className="mr-2 h-5 w-5" /> Order Management
+                  </CardTitle>
+                  <CardDescription>
+                    Manage customer orders, payments, and RDP provisioning.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Order ID</TableHead>
+                        <TableHead>User</TableHead>
+                        <TableHead>RDP</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {orders.map((order) => (
+                        <TableRow key={order.id}>
+                          <TableCell className="font-medium">#{order.id}</TableCell>
+                          <TableCell>{order.user}</TableCell>
+                          <TableCell>{order.rdp}</TableCell>
+                          <TableCell>{order.amount}</TableCell>
+                          <TableCell>{order.date}</TableCell>
+                          <TableCell>
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              order.status === 'Completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 
+                              order.status === 'Processing' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' : 
+                              order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' : 
+                              'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                            }`}>
+                              {order.status}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-2">
+                              <Select
+                                onValueChange={(value) => handleUpdateOrderStatus(order.id, value)}
+                                defaultValue={order.status}
+                              >
+                                <SelectTrigger className="h-8 w-28">
+                                  <SelectValue placeholder="Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="Pending">Pending</SelectItem>
+                                  <SelectItem value="Processing">Processing</SelectItem>
+                                  <SelectItem value="Completed">Completed</SelectItem>
+                                  <SelectItem value="Cancelled">Cancelled</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() => handleGenerateInvoice(order)}
+                              >
+                                <Download className="h-4 w-4" />
+                              </Button>
+                              {order.rdpCredentials && (
+                                <Button
+                                  variant="outline"
+                                  size="icon"
+                                  className="h-8 w-8"
+                                  onClick={() => sendRdpCredentials(order.email, order.rdpCredentials.username, order.rdpCredentials.password, order)}
+                                >
+                                  <Mail className="h-4 w-4" />
+                                </Button>
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+                <CardFooter className="border-t px-6 py-4">
+                  <p className="text-sm text-muted-foreground">
+                    Total {orders.length} orders in the system.
+                  </p>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+          )}
+
+          {/* Analytics Tab */}
+          {hasPermission("viewAnalytics") && (
+            <TabsContent value="analytics" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BarChart3 className="mr-2 h-5 w-5" /> Analytics Dashboard
+                  </CardTitle>
+                  <CardDescription>
+                    View system analytics, user statistics, and revenue reports.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-8">
+                    <div>
+                      <h3 className="text-lg font-medium mb-4">Monthly Revenue</h3>
+                      <div className="h-[300px] w-full bg-muted/20 rounded-md flex items-center justify-center">
+                        <p className="text-muted-foreground">Analytics charts will be available in the next update</p>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-medium mb-4">User Growth</h3>
+                      <div className="h-[300px] w-full bg-muted/20 rounded-md flex items-center justify-center">
+                        <p className="text-muted-foreground">Analytics charts will be available in the next update</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
+
+          {/* Admin Management Tab */}
+          {adminType === "super" && (
+            <TabsContent value="admins" className="mt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <ShieldAlert className="mr-2 h-5 w-5" /> Admin Management
+                    </div>
+                    <Button onClick={() => setIsAddAdminOpen(true)} className="flex items-center gap-2">
+                      <Plus className="h-4 w-4" />
+                      Add Admin
+                    </Button>
+                  </CardTitle>
+                  <CardDescription>
+                    Manage admin accounts, permissions, and access levels.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Username</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Last Login</TableHead>
+                        <TableHead>Permissions</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {admins.map((admin) => (
+                        <TableRow key={admin.id}>
+                          <TableCell className="font-medium">{admin.id}</TableCell>
+                          <TableCell>{admin.username}</TableCell>
+                          <TableCell>
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              admin.type === 'super' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                            }`}>
+                              {admin.type === 'super' ? 'Super Admin' : 'Regular Admin'}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                              admin.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                            }`}>
+                              {admin.status}
+                            </span>
+                          </TableCell>
+                          <TableCell>{admin.lastLogin}</TableCell>
+                          <TableCell>
+                            <div className="flex space-x-1">
+                              {admin.permissions.manageAdmins && <ShieldCheck className="h-4 w-4 text-purple-500" title="Can manage admins" />}
+                              {admin.permissions.systemSettings && <Settings className="h-4 w-4 text-blue-500" title="Can change system settings" />}
+                              {admin.permissions.manageUsers && <User className="h-4 w-4 text-green-500" title="Can manage users" />}
+                              {admin.permissions.manageRdps && <Server className="h-4 w-4 text-orange-500" title="Can manage RDPs" />}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex space-x-2">
+                              <Select
+                                onValueChange={(value) => handleUpdateAdminStatus(admin.id, value)}
+                                defaultValue={admin.status}
+                              >
+                                <SelectTrigger className="h-8 w-28">
+                                  <SelectValue placeholder="Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="Active">Active</SelectItem>
+                                  <SelectItem value="Inactive">Inactive</SelectItem>
+                                  <SelectItem value="Suspended">Suspended</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() => {
+                                  // Show permissions dialog
+                                  toast({
+                                    title: "Edit Permissions",
+                                    description: "Permission editing will be available in the next update"
+                                  });
+                                }}
+                              >
+                                <Shield className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() => handleDeleteAdmin(admin.id)}
+                                disabled={admin.username === adminName}
+                              >
+                                <Trash className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+                <CardFooter className="border-t px-6 py-4">
+                  <p className="text-sm text-muted-foreground">
+                    Total {admins.length} admins in the system.
+                  </p>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+          )}
+        </Tabs>
+
+        {/* Add User Dialog */}
+        <Dialog open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add New User</DialogTitle>
+              <DialogDescription>
+                Create a new user account in the system.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  value={newUser.name}
+                  onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="email" className="text-right">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={newUser.email}
+                  onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="role" className="text-right">
+                  Role
+                </Label>
+                <Select
+                  value={newUser.role}
+                  onValueChange={(value) => setNewUser({ ...newUser, role: value })}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Customer">Customer</SelectItem>
+                    <SelectItem value="Reseller">Reseller</SelectItem>
+                    <SelectItem value="Support">Support</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="status" className="text-right">
+                  Status
+                </Label>
+                <Select
+                  value={newUser.status}
+                  onValueChange={(value) => setNewUser({ ...newUser, status: value })}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Active">Active</SelectItem>
+                    <SelectItem value="Inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsAddUserOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleAddUser}>Add User</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Add RDP Dialog */}
+        <Dialog open={isAddRdpOpen} onOpenChange={setIsAddRdpOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add New RDP Configuration</DialogTitle>
+              <DialogDescription>
+                Create a new RDP configuration in the system.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="rdp-name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id="rdp-name"
+                  value={newRdp.name}
+                  onChange={(e) => setNewRdp({ ...newRdp, name: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="rdp-cpu" className="text-right">
+                  CPU
+                </Label>
+                <Input
+                  id="rdp-cpu"
+                  value={newRdp.cpu}
+                  onChange={(e) => setNewRdp({ ...newRdp, cpu: e.target.value })}
+                  className="col-span-3"
+                  placeholder="e.g. 4 vCPU"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="rdp-ram" className="text-right">
+                  RAM
+                </Label>
+                <Input
+                  id="rdp-ram"
+                  value={newRdp.ram}
+                  onChange={(e) => setNewRdp({ ...newRdp, ram: e.target.value })}
+                  className="col-span-3"
+                  placeholder="e.g. 8 GB"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="rdp-storage" className="text-right">
+                  Storage
+                </Label>
+                <Input
+                  id="rdp-storage"
+                  value={newRdp.storage}
+                  onChange={(e) => setNewRdp({ ...newRdp, storage: e.target.value })}
+                  className="col-span-3"
+                  placeholder="e.g. 256 GB SSD"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="rdp-price" className="text-right">
+                  Price
+                </Label>
+                <Input
+                  id="rdp-price"
+                  value={newRdp.price}
+                  onChange={(e) => setNewRdp({ ...newRdp, price: e.target.value })}
+                  className="col-span-3"
+                  placeholder="e.g. $29.99"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="rdp-status" className="text-right">
+                  Status
+                </Label>
+                <Select
+                  value={newRdp.status}
+                  onValueChange={(value) => setNewRdp({ ...newRdp, status: value })}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Available">Available</SelectItem>
+                    <SelectItem value="Limited">Limited</SelectItem>
+                    <SelectItem value="Unavailable">Unavailable</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsAddRdpOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleAddRdp}>Add RDP</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Add Admin Dialog */}
+        <Dialog open={isAddAdminOpen} onOpenChange={setIsAddAdminOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add New Admin</DialogTitle>
+              <DialogDescription>
+                Create a new admin account with specific permissions.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="admin-username" className="text-right">
+                  Username
+                </Label>
+                <Input
+                  id="admin-username"
+                  value={newAdmin.username}
+                  onChange={(e) => setNewAdmin({ ...newAdmin, username: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="admin-password" className="text-right">
+                  Password
+                </Label>
+                <Input
+                  id="admin-password"
+                  type="password"
+                  value={newAdmin.password}
+                  onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="admin-type" className="text-right">
+                  Type
+                </Label>
+                <Select
+                  value={newAdmin.type}
+                  onValueChange={(value) => setNewAdmin({ ...newAdmin, type: value })}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="regular">Regular Admin</SelectItem>
+                    <SelectItem value="super">Super Admin</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="admin-key" className="text-right">
+                  Admin Key
+                </Label>
+                <div className="col-span-3 flex gap-2">
+                  <Input
+                    id="admin-key"
+                    type="password"
+                    value={newAdmin.adminKey}
+                    onChange={(e) => setNewAdmin({ ...newAdmin, adminKey: e.target.value })}
+                    placeholder="Enter the admin key"
+                  />
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={handleGenerateKey}
+                    title="Generate a new admin key"
+                  >
+                    <KeyRound className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <div className="grid grid-cols-4 items-start gap-4">
+                <Label className="text-right pt-2">
+                  Permissions
+                </Label>
+                <div className="col-span-3 space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="manage-users"
+                      checked={newAdmin.permissions.manageUsers}
+                      onCheckedChange={(checked) => 
+                        setNewAdmin({
+                          ...newAdmin,
+                          permissions: {
+                            ...newAdmin.permissions,
+                            manageUsers: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="manage-users">Manage Users</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="manage-rdps"
+                      checked={newAdmin.permissions.manageRdps}
+                      onCheckedChange={(checked) => 
+                        setNewAdmin({
+                          ...newAdmin,
+                          permissions: {
+                            ...newAdmin.permissions,
+                            manageRdps: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="manage-rdps">Manage RDPs</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="manage-orders"
+                      checked={newAdmin.permissions.manageOrders}
+                      onCheckedChange={(checked) => 
+                        setNewAdmin({
+                          ...newAdmin,
+                          permissions: {
+                            ...newAdmin.permissions,
+                            manageOrders: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="manage-orders">Manage Orders</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="view-analytics"
+                      checked={newAdmin.permissions.viewAnalytics}
+                      onCheckedChange={(checked) => 
+                        setNewAdmin({
+                          ...newAdmin,
+                          permissions: {
+                            ...newAdmin.permissions,
+                            viewAnalytics: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="view-analytics">View Analytics</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="system-settings"
+                      checked={newAdmin.permissions.systemSettings}
+                      onCheckedChange={(checked) => 
+                        setNewAdmin({
+                          ...newAdmin,
+                          permissions: {
+                            ...newAdmin.permissions,
+                            systemSettings: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="system-settings">System Settings</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="manage-admins"
+                      checked={newAdmin.permissions.manageAdmins}
+                      onCheckedChange={(checked) => 
+                        setNewAdmin({
+                          ...newAdmin,
+                          permissions: {
+                            ...newAdmin.permissions,
+                            manageAdmins: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="manage-admins">Manage Admins</Label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsAddAdminOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleAddAdmin}>Add Admin</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* View Admin Key Dialog */}
+        <Dialog open={isViewKeyOpen} onOpenChange={setIsViewKeyOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Admin Key Generated</DialogTitle>
+              <DialogDescription>
+                This key is required to add new admin users. Copy it now - it will not be shown again.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="p-4 bg-muted rounded-md font-mono text-center break-all">
+              {adminKey}
+            </div>
+            <DialogFooter>
+              <Button 
+                onClick={() => {
+                  navigator.clipboard.writeText(adminKey);
+                  toast({
+                    title: "Copied to clipboard",
+                    description: "The admin key has been copied to your clipboard",
+                  });
+                }}
+              >
+                Copy to Clipboard
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => setIsViewKeyOpen(false)}
+              >
+                Close
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* System Settings Dialog */}
+        <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>System Settings</DialogTitle>
+              <DialogDescription>
+                Configure global system settings and preferences.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="email-notifications">Email Notifications</Label>
+                <Checkbox 
+                  id="email-notifications"
+                  checked={systemSettings.emailNotifications}
+                  onCheckedChange={(checked) => 
+                    setSystemSettings({
+                      ...systemSettings,
+                      emailNotifications: checked === true
+                    })
+                  }
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="auto-provisioning">Automatic RDP Provisioning</Label>
+                <Checkbox 
+                  id="auto-provisioning"
+                  checked={systemSettings.automaticProvisioning}
+                  onCheckedChange={(checked) => 
+                    setSystemSettings({
+                      ...systemSettings,
+                      automaticProvisioning: checked === true
+                    })
+                  }
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="maintenance-mode">Maintenance Mode</Label>
+                <Checkbox 
+                  id="maintenance-mode"
+                  checked={systemSettings.maintenanceMode}
+                  onCheckedChange={(checked) => 
+                    setSystemSettings({
+                      ...systemSettings,
+                      maintenanceMode: checked === true
+                    })
+                  }
+                />
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="backup-frequency" className="col-span-1">
+                  Backup Frequency
+                </Label>
+                <Select
+                  value={systemSettings.backupFrequency}
+                  onValueChange={(value) => 
+                    setSystemSettings({
+                      ...systemSettings,
+                      backupFrequency: value
+                    })
+                  }
+                >
+                  <SelectTrigger className="col-span-2">
+                    <SelectValue placeholder="Select frequency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="hourly">Hourly</SelectItem>
+                    <SelectItem value="daily">Daily</SelectItem>
+                    <SelectItem value="weekly">Weekly</SelectItem>
+                    <SelectItem value="monthly">Monthly</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="default-currency" className="col-span-1">
+                  Default Currency
+                </Label>
+                <Select
+                  value={systemSettings.defaultCurrency}
+                  onValueChange={(value) => 
+                    setSystemSettings({
+                      ...systemSettings,
+                      defaultCurrency: value
+                    })
+                  }
+                >
+                  <SelectTrigger className="col-span-2">
+                    <SelectValue placeholder="Select currency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="USD">USD ($)</SelectItem>
+                    <SelectItem value="EUR">EUR (€)</SelectItem>
+                    <SelectItem value="GBP">GBP (£)</SelectItem>
+                    <SelectItem value="JPY">JPY (¥)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsSettingsOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleUpdateSettings}>Save Settings</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default AdminDashboard;
