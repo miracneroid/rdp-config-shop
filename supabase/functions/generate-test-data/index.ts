@@ -125,13 +125,79 @@ serve(async (req) => {
       }
     }
 
-    // We'll no longer create RDP instances here
-    // This will now be handled by the addTestRdp function specifically for test@gmail.com
+    // If test@gmail.com is created, add a test RDP automatically
+    let rdpResult = null;
+    if (email === "test@gmail.com") {
+      console.log("Creating test RDP for test@gmail.com");
+      
+      // Call the generate-test-rdp function from within this function
+      // Create a test RDP instance with 59 EUR price
+      const { data: rdpInstance, error: rdpError } = await supabaseAdmin
+        .from('rdp_instances')
+        .insert({
+          user_id: userId,
+          name: "Windows 11 Enterprise",
+          username: "admin",
+          password: "Test123!",
+          ip_address: "192.168.1.101",
+          port: "3389",
+          status: "active",
+          expiry_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+          plan_details: {
+            cpu: "8 vCPU",
+            ram: "32 GB",
+            storage: "500 GB SSD",
+            os: "Windows 11 Enterprise",
+            bandwidth: "Unlimited"
+          }
+        })
+        .select()
+        .single();
+
+      if (rdpError) {
+        console.error("Error creating RDP instance:", rdpError);
+      } else if (rdpInstance) {
+        // Create an order for this RDP
+        const { error: orderError } = await supabaseAdmin
+          .from('orders')
+          .insert({
+            user_id: userId,
+            rdp_instance_id: rdpInstance.id,
+            invoice_number: `INV-${Date.now().toString().substring(0, 10)}`,
+            payment_status: "paid",
+            currency: "EUR",
+            amount: 59.00,
+            order_details: {
+              items: [
+                {
+                  name: "Windows 11 Enterprise RDP",
+                  quantity: 1,
+                  price: "€59.00",
+                  subtotal: "€59.00"
+                }
+              ],
+              subtotal: "€59.00",
+              tax: "€0.00",
+              total: "€59.00"
+            }
+          });
+          
+        if (orderError) {
+          console.error("Error creating order:", orderError);
+        } else {
+          rdpResult = {
+            rdpInstance,
+            message: "Test RDP added automatically for test@gmail.com"
+          };
+        }
+      }
+    }
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         user: { email, id: userId },
+        rdp: rdpResult,
         message: "Test user created successfully. You can now login with the provided credentials."
       }),
       { 
