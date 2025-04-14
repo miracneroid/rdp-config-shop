@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   adminId: z.string().min(4, { message: "Admin ID must be at least 4 characters" }),
@@ -37,43 +38,70 @@ const AdminLogin = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    // Check admin login credentials
-    setTimeout(() => {
-      if (values.adminId === "miracneroid" && values.password === "Jarus@2803") {
-        // Set admin status in localStorage
-        localStorage.setItem("isAdmin", "true");
-        localStorage.setItem("adminType", "super");
-        localStorage.setItem("adminName", values.adminId);
-        
-        toast({
-          title: "Admin login successful",
-          description: "Welcome to the admin dashboard",
-          variant: "default",
-        });
-        navigate('/admin');
-      } else if (values.adminId === "admin" && values.password === "admin12345") {
-        // Set admin status in localStorage
-        localStorage.setItem("isAdmin", "true");
-        localStorage.setItem("adminType", "regular");
-        localStorage.setItem("adminName", values.adminId);
-        
-        toast({
-          title: "Admin login successful",
-          description: "Welcome to the admin dashboard",
-          variant: "default",
-        });
-        navigate('/admin');
-      } else {
+    
+    try {
+      // Fetch admin user from database
+      const { data: adminData, error: adminError } = await supabase
+        .from('admin_users')
+        .select('*')
+        .eq('admin_id', values.adminId)
+        .eq('password', values.password)
+        .single();
+      
+      if (adminError || !adminData) {
         toast({
           title: "Login failed",
           description: "Invalid admin credentials",
           variant: "destructive",
         });
+        setIsLoading(false);
+        return;
       }
+      
+      // Update last login time
+      await supabase
+        .from('admin_users')
+        .update({ last_login: new Date().toISOString() })
+        .eq('id', adminData.id);
+      
+      // Log admin action
+      await supabase
+        .from('admin_actions')
+        .insert([
+          { 
+            admin_id: adminData.id, 
+            action: 'Admin login', 
+            admin_type: adminData.admin_type,
+            ip_address: 'Unknown', // In a real app, you'd get the IP
+            details: { method: 'regular_login' }
+          }
+        ]);
+      
+      // Set admin status in localStorage
+      localStorage.setItem("isAdmin", "true");
+      localStorage.setItem("adminType", adminData.admin_type);
+      localStorage.setItem("adminName", values.adminId);
+      localStorage.setItem("adminId", adminData.id);
+      
+      toast({
+        title: "Admin login successful",
+        description: "Welcome to the admin dashboard",
+        variant: "default",
+      });
+      
+      navigate('/admin');
+    } catch (error) {
+      console.error("Login error:", error);
+      toast({
+        title: "Login failed",
+        description: "An error occurred during login",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   }
 
   return (

@@ -13,6 +13,7 @@ export type Database = {
         Row: {
           action: string
           admin_id: string
+          admin_type: string | null
           details: Json | null
           id: string
           ip_address: string | null
@@ -21,6 +22,7 @@ export type Database = {
         Insert: {
           action: string
           admin_id: string
+          admin_type?: string | null
           details?: Json | null
           id?: string
           ip_address?: string | null
@@ -29,10 +31,38 @@ export type Database = {
         Update: {
           action?: string
           admin_id?: string
+          admin_type?: string | null
           details?: Json | null
           id?: string
           ip_address?: string | null
           performed_at?: string
+        }
+        Relationships: []
+      }
+      admin_users: {
+        Row: {
+          admin_id: string
+          admin_type: string
+          created_at: string
+          id: string
+          last_login: string | null
+          password: string
+        }
+        Insert: {
+          admin_id: string
+          admin_type?: string
+          created_at?: string
+          id?: string
+          last_login?: string | null
+          password: string
+        }
+        Update: {
+          admin_id?: string
+          admin_type?: string
+          created_at?: string
+          id?: string
+          last_login?: string | null
+          password?: string
         }
         Relationships: []
       }
