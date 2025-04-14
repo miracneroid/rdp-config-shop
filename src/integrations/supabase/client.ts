@@ -16,5 +16,41 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     storage: localStorage,
     detectSessionInUrl: true,
     flowType: 'pkce',
+    onAuthStateChange: (event, session) => {
+      if (event === 'SIGNED_IN' && session?.user?.email) {
+        const email = session.user.email;
+        // Check if user is admin
+        if (email === 'admin@example.com' || email === 'test@gmail.com') {
+          localStorage.setItem('isAdmin', 'true');
+        } else {
+          localStorage.removeItem('isAdmin');
+        }
+      } else if (event === 'SIGNED_OUT') {
+        localStorage.removeItem('isAdmin');
+      }
+    }
   }
 });
+
+// Helper function to check if the current user is an admin
+export const isUserAdmin = async (): Promise<boolean> => {
+  // First check localStorage for quick access
+  const storedIsAdmin = localStorage.getItem('isAdmin');
+  if (storedIsAdmin === 'true') return true;
+  
+  // If not in localStorage, check with Supabase
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return false;
+  
+  const email = user.email;
+  if (!email) return false;
+  
+  const isAdmin = email === 'admin@example.com' || email === 'test@gmail.com';
+  
+  // Update localStorage for future quick access
+  if (isAdmin) {
+    localStorage.setItem('isAdmin', 'true');
+  }
+  
+  return isAdmin;
+};
