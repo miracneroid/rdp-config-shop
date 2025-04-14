@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -20,7 +20,7 @@ const TestManagement = () => {
   const navigate = useNavigate();
 
   // Check if current user is admin on component load
-  useState(() => {
+  useEffect(() => {
     const checkAdmin = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
