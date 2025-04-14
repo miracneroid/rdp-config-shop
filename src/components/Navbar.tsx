@@ -13,6 +13,7 @@ const Navbar = () => {
   const { cart, getTotalItems } = useCart();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   
   const totalItems = getTotalItems();
   
@@ -22,6 +23,14 @@ const Navbar = () => {
       setIsLoading(true);
       const { data: { session } } = await supabase.auth.getSession();
       setIsLoggedIn(!!session);
+      
+      // Check if user is admin
+      if (session) {
+        const { data: userData } = await supabase.auth.getUser();
+        const email = userData?.user?.email;
+        setIsAdmin(email === 'admin@example.com' || email === 'test@gmail.com');
+      }
+      
       setIsLoading(false);
     };
 
@@ -30,6 +39,14 @@ const Navbar = () => {
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setIsLoggedIn(!!session);
+      
+      // Check if user is admin
+      if (session) {
+        const email = session.user?.email;
+        setIsAdmin(email === 'admin@example.com' || email === 'test@gmail.com');
+      } else {
+        setIsAdmin(false);
+      }
     });
 
     return () => {
@@ -65,6 +82,11 @@ const Navbar = () => {
             <Link to="/faq" className="text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light transition-colors">
               FAQ
             </Link>
+            {isAdmin && (
+              <Link to="/admin/test-management" className="text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light transition-colors">
+                Admin
+              </Link>
+            )}
             <ThemeToggle />
             <Link to="/cart" className="relative">
               <Button variant="outline" size="icon">
@@ -174,6 +196,15 @@ const Navbar = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Dashboard
+              </Link>
+            )}
+            {isAdmin && (
+              <Link 
+                to="/admin/test-management" 
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Admin
               </Link>
             )}
           </div>
