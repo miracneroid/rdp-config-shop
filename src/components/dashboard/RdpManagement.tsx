@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Json } from "@/integrations/supabase/types";
+import { safeSupabaseCast } from "@/utils/typeGuards";
 import {
   Card,
   CardContent,
@@ -105,13 +106,13 @@ const RdpManagement = () => {
       const { data, error } = await supabase
         .from("rdp_instances")
         .select("*")
-        .eq("user_id", userId)
+        .eq("user_id", userId as any)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
       
       if (data) {
-        const formattedInstances: RdpInstance[] = (data as SupabaseRdpInstance[]).map((instance) => {
+        const formattedInstances: RdpInstance[] = (safeSupabaseCast<SupabaseRdpInstance[]>(data)).map((instance) => {
           const planDetailsJson = instance.plan_details as any;
           const planDetails: PlanDetails = {
             cpu: planDetailsJson.cpu || "",

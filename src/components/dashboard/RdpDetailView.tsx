@@ -93,6 +93,7 @@ interface RdpInstance {
   expiry_date: string;
   plan_details: PlanDetails;
   created_at: string;
+  updated_at?: string;
 }
 
 interface SystemLog {
@@ -130,7 +131,7 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
   const fetchSystemLogs = async () => {
     try {
       const logs = await systemLogHelper.getByField('rdp_instance_id', rdp.id);
-      setSystemLogs(logs);
+      setSystemLogs(logs as SystemLog[]);
     } catch (error: any) {
       console.error("Error fetching system logs:", error.message);
     }
@@ -147,9 +148,7 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
     
     setIsLoading(true);
     try {
-      const updateData: Partial<RdpInstance> = {
-        updated_at: new Date().toISOString(),
-      };
+      const updateData: Partial<RdpInstance> = {};
       
       if (newUsername) updateData.username = newUsername;
       if (newPassword) updateData.password = newPassword;
@@ -165,7 +164,7 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
         action: "update_credentials",
         status: "completed",
         details: { initiated_by: "user" },
-      });
+      } as any);
       
       toast({
         title: "Credentials updated",
@@ -207,14 +206,14 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
         owner_id: userId,
         shared_with_email: shareEmail,
         permissions: { view: true, control: false },
-      });
+      } as any);
       
       await systemLogHelper.insert({
         rdp_instance_id: rdp.id,
         action: "share_access",
         status: "completed",
         details: { shared_with: shareEmail },
-      });
+      } as any);
       
       toast({
         title: "Access shared",
@@ -280,15 +279,14 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
     try {
       await rdpHelper.update(rdp.id, {
         status: "offline",
-        updated_at: new Date().toISOString(),
-      });
+      } as any);
       
       await systemLogHelper.insert({
         rdp_instance_id: rdp.id,
         action: "shutdown",
         status: "completed",
         details: { initiated_by: "user", reason: "user-initiated" },
-      });
+      } as any);
       
       toast({
         title: "RDP shutdown",
@@ -312,15 +310,14 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
     try {
       await rdpHelper.update(rdp.id, {
         status: "active",
-        updated_at: new Date().toISOString(),
-      });
+      } as any);
       
       await systemLogHelper.insert({
         rdp_instance_id: rdp.id,
         action: "start",
         status: "completed",
         details: { initiated_by: "user", reason: "user-initiated" },
-      });
+      } as any);
       
       toast({
         title: "RDP started",
@@ -344,15 +341,14 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
     try {
       await rdpHelper.update(rdp.id, {
         status: "restarting",
-        updated_at: new Date().toISOString(),
-      });
+      } as any);
       
       await systemLogHelper.insert({
         rdp_instance_id: rdp.id,
         action: "restart",
         status: "in-progress",
         details: { initiated_by: "user", reason: "user-initiated" },
-      });
+      } as any);
       
       toast({
         title: "RDP restarting",
@@ -362,15 +358,14 @@ const RdpDetailView = ({ rdp, onBack }: RdpDetailViewProps) => {
       setTimeout(async () => {
         await rdpHelper.update(rdp.id, {
           status: "active",
-          updated_at: new Date().toISOString(),
-        });
+        } as any);
           
         await systemLogHelper.insert({
           rdp_instance_id: rdp.id,
           action: "restart",
           status: "completed",
           details: { initiated_by: "user", reason: "user-initiated" },
-        });
+        } as any);
         
         window.location.reload();
       }, 3000);

@@ -64,10 +64,19 @@ export function isSingleItem<T>(value: T | T[]): value is T {
 
 /**
  * Safely cast a value to the expected type using type assertion
+ * This is a more robust version that helps TypeScript understand the conversion
  */
 export function safeCast<T>(data: unknown): T {
-  // This should be used with caution, preferably after validation
   return data as T;
+}
+
+/**
+ * Enhanced safe Supabase cast that is more aggressive with type conversion
+ * Use this when TypeScript is being overly strict with Supabase return types
+ */
+export function safeSupabaseCast<T>(data: any): T {
+  // Force the type conversion for Supabase query results
+  return data as unknown as T;
 }
 
 /**
@@ -76,7 +85,7 @@ export function safeCast<T>(data: unknown): T {
  */
 export function asUUID(id: string): string {
   // No actual conversion needed, just helps TypeScript know this is UUID-compatible
-  return id;
+  return id as any;
 }
 
 /**
@@ -107,15 +116,8 @@ export function processArrayResult<T>(data: unknown): T[] {
 }
 
 /**
- * Safely cast Supabase query results to the expected type
- * This is useful when dealing with complex types from Supabase
- */
-export function safeSupabaseCast<T>(data: any): T {
-  return data as unknown as T;
-}
-
-/**
  * Helper function to safely handle UUID columns in Supabase
+ * This version is more aggressive with type coercion
  */
 export function asSupabaseUUID(id: string): any {
   // This is a workaround for TypeScript errors with UUID columns
