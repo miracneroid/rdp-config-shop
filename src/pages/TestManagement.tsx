@@ -1,26 +1,24 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, RefreshCw, Users, UserPlus, Trash2, AlertCircle } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2, RefreshCw, Users, Trash2, AlertCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const TestManagement = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [userList, setUserList] = useState<any[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Check if current user is admin on component load
   useEffect(() => {
     const checkAdmin = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -138,77 +136,8 @@ const TestManagement = () => {
         </Alert>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Create Test User Form */}
-          <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-foreground">
-                <UserPlus className="h-5 w-5 text-rdp-blue dark:text-rdp-blue-light" />
-                Create Test User
-              </CardTitle>
-              <CardDescription className="text-muted-foreground">
-                Generate a new test user with sample data
-              </CardDescription>
-            </CardHeader>
-            
-            <form onSubmit={createTestUser}>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-foreground">Email</label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="test.user@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-foreground placeholder:text-muted-foreground"
-                    required
-                  />
-                  {email === "testing@gmail.com" && (
-                    <p className="text-sm text-green-600 dark:text-green-400">
-                      This email will receive a default active RDP
-                    </p>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="password" className="text-sm font-medium text-foreground">Password</label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Enter password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-foreground placeholder:text-muted-foreground"
-                    required
-                  />
-                  {email === "testing@gmail.com" && (
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Default password for testing@gmail.com is "password123"
-                    </p>
-                  )}
-                </div>
-              </CardContent>
-              
-              <CardFooter>
-                <Button 
-                  type="submit" 
-                  disabled={loading}
-                  className="bg-rdp-blue hover:bg-rdp-blue-light text-white"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating...
-                    </>
-                  ) : (
-                    "Create Test User"
-                  )}
-                </Button>
-              </CardFooter>
-            </form>
-          </Card>
           
-          {/* Test Users List */}
+          
           <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg">
             <CardHeader>
               <div className="flex justify-between items-center">
