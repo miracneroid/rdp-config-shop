@@ -36,6 +36,88 @@ serve(async (req) => {
       // For now, we'll skip this validation for simplicity
 
       switch (operation) {
+        case 'add_admin': {
+          // Check if admin already exists
+          const { data: existingAdmin, error: checkError } = await supabaseClient
+            .from('admin_users')
+            .select('admin_id')
+            .eq('admin_id', data.admin_id)
+            .single();
+            
+          if (existingAdmin) {
+            return new Response(
+              JSON.stringify({ 
+                success: false, 
+                message: 'Admin with this ID already exists' 
+              }),
+              {
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                status: 400,
+              }
+            );
+          }
+          
+          // Add new admin
+          const { data: newAdmin, error } = await supabaseClient
+            .from('admin_users')
+            .insert([
+              { 
+                admin_id: data.admin_id,
+                password: data.password,
+                admin_type: data.admin_type || 'regular',
+              }
+            ])
+            .select()
+            .single();
+          
+          if (error) {
+            console.error('Error creating admin:', error);
+            return new Response(
+              JSON.stringify({ 
+                success: false, 
+                message: 'Failed to create admin',
+                error: error.message
+              }),
+              {
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+                status: 500,
+              }
+            );
+          }
+          
+          // Log the admin creation action
+          await supabaseClient
+            .from('admin_actions')
+            .insert([
+              { 
+                admin_id: data.created_by || 'system', 
+                action: 'Created new admin',
+                admin_type: 'super',
+                details: { 
+                  new_admin_id: data.admin_id,
+                  admin_type: data.admin_type,
+                  timestamp: new Date().toISOString()
+                }
+              }
+            ]);
+          
+          return new Response(
+            JSON.stringify({ 
+              success: true, 
+              message: 'Admin created successfully',
+              admin: {
+                id: newAdmin.id,
+                admin_id: newAdmin.admin_id,
+                admin_type: newAdmin.admin_type,
+              }
+            }),
+            {
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+              status: 200,
+            }
+          );
+        }
+        
         case 'generate_admin_key': {
           // Generate a secure key and store it temporarily
           const keyChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
