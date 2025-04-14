@@ -89,14 +89,14 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-rdp-dark dark:to-black">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-rdp-dark dark:to-black w-full">
       <Navbar />
-      <main>
+      <main className="w-full">
         <Hero />
         <Features />
         
         {/* Pricing Section */}
-        <div className="py-16 sm:py-24">
+        <div className="py-16 sm:py-24 w-full">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="sm:text-center">
               <h2 className="text-base font-semibold uppercase tracking-wide text-rdp-blue">Pricing</h2>
