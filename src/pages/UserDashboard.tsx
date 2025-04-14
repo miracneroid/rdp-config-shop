@@ -8,6 +8,7 @@ import RdpManagement from "@/components/dashboard/RdpManagement";
 import OrderHistory from "@/components/dashboard/OrderHistory";
 import SupportTickets from "@/components/dashboard/SupportTickets";
 import UserProfile from "@/components/dashboard/UserProfile";
+import SystemUsage from "@/components/dashboard/SystemUsage";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -41,8 +42,9 @@ const UserDashboard = () => {
         <h1 className="text-3xl font-bold mb-6 text-rdp-dark dark:text-white">Your Dashboard</h1>
         
         <Tabs defaultValue="rdp-management" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-8">
+          <TabsList className="grid grid-cols-2 md:grid-cols-5 mb-8">
             <TabsTrigger value="rdp-management">RDP Management</TabsTrigger>
+            <TabsTrigger value="system-usage">System Usage</TabsTrigger>
             <TabsTrigger value="orders">Order History</TabsTrigger>
             <TabsTrigger value="support">Support Tickets</TabsTrigger>
             <TabsTrigger value="profile">Profile</TabsTrigger>
@@ -50,6 +52,10 @@ const UserDashboard = () => {
           
           <TabsContent value="rdp-management" className="space-y-4">
             <RdpManagement />
+          </TabsContent>
+          
+          <TabsContent value="system-usage" className="space-y-4">
+            <SystemUsage />
           </TabsContent>
           
           <TabsContent value="orders" className="space-y-4">

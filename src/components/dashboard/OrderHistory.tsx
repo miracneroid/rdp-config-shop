@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -90,7 +91,14 @@ const OrderHistory = () => {
       if (data) {
         // Transform Supabase data to match our Order interface
         const formattedOrders: Order[] = (data as SupabaseOrder[]).map((order) => {
-          const orderDetails = order.order_details as unknown as OrderDetails;
+          const orderDetailsJson = order.order_details as any;
+          
+          // Ensure the structure matches our OrderDetails interface
+          const orderDetails: OrderDetails = {
+            items: orderDetailsJson.items || [],
+            customer: orderDetailsJson.customer || { name: "", email: "" }
+          };
+          
           return {
             ...order,
             order_details: orderDetails

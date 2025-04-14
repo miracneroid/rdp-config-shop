@@ -97,9 +97,24 @@ const UserProfile = () => {
       
       if (data) {
         const supabaseProfile = data as SupabaseProfile;
+        
+        // Convert from Supabase Json type to our BillingAddress type
+        let billingAddressData: BillingAddress | null = null;
+        if (supabaseProfile.billing_address) {
+          const billingAddressJson = supabaseProfile.billing_address as any;
+          billingAddressData = {
+            address1: billingAddressJson.address1 || "",
+            address2: billingAddressJson.address2 || "",
+            city: billingAddressJson.city || "",
+            state: billingAddressJson.state || "",
+            zip: billingAddressJson.zip || "",
+            country: billingAddressJson.country || "",
+          };
+        }
+        
         const formattedProfile: Profile = {
           ...supabaseProfile,
-          billing_address: supabaseProfile.billing_address as unknown as BillingAddress
+          billing_address: billingAddressData
         };
         
         setProfile(formattedProfile);
@@ -110,14 +125,7 @@ const UserProfile = () => {
         });
         
         if (formattedProfile.billing_address) {
-          setBillingAddress({
-            address1: formattedProfile.billing_address.address1 || "",
-            address2: formattedProfile.billing_address.address2 || "",
-            city: formattedProfile.billing_address.city || "",
-            state: formattedProfile.billing_address.state || "",
-            zip: formattedProfile.billing_address.zip || "",
-            country: formattedProfile.billing_address.country || "",
-          });
+          setBillingAddress(formattedProfile.billing_address);
         }
         
         if (formattedProfile.preferred_currency) {

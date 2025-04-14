@@ -104,10 +104,12 @@ const RdpManagement = () => {
   const [newPassword, setNewPassword] = useState("");
   const [shareEmail, setShareEmail] = useState("");
   const [showShareDialog, setShowShareDialog] = useState(false);
+  const [systemLogs, setSystemLogs] = useState<any[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
     fetchRdpInstances();
+    fetchSystemLogs();
   }, []);
 
   const fetchRdpInstances = async () => {
@@ -121,8 +123,17 @@ const RdpManagement = () => {
       if (error) throw error;
       
       if (data) {
+        // Cast Json to PlanDetails
         const formattedInstances: RdpInstance[] = (data as SupabaseRdpInstance[]).map((instance) => {
-          const planDetails = instance.plan_details as unknown as PlanDetails;
+          const planDetailsJson = instance.plan_details as any;
+          const planDetails: PlanDetails = {
+            cpu: planDetailsJson.cpu || "",
+            ram: planDetailsJson.ram || "",
+            storage: planDetailsJson.storage || "",
+            os: planDetailsJson.os || "",
+            bandwidth: planDetailsJson.bandwidth || ""
+          };
+          
           return {
             ...instance,
             plan_details: planDetails
@@ -140,6 +151,24 @@ const RdpManagement = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSystemLogs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("system_logs")
+        .select("*")
+        .order("performed_at", { ascending: false })
+        .limit(5);
+
+      if (error) throw error;
+      
+      if (data) {
+        setSystemLogs(data);
+      }
+    } catch (error: any) {
+      console.error("Error fetching system logs:", error.message);
     }
   };
 
@@ -234,6 +263,140 @@ const RdpManagement = () => {
     const today = new Date();
     const diffTime = expiry.getTime() - today.getTime();
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  };
+
+  const shutdownRdp = async (rdp: RdpInstance) => {
+    try {
+      // Here we would normally call an API to actually shutdown the RDP
+      // For now, we'll just update the status in the database
+      const { error } = await supabase
+        .from("rdp_instances")
+        .update({
+          status: "offline",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", rdp.id);
+
+      if (error) throw error;
+      
+      // Add a system log entry
+      await supabase.from("system_logs").insert({
+        rdp_instance_id: rdp.id,
+        action: "shutdown",
+        status: "completed",
+        details: { initiated_by: "user", reason: "user-initiated" },
+      });
+      
+      toast({
+        title: "RDP shutdown",
+        description: "Your RDP has been shut down successfully.",
+      });
+      
+      fetchRdpInstances();
+      fetchSystemLogs();
+    } catch (error: any) {
+      toast({
+        title: "Error shutting down RDP",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const startRdp = async (rdp: RdpInstance) => {
+    try {
+      // Here we would normally call an API to actually start the RDP
+      // For now, we'll just update the status in the database
+      const { error } = await supabase
+        .from("rdp_instances")
+        .update({
+          status: "active",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", rdp.id);
+
+      if (error) throw error;
+      
+      // Add a system log entry
+      await supabase.from("system_logs").insert({
+        rdp_instance_id: rdp.id,
+        action: "start",
+        status: "completed",
+        details: { initiated_by: "user", reason: "user-initiated" },
+      });
+      
+      toast({
+        title: "RDP started",
+        description: "Your RDP has been started successfully.",
+      });
+      
+      fetchRdpInstances();
+      fetchSystemLogs();
+    } catch (error: any) {
+      toast({
+        title: "Error starting RDP",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const restartRdp = async (rdp: RdpInstance) => {
+    try {
+      // Here we would normally call an API to actually restart the RDP
+      // For now, we'll just update the status in the database
+      const { error } = await supabase
+        .from("rdp_instances")
+        .update({
+          status: "restarting",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", rdp.id);
+
+      if (error) throw error;
+      
+      // Add a system log entry
+      await supabase.from("system_logs").insert({
+        rdp_instance_id: rdp.id,
+        action: "restart",
+        status: "in-progress",
+        details: { initiated_by: "user", reason: "user-initiated" },
+      });
+      
+      // Simulate the restart process
+      setTimeout(async () => {
+        await supabase
+          .from("rdp_instances")
+          .update({
+            status: "active",
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", rdp.id);
+          
+        await supabase.from("system_logs").insert({
+          rdp_instance_id: rdp.id,
+          action: "restart",
+          status: "completed",
+          details: { initiated_by: "user", reason: "user-initiated" },
+        });
+        
+        fetchRdpInstances();
+        fetchSystemLogs();
+      }, 3000);
+      
+      toast({
+        title: "RDP restarting",
+        description: "Your RDP is restarting. This may take a few moments.",
+      });
+      
+      fetchRdpInstances();
+    } catch (error: any) {
+      toast({
+        title: "Error restarting RDP",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   if (loading) {
@@ -530,6 +693,41 @@ const RdpManagement = () => {
                   </Button>
                 )}
               </CardFooter>
+              <div className="flex gap-2 mt-2 w-full">
+                {rdp.status === 'active' && (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => shutdownRdp(rdp)}
+                    >
+                      <PowerOff className="h-4 w-4 mr-2" />
+                      Shutdown
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => restartRdp(rdp)}
+                    >
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Restart
+                    </Button>
+                  </>
+                )}
+                {rdp.status !== 'active' && rdp.status !== 'expired' && (
+                  <Button 
+                    variant="default" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => startRdp(rdp)}
+                  >
+                    <Power className="h-4 w-4 mr-2" />
+                    Power On
+                  </Button>
+                )}
+              </div>
             </Card>
           ))}
         </div>
@@ -550,12 +748,34 @@ const RdpManagement = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">No logs available</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>-</TableCell>
-                    <TableCell>-</TableCell>
-                  </TableRow>
+                  {systemLogs.length > 0 ? (
+                    systemLogs.map((log) => {
+                      const rdp = rdpInstances.find(r => r.id === log.rdp_instance_id);
+                      return (
+                        <TableRow key={log.id}>
+                          <TableCell className="font-medium">{rdp?.name || 'Unknown'}</TableCell>
+                          <TableCell>{log.action}</TableCell>
+                          <TableCell>
+                            <Badge variant={
+                              log.status === 'completed' ? 'default' :
+                              log.status === 'in-progress' ? 'outline' :
+                              'destructive'
+                            }>
+                              {log.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{new Date(log.performed_at).toLocaleString()}</TableCell>
+                        </TableRow>
+                      );
+                    })
+                  ) : (
+                    <TableRow>
+                      <TableCell className="font-medium">No logs available</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>-</TableCell>
+                      <TableCell>-</TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
