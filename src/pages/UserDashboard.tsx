@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/Navbar";
@@ -30,9 +30,9 @@ const UserDashboard = () => {
   };
 
   // Check session on component mount
-  useState(() => {
+  useEffect(() => {
     checkSession();
-  });
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col dark:bg-gray-900">

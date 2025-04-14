@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useSettings } from "@/context/SettingsContext";
+import { Json } from "@/integrations/supabase/types";
 import {
   Card,
   CardContent,
@@ -18,20 +18,32 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, DollarSign, IndianRupee, EuroIcon, PoundSterling } from "lucide-react";
 
+interface BillingAddress {
+  address1: string;
+  address2?: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
+
 interface Profile {
   id: string;
   first_name: string | null;
   last_name: string | null;
   display_name: string | null;
   avatar_url: string | null;
-  billing_address: {
-    address1: string;
-    address2?: string;
-    city: string;
-    state: string;
-    zip: string;
-    country: string;
-  } | null;
+  billing_address: BillingAddress | null;
+  preferred_currency: string;
+}
+
+interface SupabaseProfile {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  display_name: string | null;
+  avatar_url: string | null;
+  billing_address: Json | null;
   preferred_currency: string;
 }
 
@@ -44,7 +56,7 @@ const UserProfile = () => {
     lastName: "",
     displayName: "",
   });
-  const [billingAddress, setBillingAddress] = useState({
+  const [billingAddress, setBillingAddress] = useState<BillingAddress>({
     address1: "",
     address2: "",
     city: "",
@@ -82,27 +94,32 @@ const UserProfile = () => {
       if (error) throw error;
       
       if (data) {
-        setProfile(data as Profile);
+        const supabaseProfile = data as SupabaseProfile;
+        const formattedProfile: Profile = {
+          ...supabaseProfile,
+          billing_address: supabaseProfile.billing_address as unknown as BillingAddress
+        };
+        
+        setProfile(formattedProfile);
         setUserDetails({
-          firstName: data.first_name || "",
-          lastName: data.last_name || "",
-          displayName: data.display_name || "",
+          firstName: formattedProfile.first_name || "",
+          lastName: formattedProfile.last_name || "",
+          displayName: formattedProfile.display_name || "",
         });
         
-        if (data.billing_address) {
+        if (formattedProfile.billing_address) {
           setBillingAddress({
-            address1: data.billing_address.address1 || "",
-            address2: data.billing_address.address2 || "",
-            city: data.billing_address.city || "",
-            state: data.billing_address.state || "",
-            zip: data.billing_address.zip || "",
-            country: data.billing_address.country || "",
+            address1: formattedProfile.billing_address.address1 || "",
+            address2: formattedProfile.billing_address.address2 || "",
+            city: formattedProfile.billing_address.city || "",
+            state: formattedProfile.billing_address.state || "",
+            zip: formattedProfile.billing_address.zip || "",
+            country: formattedProfile.billing_address.country || "",
           });
         }
         
-        // Update the app's currency settings if the user has a preferred currency
-        if (data.preferred_currency) {
-          const currency = currencies.find(c => c.code === data.preferred_currency);
+        if (formattedProfile.preferred_currency) {
+          const currency = currencies.find(c => c.code === formattedProfile.preferred_currency);
           if (currency) {
             updateCurrency(currency.code, currency.symbol, currency.name);
           }
@@ -207,7 +224,6 @@ const UserProfile = () => {
 
       if (error) throw error;
       
-      // Update the app's currency settings
       updateCurrency(code, symbol, name);
       
       toast({

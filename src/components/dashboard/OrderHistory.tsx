@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useSettings } from "@/context/SettingsContext";
+import { Json } from "@/integrations/supabase/types";
 import {
   Card,
   CardContent,
@@ -31,22 +31,38 @@ import { Badge } from "@/components/ui/badge";
 import { Download, FileText, RefreshCw } from "lucide-react";
 import { emailInvoice, generateInvoice } from "@/utils/invoiceGenerator";
 
+interface OrderItem {
+  description: string;
+  price: string;
+}
+
+interface OrderCustomer {
+  name: string;
+  email: string;
+}
+
+interface OrderDetails {
+  items: OrderItem[];
+  customer: OrderCustomer;
+}
+
 interface Order {
   id: string;
   amount: number;
   currency: string;
   payment_status: string;
   invoice_number: string;
-  order_details: {
-    items: {
-      description: string;
-      price: string;
-    }[];
-    customer: {
-      name: string;
-      email: string;
-    };
-  };
+  order_details: OrderDetails;
+  created_at: string;
+}
+
+interface SupabaseOrder {
+  id: string;
+  amount: number;
+  currency: string;
+  payment_status: string;
+  invoice_number: string;
+  order_details: Json;
   created_at: string;
 }
 
@@ -70,7 +86,19 @@ const OrderHistory = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      if (data) setOrders(data as Order[]);
+      
+      if (data) {
+        // Transform Supabase data to match our Order interface
+        const formattedOrders: Order[] = (data as SupabaseOrder[]).map((order) => {
+          const orderDetails = order.order_details as unknown as OrderDetails;
+          return {
+            ...order,
+            order_details: orderDetails
+          };
+        });
+        
+        setOrders(formattedOrders);
+      }
     } catch (error: any) {
       console.error("Error fetching orders:", error.message);
       toast({

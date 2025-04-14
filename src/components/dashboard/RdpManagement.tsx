@@ -1,7 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { Json } from "@/integrations/supabase/types";
 import {
   Card,
   CardContent,
@@ -61,6 +61,14 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+interface PlanDetails {
+  cpu: string;
+  ram: string;
+  storage: string;
+  os: string;
+  bandwidth: string;
+}
+
 interface RdpInstance {
   id: string;
   name: string;
@@ -70,13 +78,20 @@ interface RdpInstance {
   port: string;
   status: string;
   expiry_date: string;
-  plan_details: {
-    cpu: string;
-    ram: string;
-    storage: string;
-    os: string;
-    bandwidth: string;
-  };
+  plan_details: PlanDetails;
+  created_at: string;
+}
+
+interface SupabaseRdpInstance {
+  id: string;
+  name: string;
+  username: string;
+  password: string;
+  ip_address: string;
+  port: string;
+  status: string;
+  expiry_date: string;
+  plan_details: Json;
   created_at: string;
 }
 
@@ -104,7 +119,18 @@ const RdpManagement = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      if (data) setRdpInstances(data as RdpInstance[]);
+      
+      if (data) {
+        const formattedInstances: RdpInstance[] = (data as SupabaseRdpInstance[]).map((instance) => {
+          const planDetails = instance.plan_details as unknown as PlanDetails;
+          return {
+            ...instance,
+            plan_details: planDetails
+          };
+        });
+        
+        setRdpInstances(formattedInstances);
+      }
     } catch (error: any) {
       console.error("Error fetching RDP instances:", error.message);
       toast({
@@ -181,7 +207,6 @@ const RdpManagement = () => {
   };
 
   const renewRdp = (rdp: RdpInstance) => {
-    // This would typically navigate to a payment page for renewal
     toast({
       title: "Renewal process",
       description: "Redirecting to renewal options...",
@@ -525,7 +550,6 @@ const RdpManagement = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {/* This would be populated from system_logs table */}
                   <TableRow>
                     <TableCell className="font-medium">No logs available</TableCell>
                     <TableCell>-</TableCell>
