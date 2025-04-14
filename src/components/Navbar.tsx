@@ -1,19 +1,38 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Monitor, Menu, X, ShoppingCart, LogIn } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import ThemeToggle from './ThemeToggle';
 import UserMenu from './UserMenu';
+import { supabase } from "@/integrations/supabase/client";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { cart, getTotalItems } = useCart();
-  // Mock auth state - would be replaced with actual auth state
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   
   const totalItems = getTotalItems();
+  
+  useEffect(() => {
+    // Check if user is logged in on component mount
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsLoggedIn(!!session);
+    };
+
+    checkAuth();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsLoggedIn(!!session);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
   
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -141,20 +160,33 @@ const Navbar = () => {
             >
               FAQ
             </Link>
-            <Link 
-              to="/login" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Login
-            </Link>
-            <Link 
-              to="/register" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Register
-            </Link>
+            {!isLoggedIn && (
+              <>
+                <Link 
+                  to="/login" 
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link 
+                  to="/register" 
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Register
+                </Link>
+              </>
+            )}
+            {isLoggedIn && (
+              <Link 
+                to="/dashboard" 
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Dashboard
+              </Link>
+            )}
           </div>
         </div>
       )}

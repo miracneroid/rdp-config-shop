@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { z } from "zod";
@@ -31,7 +30,7 @@ const Login = () => {
   const location = useLocation();
   const { toast } = useToast();
   
-  const redirectTo = location.state?.redirectTo || "/configure";
+  const redirectTo = location.state?.redirectTo || "/dashboard";
 
   useEffect(() => {
     // Check if user is already logged in
@@ -90,7 +89,7 @@ const Login = () => {
           <p className="text-muted-foreground">Login to your RDP Config account</p>
           {location.state?.redirectTo && (
             <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-md text-sm text-blue-600 dark:text-blue-300">
-              Please log in to continue with your checkout
+              Please log in to continue
             </div>
           )}
         </div>

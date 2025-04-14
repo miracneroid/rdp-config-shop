@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -13,7 +13,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
 const UserDashboard = () => {
-  const [activeTab, setActiveTab] = useState("rdp-management");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const tabFromUrl = queryParams.get('tab');
+  const defaultTab = tabFromUrl || "rdp-management";
+  
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -26,14 +31,27 @@ const UserDashboard = () => {
         description: "Please log in to access your dashboard",
         variant: "destructive",
       });
-      navigate("/login");
+      navigate("/login", { state: { redirectTo: "/dashboard" } });
     }
   };
 
-  // Check session on component mount
+  // Handle tab changes - update URL when tab changes
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    navigate(`/dashboard?tab=${value}`);
+  };
+
+  // Check session on component mount and when URL changes
   useEffect(() => {
     checkSession();
   }, []);
+
+  // Update active tab when URL changes
+  useEffect(() => {
+    if (tabFromUrl) {
+      setActiveTab(tabFromUrl);
+    }
+  }, [location]);
 
   return (
     <div className="min-h-screen flex flex-col dark:bg-gray-900">
@@ -41,7 +59,7 @@ const UserDashboard = () => {
       <div className="flex-grow container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6 text-rdp-dark dark:text-white">Your Dashboard</h1>
         
-        <Tabs defaultValue="rdp-management" value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <Tabs defaultValue={activeTab} value={activeTab} onValueChange={handleTabChange} className="w-full">
           <TabsList className="grid grid-cols-2 md:grid-cols-5 mb-8">
             <TabsTrigger value="rdp-management">RDP Management</TabsTrigger>
             <TabsTrigger value="system-usage">System Usage</TabsTrigger>
