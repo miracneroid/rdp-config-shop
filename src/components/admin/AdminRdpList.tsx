@@ -31,6 +31,15 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Json } from "@/integrations/supabase/types";
+
+interface PlanDetails {
+  cpu: string;
+  ram: string;
+  storage: string;
+  os: string;
+  bandwidth: string;
+}
 
 interface RdpInstance {
   id: string;
@@ -43,14 +52,9 @@ interface RdpInstance {
   created_at: string;
   expiry_date: string;
   user_id: string;
-  plan_details: {
-    cpu: string;
-    ram: string;
-    storage: string;
-    os: string;
-    bandwidth: string;
-  };
+  plan_details: PlanDetails;
   user_email?: string;
+  avatar?: string;
 }
 
 const AdminRdpList = () => {
@@ -92,27 +96,42 @@ const AdminRdpList = () => {
             }
             
             // Process plan_details from string to object if needed
-            let planDetails = rdp.plan_details;
-            if (typeof planDetails === 'string') {
-              try {
-                planDetails = JSON.parse(planDetails);
-              } catch (e) {
-                console.error("Error parsing plan details:", e);
-                planDetails = {
-                  cpu: "Unknown",
-                  ram: "Unknown",
-                  storage: "Unknown",
-                  os: "Unknown",
-                  bandwidth: "Unknown"
-                };
-              }
+            let planDetails: PlanDetails = {
+              cpu: "Unknown",
+              ram: "Unknown",
+              storage: "Unknown",
+              os: "Unknown",
+              bandwidth: "Unknown"
+            };
+            
+            if (rdp.plan_details) {
+              const pd = rdp.plan_details as any;
+              planDetails = {
+                cpu: pd.cpu || "Unknown",
+                ram: pd.ram || "Unknown",
+                storage: pd.storage || "Unknown",
+                os: pd.os || "Unknown",
+                bandwidth: pd.bandwidth || "Unknown"
+              };
             }
             
-            return {
-              ...rdp,
-              user_email: userEmail,
-              plan_details: planDetails
-            } as RdpInstance;
+            // Create properly typed RDP instance
+            const typedRdp: RdpInstance = {
+              id: rdp.id,
+              name: rdp.name,
+              username: rdp.username,
+              password: rdp.password,
+              ip_address: rdp.ip_address || "",
+              port: rdp.port || "3389",
+              status: rdp.status || "inactive",
+              created_at: rdp.created_at,
+              expiry_date: rdp.expiry_date,
+              user_id: rdp.user_id,
+              plan_details: planDetails,
+              user_email: userEmail
+            };
+            
+            return typedRdp;
           })
         );
         
@@ -173,7 +192,7 @@ const AdminRdpList = () => {
     } else if (daysLeft <= 7) {
       return <Badge variant="destructive">Expiring soon ({daysLeft} days)</Badge>;
     } else if (daysLeft <= 30) {
-      return <Badge variant="warning">Expiring in {daysLeft} days</Badge>;
+      return <Badge variant="secondary">Expiring in {daysLeft} days</Badge>;
     } else {
       return <Badge variant="secondary">Valid for {daysLeft} days</Badge>;
     }
