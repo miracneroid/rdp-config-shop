@@ -15,7 +15,6 @@ import AdminDashboard from './pages/AdminDashboard';
 import FAQ from './pages/FAQ';
 import NotFound from './pages/NotFound';
 import UserDashboard from './pages/UserDashboard';
-import TestManagement from './pages/TestManagement';
 
 import { Toaster } from './components/ui/toaster';
 import { CartProvider } from './context/CartContext';
@@ -37,7 +36,6 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/test-management" element={<TestManagement />} />
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="*" element={<NotFound />} />

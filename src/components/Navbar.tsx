@@ -28,7 +28,7 @@ const Navbar = () => {
       if (session) {
         const { data: userData } = await supabase.auth.getUser();
         const email = userData?.user?.email;
-        setIsAdmin(email === 'admin@example.com' || email === 'test@gmail.com');
+        setIsAdmin(email === 'admin@example.com');
       }
       
       setIsLoading(false);
@@ -43,7 +43,7 @@ const Navbar = () => {
       // Check if user is admin
       if (session) {
         const email = session.user?.email;
-        setIsAdmin(email === 'admin@example.com' || email === 'test@gmail.com');
+        setIsAdmin(email === 'admin@example.com');
       } else {
         setIsAdmin(false);
       }
@@ -83,7 +83,7 @@ const Navbar = () => {
               FAQ
             </Link>
             {isAdmin && (
-              <Link to="/admin/test-management" className="text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light transition-colors">
+              <Link to="/admin" className="text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light transition-colors">
                 Admin
               </Link>
             )}
@@ -200,7 +200,7 @@ const Navbar = () => {
             )}
             {isAdmin && (
               <Link 
-                to="/admin/test-management" 
+                to="/admin" 
                 className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
                 onClick={() => setIsMenuOpen(false)}
               >

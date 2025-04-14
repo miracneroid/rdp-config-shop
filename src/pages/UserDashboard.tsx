@@ -13,28 +13,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { 
-  LayoutDashboard, 
   Server, 
   History, 
   HelpCircle, 
   User, 
   BarChart,
   Loader2,
-  Heart,
   Ticket,
   Gift,
   Bell
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 // Placeholder components for the new tabs
-const Wishlist = () => (
-  <div className="p-4">
-    <h2 className="text-2xl font-bold mb-4">Your Wishlist</h2>
-    <p>You don't have any items in your wishlist yet.</p>
-  </div>
-);
-
 const Coupons = () => (
   <div className="p-4">
     <h2 className="text-2xl font-bold mb-4">Your Coupons</h2>
@@ -127,7 +117,7 @@ const UserDashboard = () => {
 
   // Update active tab when URL changes
   useEffect(() => {
-    if (tabFromUrl && ["profile", "rdp-management", "orders", "wishlist", "coupons", "giftcards", "notifications"].includes(tabFromUrl)) {
+    if (tabFromUrl && ["profile", "rdp-management", "orders", "coupons", "giftcards", "notifications"].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     } else {
       // If invalid tab parameter, default to profile and update URL
@@ -166,7 +156,7 @@ const UserDashboard = () => {
         <Card className="mb-8">
           <CardContent className="p-0">
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-              <TabsList className="w-full grid grid-cols-2 md:grid-cols-7 rounded-none bg-muted/50">
+              <TabsList className="w-full grid grid-cols-2 md:grid-cols-6 rounded-none bg-muted/50">
                 <TabsTrigger value="profile" className="flex items-center justify-center">
                   <User className="h-4 w-4 mr-2" /><span className="hidden md:inline">Profile</span>
                   <span className="inline md:hidden">Profile</span>
@@ -178,10 +168,6 @@ const UserDashboard = () => {
                 <TabsTrigger value="orders" className="flex items-center justify-center">
                   <History className="h-4 w-4 mr-2" /><span className="hidden md:inline">Orders</span>
                   <span className="inline md:hidden">Orders</span>
-                </TabsTrigger>
-                <TabsTrigger value="wishlist" className="flex items-center justify-center">
-                  <Heart className="h-4 w-4 mr-2" /><span className="hidden md:inline">Wishlist</span>
-                  <span className="inline md:hidden">Wishlist</span>
                 </TabsTrigger>
                 <TabsTrigger value="coupons" className="flex items-center justify-center">
                   <Ticket className="h-4 w-4 mr-2" /><span className="hidden md:inline">Coupons</span>
@@ -216,10 +202,6 @@ const UserDashboard = () => {
                 
                 <TabsContent value="support" className="space-y-4 mt-0">
                   <SupportTickets />
-                </TabsContent>
-                
-                <TabsContent value="wishlist" className="space-y-4 mt-0">
-                  <Wishlist />
                 </TabsContent>
                 
                 <TabsContent value="coupons" className="space-y-4 mt-0">

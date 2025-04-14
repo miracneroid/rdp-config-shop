@@ -42,19 +42,19 @@ const AdminLogin = () => {
     // Check admin login credentials
     setTimeout(() => {
       if (values.adminId === "miracneroid" && values.password === "Jarus@2803") {
-        // Set super admin status in localStorage
+        // Set admin status in localStorage
         localStorage.setItem("isAdmin", "true");
         localStorage.setItem("adminType", "super");
         localStorage.setItem("adminName", values.adminId);
         
         toast({
-          title: "Super Admin login successful",
+          title: "Admin login successful",
           description: "Welcome to the admin dashboard",
           variant: "default",
         });
         navigate('/admin');
       } else if (values.adminId === "admin" && values.password === "admin12345") {
-        // Set regular admin status in localStorage
+        // Set admin status in localStorage
         localStorage.setItem("isAdmin", "true");
         localStorage.setItem("adminType", "regular");
         localStorage.setItem("adminName", values.adminId);
