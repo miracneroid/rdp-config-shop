@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,33 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+  
+  const redirectTo = location.state?.redirectTo || "/dashboard";
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate(redirectTo);
+      }
+    };
+
+    checkSession();
+    
+    // Check for auth error messages in URL
+    const url = new URL(window.location.href);
+    const errorMessage = url.searchParams.get('error_description');
+    if (errorMessage) {
+      toast({
+        title: "Authentication Error",
+        description: decodeURIComponent(errorMessage),
+        variant: "destructive",
+      });
+    }
+  }, [navigate, redirectTo, toast]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +76,7 @@ const Login = () => {
         localStorage.setItem("isAdmin", "true");
       }
       
-      navigate("/dashboard");
+      navigate(redirectTo);
     } catch (error: any) {
       console.error("Login error:", error.message);
       toast({
@@ -66,14 +92,24 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     try {
       setGoogleLoading(true);
+      
+      // Get the current domain for the redirect URL
+      const currentDomain = window.location.origin;
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: `${currentDomain}/dashboard`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          }
         },
       });
       
       if (error) throw error;
+      
+      // No toast here as the user will be redirected to Google
     } catch (error: any) {
       console.error("Google login error:", error.message);
       toast({
