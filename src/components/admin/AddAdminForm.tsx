@@ -64,34 +64,19 @@ const AddAdminForm = () => {
     
     try {
       console.log("Creating admin:", data.admin_id);
-
-      // Check if admin already exists
-      const { data: existingAdmin, error: checkError } = await supabase
-        .from("admin_users")
-        .select("admin_id")
-        .eq("admin_id", data.admin_id)
-        .single();
-
-      if (checkError && checkError.code !== "PGRST116") {
-        console.error("Error checking existing admin:", checkError);
-        throw checkError;
-      }
-
-      if (existingAdmin) {
-        console.log("Admin already exists:", existingAdmin);
-        toast({
-          title: "Admin already exists",
-          description: "An admin with this ID already exists",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // Add the new admin
-      const { error } = await supabase.from("admin_users").insert({
-        admin_id: data.admin_id,
-        password: data.password, // In a real app, this would be hashed
-        admin_type: data.admin_type,
+      
+      // Call the admin-operations Edge Function instead of directly inserting
+      const { data: responseData, error } = await supabase.functions.invoke("admin-operations", {
+        body: {
+          operation: {
+            action: "add_admin",
+            admin_id: "system", // This would normally be the current admin's ID
+            admin_type: "super", // This would normally be the current admin's type
+            admin_id: data.admin_id,
+            password: data.password,
+            admin_type: data.admin_type,
+          }
+        }
       });
 
       if (error) {
@@ -99,27 +84,12 @@ const AddAdminForm = () => {
         throw error;
       }
 
-      console.log("Admin created successfully");
-
-      // Get the current date for the action log
-      const now = new Date().toISOString();
-
-      // Log the admin action
-      const { error: logError } = await supabase.from("admin_actions").insert({
-        admin_id: "system", // This would normally be the current admin's ID
-        action: "create_admin",
-        admin_type: data.admin_type,
-        details: {
-          created_admin_id: data.admin_id,
-          admin_type: data.admin_type,
-          timestamp: now
-        },
-      });
-
-      if (logError) {
-        console.error("Error logging admin action:", logError);
-        // Non-critical error, so we'll just log it and continue
+      if (!responseData?.success) {
+        console.error("Admin creation failed:", responseData?.error || "Unknown error");
+        throw new Error(responseData?.error || "Failed to create admin");
       }
+
+      console.log("Admin created successfully:", responseData);
 
       toast({
         title: "Admin created",

@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.1.1";
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
@@ -45,28 +44,31 @@ serve(async (req) => {
       );
     }
 
-    const { action, admin_id, admin_type, ...params } = operation;
+    const { action } = operation;
+    // Fixed: use different variables for caller vs new admin
+    const callerAdminId = operation.admin_id;
+    const callerAdminType = operation.admin_type;
 
     let result;
     switch (action) {
       case "login_admin":
-        result = await loginAdmin(supabase, params.admin_id, params.password);
+        result = await loginAdmin(supabase, operation.admin_id, operation.password);
         break;
       case "add_admin":
         result = await addAdmin(supabase, {
-          admin_id: params.admin_id,
-          password: params.password,
-          admin_type: params.admin_type || "regular"
-        }, admin_id, admin_type);
+          admin_id: operation.admin_id,
+          password: operation.password,
+          admin_type: operation.admin_type || "regular"
+        }, callerAdminId, callerAdminType);
         break;
       case "update_rdp_status":
-        result = await updateRdpStatus(supabase, params.rdp_id, params.status, admin_id, admin_type);
+        result = await updateRdpStatus(supabase, operation.rdp_id, operation.status, callerAdminId, callerAdminType);
         break;
       case "delete_user":
-        result = await deleteUser(supabase, params.user_id, admin_id, admin_type);
+        result = await deleteUser(supabase, operation.user_id, callerAdminId, callerAdminType);
         break;
       case "assign_rdp_ip":
-        result = await assignRdpIp(supabase, params.rdp_id, params.ip_address, admin_id, admin_type);
+        result = await assignRdpIp(supabase, operation.rdp_id, operation.ip_address, callerAdminId, callerAdminType);
         break;
       default:
         return new Response(
