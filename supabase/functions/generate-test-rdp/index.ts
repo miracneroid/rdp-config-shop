@@ -48,14 +48,10 @@ serve(async (req) => {
       );
     }
 
-    // Get the user ID using a query instead of admin.getUserByEmail
-    const { data: userData, error: userError } = await supabaseAdmin
-      .from('auth.users')
-      .select('id')
-      .eq('email', email)
-      .single();
+    // Get user by email using the admin auth API
+    const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserByEmail(email);
     
-    if (userError || !userData) {
+    if (userError || !userData?.user) {
       console.error("Error finding test user:", userError);
       return new Response(
         JSON.stringify({ error: "Failed to find test user", details: userError }),
@@ -66,7 +62,7 @@ serve(async (req) => {
       );
     }
     
-    const userId = userData.id;
+    const userId = userData.user.id;
     
     // First check if an RDP instance already exists for the user
     const { data: existingRdp } = await supabaseAdmin
