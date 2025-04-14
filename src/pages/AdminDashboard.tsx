@@ -62,6 +62,8 @@ import { generateInvoice } from "@/utils/invoiceGenerator";
 import { 
   Checkbox,
 } from "@/components/ui/checkbox";
+import { generateTestUser } from "@/utils/testDataGenerator";
+import { Navbar, Footer } from "@/components";
 
 // Mock data
 const mockUsers = [
@@ -172,6 +174,8 @@ const AdminDashboard = () => {
     backupFrequency: "daily",
     defaultCurrency: "USD"
   });
+  const [activeTab, setActiveTab] = useState("users");
+  const [isTestUserLoading, setIsTestUserLoading] = useState(false);
 
   // Stats
   const stats = {
@@ -213,6 +217,36 @@ const AdminDashboard = () => {
       description: "You have been successfully logged out of the admin portal.",
     });
     navigate("/admin-login");
+  };
+
+  // Create test user function
+  const createTestUser = async () => {
+    setIsTestUserLoading(true);
+    
+    try {
+      const testEmail = "test@gmail.com";
+      const testPassword = "test@123";
+      
+      const result = await generateTestUser(testEmail, testPassword);
+      
+      if (!result.success) {
+        throw new Error(result.error?.message || "Failed to create test user");
+      }
+      
+      toast({
+        title: "Test user created",
+        description: "Test user created with email: test@gmail.com and password: test@123",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error creating test user",
+        description: error.message || "An error occurred while creating the test user",
+        variant: "destructive",
+      });
+      console.error("Test user error:", error);
+    } finally {
+      setIsTestUserLoading(false);
+    }
   };
 
   // Handle admin key generation
@@ -554,35 +588,47 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-rdp-dark-deeper">
-      {/* Admin Header */}
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-        <div className="flex items-center gap-2">
-          <ShieldAlert className="h-6 w-6 text-rdp-blue dark:text-rdp-blue-light" />
-          <h1 className="text-xl font-bold">Admin Dashboard</h1>
-          {adminType === "super" && (
-            <span className="ml-2 inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900/30 dark:text-amber-500">
-              Super Admin
-            </span>
-          )}
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col md:flex-row justify-between items-start mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+            <p className="text-muted-foreground">
+              {adminType === "super" ? "Super Admin" : "Admin"} Control Panel
+            </p>
+          </div>
+          <div className="mt-4 md:mt-0 flex space-x-3">
+            <Button 
+              variant="secondary"
+              onClick={createTestUser}
+              disabled={isTestUserLoading}
+              className="flex items-center"
+            >
+              {isTestUserLoading ? (
+                <span className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating test user...
+                </span>
+              ) : (
+                <>
+                  <Lightbulb className="mr-2 h-5 w-5" />
+                  Create Test User
+                </>
+              )}
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleLogout}
+            >
+              Log Out
+            </Button>
+          </div>
         </div>
-        <div className="ml-auto flex items-center gap-4">
-          <span className="text-sm text-muted-foreground">
-            Logged in as: <span className="font-medium">{adminName}</span>
-          </span>
-          <Button 
-            variant="destructive" 
-            size="sm" 
-            onClick={handleLogout}
-            className="gap-1"
-          >
-            <LogOut className="h-4 w-4" />
-            Logout
-          </Button>
-        </div>
-      </header>
 
-      <div className="container mx-auto px-4 py-6">
         {/* Overview Cards */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
           <Card>

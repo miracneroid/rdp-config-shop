@@ -22,3 +22,9 @@ export const generateTestUser = async (email: string, password: string) => {
     return { success: false, error };
   }
 };
+
+// Check if user is admin
+export const isUserAdmin = (): boolean => {
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
+  return isAdmin;
+};

@@ -38,12 +38,21 @@ serve(async (req) => {
       );
     }
 
-    // Check if user already exists
-    const { data: existingUser, error: getUserError } = await supabaseAdmin.auth.admin.getUserByEmail(email);
+    // Check if user already exists - FIXED method for v2 client
+    const { data: users, error: getUserError } = await supabaseAdmin.auth.admin.listUsers();
     
     if (getUserError) {
-      console.error("Error checking existing user:", getUserError);
+      console.error("Error checking existing users:", getUserError);
+      return new Response(
+        JSON.stringify({ error: "Failed to check existing users", details: getUserError }),
+        { 
+          status: 500, 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        }
+      );
     }
+    
+    const existingUser = users.users.find(user => user.email === email);
 
     let userId;
     if (existingUser) {
