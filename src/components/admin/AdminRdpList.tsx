@@ -71,6 +71,35 @@ const AdminRdpList = () => {
     fetchRdpInstances();
   }, []);
 
+  const fetchUserEmail = async (userId: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return "Unknown";
+
+      // Use the edge function to get the user's email
+      const response = await fetch(`https://mbvsottvfclwoswykxfy.supabase.co/functions/v1/get-user-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({ userId })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok && data.email) {
+        return data.email;
+      } else {
+        console.error("Error fetching user email:", data.error);
+        return "Unknown";
+      }
+    } catch (error) {
+      console.error("Error in fetchUserEmail:", error);
+      return "Unknown";
+    }
+  };
+
   const fetchRdpInstances = async () => {
     setLoading(true);
     try {
@@ -86,14 +115,8 @@ const AdminRdpList = () => {
       if (rdpData && rdpData.length > 0) {
         const rdpsWithEmails = await Promise.all(
           rdpData.map(async (rdp) => {
-            // Get user email
-            let userEmail = "Unknown";
-            try {
-              const { data: { user } } = await supabase.auth.admin.getUserById(rdp.user_id);
-              userEmail = user?.email || "Unknown";
-            } catch (e) {
-              console.error("Error fetching user:", e);
-            }
+            // Get user email using the edge function
+            const userEmail = await fetchUserEmail(rdp.user_id);
             
             // Process plan_details from string to object if needed
             let planDetails: PlanDetails = {

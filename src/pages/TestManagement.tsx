@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -73,6 +72,35 @@ const TestManagement = () => {
     checkAdmin();
   }, [navigate, toast]);
 
+  const fetchUserEmail = async (userId: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return "Unknown";
+
+      // Use the edge function to get the user's email
+      const response = await fetch(`https://mbvsottvfclwoswykxfy.supabase.co/functions/v1/get-user-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({ userId })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok && data.email) {
+        return data.email;
+      } else {
+        console.error("Error fetching user email:", data.error);
+        return "Unknown";
+      }
+    } catch (error) {
+      console.error("Error in fetchUserEmail:", error);
+      return "Unknown";
+    }
+  };
+
   const loadUsers = async () => {
     try {
       setIsLoadingUsers(true);
@@ -105,14 +133,8 @@ const TestManagement = () => {
             .eq('user_id', profile.id)
             .maybeSingle();
           
-          // Get user auth info via RPC call (since we can't access auth.users directly)
-          const { data: authUser } = await supabase.auth.admin.getUserById(profile.id);
-          
-          // Get email from auth user or display name from profile
-          const email = authUser?.user?.email || 
-                        `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 
-                        profile.display_name || 
-                        'Unknown user';
+          // Get user email using the edge function
+          const email = await fetchUserEmail(profile.id);
           
           return {
             ...profile,
