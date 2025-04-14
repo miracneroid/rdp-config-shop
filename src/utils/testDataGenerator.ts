@@ -33,8 +33,7 @@ export const addTestRdp = async (email: string) => {
       return { success: false, error: "This function only works for test@gmail.com" };
     }
     
-    // Instead of directly accessing auth.users, use an edge function to handle this
-    // This avoids the "permission denied for table users" error
+    // Call the dedicated edge function to handle this with admin privileges
     const { data, error } = await supabase.functions.invoke('generate-test-rdp', {
       body: { email }
     });
