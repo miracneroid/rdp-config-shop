@@ -128,12 +128,12 @@ const UserDashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col dark:bg-gray-900">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background/95 to-background/90 dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-800/90">
         <Navbar />
         <div className="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
           <div className="text-center">
             <Loader2 className="h-10 w-10 animate-spin mx-auto text-rdp-blue dark:text-rdp-blue-light" />
-            <p className="mt-4 text-lg">Loading your dashboard...</p>
+            <p className="mt-4 text-lg text-foreground/80">Loading your dashboard...</p>
           </div>
         </div>
         <Footer />
@@ -142,44 +142,53 @@ const UserDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background/95 to-background/90 dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-800/90">
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="flex items-center gap-3 mb-6">
-          <User className="h-8 w-8 text-rdp-blue dark:text-rdp-blue-light" />
+          <div className="p-2 rounded-full bg-rdp-blue/10 dark:bg-rdp-blue-light/10">
+            <User className="h-8 w-8 text-rdp-blue dark:text-rdp-blue-light" />
+          </div>
           <div>
-            <h1 className="text-3xl font-bold text-rdp-dark dark:text-white">My Account</h1>
-            <p className="text-gray-600 dark:text-gray-400">Welcome back, {userName}</p>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/80 dark:from-white dark:to-white/80 bg-clip-text text-transparent">
+              My Account
+            </h1>
+            <p className="text-muted-foreground">Welcome back, {userName}</p>
           </div>
         </div>
         
-        <Card className="mb-8">
+        <Card className="mb-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
           <CardContent className="p-0">
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-              <TabsList className="w-full grid grid-cols-2 md:grid-cols-5 rounded-none bg-muted/50">
-                <TabsTrigger value="profile" className="flex items-center justify-center">
-                  <User className="h-4 w-4 mr-2" /><span className="hidden md:inline">Profile</span>
+              <TabsList className="w-full grid grid-cols-2 md:grid-cols-5 rounded-none bg-white/50 dark:bg-gray-900/50 border-b border-gray-200/50 dark:border-gray-700/50">
+                <TabsTrigger value="profile" className="flex items-center justify-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light">
+                  <User className="h-4 w-4 mr-2" />
+                  <span className="hidden md:inline">Profile</span>
                   <span className="inline md:hidden">Profile</span>
                 </TabsTrigger>
-                <TabsTrigger value="rdp-management" className="flex items-center justify-center">
-                  <Server className="h-4 w-4 mr-2" /><span className="hidden md:inline">RDP Management</span>
+                <TabsTrigger value="rdp-management" className="flex items-center justify-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light">
+                  <Server className="h-4 w-4 mr-2" />
+                  <span className="hidden md:inline">RDP Management</span>
                   <span className="inline md:hidden">RDPs</span>
                 </TabsTrigger>
-                <TabsTrigger value="orders" className="flex items-center justify-center">
-                  <History className="h-4 w-4 mr-2" /><span className="hidden md:inline">Orders</span>
+                <TabsTrigger value="orders" className="flex items-center justify-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light">
+                  <History className="h-4 w-4 mr-2" />
+                  <span className="hidden md:inline">Orders</span>
                   <span className="inline md:hidden">Orders</span>
                 </TabsTrigger>
-                <TabsTrigger value="coupons" className="flex items-center justify-center">
-                  <Ticket className="h-4 w-4 mr-2" /><span className="hidden md:inline">Coupons</span>
+                <TabsTrigger value="coupons" className="flex items-center justify-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light">
+                  <Ticket className="h-4 w-4 mr-2" />
+                  <span className="hidden md:inline">Coupons</span>
                   <span className="inline md:hidden">Coupons</span>
                 </TabsTrigger>
-                <TabsTrigger value="notifications" className="flex items-center justify-center">
-                  <Bell className="h-4 w-4 mr-2" /><span className="hidden md:inline">Notifications</span>
+                <TabsTrigger value="notifications" className="flex items-center justify-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light">
+                  <Bell className="h-4 w-4 mr-2" />
+                  <span className="hidden md:inline">Notifications</span>
                   <span className="inline md:hidden">Alerts</span>
                 </TabsTrigger>
               </TabsList>
               
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mt-0">
+              <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-inner p-6 mt-0">
                 <TabsContent value="profile" className="space-y-4 mt-0">
                   <UserProfile />
                 </TabsContent>
