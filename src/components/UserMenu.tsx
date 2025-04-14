@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { 
   User, 
   LogOut, 
-  Heart,
   Ticket,
   Gift,
   Bell,
@@ -214,10 +213,6 @@ const UserMenu = () => {
             <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=orders')}>
               <History className="mr-2 h-4 w-4" />
               <span>Orders</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=wishlist')}>
-              <Heart className="mr-2 h-4 w-4" />
-              <span>Wishlist</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=coupons')}>
               <Ticket className="mr-2 h-4 w-4" />

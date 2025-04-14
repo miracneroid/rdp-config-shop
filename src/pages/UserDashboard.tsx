@@ -156,7 +156,7 @@ const UserDashboard = () => {
         <Card className="mb-8">
           <CardContent className="p-0">
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-              <TabsList className="w-full grid grid-cols-2 md:grid-cols-6 rounded-none bg-muted/50">
+              <TabsList className="w-full grid grid-cols-2 md:grid-cols-5 rounded-none bg-muted/50">
                 <TabsTrigger value="profile" className="flex items-center justify-center">
                   <User className="h-4 w-4 mr-2" /><span className="hidden md:inline">Profile</span>
                   <span className="inline md:hidden">Profile</span>
@@ -172,10 +172,6 @@ const UserDashboard = () => {
                 <TabsTrigger value="coupons" className="flex items-center justify-center">
                   <Ticket className="h-4 w-4 mr-2" /><span className="hidden md:inline">Coupons</span>
                   <span className="inline md:hidden">Coupons</span>
-                </TabsTrigger>
-                <TabsTrigger value="giftcards" className="flex items-center justify-center">
-                  <Gift className="h-4 w-4 mr-2" /><span className="hidden md:inline">Gift Cards</span>
-                  <span className="inline md:hidden">Gifts</span>
                 </TabsTrigger>
                 <TabsTrigger value="notifications" className="flex items-center justify-center">
                   <Bell className="h-4 w-4 mr-2" /><span className="hidden md:inline">Notifications</span>
