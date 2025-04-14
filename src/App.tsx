@@ -14,6 +14,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import Settings from './pages/Settings';
 import FAQ from './pages/FAQ';
 import NotFound from './pages/NotFound';
+import UserDashboard from './pages/UserDashboard';
 
 import { Toaster } from './components/ui/toaster';
 import { CartProvider } from './context/CartContext';
@@ -36,6 +37,7 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/faq" element={<FAQ />} />
+            <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
