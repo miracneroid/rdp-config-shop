@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -30,7 +29,7 @@ const billingFormSchema = z.object({
   firstName: z.string().min(2, { message: "First name must be at least 2 characters" }),
   lastName: z.string().min(2, { message: "Last name must be at least 2 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
-  phone: z.string().min(10, { message: "Please enter a valid phone number" }),
+  phone: z.string().optional(),
   address: z.string().min(5, { message: "Address must be at least 5 characters" }),
   city: z.string().min(2, { message: "City must be at least 2 characters" }),
   state: z.string().min(2, { message: "State must be at least 2 characters" }),
@@ -48,7 +47,6 @@ const paymentFormSchema = z.object({
 type BillingFormValues = z.infer<typeof billingFormSchema>;
 type PaymentFormValues = z.infer<typeof paymentFormSchema>;
 
-// Define interface for billing address that can be converted to Json
 interface BillingAddressData {
   phone: string;
   address: string;
@@ -93,7 +91,6 @@ const Checkout = () => {
     },
   });
 
-  // Check if user is authenticated and redirect if not
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -108,7 +105,6 @@ const Checkout = () => {
         return;
       }
 
-      // Get user profile data if available
       const { data: profileData } = await supabase
         .from("profiles")
         .select("*")
@@ -120,13 +116,10 @@ const Checkout = () => {
         profile: profileData || {},
       });
 
-      // Pre-fill the form with user data if available
       if (profileData) {
-        // Safely access billing_address fields with proper type checking
         const billingAddressJson = profileData.billing_address as Json;
         let billingAddress: Partial<BillingAddressData> = {};
         
-        // Check if billing_address exists and is an object
         if (billingAddressJson && typeof billingAddressJson === 'object' && !Array.isArray(billingAddressJson)) {
           billingAddress = billingAddressJson as Partial<BillingAddressData>;
         }
@@ -143,7 +136,6 @@ const Checkout = () => {
           country: billingAddress.country || "",
         });
       } else {
-        // Just fill the email if no profile data
         billingForm.setValue("email", session.user.email || "");
       }
 
@@ -153,7 +145,6 @@ const Checkout = () => {
     checkAuth();
   }, [navigate, toast, billingForm]);
 
-  // Redirect if cart is empty
   useEffect(() => {
     if (cart.length === 0) {
       toast({
@@ -175,14 +166,12 @@ const Checkout = () => {
     setCurrentStep("processing");
     
     try {
-      // 1. Save order to database
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
         throw new Error("User not authenticated");
       }
       
-      // Create serializable order details that can be stored as JSON
       const orderDetails = {
         items: cart.map(item => ({
           id: item.id,
@@ -190,12 +179,10 @@ const Checkout = () => {
           price: `${settings.currency.symbol}${item.price.toFixed(2)}`,
           quantity: item.quantity,
           subtotal: `${settings.currency.symbol}${(item.price * item.quantity).toFixed(2)}`,
-          // Convert configuration to plain object that can be stored as JSON
           configuration: JSON.parse(JSON.stringify(item.configuration))
         }))
       };
 
-      // Create the order in the database
       const { data: order, error: orderError } = await supabase
         .from("orders")
         .insert({
@@ -212,19 +199,15 @@ const Checkout = () => {
         throw new Error(`Failed to create order: ${orderError.message}`);
       }
       
-      // Create an RDP instance for each item in the cart
       const rdpInstances = [];
       
       for (const item of cart) {
-        // Generate random credentials for the RDP
         const username = `user_${Math.random().toString(36).substring(2, 8)}`;
         const password = Math.random().toString(36).substring(2, 15);
         
-        // Calculate expiry date based on duration
         const expiryDate = new Date();
         expiryDate.setMonth(expiryDate.getMonth() + item.configuration.duration);
         
-        // Create RDP instance - serialize configuration to plain JSON
         const { data: rdpInstance, error: rdpError } = await supabase
           .from("rdp_instances")
           .insert({
@@ -245,7 +228,6 @@ const Checkout = () => {
         
         rdpInstances.push(rdpInstance);
         
-        // Link RDP instance to order
         if (rdpInstance) {
           await supabase
             .from("orders")
@@ -254,8 +236,6 @@ const Checkout = () => {
         }
       }
 
-      // 2. Generate and email invoice
-      // Invoke the Supabase edge function to send the invoice
       await supabase.functions.invoke('send-invoice', {
         body: {
           orderId: order.id,
@@ -263,7 +243,6 @@ const Checkout = () => {
         }
       });
 
-      // 3. Email RDP credentials
       for (const rdp of rdpInstances) {
         emailRdpCredentials(
           billingInfo.email, 
@@ -272,14 +251,12 @@ const Checkout = () => {
         );
       }
 
-      // 4. Update user profile with billing info if it doesn't exist
       const { data: profile } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", user.id)
         .single();
       
-      // Create billing address data that matches our expected structure
       const billingAddressData: BillingAddressData = {
         address: billingInfo.address,
         city: billingInfo.city,
@@ -300,7 +277,6 @@ const Checkout = () => {
           .eq("id", user.id);
       }
 
-      // 5. Clear cart and show success message
       toast({
         title: "Order Successful!",
         description: "Your RDP is being provisioned. Details have been sent to your email.",
@@ -308,7 +284,6 @@ const Checkout = () => {
       
       clearCart();
       
-      // 6. Redirect to dashboard
       navigate("/dashboard");
       
     } catch (error) {
