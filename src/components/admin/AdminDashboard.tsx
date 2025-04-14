@@ -27,6 +27,8 @@ import { fetchData } from "@/services/supabaseService";
 
 interface OrderItem {
   amount: number;
+  description?: string;
+  price?: string;
 }
 
 const AdminDashboard = () => {
@@ -94,22 +96,22 @@ const AdminDashboard = () => {
         select: 'amount'
       });
 
-      const totalRevenue = (orders || []).reduce((sum, order) => {
+      const totalRevenue = Array.isArray(orders) ? orders.reduce((sum, order) => {
         const amount = typeof order.amount === 'number' ? order.amount : 0;
         return sum + amount;
-      }, 0);
+      }, 0) : 0;
 
       const { count: rdpCount, error: rdpError } = await supabase
         .from('rdp_instances')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'active' as any);
+        .eq('status', asUUID('active'));
         
       if (rdpError) throw rdpError;
 
       const { count: ticketCount, error: ticketError } = await supabase
         .from('support_tickets')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'open' as any);
+        .eq('status', asUUID('open'));
         
       if (ticketError) throw ticketError;
 

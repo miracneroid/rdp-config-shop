@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PostgrestError } from "@supabase/supabase-js";
+import { asUUID, processArrayResult, processQueryResult } from "@/utils/typeGuards";
 
 interface QueryState<T> {
   data: T | null;
@@ -20,7 +21,7 @@ export function useSupabaseSafeQuery<T>() {
   });
 
   const executeQuery = async (
-    queryFn: () => Promise<{ data: T | null; error: PostgrestError | null }>
+    queryFn: () => Promise<{ data: any; error: PostgrestError | null }>
   ) => {
     setState((prev) => ({ ...prev, loading: true }));
     try {
@@ -32,8 +33,16 @@ export function useSupabaseSafeQuery<T>() {
         return null;
       }
       
-      setState({ data, error: null, loading: false });
-      return data;
+      // Handle array results
+      if (Array.isArray(data)) {
+        const processedData = processArrayResult<T>(data);
+        setState({ data: processedData as T, error: null, loading: false });
+        return processedData;
+      }
+      
+      // Handle single results
+      setState({ data: data as T, error: null, loading: false });
+      return data as T;
     } catch (err) {
       console.error("Unexpected error during query:", err);
       setState({ 
@@ -45,8 +54,27 @@ export function useSupabaseSafeQuery<T>() {
     }
   };
 
+  /**
+   * Helper function to execute queries with UUID-based parameters
+   */
+  const executeQueryWithUUID = async (
+    tableName: string,
+    idField: string,
+    idValue: string,
+    selectFields: string = '*'
+  ) => {
+    return executeQuery(() => 
+      supabase
+        .from(tableName)
+        .select(selectFields)
+        .eq(idField, asUUID(idValue))
+        .maybeSingle()
+    );
+  };
+
   return {
     ...state,
-    executeQuery
+    executeQuery,
+    executeQueryWithUUID
   };
 }

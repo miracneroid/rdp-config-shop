@@ -42,19 +42,67 @@ export function isQueryResultObject<T extends object>(obj: unknown, requiredProp
 }
 
 /**
- * Processes Supabase query results and provides proper TypeScript typing
- */
-export function processQueryResult<T>(data: T | null, error: any): { data: T | null, error: string | null } {
-  if (error) {
-    console.error('Query error:', error);
-    return { data: null, error: error.message || 'Unknown error' };
-  }
-  return { data, error: null };
-}
-
-/**
  * Type guard to check if an error object was returned
  */
 export function isError(obj: any): obj is { error: string } {
   return typeof obj === 'object' && obj !== null && 'error' in obj;
+}
+
+/**
+ * Type guard to check if value is array
+ */
+export function isArray<T>(value: T | T[]): value is T[] {
+  return Array.isArray(value);
+}
+
+/**
+ * Type guard for checking if an object is a single item (not an array)
+ */
+export function isSingleItem<T>(value: T | T[]): value is T {
+  return !Array.isArray(value);
+}
+
+/**
+ * Safely cast a value to the expected type using type assertion
+ */
+export function safeCast<T>(data: unknown): T {
+  // This should be used with caution, preferably after validation
+  return data as T;
+}
+
+/**
+ * Processes Supabase query results and provides proper TypeScript typing
+ * with enhanced error handling and type safety
+ */
+export function processQueryResult<T>(data: unknown, error: any): { data: T | null, error: string | null } {
+  if (error) {
+    console.error('Query error:', error);
+    return { data: null, error: error.message || 'Unknown error' };
+  }
+  
+  // When data is null or undefined, return it as is
+  if (data === null || data === undefined) {
+    return { data: null, error: null };
+  }
+  
+  // Safely cast to the expected type
+  return { data: data as T, error: null };
+}
+
+/**
+ * Convert a string value to a UUID-compatible format for Supabase
+ * Use this before passing IDs to Supabase queries
+ */
+export function asUUID(id: string): string {
+  // No actual conversion needed, just helps TypeScript know this is UUID-compatible
+  return id;
+}
+
+/**
+ * Safely process array results from Supabase
+ */
+export function processArrayResult<T>(data: unknown): T[] {
+  if (!data) return [];
+  if (!Array.isArray(data)) return [data as T];
+  return data as T[];
 }

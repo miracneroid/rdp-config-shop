@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { processQueryResult } from "@/utils/typeGuards";
+import { asUUID, processArrayResult, processQueryResult } from "@/utils/typeGuards";
 import { PostgrestError } from "@supabase/supabase-js";
 
 /**
@@ -17,14 +17,16 @@ export async function fetchData<T>(
     limit?: number;
     single?: boolean;
   } = {}
-): Promise<{ data: T | T[] | null; error: string | null }> {
+): Promise<{ data: T | null; error: string | null }> {
   try {
     let query = supabase.from(tableName).select(options.select || '*');
 
     // Apply filters
     if (options.match) {
       Object.entries(options.match).forEach(([key, value]) => {
-        query = query.eq(key, value);
+        // Use asUUID for string IDs to help with TypeScript
+        const safeValue = typeof value === 'string' ? asUUID(value) : value;
+        query = query.eq(key, safeValue);
       });
     }
 
@@ -45,7 +47,16 @@ export async function fetchData<T>(
       ? await query.maybeSingle() 
       : await query;
 
-    return processQueryResult(data as unknown as T, error);
+    if (error) throw error;
+    
+    // For single results, return as is
+    if (options.single) {
+      return processQueryResult<T>(data, null);
+    }
+    
+    // For array results, ensure we return the proper type
+    const processedData = processArrayResult<T>(data);
+    return { data: processedData as T, error: null };
   } catch (error: any) {
     console.error(`Error in fetchData(${tableName}):`, error);
     return { data: null, error: error.message || 'Unknown error occurred' };
@@ -60,13 +71,23 @@ export async function insertData<T>(
   data: Record<string, any>
 ): Promise<{ data: T | null; error: string | null }> {
   try {
+    // Convert any string IDs to UUID format
+    const processedData = Object.entries(data).reduce((acc, [key, value]) => {
+      if (key.endsWith('_id') && typeof value === 'string') {
+        acc[key] = asUUID(value);
+      } else {
+        acc[key] = value;
+      }
+      return acc;
+    }, {} as Record<string, any>);
+    
     const { data: result, error } = await supabase
       .from(tableName)
-      .insert(data)
+      .insert(processedData)
       .select()
       .single();
 
-    return processQueryResult(result as T, error);
+    return processQueryResult<T>(result, error);
   } catch (error: any) {
     console.error(`Error in insertData(${tableName}):`, error);
     return { data: null, error: error.message || 'Unknown error occurred' };
@@ -86,12 +107,14 @@ export async function updateData<T>(
     
     // Apply match criteria for the update
     Object.entries(match).forEach(([key, value]) => {
-      query = query.eq(key, value);
+      // Convert string IDs to UUID format
+      const safeValue = typeof value === 'string' ? asUUID(value) : value;
+      query = query.eq(key, safeValue);
     });
     
     const { data: result, error } = await query.select().single();
     
-    return processQueryResult(result as T, error);
+    return processQueryResult<T>(result, error);
   } catch (error: any) {
     console.error(`Error in updateData(${tableName}):`, error);
     return { data: null, error: error.message || 'Unknown error occurred' };
@@ -110,7 +133,9 @@ export async function deleteData(
     
     // Apply match criteria for the delete
     Object.entries(match).forEach(([key, value]) => {
-      query = query.eq(key, value);
+      // Convert string IDs to UUID format
+      const safeValue = typeof value === 'string' ? asUUID(value) : value;
+      query = query.eq(key, safeValue);
     });
     
     const { error } = await query;
@@ -121,5 +146,21 @@ export async function deleteData(
   } catch (error: any) {
     console.error(`Error in deleteData(${tableName}):`, error);
     return { success: false, error: error.message || 'Unknown error occurred' };
+  }
+}
+
+/**
+ * Run a custom query using Supabase's PostgreSQL functions
+ */
+export async function runFunction<T>(
+  functionName: string,
+  params: Record<string, any>
+): Promise<{ data: T | null; error: string | null }> {
+  try {
+    const { data, error } = await supabase.rpc(functionName, params);
+    return processQueryResult<T>(data, error);
+  } catch (error: any) {
+    console.error(`Error in runFunction(${functionName}):`, error);
+    return { data: null, error: error.message || 'Unknown error occurred' };
   }
 }

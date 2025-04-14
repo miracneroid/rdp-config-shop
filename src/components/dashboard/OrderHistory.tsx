@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -31,6 +30,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Download, FileText, RefreshCw } from "lucide-react";
 import { emailInvoice, generateInvoice } from "@/utils/invoiceGenerator";
+import { asUUID, isNotNullOrUndefined, processArrayResult } from "@/utils/typeGuards";
+import { fetchData } from "@/services/supabaseService";
 
 interface OrderItem {
   description: string;
@@ -87,16 +88,15 @@ const OrderHistory = () => {
         throw new Error("User not authenticated");
       }
       
-      const { data, error } = await supabase
-        .from("orders")
-        .select("*")
-        .eq("user_id", session.user.id)
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
+      const { data, error } = await fetchData<SupabaseOrder[]>('orders', {
+        match: { user_id: asUUID(session.user.id) },
+        order: { column: 'created_at', ascending: false }
+      });
+      
+      if (error) throw new Error(error);
       
       if (data) {
-        const formattedOrders: Order[] = (data as SupabaseOrder[]).map((order) => {
+        const formattedOrders: Order[] = data.map((order) => {
           const orderDetailsJson = order.order_details as any;
           
           const orderDetails: OrderDetails = {
@@ -134,10 +134,8 @@ const OrderHistory = () => {
         date: new Date(order.created_at).toLocaleDateString(),
       };
 
-      // Generate PDF invoice
       const invoiceBlob = generateInvoice(invoiceData);
       
-      // Create a download link and trigger download
       const url = URL.createObjectURL(invoiceBlob);
       const a = document.createElement("a");
       a.href = url;
