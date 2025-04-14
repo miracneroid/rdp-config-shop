@@ -85,6 +85,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_character: string | null
           avatar_url: string | null
           billing_address: Json | null
           created_at: string
@@ -96,6 +97,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          avatar_character?: string | null
           avatar_url?: string | null
           billing_address?: Json | null
           created_at?: string
@@ -107,6 +109,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          avatar_character?: string | null
           avatar_url?: string | null
           billing_address?: Json | null
           created_at?: string
