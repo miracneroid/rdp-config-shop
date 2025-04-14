@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -26,7 +25,7 @@ import {
   Cell,
 } from "recharts";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RefreshCw, Cpu, Memory, HardDrive, Network } from "lucide-react";
+import { RefreshCw, Cpu, MemoryStick, HardDrive, Network } from "lucide-react";
 
 interface RdpInstance {
   id: string;
@@ -34,7 +33,6 @@ interface RdpInstance {
   status: string;
 }
 
-// Mock data for system usage (in a real app, this would come from an API)
 const mockCpuData = [
   { name: "00:00", usage: 15 },
   { name: "01:00", usage: 12 },
@@ -133,7 +131,6 @@ const SystemUsage = () => {
       description: "Fetching the latest system usage data...",
     });
     
-    // In a real app, this would fetch fresh data from an API
     setTimeout(() => {
       toast({
         title: "Data refreshed",
@@ -217,7 +214,7 @@ const SystemUsage = () => {
                 <p className="text-sm font-medium text-muted-foreground">Memory Usage</p>
                 <h3 className="text-2xl font-bold">{mockMemoryData[mockMemoryData.length - 1].usage}%</h3>
               </div>
-              <Memory className="h-10 w-10 text-green-500" />
+              <MemoryStick className="h-10 w-10 text-green-500" />
             </div>
           </CardContent>
         </Card>
