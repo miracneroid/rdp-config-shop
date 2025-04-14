@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -60,7 +61,7 @@ const AddAdminForm = () => {
   };
 
   return (
-    <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700">
+    <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg">
       <CardHeader>
         <CardTitle className="flex items-center text-foreground">
           <UserPlus className="h-5 w-5 mr-2 text-rdp-blue dark:text-rdp-blue-light" />
@@ -80,7 +81,7 @@ const AddAdminForm = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@example.com"
-              className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+              className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-foreground placeholder:text-muted-foreground"
               required
             />
           </div>
@@ -92,7 +93,7 @@ const AddAdminForm = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter secure password"
-              className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700"
+              className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-foreground placeholder:text-muted-foreground"
               required
             />
           </div>

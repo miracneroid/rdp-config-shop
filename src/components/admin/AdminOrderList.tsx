@@ -189,21 +189,21 @@ const AdminOrderList = () => {
     return (
       <div className="flex justify-center items-center py-8">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2">Loading orders...</span>
+        <span className="ml-2 text-foreground">Loading orders...</span>
       </div>
     );
   }
 
   return (
     <div>
-      <Card>
+      <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-xl">Order History</CardTitle>
+          <CardTitle className="text-xl text-foreground">Order History</CardTitle>
           <Button
             variant="outline"
             size="sm"
             onClick={fetchOrders}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 text-foreground dark:text-white bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
           >
             <Loader2 className="h-4 w-4" />
             Refresh
@@ -216,24 +216,24 @@ const AdminOrderList = () => {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>Invoice #</TableHead>
-                    <TableHead>User</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
+                  <TableRow className="border-gray-200 dark:border-gray-700">
+                    <TableHead className="text-foreground">Invoice #</TableHead>
+                    <TableHead className="text-foreground">User</TableHead>
+                    <TableHead className="text-foreground">Date</TableHead>
+                    <TableHead className="text-foreground">Amount</TableHead>
+                    <TableHead className="text-foreground">Status</TableHead>
+                    <TableHead className="text-foreground">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {orders.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell className="font-medium">
+                    <TableRow key={order.id} className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="font-medium text-foreground">
                         {order.invoice_number || order.id.substring(0, 8)}
                       </TableCell>
-                      <TableCell>{order.user_email || order.order_details.customer.email}</TableCell>
-                      <TableCell>{formatDate(order.created_at)}</TableCell>
-                      <TableCell>
+                      <TableCell className="text-foreground">{order.user_email || order.order_details.customer.email}</TableCell>
+                      <TableCell className="text-foreground">{formatDate(order.created_at)}</TableCell>
+                      <TableCell className="text-foreground">
                         {order.currency} {Number(order.amount).toFixed(2)}
                       </TableCell>
                       <TableCell>{getStatusBadge(order.payment_status)}</TableCell>
@@ -246,6 +246,7 @@ const AdminOrderList = () => {
                               setSelectedOrder(order);
                               setViewOrderDetails(true);
                             }}
+                            className="bg-white dark:bg-gray-800 text-foreground dark:text-white border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
@@ -253,6 +254,7 @@ const AdminOrderList = () => {
                             variant="outline"
                             size="icon"
                             onClick={() => downloadInvoice(order)}
+                            className="bg-white dark:bg-gray-800 text-foreground dark:text-white border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
                           >
                             <Download className="h-4 w-4" />
                           </Button>
@@ -269,10 +271,10 @@ const AdminOrderList = () => {
 
       {/* Order Details Dialog */}
       <Dialog open={viewOrderDetails} onOpenChange={setViewOrderDetails}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px] bg-white dark:bg-gray-800 text-foreground border border-gray-200 dark:border-gray-700">
           <DialogHeader>
-            <DialogTitle>Order Details</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-foreground">Order Details</DialogTitle>
+            <DialogDescription className="text-muted-foreground">
               Invoice #{selectedOrder?.invoice_number || selectedOrder?.id?.substring(0, 8)}
             </DialogDescription>
           </DialogHeader>
@@ -281,36 +283,36 @@ const AdminOrderList = () => {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h4 className="text-sm font-medium mb-1">Customer</h4>
-                  <p>{selectedOrder.order_details.customer.name}</p>
-                  <p>{selectedOrder.user_email || selectedOrder.order_details.customer.email}</p>
+                  <h4 className="text-sm font-medium mb-1 text-foreground">Customer</h4>
+                  <p className="text-foreground">{selectedOrder.order_details.customer.name}</p>
+                  <p className="text-foreground">{selectedOrder.user_email || selectedOrder.order_details.customer.email}</p>
                 </div>
                 <div>
-                  <h4 className="text-sm font-medium mb-1">Order Info</h4>
-                  <p>Date: {formatDate(selectedOrder.created_at)}</p>
-                  <p>Status: {selectedOrder.payment_status || 'Unknown'}</p>
+                  <h4 className="text-sm font-medium mb-1 text-foreground">Order Info</h4>
+                  <p className="text-foreground">Date: {formatDate(selectedOrder.created_at)}</p>
+                  <p className="text-foreground">Status: {selectedOrder.payment_status || 'Unknown'}</p>
                 </div>
               </div>
               
               <div>
-                <h4 className="text-sm font-medium mb-2">Items</h4>
+                <h4 className="text-sm font-medium mb-2 text-foreground">Items</h4>
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Description</TableHead>
-                      <TableHead className="text-right">Price</TableHead>
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableHead className="text-foreground">Description</TableHead>
+                      <TableHead className="text-right text-foreground">Price</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {selectedOrder.order_details.items.map((item, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{item.description}</TableCell>
-                        <TableCell className="text-right">{item.price}</TableCell>
+                      <TableRow key={index} className="border-gray-200 dark:border-gray-700">
+                        <TableCell className="text-foreground">{item.description}</TableCell>
+                        <TableCell className="text-right text-foreground">{item.price}</TableCell>
                       </TableRow>
                     ))}
-                    <TableRow>
-                      <TableCell className="font-medium">Total</TableCell>
-                      <TableCell className="font-medium text-right">
+                    <TableRow className="border-gray-200 dark:border-gray-700">
+                      <TableCell className="font-medium text-foreground">Total</TableCell>
+                      <TableCell className="font-medium text-right text-foreground">
                         {selectedOrder.currency} {Number(selectedOrder.amount).toFixed(2)}
                       </TableCell>
                     </TableRow>
@@ -322,7 +324,7 @@ const AdminOrderList = () => {
                 <Button 
                   variant="outline" 
                   onClick={() => downloadInvoice(selectedOrder)}
-                  className="flex items-center"
+                  className="flex items-center bg-white dark:bg-gray-800 text-foreground dark:text-white border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download Invoice

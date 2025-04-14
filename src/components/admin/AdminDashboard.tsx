@@ -152,7 +152,7 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col dark:bg-gray-900">
+      <div className="min-h-screen flex flex-col bg-background dark:bg-gray-900">
         <Navbar />
         <div className="flex-grow flex items-center justify-center">
           <Loader2 className="h-8 w-8 animate-spin text-rdp-blue dark:text-rdp-blue-light" />
@@ -164,7 +164,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col bg-background dark:bg-gray-900">
       <Navbar />
       <div className="flex-grow container mx-auto py-8 px-4">
         <h1 className="text-3xl font-bold mb-6 text-foreground">Admin Dashboard</h1>
@@ -193,7 +193,7 @@ const AdminDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.activeRdps}</div>
+              <div className="text-2xl font-bold text-foreground">{stats.activeRdps}</div>
             </CardContent>
           </Card>
           
@@ -205,7 +205,7 @@ const AdminDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.totalOrders}</div>
+              <div className="text-2xl font-bold text-foreground">{stats.totalOrders}</div>
             </CardContent>
           </Card>
           
@@ -217,7 +217,7 @@ const AdminDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">₹{stats.totalRevenue.toFixed(2)}</div>
+              <div className="text-2xl font-bold text-foreground">₹{stats.totalRevenue.toFixed(2)}</div>
             </CardContent>
           </Card>
           
@@ -229,7 +229,7 @@ const AdminDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.openTickets}</div>
+              <div className="text-2xl font-bold text-foreground">{stats.openTickets}</div>
             </CardContent>
           </Card>
         </div>

@@ -121,17 +121,17 @@ const TestManagement = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col bg-background dark:bg-gray-900">
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-rdp-dark dark:text-white">
+        <h1 className="text-3xl font-bold mb-6 text-foreground">
           Admin Test Management
         </h1>
         
-        <Alert className="mb-6">
+        <Alert className="mb-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Important</AlertTitle>
-          <AlertDescription>
+          <AlertTitle className="text-foreground">Important</AlertTitle>
+          <AlertDescription className="text-foreground">
             A default active RDP will be created automatically only for users with the email <strong>testing@gmail.com</strong>. 
             Other test users will not receive a default RDP.
           </AlertDescription>
@@ -139,13 +139,13 @@ const TestManagement = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Create Test User Form */}
-          <Card>
+          <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <UserPlus className="h-5 w-5" />
+              <CardTitle className="flex items-center gap-2 text-foreground">
+                <UserPlus className="h-5 w-5 text-rdp-blue dark:text-rdp-blue-light" />
                 Create Test User
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-muted-foreground">
                 Generate a new test user with sample data
               </CardDescription>
             </CardHeader>
@@ -153,13 +153,14 @@ const TestManagement = () => {
             <form onSubmit={createTestUser}>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium">Email</label>
+                  <label htmlFor="email" className="text-sm font-medium text-foreground">Email</label>
                   <Input
                     id="email"
                     type="email"
                     placeholder="test.user@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-foreground placeholder:text-muted-foreground"
                     required
                   />
                   {email === "testing@gmail.com" && (
@@ -170,13 +171,14 @@ const TestManagement = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <label htmlFor="password" className="text-sm font-medium">Password</label>
+                  <label htmlFor="password" className="text-sm font-medium text-foreground">Password</label>
                   <Input
                     id="password"
                     type="password"
                     placeholder="Enter password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-foreground placeholder:text-muted-foreground"
                     required
                   />
                   {email === "testing@gmail.com" && (
@@ -188,7 +190,11 @@ const TestManagement = () => {
               </CardContent>
               
               <CardFooter>
-                <Button type="submit" disabled={loading}>
+                <Button 
+                  type="submit" 
+                  disabled={loading}
+                  className="bg-rdp-blue hover:bg-rdp-blue-light text-white"
+                >
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -203,11 +209,11 @@ const TestManagement = () => {
           </Card>
           
           {/* Test Users List */}
-          <Card>
+          <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg">
             <CardHeader>
               <div className="flex justify-between items-center">
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <Users className="h-5 w-5 text-rdp-blue dark:text-rdp-blue-light" />
                   Test Users
                 </CardTitle>
                 <Button 
@@ -215,6 +221,7 @@ const TestManagement = () => {
                   size="sm" 
                   onClick={loadTestUsers}
                   disabled={isLoadingUsers}
+                  className="bg-white dark:bg-gray-800 text-foreground dark:text-white border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   {isLoadingUsers ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -223,14 +230,14 @@ const TestManagement = () => {
                   )}
                 </Button>
               </div>
-              <CardDescription>
+              <CardDescription className="text-muted-foreground">
                 Manage existing test users
               </CardDescription>
             </CardHeader>
             
             <CardContent>
               {userList.length === 0 ? (
-                <div className="text-center p-4 text-gray-500">
+                <div className="text-center p-4 text-muted-foreground">
                   {isLoadingUsers ? (
                     <div className="flex flex-col items-center">
                       <Loader2 className="h-10 w-10 animate-spin mb-2" />
@@ -245,8 +252,8 @@ const TestManagement = () => {
                   {userList.map((user, index) => (
                     <li key={index} className="py-3 flex justify-between items-center">
                       <div>
-                        <p className="font-medium">{user.email}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className="font-medium text-foreground">{user.email}</p>
+                        <p className="text-sm text-muted-foreground">
                           Created: {new Date(user.created_at).toLocaleDateString()}
                         </p>
                         {user.email === "test@gmail.com" && (
@@ -255,7 +262,11 @@ const TestManagement = () => {
                           </p>
                         )}
                       </div>
-                      <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700 hover:bg-red-100">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-red-500 hover:text-red-700 hover:bg-red-100 dark:hover:bg-red-900/30"
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </li>
