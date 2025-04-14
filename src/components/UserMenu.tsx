@@ -4,11 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { 
   User, 
   LogOut, 
-  Settings, 
   History, 
   CreditCard, 
   Server,
-  LayoutDashboard
+  LayoutDashboard,
+  HelpCircle,
+  ShoppingCart
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -141,9 +142,13 @@ const UserMenu = () => {
             <CreditCard className="mr-2 h-4 w-4" />
             <span>System Usage</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => navigate('/settings')}>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+          <DropdownMenuItem onClick={() => navigate('/cart')}>
+            <ShoppingCart className="mr-2 h-4 w-4" />
+            <span>Shopping Cart</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate('/faq')}>
+            <HelpCircle className="mr-2 h-4 w-4" />
+            <span>Help & FAQ</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

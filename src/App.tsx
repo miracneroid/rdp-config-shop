@@ -12,7 +12,6 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
-import Settings from './pages/Settings';
 import FAQ from './pages/FAQ';
 import NotFound from './pages/NotFound';
 import UserDashboard from './pages/UserDashboard';
@@ -37,9 +36,8 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/faq" element={<FAQ />} />
             <Route path="/dashboard" element={<UserDashboard />} />
+            <Route path="/faq" element={<FAQ />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />

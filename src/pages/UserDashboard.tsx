@@ -11,6 +11,15 @@ import UserProfile from "@/components/dashboard/UserProfile";
 import SystemUsage from "@/components/dashboard/SystemUsage";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { Card, CardContent } from "@/components/ui/card";
+import { 
+  LayoutDashboard, 
+  Server, 
+  History, 
+  HelpCircle, 
+  User, 
+  BarChart
+} from "lucide-react";
 
 const UserDashboard = () => {
   const location = useLocation();
@@ -19,6 +28,7 @@ const UserDashboard = () => {
   const defaultTab = tabFromUrl || "rdp-management";
   
   const [activeTab, setActiveTab] = useState(defaultTab);
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -32,6 +42,15 @@ const UserDashboard = () => {
         variant: "destructive",
       });
       navigate("/login", { state: { redirectTo: "/dashboard" } });
+    } else {
+      // Get user profile
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('id', session.user.id)
+        .single();
+      
+      setUserName(profileData?.display_name || session.user.email?.split('@')[0] || "User");
     }
   };
 
@@ -53,41 +72,76 @@ const UserDashboard = () => {
     }
   }, [location]);
 
+  const tabIcons = {
+    "rdp-management": <Server className="h-5 w-5 mr-2" />,
+    "system-usage": <BarChart className="h-5 w-5 mr-2" />,
+    "orders": <History className="h-5 w-5 mr-2" />,
+    "support": <HelpCircle className="h-5 w-5 mr-2" />,
+    "profile": <User className="h-5 w-5 mr-2" />
+  };
+
   return (
     <div className="min-h-screen flex flex-col dark:bg-gray-900">
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-rdp-dark dark:text-white">Your Dashboard</h1>
+        <div className="flex items-center gap-3 mb-6">
+          <LayoutDashboard className="h-8 w-8 text-rdp-blue dark:text-rdp-blue-light" />
+          <div>
+            <h1 className="text-3xl font-bold text-rdp-dark dark:text-white">Dashboard</h1>
+            <p className="text-gray-600 dark:text-gray-400">Welcome back, {userName}</p>
+          </div>
+        </div>
         
-        <Tabs defaultValue={activeTab} value={activeTab} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-5 mb-8">
-            <TabsTrigger value="rdp-management">RDP Management</TabsTrigger>
-            <TabsTrigger value="system-usage">System Usage</TabsTrigger>
-            <TabsTrigger value="orders">Order History</TabsTrigger>
-            <TabsTrigger value="support">Support Tickets</TabsTrigger>
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="rdp-management" className="space-y-4">
+        <Card className="mb-8">
+          <CardContent className="p-0">
+            <Tabs defaultValue={activeTab} value={activeTab} onValueChange={handleTabChange} className="w-full">
+              <TabsList className="w-full grid grid-cols-2 md:grid-cols-5 rounded-none bg-muted/50">
+                <TabsTrigger value="rdp-management" className="flex items-center justify-center">
+                  <Server className="h-4 w-4 mr-2" /><span className="hidden md:inline">RDP Management</span>
+                  <span className="inline md:hidden">RDPs</span>
+                </TabsTrigger>
+                <TabsTrigger value="system-usage" className="flex items-center justify-center">
+                  <BarChart className="h-4 w-4 mr-2" /><span className="hidden md:inline">System Usage</span>
+                  <span className="inline md:hidden">Usage</span>
+                </TabsTrigger>
+                <TabsTrigger value="orders" className="flex items-center justify-center">
+                  <History className="h-4 w-4 mr-2" /><span className="hidden md:inline">Order History</span>
+                  <span className="inline md:hidden">Orders</span>
+                </TabsTrigger>
+                <TabsTrigger value="support" className="flex items-center justify-center">
+                  <HelpCircle className="h-4 w-4 mr-2" /><span className="hidden md:inline">Support Tickets</span>
+                  <span className="inline md:hidden">Support</span>
+                </TabsTrigger>
+                <TabsTrigger value="profile" className="flex items-center justify-center">
+                  <User className="h-4 w-4 mr-2" /><span className="hidden md:inline">Profile</span>
+                  <span className="inline md:hidden">Profile</span>
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </CardContent>
+        </Card>
+        
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <TabsContent value="rdp-management" className="space-y-4 mt-0">
             <RdpManagement />
           </TabsContent>
           
-          <TabsContent value="system-usage" className="space-y-4">
+          <TabsContent value="system-usage" className="space-y-4 mt-0">
             <SystemUsage />
           </TabsContent>
           
-          <TabsContent value="orders" className="space-y-4">
+          <TabsContent value="orders" className="space-y-4 mt-0">
             <OrderHistory />
           </TabsContent>
           
-          <TabsContent value="support" className="space-y-4">
+          <TabsContent value="support" className="space-y-4 mt-0">
             <SupportTickets />
           </TabsContent>
           
-          <TabsContent value="profile" className="space-y-4">
+          <TabsContent value="profile" className="space-y-4 mt-0">
             <UserProfile />
           </TabsContent>
-        </Tabs>
+        </div>
       </div>
       <Footer />
     </div>
