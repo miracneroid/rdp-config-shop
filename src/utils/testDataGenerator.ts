@@ -16,6 +16,12 @@ export const generateTestUser = async (email: string, password: string) => {
     }
     
     console.log("Test data generation successful:", data);
+    
+    // If test@gmail.com is created, add the default RDP
+    if (email === "test@gmail.com") {
+      await addTestRdp(email);
+    }
+    
     return { success: true, data };
   } catch (error) {
     console.error("Error generating test data:", error);

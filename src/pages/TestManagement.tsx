@@ -7,8 +7,9 @@ import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, RefreshCw, Users, UserPlus, Trash2 } from "lucide-react";
+import { Loader2, RefreshCw, Users, UserPlus, Trash2, AlertCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const TestManagement = () => {
   const [email, setEmail] = useState("");
@@ -127,6 +128,15 @@ const TestManagement = () => {
           Admin Test Management
         </h1>
         
+        <Alert className="mb-6">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Important</AlertTitle>
+          <AlertDescription>
+            A default active RDP will be created automatically only for users with the email <strong>test@gmail.com</strong>. 
+            Other test users will not receive a default RDP.
+          </AlertDescription>
+        </Alert>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Create Test User Form */}
           <Card>
@@ -152,6 +162,11 @@ const TestManagement = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
+                  {email === "test@gmail.com" && (
+                    <p className="text-sm text-green-600 dark:text-green-400">
+                      This email will receive a default active RDP
+                    </p>
+                  )}
                 </div>
                 
                 <div className="space-y-2">
@@ -164,6 +179,11 @@ const TestManagement = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
+                  {email === "test@gmail.com" && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Default password for test@gmail.com is "password123"
+                    </p>
+                  )}
                 </div>
               </CardContent>
               
@@ -229,6 +249,11 @@ const TestManagement = () => {
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                           Created: {new Date(user.created_at).toLocaleDateString()}
                         </p>
+                        {user.email === "test@gmail.com" && (
+                          <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                            Has default RDP
+                          </p>
+                        )}
                       </div>
                       <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700 hover:bg-red-100">
                         <Trash2 className="h-4 w-4" />

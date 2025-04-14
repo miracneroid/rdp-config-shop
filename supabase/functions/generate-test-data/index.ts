@@ -125,104 +125,14 @@ serve(async (req) => {
       }
     }
 
-    // Check if it's the specific test@gmail.com user
-    const isTestUser = email === "test@gmail.com";
-    
-    // Create a test RDP instance for the user with a higher price if it's the test user
-    const { data: rdpInstance, error: rdpError } = await supabaseAdmin
-      .from('rdp_instances')
-      .insert({
-        user_id: userId,
-        name: isTestUser ? "Windows 11 Enterprise" : "Windows Server 2022",
-        username: "admin",
-        password: "SecurePassword123!",
-        ip_address: "192.168.1.100",
-        port: "3389",
-        status: "active",
-        expiry_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
-        plan_details: isTestUser ? {
-          cpu: "8 vCPU",
-          ram: "32 GB",
-          storage: "500 GB SSD",
-          os: "Windows 11 Enterprise",
-          bandwidth: "Unlimited"
-        } : {
-          cpu: "4 vCPU",
-          ram: "16 GB",
-          storage: "250 GB SSD",
-          os: "Windows Server 2022",
-          bandwidth: "Unlimited"
-        }
-      })
-      .select()
-      .single();
-
-    if (rdpError) {
-      console.error("Error creating RDP instance:", rdpError);
-      // Continue execution even if RDP creation fails
-    } else {
-      console.log("Created RDP instance:", rdpInstance?.id);
-      
-      // Create a test order for the RDP
-      if (rdpInstance) {
-        const { error: orderError } = await supabaseAdmin
-          .from('orders')
-          .insert({
-            user_id: userId,
-            rdp_instance_id: rdpInstance.id,
-            invoice_number: `INV-${Date.now().toString().substring(0, 10)}`,
-            payment_status: "paid",
-            currency: "EUR",
-            amount: isTestUser ? 59.99 : 49.99,
-            order_details: {
-              items: [
-                {
-                  name: isTestUser ? "Windows 11 Enterprise RDP" : "Windows Server 2022 RDP",
-                  quantity: 1,
-                  price: isTestUser ? "€59.99" : "€49.99",
-                  subtotal: isTestUser ? "€59.99" : "€49.99"
-                }
-              ],
-              subtotal: isTestUser ? "€59.99" : "€49.99",
-              tax: "€0.00",
-              total: isTestUser ? "€59.99" : "€49.99"
-            }
-          });
-
-        if (orderError) {
-          console.error("Error creating order:", orderError);
-        } else {
-          console.log("Created order for RDP instance");
-        }
-      }
-      
-      // Create some system logs for the RDP
-      if (rdpInstance) {
-        const logActions = ["create", "start", "restart"];
-        for (let i = 0; i < logActions.length; i++) {
-          const { error: logError } = await supabaseAdmin
-            .from('system_logs')
-            .insert({
-              rdp_instance_id: rdpInstance.id,
-              action: logActions[i],
-              status: "completed",
-              details: { initiated_by: "system", reason: "setup" },
-              performed_at: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString() // Going back in time for each log
-            });
-            
-          if (logError) {
-            console.error(`Error creating log for action ${logActions[i]}:`, logError);
-          }
-        }
-        console.log("Created system logs for RDP instance");
-      }
-    }
+    // We'll no longer create RDP instances here
+    // This will now be handled by the addTestRdp function specifically for test@gmail.com
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         user: { email, id: userId },
-        message: "Test data created successfully. You can now login with the provided credentials."
+        message: "Test user created successfully. You can now login with the provided credentials."
       }),
       { 
         status: 200, 
