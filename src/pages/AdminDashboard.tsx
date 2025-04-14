@@ -21,7 +21,8 @@ import {
   Shield,
   KeyRound,
   ShieldCheck,
-  ShieldX
+  ShieldX,
+  Lightbulb
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -63,7 +64,8 @@ import {
   Checkbox,
 } from "@/components/ui/checkbox";
 import { generateTestUser } from "@/utils/testDataGenerator";
-import { Navbar, Footer } from "@/components";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 // Mock data
 const mockUsers = [
