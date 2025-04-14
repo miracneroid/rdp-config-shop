@@ -117,7 +117,7 @@ const UserDashboard = () => {
 
   // Update active tab when URL changes
   useEffect(() => {
-    if (tabFromUrl && ["profile", "rdp-management", "orders", "coupons", "giftcards", "notifications"].includes(tabFromUrl)) {
+    if (tabFromUrl && ["profile", "rdp-management", "orders", "support", "coupons", "giftcards", "notifications"].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     } else {
       // If invalid tab parameter, default to profile and update URL
@@ -160,7 +160,7 @@ const UserDashboard = () => {
         <Card className="mb-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
           <CardContent className="p-0">
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-              <TabsList className="w-full grid grid-cols-2 md:grid-cols-5 rounded-none bg-white/50 dark:bg-gray-900/50 border-b border-gray-200/50 dark:border-gray-700/50">
+              <TabsList className="w-full grid grid-cols-2 md:grid-cols-6 rounded-none bg-white/50 dark:bg-gray-900/50 border-b border-gray-200/50 dark:border-gray-700/50">
                 <TabsTrigger value="profile" className="flex items-center justify-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light">
                   <User className="h-4 w-4 mr-2" />
                   <span className="hidden md:inline">Profile</span>
@@ -175,6 +175,11 @@ const UserDashboard = () => {
                   <History className="h-4 w-4 mr-2" />
                   <span className="hidden md:inline">Orders</span>
                   <span className="inline md:hidden">Orders</span>
+                </TabsTrigger>
+                <TabsTrigger value="support" className="flex items-center justify-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light">
+                  <HelpCircle className="h-4 w-4 mr-2" />
+                  <span className="hidden md:inline">Support</span>
+                  <span className="inline md:hidden">Support</span>
                 </TabsTrigger>
                 <TabsTrigger value="coupons" className="flex items-center justify-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light">
                   <Ticket className="h-4 w-4 mr-2" />

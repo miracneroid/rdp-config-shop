@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -49,6 +50,7 @@ const AdminDashboard = () => {
       try {
         console.log("Fetching admin stats...");
         
+        // Get total user count
         const { count: userCount, error: userError } = await supabase
           .from('profiles')
           .select('*', { count: 'exact', head: true });
@@ -60,6 +62,7 @@ const AdminDashboard = () => {
         
         console.log("Total users:", userCount);
 
+        // Get active users (users updated within last 30 days)
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         
@@ -77,6 +80,7 @@ const AdminDashboard = () => {
         
         console.log("Active users:", activeUserCount);
 
+        // Get all orders and calculate total revenue
         const { data: orders, error: ordersError } = await supabase
           .from('orders')
           .select('amount');
@@ -95,6 +99,7 @@ const AdminDashboard = () => {
         
         console.log("Total revenue:", totalRevenue);
 
+        // Get count of active RDPs
         const { count: rdpCount, error: rdpError } = await supabase
           .from('rdp_instances')
           .select('*', { count: 'exact', head: true })
@@ -107,6 +112,7 @@ const AdminDashboard = () => {
         
         console.log("Active RDPs:", rdpCount);
 
+        // Get count of open support tickets
         const { count: ticketCount, error: ticketError } = await supabase
           .from('support_tickets')
           .select('*', { count: 'exact', head: true })
@@ -152,7 +158,7 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col bg-background dark:bg-gray-900">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background/95 to-background/90 dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-800/90">
         <Navbar />
         <div className="flex-grow flex items-center justify-center">
           <Loader2 className="h-8 w-8 animate-spin text-rdp-blue dark:text-rdp-blue-light" />
@@ -164,10 +170,10 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background/95 to-background/90 dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-800/90">
       <Navbar />
       <div className="flex-grow container mx-auto py-8 px-4">
-        <h1 className="text-3xl font-bold mb-6 text-foreground">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/80 dark:from-white dark:to-white/80 bg-clip-text text-transparent">Admin Dashboard</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">

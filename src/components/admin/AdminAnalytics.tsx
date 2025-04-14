@@ -55,14 +55,14 @@ const AdminAnalytics = () => {
       const processedOrderData = processOrderData(orders || []);
       setOrderData(processedOrderData);
 
-      // Fetch RDP data
+      // Fetch RDP data - all RDP instances (not just active)
       const { data: rdps, error: rdpsError } = await supabase
         .from("rdp_instances")
         .select("*");
 
       if (rdpsError) throw rdpsError;
 
-      // Process RDP data for charts
+      // Process RDP data for charts (all RDPs, not just active ones)
       const processedRdpData = processRdpData(rdps || []);
       setRdpStats(processedRdpData);
 
@@ -243,7 +243,7 @@ const AdminAnalytics = () => {
             <CardHeader>
               <CardTitle>RDP Status Distribution</CardTitle>
               <CardDescription>
-                Current status of all RDP instances
+                Status of all RDP instances (including inactive/expired)
               </CardDescription>
             </CardHeader>
             <CardContent className="h-80">
