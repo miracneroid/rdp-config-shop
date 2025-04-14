@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { useSettings } from "@/context/SettingsContext";
 import { Json } from "@/integrations/supabase/types";
 import {
   Card,
@@ -17,7 +16,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "lucide-react";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { User, Loader2 } from "lucide-react";
 
 interface BillingAddress {
   address1: string;
@@ -66,7 +67,16 @@ const UserProfile = () => {
     zip: "",
     country: "",
   });
-  const { settings } = useSettings();
+  
+  // Email change state
+  const [userEmail, setUserEmail] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [isChangingEmail, setIsChangingEmail] = useState(false);
+  const [otpDialogOpen, setOtpDialogOpen] = useState(false);
+  const [otpCode, setOtpCode] = useState("");
+  const [otpSending, setOtpSending] = useState(false);
+  const [otpVerifying, setOtpVerifying] = useState(false);
+  
   const { toast } = useToast();
 
   useEffect(() => {
@@ -79,6 +89,8 @@ const UserProfile = () => {
       const { data: userData } = await supabase.auth.getUser();
       
       if (!userData.user) throw new Error("User not found");
+      
+      setUserEmail(userData.user.email || "");
       
       const { data, error } = await supabase
         .from("profiles")
@@ -206,6 +218,112 @@ const UserProfile = () => {
     }
   };
 
+  // Handle initiating email change
+  const initiateEmailChange = async () => {
+    if (!newEmail) {
+      toast({
+        title: "Error",
+        description: "Please enter a new email address",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (newEmail === userEmail) {
+      toast({
+        title: "No change needed",
+        description: "The new email address is the same as your current one",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsChangingEmail(true);
+    
+    try {
+      // Send OTP to the new email
+      setOtpSending(true);
+      
+      const { error } = await supabase.auth.signInWithOtp({
+        email: newEmail,
+        options: {
+          shouldCreateUser: false,
+        },
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Verification code sent",
+        description: `We've sent a verification code to ${newEmail}`,
+      });
+      
+      // Open OTP verification dialog
+      setOtpDialogOpen(true);
+    } catch (error: any) {
+      toast({
+        title: "Error sending verification code",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setOtpSending(false);
+      setIsChangingEmail(false);
+    }
+  };
+  
+  // Handle OTP verification and email change
+  const verifyOtpAndChangeEmail = async () => {
+    if (!otpCode || otpCode.length !== 6) {
+      toast({
+        title: "Invalid code",
+        description: "Please enter a valid 6-digit verification code",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setOtpVerifying(true);
+    
+    try {
+      // Verify OTP
+      const { data, error } = await supabase.auth.verifyOtp({
+        email: newEmail,
+        token: otpCode,
+        type: 'email',
+      });
+      
+      if (error) throw error;
+      
+      // Update the user's email in Supabase Auth
+      const { error: updateError } = await supabase.auth.updateUser({
+        email: newEmail,
+      });
+      
+      if (updateError) throw updateError;
+      
+      toast({
+        title: "Email updated",
+        description: `Your email has been changed to ${newEmail}`,
+      });
+      
+      // Refresh the profile data
+      setUserEmail(newEmail);
+      setNewEmail("");
+      setOtpCode("");
+      setOtpDialogOpen(false);
+      
+    } catch (error: any) {
+      toast({
+        title: "Error verifying code",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setOtpVerifying(false);
+    }
+  };
+
   const getInitials = () => {
     if (userDetails.firstName && userDetails.lastName) {
       return `${userDetails.firstName.charAt(0)}${userDetails.lastName.charAt(0)}`;
@@ -277,26 +395,38 @@ const UserProfile = () => {
               
               <div className="space-y-2">
                 <label className="text-sm font-medium">Email</label>
-                <Input 
-                  value={(supabase.auth.getUser().then(({data}) => data.user?.email) as unknown) as string} 
-                  disabled
-                  className="bg-gray-50 dark:bg-gray-800"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Email address cannot be changed
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Currency</label>
-                <Input 
-                  value={`${settings.currency.name} (${settings.currency.code}) ${settings.currency.symbol}`}
-                  disabled
-                  className="bg-gray-50 dark:bg-gray-800"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Currency settings can only be changed by an administrator
-                </p>
+                <div className="flex flex-col space-y-4">
+                  <Input 
+                    value={userEmail}
+                    disabled
+                    className="bg-gray-50 dark:bg-gray-800"
+                  />
+                  
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <Input 
+                      value={newEmail}
+                      onChange={(e) => setNewEmail(e.target.value)}
+                      placeholder="New email address"
+                    />
+                    <Button 
+                      onClick={initiateEmailChange}
+                      disabled={otpSending || !newEmail}
+                    >
+                      {otpSending ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        "Change Email"
+                      )}
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    To change your email address, enter your new email and click "Change Email". 
+                    A verification code will be sent to confirm the change.
+                  </p>
+                </div>
               </div>
             </CardContent>
             <CardFooter className="flex justify-end">
@@ -386,6 +516,45 @@ const UserProfile = () => {
           </Card>
         </TabsContent>
       </Tabs>
+      
+      {/* OTP Dialog */}
+      <Dialog open={otpDialogOpen} onOpenChange={setOtpDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Verify Email Change</DialogTitle>
+            <DialogDescription>
+              Enter the 6-digit verification code sent to {newEmail}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4 flex flex-col items-center space-y-4">
+            <InputOTP maxLength={6} value={otpCode} onChange={setOtpCode}>
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
+            
+            <Button 
+              onClick={verifyOtpAndChangeEmail} 
+              disabled={otpVerifying || otpCode.length !== 6}
+              className="mt-4 w-full"
+            >
+              {otpVerifying ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Verifying...
+                </>
+              ) : (
+                "Verify and Change Email"
+              )}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
