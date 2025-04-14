@@ -22,10 +22,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { supabase, handleQueryResult } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AvatarSelector from "./AvatarSelector";
-import { isNotNullOrUndefined, processQueryResult } from "@/utils/typeGuards";
+import { isNotNullOrUndefined } from "@/utils/typeGuards";
+import { fetchData, updateData, insertData } from "@/services/supabaseService";
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -66,18 +67,19 @@ const UserMenu = () => {
             }
           }
           
-          const { data: profileData, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', user.id)
-            .maybeSingle();
+          // Use our new fetchData utility
+          const { data: profileData } = await fetchData<any>(
+            'profiles',
+            { 
+              match: { id: user.id },
+              single: true
+            }
+          );
           
-          const safeProfileData = handleQueryResult(profileData, error);
-          
-          if (safeProfileData) {
-            displayName = safeProfileData.display_name || displayName;
-            avatarUrl = safeProfileData.avatar_url || avatarUrl;
-            avatarCharacter = safeProfileData.avatar_character || null;
+          if (profileData) {
+            displayName = profileData.display_name || displayName;
+            avatarUrl = profileData.avatar_url || avatarUrl;
+            avatarCharacter = profileData.avatar_character || null;
           }
           
           const initials = getInitialsFromName(displayName);
@@ -91,20 +93,36 @@ const UserMenu = () => {
           });
           
           // If user signed up with Google and doesn't have a profile yet, create one with Google data
-          if ((provider_id === 'google' && !safeProfileData) || (provider_id === 'google' && safeProfileData && !safeProfileData.avatar_url && avatarUrl)) {
+          if ((provider_id === 'google' && !profileData) || (provider_id === 'google' && profileData && !profileData.avatar_url && avatarUrl)) {
             const firstName = user_metadata?.given_name || displayName.split(' ')[0] || '';
             const lastName = user_metadata?.family_name || (displayName.split(' ').length > 1 ? displayName.split(' ').slice(1).join(' ') : '');
             
-            await supabase
-              .from('profiles')
-              .upsert({
-                id: user.id,
-                display_name: displayName,
-                first_name: firstName,
-                last_name: lastName,
-                avatar_url: avatarUrl,
-                updated_at: new Date().toISOString()
-              });
+            // Use insertData/updateData utility
+            if (!profileData) {
+              await insertData(
+                'profiles', 
+                {
+                  id: user.id,
+                  display_name: displayName,
+                  first_name: firstName,
+                  last_name: lastName,
+                  avatar_url: avatarUrl,
+                  updated_at: new Date().toISOString()
+                }
+              );
+            } else {
+              await updateData(
+                'profiles',
+                { id: user.id },
+                {
+                  display_name: displayName,
+                  first_name: firstName,
+                  last_name: lastName,
+                  avatar_url: avatarUrl,
+                  updated_at: new Date().toISOString()
+                }
+              );
+            }
           }
         }
       } catch (error) {
@@ -139,16 +157,18 @@ const UserMenu = () => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
-        const { error } = await supabase
-          .from('profiles')
-          .update({ 
+        // Use updateData utility
+        const { error } = await updateData(
+          'profiles',
+          { id: user.id },
+          { 
             avatar_url: avatarUrl,
             avatar_character: character,
             updated_at: new Date().toISOString()
-          })
-          .eq('id', user.id);
+          }
+        );
         
-        if (error) throw error;
+        if (error) throw new Error(error);
         
         setUserProfile({
           ...userProfile,
