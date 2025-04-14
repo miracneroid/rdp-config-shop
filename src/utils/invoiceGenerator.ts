@@ -24,12 +24,14 @@ export const generateInvoice = (data: {
   return new Blob([pdfContent], { type: 'application/pdf' });
 };
 
-function generatePdfContent(data: any): string {
-  // PDF structure based on PDF 1.4 specification
-  // This creates a minimal but valid PDF document
+function generatePdfContent(data: any): Uint8Array {
+  // PDF structure based on PDF 1.7 specification to create a valid PDF document
   
-  // PDF header and version
-  let pdf = '%PDF-1.4\n';
+  // Instead of returning just text, create a proper PDF structure with binary content
+  const textEncoder = new TextEncoder();
+  
+  // PDF header
+  let pdfStr = '%PDF-1.7\n';
   
   // Objects array to track PDF objects
   const objects: string[] = [];
@@ -43,88 +45,85 @@ function generatePdfContent(data: any): string {
   // Add page object (3)
   objects.push('3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n');
   
-  // Add content stream (4)
-  // Prepare invoice content
-  const invoiceText = [
-    'BT',
-    '/F1 14 Tf',
-    '50 750 Td',
-    '(RDP Config Service - Invoice) Tj',
-    '/F1 12 Tf',
-    '0 -25 Td',
-    `(Invoice #: ${data.orderNumber}) Tj`,
-    '0 -20 Td',
-    `(Date: ${data.date}) Tj`,
-    '0 -20 Td',
-    `(Customer: ${data.customer.name}) Tj`,
-    '0 -20 Td',
-    `(Email: ${data.customer.email}) Tj`,
-    '0 -30 Td',
-    '(Items:) Tj'
-  ];
-  
+  // Prepare invoice content stream
+  const contentStream = `
+BT
+/F1 16 Tf
+50 750 Td
+(RDP Config Service - INVOICE) Tj
+/F1 12 Tf
+0 -30 Td
+(Invoice #: ${data.orderNumber}) Tj
+0 -20 Td
+(Date: ${data.date}) Tj
+0 -20 Td
+(Customer: ${data.customer.name}) Tj
+0 -20 Td
+(Email: ${data.customer.email}) Tj
+0 -30 Td
+(Items:) Tj
+`;
+
   // Add each line item
-  let yOffset = -25;
+  let itemsContent = '';
+  let yOffset = 30;
   data.items.forEach((item: { description: string; price: string }) => {
-    invoiceText.push('0 ' + yOffset + ' Td');
-    invoiceText.push(`(${item.description}: ${item.price}) Tj`);
-    yOffset = -20;
+    itemsContent += `0 -20 Td\n(${item.description}: ${item.price}) Tj\n`;
   });
+
+  // Add total and footer
+  const footerContent = `
+0 -30 Td
+(Total: ${data.total}) Tj
+0 -50 Td
+(Thank you for your business!) Tj
+ET
+`;
+
+  const completeContent = contentStream + itemsContent + footerContent;
   
-  // Add total
-  invoiceText.push('0 -30 Td');
-  invoiceText.push(`(Total: ${data.total}) Tj`);
-  
-  // Add footer
-  invoiceText.push('0 -50 Td');
-  invoiceText.push('(Thank you for your business!) Tj');
-  
-  // End text object
-  invoiceText.push('ET');
-  
-  const content = invoiceText.join('\n');
-  const contentStream = content.length + '\n' + content;
-  
-  objects.push(`4 0 obj\n<< /Length ${contentStream.length} >>\nstream\n${content}\nendstream\nendobj\n`);
+  // Add content stream (4)
+  objects.push(`4 0 obj\n<< /Length ${completeContent.length} >>\nstream\n${completeContent}\nendstream\nendobj\n`);
   
   // Add font (5)
   objects.push('5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>\nendobj\n');
   
   // Add objects to PDF
-  objects.forEach(obj => {
-    pdf += obj;
-  });
+  for (const obj of objects) {
+    pdfStr += obj;
+  }
   
   // Cross-reference table
-  const xrefOffset = pdf.length;
-  pdf += 'xref\n';
-  pdf += '0 6\n'; // 6 objects (including object 0)
-  pdf += '0000000000 65535 f \n'; // Object 0
+  const xrefOffset = pdfStr.length;
+  pdfStr += 'xref\n';
+  pdfStr += '0 6\n'; // 6 objects (including object 0)
+  pdfStr += '0000000000 65535 f \n'; // Object 0
   
   // Calculate offsets for each object
-  let offset = pdf.indexOf('1 0 obj');
-  pdf += `${offset.toString().padStart(10, '0')} 00000 n \n`;
+  let offset = pdfStr.indexOf('1 0 obj');
+  pdfStr += `${offset.toString().padStart(10, '0')} 00000 n \n`;
   
-  offset = pdf.indexOf('2 0 obj');
-  pdf += `${offset.toString().padStart(10, '0')} 00000 n \n`;
+  offset = pdfStr.indexOf('2 0 obj');
+  pdfStr += `${offset.toString().padStart(10, '0')} 00000 n \n`;
   
-  offset = pdf.indexOf('3 0 obj');
-  pdf += `${offset.toString().padStart(10, '0')} 00000 n \n`;
+  offset = pdfStr.indexOf('3 0 obj');
+  pdfStr += `${offset.toString().padStart(10, '0')} 00000 n \n`;
   
-  offset = pdf.indexOf('4 0 obj');
-  pdf += `${offset.toString().padStart(10, '0')} 00000 n \n`;
+  offset = pdfStr.indexOf('4 0 obj');
+  pdfStr += `${offset.toString().padStart(10, '0')} 00000 n \n`;
   
-  offset = pdf.indexOf('5 0 obj');
-  pdf += `${offset.toString().padStart(10, '0')} 00000 n \n`;
+  offset = pdfStr.indexOf('5 0 obj');
+  pdfStr += `${offset.toString().padStart(10, '0')} 00000 n \n`;
   
   // Trailer
-  pdf += 'trailer\n';
-  pdf += '<< /Size 6 /Root 1 0 R >>\n';
-  pdf += 'startxref\n';
-  pdf += xrefOffset + '\n';
-  pdf += '%%EOF';
+  pdfStr += 'trailer\n';
+  pdfStr += '<< /Size 6 /Root 1 0 R >>\n';
+  pdfStr += 'startxref\n';
+  pdfStr += `${xrefOffset}\n`;
+  pdfStr += '%%EOF';
   
-  return pdf;
+  // Convert to binary
+  return textEncoder.encode(pdfStr);
 }
 
 export const emailInvoice = (email: string, invoiceData: any) => {
