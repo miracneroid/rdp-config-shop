@@ -47,6 +47,16 @@ const paymentFormSchema = z.object({
 type BillingFormValues = z.infer<typeof billingFormSchema>;
 type PaymentFormValues = z.infer<typeof paymentFormSchema>;
 
+// Define interface for billing address to ensure type safety
+interface BillingAddress {
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  zip_code: string;
+  country: string;
+}
+
 const Checkout = () => {
   const [currentStep, setCurrentStep] = useState<"billing" | "payment" | "processing">("billing");
   const [billingInfo, setBillingInfo] = useState<BillingFormValues | null>(null);
@@ -111,18 +121,19 @@ const Checkout = () => {
 
       // Pre-fill the form with user data if available
       if (profileData) {
-        const billingAddress = profileData.billing_address || {};
+        // Make sure billing_address is treated as an object with correct type
+        const billingAddress = profileData.billing_address as BillingAddress | null;
         
         billingForm.reset({
           firstName: profileData.first_name || "",
           lastName: profileData.last_name || "",
           email: session.user.email || "",
-          phone: billingAddress.phone || "",
-          address: billingAddress.address || "",
-          city: billingAddress.city || "",
-          state: billingAddress.state || "",
-          zipCode: billingAddress.zip_code || "",
-          country: billingAddress.country || "",
+          phone: billingAddress?.phone || "",
+          address: billingAddress?.address || "",
+          city: billingAddress?.city || "",
+          state: billingAddress?.state || "",
+          zipCode: billingAddress?.zip_code || "",
+          country: billingAddress?.country || "",
         });
       } else {
         // Just fill the email if no profile data
@@ -164,6 +175,7 @@ const Checkout = () => {
         throw new Error("User not authenticated");
       }
       
+      // Create serializable order details that can be stored as JSON
       const orderDetails = {
         items: cart.map(item => ({
           id: item.id,
@@ -171,7 +183,8 @@ const Checkout = () => {
           price: `${settings.currency.symbol}${item.price.toFixed(2)}`,
           quantity: item.quantity,
           subtotal: `${settings.currency.symbol}${(item.price * item.quantity).toFixed(2)}`,
-          configuration: item.configuration
+          // Convert configuration to plain object that can be stored as JSON
+          configuration: JSON.parse(JSON.stringify(item.configuration))
         }))
       };
 
@@ -204,7 +217,7 @@ const Checkout = () => {
         const expiryDate = new Date();
         expiryDate.setMonth(expiryDate.getMonth() + item.configuration.duration);
         
-        // Create RDP instance
+        // Create RDP instance - serialize configuration to plain JSON
         const { data: rdpInstance, error: rdpError } = await supabase
           .from("rdp_instances")
           .insert({
@@ -212,7 +225,7 @@ const Checkout = () => {
             name: item.name,
             username: username,
             password: password,
-            plan_details: item.configuration,
+            plan_details: JSON.parse(JSON.stringify(item.configuration)),
             expiry_date: expiryDate.toISOString(),
           })
           .select()
@@ -235,23 +248,14 @@ const Checkout = () => {
       }
 
       // 2. Generate and email invoice
-      const invoiceData = {
-        orderNumber: Math.floor(Math.random() * 1000000),
-        customer: {
-          name: `${billingInfo.firstName} ${billingInfo.lastName}`,
-          email: billingInfo.email,
-        },
-        items: cart.map(item => ({
-          description: `${item.name} (${item.configuration.duration} months)`,
-          price: `${settings.currency.symbol}${(item.price * item.quantity).toFixed(2)}`,
-        })),
-        total: `${settings.currency.symbol}${getTotal().toFixed(2)}`,
-        date: new Date().toLocaleDateString(),
-      };
+      // Invoke the Supabase edge function to send the invoice
+      await supabase.functions.invoke('send-invoice', {
+        body: {
+          orderId: order.id,
+          email: billingInfo.email
+        }
+      });
 
-      const invoiceBlob = generateInvoice(invoiceData);
-      emailInvoice(billingInfo.email, invoiceBlob);
-      
       // 3. Email RDP credentials
       for (const rdp of rdpInstances) {
         emailRdpCredentials(
@@ -268,7 +272,7 @@ const Checkout = () => {
         .eq("id", user.id)
         .single();
       
-      const billingAddress = {
+      const billingAddress: BillingAddress = {
         address: billingInfo.address,
         city: billingInfo.city,
         state: billingInfo.state,
