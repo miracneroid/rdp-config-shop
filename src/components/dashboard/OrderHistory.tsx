@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -133,8 +134,10 @@ const OrderHistory = () => {
         date: new Date(order.created_at).toLocaleDateString(),
       };
 
+      // Generate PDF invoice
       const invoiceBlob = generateInvoice(invoiceData);
       
+      // Create a download link and trigger download
       const url = URL.createObjectURL(invoiceBlob);
       const a = document.createElement("a");
       a.href = url;
@@ -143,7 +146,7 @@ const OrderHistory = () => {
       a.click();
       
       setTimeout(() => {
-        window.URL.revokeObjectURL(url);
+        URL.revokeObjectURL(url);
         document.body.removeChild(a);
       }, 100);
       

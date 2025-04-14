@@ -1,6 +1,6 @@
 
-// This is a mock invoice generator
-// In a real application, you would use a library like jsPDF or connect to a service like DocuSign
+// This module generates PDF invoices using a proper PDF structure
+// It creates valid PDF documents that can be downloaded and viewed in PDF readers
 
 export const generateInvoice = (data: {
   orderNumber: number;
@@ -17,61 +17,115 @@ export const generateInvoice = (data: {
 }) => {
   console.log('Generating invoice for order', data.orderNumber);
   
-  // Create a basic PDF structure mimicking a real PDF file
-  // This is still a mock but will create a more valid PDF structure
-  const pdfHeader = '%PDF-1.4\n';
-  const pdfFooter = '%%EOF\n';
-  
-  // Create a simple text-based representation of the invoice
-  const invoiceContent = `
-Invoice #${data.orderNumber}
-Date: ${data.date}
-Customer: ${data.customer.name}
-Email: ${data.customer.email}
-
-Items:
-${data.items.map(item => `- ${item.description}: ${item.price}`).join('\n')}
-
-Total: ${data.total}
-  `.trim();
-  
-  // Encode the invoice content for the PDF
-  const content = `
-${pdfHeader}
-1 0 obj
-<< /Type /Catalog /Pages 2 0 R >>
-endobj
-2 0 obj
-<< /Type /Pages /Kids [3 0 R] /Count 1 >>
-endobj
-3 0 obj
-<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
-endobj
-4 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
-endobj
-5 0 obj
-<< /Length 168 >>
-stream
-BT
-/F1 12 Tf
-36 750 Td
-(RDP Config Service Invoice) Tj
-0 -20 Td
-(Order: ${data.orderNumber}) Tj
-0 -20 Td
-(Date: ${data.date}) Tj
-0 -20 Td
-(Total: ${data.total}) Tj
-ET
-endstream
-endobj
-${pdfFooter}
-  `;
+  // Create a valid PDF structure following the PDF specification
+  const pdfContent = generatePdfContent(data);
   
   // Return a PDF blob with proper MIME type
-  return new Blob([content], { type: 'application/pdf' });
+  return new Blob([pdfContent], { type: 'application/pdf' });
 };
+
+function generatePdfContent(data: any): string {
+  // PDF structure based on PDF 1.4 specification
+  // This creates a minimal but valid PDF document
+  
+  // PDF header and version
+  let pdf = '%PDF-1.4\n';
+  
+  // Objects array to track PDF objects
+  const objects: string[] = [];
+  
+  // Add catalog - the root object (1)
+  objects.push('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+  
+  // Add pages dictionary (2)
+  objects.push('2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+  
+  // Add page object (3)
+  objects.push('3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n');
+  
+  // Add content stream (4)
+  // Prepare invoice content
+  const invoiceText = [
+    'BT',
+    '/F1 14 Tf',
+    '50 750 Td',
+    '(RDP Config Service - Invoice) Tj',
+    '/F1 12 Tf',
+    '0 -25 Td',
+    `(Invoice #: ${data.orderNumber}) Tj`,
+    '0 -20 Td',
+    `(Date: ${data.date}) Tj`,
+    '0 -20 Td',
+    `(Customer: ${data.customer.name}) Tj`,
+    '0 -20 Td',
+    `(Email: ${data.customer.email}) Tj`,
+    '0 -30 Td',
+    '(Items:) Tj'
+  ];
+  
+  // Add each line item
+  let yOffset = -25;
+  data.items.forEach((item: { description: string; price: string }) => {
+    invoiceText.push('0 ' + yOffset + ' Td');
+    invoiceText.push(`(${item.description}: ${item.price}) Tj`);
+    yOffset = -20;
+  });
+  
+  // Add total
+  invoiceText.push('0 -30 Td');
+  invoiceText.push(`(Total: ${data.total}) Tj`);
+  
+  // Add footer
+  invoiceText.push('0 -50 Td');
+  invoiceText.push('(Thank you for your business!) Tj');
+  
+  // End text object
+  invoiceText.push('ET');
+  
+  const content = invoiceText.join('\n');
+  const contentStream = content.length + '\n' + content;
+  
+  objects.push(`4 0 obj\n<< /Length ${contentStream.length} >>\nstream\n${content}\nendstream\nendobj\n`);
+  
+  // Add font (5)
+  objects.push('5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>\nendobj\n');
+  
+  // Add objects to PDF
+  objects.forEach(obj => {
+    pdf += obj;
+  });
+  
+  // Cross-reference table
+  const xrefOffset = pdf.length;
+  pdf += 'xref\n';
+  pdf += '0 6\n'; // 6 objects (including object 0)
+  pdf += '0000000000 65535 f \n'; // Object 0
+  
+  // Calculate offsets for each object
+  let offset = pdf.indexOf('1 0 obj');
+  pdf += `${offset.toString().padStart(10, '0')} 00000 n \n`;
+  
+  offset = pdf.indexOf('2 0 obj');
+  pdf += `${offset.toString().padStart(10, '0')} 00000 n \n`;
+  
+  offset = pdf.indexOf('3 0 obj');
+  pdf += `${offset.toString().padStart(10, '0')} 00000 n \n`;
+  
+  offset = pdf.indexOf('4 0 obj');
+  pdf += `${offset.toString().padStart(10, '0')} 00000 n \n`;
+  
+  offset = pdf.indexOf('5 0 obj');
+  pdf += `${offset.toString().padStart(10, '0')} 00000 n \n`;
+  
+  // Trailer
+  pdf += 'trailer\n';
+  pdf += '<< /Size 6 /Root 1 0 R >>\n';
+  pdf += 'startxref\n';
+  pdf += xrefOffset + '\n';
+  pdf += '%%EOF';
+  
+  return pdf;
+}
 
 export const emailInvoice = (email: string, invoiceData: any) => {
   // In a real application, this would send an email with the invoice attached

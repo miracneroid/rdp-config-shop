@@ -3,9 +3,10 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.1.1";
 
 // Email service (mock implementation)
-const sendEmail = async (to: string, subject: string, html: string) => {
+const sendEmail = async (to: string, subject: string, html: string, attachmentContent?: string) => {
   console.log(`Sending email to ${to} with subject: ${subject}`);
   // In a real implementation, this would use a service like Resend or SendGrid
+  // and would include the PDF attachment
   return { success: true };
 };
 
@@ -13,10 +14,8 @@ const generateInvoiceHTML = (orderData: any) => {
   const items = orderData.order_details.items.map((item: any) => {
     return `
       <tr>
-        <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.name}</td>
-        <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.quantity}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #eee;">${item.description}</td>
         <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">${item.price}</td>
-        <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">${item.subtotal}</td>
       </tr>
     `;
   }).join('');
@@ -53,9 +52,7 @@ const generateInvoiceHTML = (orderData: any) => {
           <thead>
             <tr>
               <th>Item</th>
-              <th>Quantity</th>
               <th>Price</th>
-              <th>Subtotal</th>
             </tr>
           </thead>
           <tbody>
@@ -64,7 +61,7 @@ const generateInvoiceHTML = (orderData: any) => {
         </table>
         
         <div class="total">
-          <p><strong>Total:</strong> ${orderData.currency}${orderData.amount.toFixed(2)}</p>
+          <p><strong>Total:</strong> ${orderData.currency} ${orderData.amount.toFixed(2)}</p>
         </div>
         
         <div class="footer">
@@ -128,7 +125,7 @@ serve(async (req) => {
     // Generate invoice HTML
     const invoiceHTML = generateInvoiceHTML(order);
 
-    // Send the invoice by email
+    // Send the invoice by email (in a real implementation, this would also attach the PDF)
     await sendEmail(
       email,
       `Your RDP Config Invoice #${order.invoice_number || order.id.substring(0, 8)}`,
