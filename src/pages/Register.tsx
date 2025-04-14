@@ -160,151 +160,145 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-background to-secondary/20">
       <Navbar />
-      <div className="flex-1 container max-w-md mx-auto px-4 py-8">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold mb-2">Create an Account</h1>
-          <p className="text-muted-foreground">Join RDP Config to start creating your custom RDP</p>
-          {location.state?.redirectTo && (
-            <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-md text-sm text-blue-600 dark:text-blue-300">
-              Sign up to continue with your checkout
-            </div>
-          )}
-        </div>
-
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full Name</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                      <Input 
-                        placeholder="Enter your full name" 
-                        className="pl-10" 
-                        {...field} 
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                      <Input 
-                        placeholder="Enter your email" 
-                        className="pl-10" 
-                        {...field} 
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                      <Input 
-                        type="password" 
-                        placeholder="Create a password" 
-                        className="pl-10" 
-                        {...field} 
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-                      <Input 
-                        type="password" 
-                        placeholder="Confirm your password" 
-                        className="pl-10" 
-                        {...field} 
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="text-sm">
-              <p className="text-muted-foreground">
-                Already have an account?{" "}
-                <Link to="/login" className="text-rdp-blue dark:text-rdp-blue-light hover:underline">
-                  Login here
-                </Link>
+      <div className="flex-1 container relative">
+        <div className="lg:p-8">
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <div className="flex flex-col space-y-2 text-center">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Create an account
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Enter your details below to create your account
               </p>
+              {location.state?.redirectTo && (
+                <div className="mt-2 p-2 bg-primary/10 rounded-md text-sm text-primary">
+                  Sign up to continue with your checkout
+                </div>
+              )}
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <span className="flex items-center">
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Creating account...
-                </span>
-              ) : (
-                <span className="flex items-center">
-                  <UserPlus className="mr-2 h-5 w-5" />
-                  Create Account
-                </span>
-              )}
-            </Button>
-            
-            <div className="relative my-4">
-              <Separator />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-background px-2 text-xs text-muted-foreground">OR</span>
+            <div className="grid gap-6">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full Name</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                            <Input 
+                              placeholder="Enter your full name" 
+                              className="pl-10" 
+                              {...field} 
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                            <Input 
+                              placeholder="Enter your email" 
+                              className="pl-10" 
+                              {...field} 
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                            <Input 
+                              type="password" 
+                              placeholder="Create a password" 
+                              className="pl-10" 
+                              {...field} 
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                            <Input 
+                              type="password" 
+                              placeholder="Confirm your password" 
+                              className="pl-10" 
+                              {...field} 
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? (
+                      <span className="flex items-center justify-center">
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Creating account...
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center">
+                        <UserPlus className="mr-2 h-4 w-4" />
+                        Create Account
+                      </span>
+                    )}
+                  </Button>
+                </form>
+              </Form>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <Separator className="w-full" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or continue with
+                  </span>
+                </div>
               </div>
-            </div>
-            
-            <Button 
-              type="button" 
-              variant="outline" 
-              className="w-full" 
-              onClick={handleGoogleSignIn}
-              disabled={isGoogleLoading}
-            >
-              {isGoogleLoading ? (
-                <span className="flex items-center">
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  Connecting...
-                </span>
-              ) : (
-                <span className="flex items-center">
+
+              <Button variant="outline" onClick={handleGoogleSignIn} disabled={isGoogleLoading} className="w-full">
+                {isGoogleLoading ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
                   <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                     <path
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -324,19 +318,32 @@ const Register = () => {
                     />
                     <path d="M1 1h22v22H1z" fill="none" />
                   </svg>
-                  Sign up with Google
-                </span>
-              )}
-            </Button>
+                )}
+                Continue with Google
+              </Button>
 
-            <div className="text-center mt-4">
-              <Link to="/" className="flex items-center justify-center text-sm text-muted-foreground hover:text-foreground">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to home
-              </Link>
+              <div className="px-8 text-center text-sm text-muted-foreground">
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  className="underline underline-offset-4 hover:text-primary"
+                >
+                  Sign in
+                </Link>
+              </div>
+
+              <div className="text-center">
+                <Link
+                  to="/"
+                  className="inline-flex items-center text-sm text-muted-foreground hover:text-primary"
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to home
+                </Link>
+              </div>
             </div>
-          </form>
-        </Form>
+          </div>
+        </div>
       </div>
       <Footer />
     </div>
