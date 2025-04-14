@@ -41,7 +41,7 @@ const paymentFormSchema = z.object({
   cardNumber: z.string().min(16, { message: "Please enter a valid card number" }).max(19),
   cardName: z.string().min(2, { message: "Please enter the name on the card" }),
   expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, { message: "Please enter a valid expiry date (MM/YY)" }),
-  cvv: z.string().min(3, { message: "Please enter a valid CVV" }).max(4),
+  cvv: z.string().min(3, { message: "CVV must be 3 digits" }).max(3, { message: "CVV must be 3 digits" }),
 });
 
 type BillingFormValues = z.infer<typeof billingFormSchema>;
@@ -587,7 +587,16 @@ const Checkout = () => {
                             <FormItem>
                               <FormLabel>CVV</FormLabel>
                               <FormControl>
-                                <Input {...field} type="password" placeholder="123" />
+                                <Input 
+                                  {...field} 
+                                  type="password" 
+                                  placeholder="123" 
+                                  maxLength={3} 
+                                  onChange={(e) => {
+                                    const value = e.target.value.replace(/\D/g, '');
+                                    field.onChange(value);
+                                  }}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
