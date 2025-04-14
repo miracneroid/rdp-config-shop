@@ -5,9 +5,11 @@ import {
   User, 
   LogOut, 
   ShoppingCart,
-  LayoutDashboard,
-  Settings,
-  HelpCircle
+  Heart,
+  Ticket,
+  Gift,
+  Bell,
+  History
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -165,21 +167,33 @@ const UserMenu = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => handleNavigation('/dashboard')}>
-            <LayoutDashboard className="mr-2 h-4 w-4" />
-            <span>Dashboard</span>
-          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=profile')}>
             <User className="mr-2 h-4 w-4" />
-            <span>Profile Settings</span>
+            <span>Profile</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=orders')}>
+            <History className="mr-2 h-4 w-4" />
+            <span>Orders</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=wishlist')}>
+            <Heart className="mr-2 h-4 w-4" />
+            <span>Wishlist</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=coupons')}>
+            <Ticket className="mr-2 h-4 w-4" />
+            <span>Coupons</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=giftcards')}>
+            <Gift className="mr-2 h-4 w-4" />
+            <span>Gift Cards</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=notifications')}>
+            <Bell className="mr-2 h-4 w-4" />
+            <span>Notifications</span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleNavigation('/cart')}>
             <ShoppingCart className="mr-2 h-4 w-4" />
             <span>Cart</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleNavigation('/faq')}>
-            <HelpCircle className="mr-2 h-4 w-4" />
-            <span>Help & FAQ</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

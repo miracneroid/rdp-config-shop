@@ -19,15 +19,48 @@ import {
   HelpCircle, 
   User, 
   BarChart,
-  Loader2
+  Loader2,
+  Heart,
+  Ticket,
+  Gift,
+  Bell
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+// Placeholder components for the new tabs
+const Wishlist = () => (
+  <div className="p-4">
+    <h2 className="text-2xl font-bold mb-4">Your Wishlist</h2>
+    <p>You don't have any items in your wishlist yet.</p>
+  </div>
+);
+
+const Coupons = () => (
+  <div className="p-4">
+    <h2 className="text-2xl font-bold mb-4">Your Coupons</h2>
+    <p>You don't have any active coupons at the moment.</p>
+  </div>
+);
+
+const GiftCards = () => (
+  <div className="p-4">
+    <h2 className="text-2xl font-bold mb-4">Your Gift Cards</h2>
+    <p>You don't have any gift cards at the moment.</p>
+  </div>
+);
+
+const Notifications = () => (
+  <div className="p-4">
+    <h2 className="text-2xl font-bold mb-4">Your Notifications</h2>
+    <p>You don't have any notifications at the moment.</p>
+  </div>
+);
 
 const UserDashboard = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const tabFromUrl = queryParams.get('tab');
-  const defaultTab = tabFromUrl || "rdp-management";
+  const defaultTab = tabFromUrl || "profile"; // Changed default to profile
   
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [userName, setUserName] = useState("");
@@ -119,9 +152,9 @@ const UserDashboard = () => {
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="flex items-center gap-3 mb-6">
-          <LayoutDashboard className="h-8 w-8 text-rdp-blue dark:text-rdp-blue-light" />
+          <User className="h-8 w-8 text-rdp-blue dark:text-rdp-blue-light" />
           <div>
-            <h1 className="text-3xl font-bold text-rdp-dark dark:text-white">Dashboard</h1>
+            <h1 className="text-3xl font-bold text-rdp-dark dark:text-white">My Account</h1>
             <p className="text-gray-600 dark:text-gray-400">Welcome back, {userName}</p>
           </div>
         </div>
@@ -129,26 +162,34 @@ const UserDashboard = () => {
         <Card className="mb-8">
           <CardContent className="p-0">
             <Tabs defaultValue={activeTab} value={activeTab} onValueChange={handleTabChange} className="w-full">
-              <TabsList className="w-full grid grid-cols-2 md:grid-cols-5 rounded-none bg-muted/50">
-                <TabsTrigger value="rdp-management" className="flex items-center justify-center">
-                  <Server className="h-4 w-4 mr-2" /><span className="hidden md:inline">RDP Management</span>
-                  <span className="inline md:hidden">RDPs</span>
-                </TabsTrigger>
-                <TabsTrigger value="system-usage" className="flex items-center justify-center">
-                  <BarChart className="h-4 w-4 mr-2" /><span className="hidden md:inline">System Usage</span>
-                  <span className="inline md:hidden">Usage</span>
-                </TabsTrigger>
-                <TabsTrigger value="orders" className="flex items-center justify-center">
-                  <History className="h-4 w-4 mr-2" /><span className="hidden md:inline">Order History</span>
-                  <span className="inline md:hidden">Orders</span>
-                </TabsTrigger>
-                <TabsTrigger value="support" className="flex items-center justify-center">
-                  <HelpCircle className="h-4 w-4 mr-2" /><span className="hidden md:inline">Support Tickets</span>
-                  <span className="inline md:hidden">Support</span>
-                </TabsTrigger>
+              <TabsList className="w-full grid grid-cols-2 md:grid-cols-7 rounded-none bg-muted/50">
                 <TabsTrigger value="profile" className="flex items-center justify-center">
                   <User className="h-4 w-4 mr-2" /><span className="hidden md:inline">Profile</span>
                   <span className="inline md:hidden">Profile</span>
+                </TabsTrigger>
+                <TabsTrigger value="orders" className="flex items-center justify-center">
+                  <History className="h-4 w-4 mr-2" /><span className="hidden md:inline">Orders</span>
+                  <span className="inline md:hidden">Orders</span>
+                </TabsTrigger>
+                <TabsTrigger value="wishlist" className="flex items-center justify-center">
+                  <Heart className="h-4 w-4 mr-2" /><span className="hidden md:inline">Wishlist</span>
+                  <span className="inline md:hidden">Wishlist</span>
+                </TabsTrigger>
+                <TabsTrigger value="coupons" className="flex items-center justify-center">
+                  <Ticket className="h-4 w-4 mr-2" /><span className="hidden md:inline">Coupons</span>
+                  <span className="inline md:hidden">Coupons</span>
+                </TabsTrigger>
+                <TabsTrigger value="giftcards" className="flex items-center justify-center">
+                  <Gift className="h-4 w-4 mr-2" /><span className="hidden md:inline">Gift Cards</span>
+                  <span className="inline md:hidden">Gifts</span>
+                </TabsTrigger>
+                <TabsTrigger value="notifications" className="flex items-center justify-center">
+                  <Bell className="h-4 w-4 mr-2" /><span className="hidden md:inline">Notifications</span>
+                  <span className="inline md:hidden">Alerts</span>
+                </TabsTrigger>
+                <TabsTrigger value="rdp-management" className="flex items-center justify-center">
+                  <Server className="h-4 w-4 mr-2" /><span className="hidden md:inline">RDP Management</span>
+                  <span className="inline md:hidden">RDPs</span>
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -156,6 +197,10 @@ const UserDashboard = () => {
         </Card>
         
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <TabsContent value="profile" className="space-y-4 mt-0">
+            <UserProfile />
+          </TabsContent>
+          
           <TabsContent value="rdp-management" className="space-y-4 mt-0">
             <RdpManagement />
           </TabsContent>
@@ -172,8 +217,20 @@ const UserDashboard = () => {
             <SupportTickets />
           </TabsContent>
           
-          <TabsContent value="profile" className="space-y-4 mt-0">
-            <UserProfile />
+          <TabsContent value="wishlist" className="space-y-4 mt-0">
+            <Wishlist />
+          </TabsContent>
+          
+          <TabsContent value="coupons" className="space-y-4 mt-0">
+            <Coupons />
+          </TabsContent>
+          
+          <TabsContent value="giftcards" className="space-y-4 mt-0">
+            <GiftCards />
+          </TabsContent>
+          
+          <TabsContent value="notifications" className="space-y-4 mt-0">
+            <Notifications />
           </TabsContent>
         </div>
       </div>
