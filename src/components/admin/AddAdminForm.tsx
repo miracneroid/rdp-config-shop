@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -20,10 +19,9 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { User, Shield, Users, RefreshCw } from "lucide-react";
+import { Loader2, User, Shield, Users, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-// Update interfaces to handle potential null/undefined values
 interface Profile {
   id: string;
   display_name?: string | null;
@@ -55,7 +53,6 @@ const AddAdminForm = () => {
     try {
       setLoadingAdmins(true);
       
-      // First, fetch user roles
       const { data: userRoles, error: rolesError } = await supabase
         .from('user_roles')
         .select('user_id, role')
@@ -70,7 +67,6 @@ const AddAdminForm = () => {
       
       const userIds = userRoles.map(admin => admin.user_id);
       
-      // Then, fetch profiles for those users
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('id, display_name, first_name, last_name, avatar_url')
@@ -78,7 +74,6 @@ const AddAdminForm = () => {
         
       if (profilesError) throw profilesError;
       
-      // Map the data safely
       const formattedAdmins: AdminUser[] = userRoles.map(role => {
         const profile = (profiles || []).find(p => p.id === role.user_id) || {} as Profile;
         
@@ -333,4 +328,3 @@ const AddAdminForm = () => {
 };
 
 export default AddAdminForm;
-
