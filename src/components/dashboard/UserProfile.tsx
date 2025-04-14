@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -37,6 +38,7 @@ interface Profile {
   preferred_currency: string;
 }
 
+// Define an interface that matches what comes from Supabase
 interface SupabaseProfile {
   id: string;
   first_name: string | null;
@@ -180,10 +182,13 @@ const UserProfile = () => {
       
       if (!userData.user) throw new Error("User not found");
       
+      // Convert BillingAddress to Json-compatible object
+      const billingAddressJson = billingAddress as unknown as Json;
+      
       const { error } = await supabase
         .from("profiles")
         .update({
-          billing_address: billingAddress,
+          billing_address: billingAddressJson,
           updated_at: new Date().toISOString(),
         })
         .eq("id", userData.user.id);
