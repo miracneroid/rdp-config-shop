@@ -60,7 +60,7 @@ const UserDashboard = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const tabFromUrl = queryParams.get('tab');
-  const defaultTab = tabFromUrl || "profile"; // Changed default to profile
+  const defaultTab = tabFromUrl || "profile"; // Default to profile tab
   
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [userName, setUserName] = useState("");
@@ -127,10 +127,14 @@ const UserDashboard = () => {
 
   // Update active tab when URL changes
   useEffect(() => {
-    if (tabFromUrl) {
+    if (tabFromUrl && ["profile", "orders", "wishlist", "coupons", "giftcards", "notifications", "rdp-management"].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
+    } else {
+      // If invalid tab parameter, default to profile and update URL
+      setActiveTab("profile");
+      navigate(`/dashboard?tab=profile`, { replace: true });
     }
-  }, [location, tabFromUrl]);
+  }, [location, tabFromUrl, navigate]);
 
   if (isLoading) {
     return (
@@ -161,7 +165,7 @@ const UserDashboard = () => {
         
         <Card className="mb-8">
           <CardContent className="p-0">
-            <Tabs defaultValue={activeTab} value={activeTab} onValueChange={handleTabChange} className="w-full">
+            <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
               <TabsList className="w-full grid grid-cols-2 md:grid-cols-7 rounded-none bg-muted/50">
                 <TabsTrigger value="profile" className="flex items-center justify-center">
                   <User className="h-4 w-4 mr-2" /><span className="hidden md:inline">Profile</span>
@@ -192,47 +196,47 @@ const UserDashboard = () => {
                   <span className="inline md:hidden">RDPs</span>
                 </TabsTrigger>
               </TabsList>
+              
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mt-0">
+                <TabsContent value="profile" className="space-y-4 mt-0">
+                  <UserProfile />
+                </TabsContent>
+                
+                <TabsContent value="rdp-management" className="space-y-4 mt-0">
+                  <RdpManagement />
+                </TabsContent>
+                
+                <TabsContent value="system-usage" className="space-y-4 mt-0">
+                  <SystemUsage />
+                </TabsContent>
+                
+                <TabsContent value="orders" className="space-y-4 mt-0">
+                  <OrderHistory />
+                </TabsContent>
+                
+                <TabsContent value="support" className="space-y-4 mt-0">
+                  <SupportTickets />
+                </TabsContent>
+                
+                <TabsContent value="wishlist" className="space-y-4 mt-0">
+                  <Wishlist />
+                </TabsContent>
+                
+                <TabsContent value="coupons" className="space-y-4 mt-0">
+                  <Coupons />
+                </TabsContent>
+                
+                <TabsContent value="giftcards" className="space-y-4 mt-0">
+                  <GiftCards />
+                </TabsContent>
+                
+                <TabsContent value="notifications" className="space-y-4 mt-0">
+                  <Notifications />
+                </TabsContent>
+              </div>
             </Tabs>
           </CardContent>
         </Card>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <TabsContent value="profile" className="space-y-4 mt-0">
-            <UserProfile />
-          </TabsContent>
-          
-          <TabsContent value="rdp-management" className="space-y-4 mt-0">
-            <RdpManagement />
-          </TabsContent>
-          
-          <TabsContent value="system-usage" className="space-y-4 mt-0">
-            <SystemUsage />
-          </TabsContent>
-          
-          <TabsContent value="orders" className="space-y-4 mt-0">
-            <OrderHistory />
-          </TabsContent>
-          
-          <TabsContent value="support" className="space-y-4 mt-0">
-            <SupportTickets />
-          </TabsContent>
-          
-          <TabsContent value="wishlist" className="space-y-4 mt-0">
-            <Wishlist />
-          </TabsContent>
-          
-          <TabsContent value="coupons" className="space-y-4 mt-0">
-            <Coupons />
-          </TabsContent>
-          
-          <TabsContent value="giftcards" className="space-y-4 mt-0">
-            <GiftCards />
-          </TabsContent>
-          
-          <TabsContent value="notifications" className="space-y-4 mt-0">
-            <Notifications />
-          </TabsContent>
-        </div>
       </div>
       <Footer />
     </div>
