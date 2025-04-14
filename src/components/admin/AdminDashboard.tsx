@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, handleQueryResult } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { isNotNullOrUndefined } from "@/utils/typeGuards";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -89,20 +90,23 @@ const AdminDashboard = () => {
       if (activeUserError) throw activeUserError;
 
       // Get order stats
-      const { data: orders, error: ordersError } = await supabase
+      const { data: ordersData, error: ordersError } = await supabase
         .from('orders')
         .select('amount');
-        
-      if (ordersError) throw ordersError;
+      
+      const orders = handleQueryResult(ordersData, ordersError) || [];
 
       // Calculate total revenue
-      const totalRevenue = orders?.reduce((sum, order) => sum + (typeof order.amount === 'number' ? order.amount : 0), 0) || 0;
+      const totalRevenue = orders.reduce((sum, order) => {
+        const amount = typeof order.amount === 'number' ? order.amount : 0;
+        return sum + amount;
+      }, 0);
 
       // Get active RDPs
       const { count: rdpCount, error: rdpError } = await supabase
         .from('rdp_instances')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'active');
+        .eq('status', 'active' as any);
         
       if (rdpError) throw rdpError;
 
@@ -110,7 +114,7 @@ const AdminDashboard = () => {
       const { count: ticketCount, error: ticketError } = await supabase
         .from('support_tickets')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'open');
+        .eq('status', 'open' as any);
         
       if (ticketError) throw ticketError;
 

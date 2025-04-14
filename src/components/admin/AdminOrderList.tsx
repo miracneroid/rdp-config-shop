@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, handleQueryResult } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import {
   Table,
@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Download, Eye } from "lucide-react";
+import { isNotNullOrUndefined } from "@/utils/typeGuards";
 
 interface OrderItem {
   description: string;
@@ -69,37 +70,38 @@ const AdminOrderList = () => {
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
+      const safeOrdersData = handleQueryResult(ordersData, error);
+      
+      if (!safeOrdersData) {
+        setOrders([]);
+        return;
+      }
 
       // Fetch user emails for each order
-      if (ordersData && ordersData.length > 0) {
-        const ordersWithEmails = await Promise.all(
-          ordersData.map(async (order) => {
-            // Get user email from auth.users
-            const { data: userData } = await supabase.auth.admin.getUserById(
-              order.user_id
-            );
-            
-            // Parse order_details from JSON if needed
-            let parsedOrderDetails: OrderDetails;
-            if (typeof order.order_details === 'string') {
-              parsedOrderDetails = JSON.parse(order.order_details);
-            } else {
-              parsedOrderDetails = order.order_details as unknown as OrderDetails;
-            }
-            
-            return {
-              ...order,
-              order_details: parsedOrderDetails,
-              user_email: userData?.user?.email || "Unknown"
-            } as Order;
-          })
-        );
-        
-        setOrders(ordersWithEmails);
-      } else {
-        setOrders([]);
-      }
+      const ordersWithEmails = await Promise.all(
+        safeOrdersData.map(async (order) => {
+          // Get user email from auth.users
+          const { data: userData } = await supabase.auth.admin.getUserById(
+            order.user_id
+          );
+          
+          // Parse order_details from JSON if needed
+          let parsedOrderDetails: OrderDetails;
+          if (typeof order.order_details === 'string') {
+            parsedOrderDetails = JSON.parse(order.order_details);
+          } else {
+            parsedOrderDetails = order.order_details as unknown as OrderDetails;
+          }
+          
+          return {
+            ...order,
+            order_details: parsedOrderDetails,
+            user_email: userData?.user?.email || "Unknown"
+          } as Order;
+        })
+      );
+      
+      setOrders(ordersWithEmails);
     } catch (error: any) {
       console.error("Error fetching orders:", error.message);
       toast({

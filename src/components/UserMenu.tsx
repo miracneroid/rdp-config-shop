@@ -22,9 +22,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, handleQueryResult } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AvatarSelector from "./AvatarSelector";
+import { isNotNullOrUndefined, processQueryResult } from "@/utils/typeGuards";
 
 const UserMenu = () => {
   const navigate = useNavigate();
@@ -65,16 +66,18 @@ const UserMenu = () => {
             }
           }
           
-          const { data: profileData } = await supabase
+          const { data: profileData, error } = await supabase
             .from('profiles')
             .select('*')
             .eq('id', user.id)
             .maybeSingle();
           
-          if (profileData) {
-            displayName = profileData.display_name || displayName;
-            avatarUrl = profileData.avatar_url || avatarUrl;
-            avatarCharacter = profileData.avatar_character || null;
+          const safeProfileData = handleQueryResult(profileData, error);
+          
+          if (safeProfileData) {
+            displayName = safeProfileData.display_name || displayName;
+            avatarUrl = safeProfileData.avatar_url || avatarUrl;
+            avatarCharacter = safeProfileData.avatar_character || null;
           }
           
           const initials = getInitialsFromName(displayName);
@@ -88,7 +91,7 @@ const UserMenu = () => {
           });
           
           // If user signed up with Google and doesn't have a profile yet, create one with Google data
-          if ((provider_id === 'google' && !profileData) || (provider_id === 'google' && profileData && !profileData.avatar_url && avatarUrl)) {
+          if ((provider_id === 'google' && !safeProfileData) || (provider_id === 'google' && safeProfileData && !safeProfileData.avatar_url && avatarUrl)) {
             const firstName = user_metadata?.given_name || displayName.split(' ')[0] || '';
             const lastName = user_metadata?.family_name || (displayName.split(' ').length > 1 ? displayName.split(' ').slice(1).join(' ') : '');
             
@@ -136,7 +139,7 @@ const UserMenu = () => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
-        await supabase
+        const { error } = await supabase
           .from('profiles')
           .update({ 
             avatar_url: avatarUrl,
@@ -144,6 +147,8 @@ const UserMenu = () => {
             updated_at: new Date().toISOString()
           })
           .eq('id', user.id);
+        
+        if (error) throw error;
         
         setUserProfile({
           ...userProfile,
