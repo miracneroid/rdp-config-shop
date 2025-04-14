@@ -10,6 +10,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import AddAdminForm from "@/components/admin/AddAdminForm";
+import AdminEditButton from "@/components/admin/AdminEditButton";
 
 interface UserWithRole {
   id: string;
@@ -56,7 +57,6 @@ const TestManagement = () => {
           return;
         }
 
-        // If we got here, the user is an admin, so load the users
         loadUsers();
       } catch (error: any) {
         console.error("Admin check error:", error);
@@ -77,7 +77,6 @@ const TestManagement = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return "Unknown";
 
-      // Use the edge function to get the user's email
       const response = await fetch(`https://mbvsottvfclwoswykxfy.supabase.co/functions/v1/get-user-email`, {
         method: 'POST',
         headers: {
@@ -106,8 +105,6 @@ const TestManagement = () => {
       setIsLoadingUsers(true);
       setError(null);
       
-      // Fetch profiles from the database - we use profiles instead of auth.users
-      // since we don't have direct access to auth.users from the client
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select(`
@@ -123,17 +120,14 @@ const TestManagement = () => {
       
       if (profilesError) throw profilesError;
       
-      // Fetch user emails and roles
       const usersWithRoles: UserWithRole[] = await Promise.all(
         (profiles || []).map(async (profile) => {
-          // Get user roles
           const { data: roleData } = await supabase
             .from('user_roles')
             .select('role')
             .eq('user_id', profile.id)
             .maybeSingle();
           
-          // Get user email using the edge function
           const email = await fetchUserEmail(profile.id);
           
           return {
@@ -160,6 +154,59 @@ const TestManagement = () => {
       });
     } finally {
       setIsLoadingUsers(false);
+    }
+  };
+
+  const updateUserProfile = async (userId: string, updatedFields: Record<string, any>) => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          display_name: updatedFields.display_name,
+          first_name: updatedFields.first_name,
+          last_name: updatedFields.last_name
+        })
+        .eq('id', userId);
+      
+      if (error) throw error;
+      
+      if (updatedFields.role) {
+        const { data: existingRole } = await supabase
+          .from('user_roles')
+          .select('*')
+          .eq('user_id', userId)
+          .maybeSingle();
+        
+        if (existingRole) {
+          const { error: roleError } = await supabase
+            .from('user_roles')
+            .update({ role: updatedFields.role })
+            .eq('user_id', userId);
+          
+          if (roleError) throw roleError;
+        } else {
+          const { error: roleError } = await supabase
+            .from('user_roles')
+            .insert({ user_id: userId, role: updatedFields.role });
+          
+          if (roleError) throw roleError;
+        }
+      }
+      
+      await loadUsers();
+      
+      toast({
+        title: "User Updated",
+        description: "The user profile has been updated successfully.",
+      });
+    } catch (error: any) {
+      console.error("Error updating user profile:", error.message);
+      toast({
+        title: "Error updating user profile",
+        description: error.message,
+        variant: "destructive",
+      });
+      throw error;
     }
   };
 
@@ -202,7 +249,7 @@ const TestManagement = () => {
                 </Button>
               </div>
               <CardDescription className="text-muted-foreground">
-                View registered users
+                View and manage registered users
               </CardDescription>
             </CardHeader>
             
@@ -225,11 +272,29 @@ const TestManagement = () => {
                       <div>
                         <p className="font-medium text-foreground">{user.email}</p>
                         <p className="text-sm text-muted-foreground">
+                          {user.display_name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Unnamed User'}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
                           Created: {new Date(user.created_at).toLocaleDateString()}
                         </p>
                       </div>
-                      <div>
+                      <div className="flex items-center gap-2">
                         <Badge variant="outline">{user.role}</Badge>
+                        <AdminEditButton
+                          entityId={user.id}
+                          entityName="User"
+                          fields={[
+                            { name: "display_name", label: "Display Name", value: user.display_name || "" },
+                            { name: "first_name", label: "First Name", value: user.first_name || "" },
+                            { name: "last_name", label: "Last Name", value: user.last_name || "" },
+                            { 
+                              name: "role", 
+                              label: "Role", 
+                              value: user.role || "user"
+                            }
+                          ]}
+                          onSave={updateUserProfile}
+                        />
                       </div>
                     </li>
                   ))}

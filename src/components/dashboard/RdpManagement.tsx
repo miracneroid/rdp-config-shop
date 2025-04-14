@@ -32,8 +32,10 @@ import {
   Monitor,
   Laptop,
   Computer,
+  Pencil,
 } from "lucide-react";
 import RdpDetailView from "./RdpDetailView";
+import AdminEditButton from "../admin/AdminEditButton";
 
 const RDP_AVATARS = [
   "/avatars/robot-red.png",
@@ -145,6 +147,46 @@ const RdpManagement = () => {
     }
   };
 
+  const updateRdpInstance = async (id: string, updatedFields: Record<string, any>) => {
+    try {
+      const planDetails = updatedFields.plan_details ? 
+        JSON.parse(updatedFields.plan_details) : 
+        undefined;
+      
+      const updateData: any = { ...updatedFields };
+      
+      if (updateData.plan_details) {
+        delete updateData.plan_details;
+      }
+      
+      if (planDetails) {
+        updateData.plan_details = planDetails;
+      }
+      
+      const { error } = await supabase
+        .from('rdp_instances')
+        .update(updateData)
+        .eq('id', id);
+      
+      if (error) throw error;
+      
+      await fetchRdpInstances();
+      
+      toast({
+        title: "RDP Updated",
+        description: "The RDP instance has been updated successfully.",
+      });
+    } catch (error: any) {
+      console.error("Error updating RDP instance:", error.message);
+      toast({
+        title: "Error updating RDP instance",
+        description: error.message,
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -229,7 +271,7 @@ const RdpManagement = () => {
                   <TableHead className="hidden md:table-cell">Specs</TableHead>
                   <TableHead className="hidden md:table-cell">Expiry Date</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -274,15 +316,30 @@ const RdpManagement = () => {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => handleManageRdp(rdp.id)}
-                        className="flex items-center"
-                      >
-                        Manage
-                        <ArrowRight className="ml-1 h-4 w-4" />
-                      </Button>
+                      <div className="flex justify-end gap-2">
+                        <AdminEditButton
+                          entityId={rdp.id}
+                          entityName="RDP Instance"
+                          fields={[
+                            { name: "name", label: "RDP Name", value: rdp.name },
+                            { name: "username", label: "Username", value: rdp.username },
+                            { name: "password", label: "Password", value: rdp.password },
+                            { name: "ip_address", label: "IP Address", value: rdp.ip_address || "" },
+                            { name: "port", label: "Port", value: rdp.port || "3389" },
+                            { name: "status", label: "Status", value: rdp.status || "inactive" }
+                          ]}
+                          onSave={updateRdpInstance}
+                        />
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => handleManageRdp(rdp.id)}
+                          className="flex items-center"
+                        >
+                          Manage
+                          <ArrowRight className="ml-1 h-4 w-4" />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
