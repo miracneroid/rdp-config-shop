@@ -8,6 +8,7 @@ import {
   Gift,
   Bell,
   History,
+  Camera
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -19,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -208,7 +209,7 @@ const UserMenu = () => {
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">Username: {userProfile.name}</p>
+              <p className="text-sm font-medium leading-none">{userProfile.name}</p>
               <p className="text-xs leading-none text-muted-foreground">
                 {userProfile.email}
               </p>
@@ -219,6 +220,10 @@ const UserMenu = () => {
             <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=profile')}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setAvatarDialogOpen(true)}>
+              <Camera className="mr-2 h-4 w-4" />
+              <span>Change Avatar</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=orders')}>
               <History className="mr-2 h-4 w-4" />
