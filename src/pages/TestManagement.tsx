@@ -12,8 +12,20 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import AddAdminForm from "@/components/admin/AddAdminForm";
 
+interface UserWithRole {
+  id: string;
+  display_name?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  created_at: string;
+  updated_at: string;
+  avatar_url?: string | null;
+  email: string;
+  role: string;
+}
+
 const TestManagement = () => {
-  const [userList, setUserList] = useState<any[]>([]);
+  const [userList, setUserList] = useState<UserWithRole[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -63,7 +75,7 @@ const TestManagement = () => {
       if (error) throw error;
       
       // Fetch user roles information
-      const usersWithRoles = await Promise.all(
+      const usersWithRoles: UserWithRole[] = await Promise.all(
         (users || []).map(async (user) => {
           const { data: roleData, error: roleError } = await supabase
             .from('user_roles')
@@ -71,9 +83,12 @@ const TestManagement = () => {
             .eq('user_id', user.id)
             .maybeSingle();
           
+          // Create properly typed user object
           return {
             ...user,
-            email: user.display_name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Unknown user',
+            email: user.display_name || 
+                  `${user.first_name || ''} ${user.last_name || ''}`.trim() || 
+                  'Unknown user',
             role: roleData?.role || 'user'
           };
         })

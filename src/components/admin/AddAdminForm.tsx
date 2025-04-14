@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -23,15 +22,29 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, User, Shield, Users, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+interface AdminUser {
+  id: string;
+  role: string;
+  name: string;
+  avatar?: string;
+}
+
+interface Profile {
+  id: string;
+  display_name?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  avatar_url?: string | null;
+}
+
 const AddAdminForm = () => {
   const [email, setEmail] = useState("");
   const [adminType, setAdminType] = useState("admin");
   const [loading, setLoading] = useState(false);
-  const [admins, setAdmins] = useState<any[]>([]);
+  const [admins, setAdmins] = useState<AdminUser[]>([]);
   const [loadingAdmins, setLoadingAdmins] = useState(false);
   const { toast } = useToast();
 
-  // Load existing admins on component mount
   useEffect(() => {
     loadAdmins();
   }, []);
@@ -40,7 +53,6 @@ const AddAdminForm = () => {
     try {
       setLoadingAdmins(true);
       
-      // Find all users with admin role
       const { data: userRoles, error: rolesError } = await supabase
         .from('user_roles')
         .select('user_id, role')
@@ -54,10 +66,8 @@ const AddAdminForm = () => {
         return;
       }
       
-      // Get user IDs to fetch profile information
       const userIds = userRoles.map(admin => admin.user_id);
       
-      // Fetch profiles for these user IDs
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('id, display_name, first_name, last_name, avatar_url')
@@ -65,16 +75,16 @@ const AddAdminForm = () => {
         
       if (profilesError) throw profilesError;
       
-      // Combine the data
-      const formattedAdmins = userRoles.map(role => {
-        const profile = profiles?.find(p => p.id === role.user_id) || {};
+      const formattedAdmins: AdminUser[] = userRoles.map(role => {
+        const profile = (profiles || []).find(p => p.id === role.user_id) || {} as Profile;
+        
         return {
           id: role.user_id,
           role: role.role,
           name: profile.display_name || 
                 `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 
                 'Unknown Admin',
-          avatar: profile.avatar_url
+          avatar: profile.avatar_url || undefined
         };
       });
       
@@ -106,7 +116,6 @@ const AddAdminForm = () => {
     setLoading(true);
     
     try {
-      // First, check if the user exists in profiles table
       const { data: userData, error: userCheckError } = await supabase
         .from('profiles')
         .select('id')
@@ -123,7 +132,6 @@ const AddAdminForm = () => {
         return;
       }
       
-      // Add admin role to the user_roles table
       const { error: roleError } = await supabase
         .from('user_roles')
         .insert({
@@ -132,7 +140,7 @@ const AddAdminForm = () => {
         });
       
       if (roleError) {
-        if (roleError.code === '23505') { // Unique violation
+        if (roleError.code === '23505') {
           toast({
             title: "User is already an admin",
             description: "This user already has the admin role assigned.",
@@ -147,7 +155,6 @@ const AddAdminForm = () => {
           description: `User ${email} has been granted admin privileges`,
         });
         
-        // Log the admin action
         await supabase
           .from('admin_actions')
           .insert({
@@ -156,7 +163,6 @@ const AddAdminForm = () => {
             details: { target_user: email, role: adminType }
           });
         
-        // Clear form and reload admins
         setEmail("");
         setAdminType("admin");
         loadAdmins();
@@ -185,7 +191,6 @@ const AddAdminForm = () => {
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Add Admin Form */}
         <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-foreground">
@@ -250,7 +255,6 @@ const AddAdminForm = () => {
           </form>
         </Card>
         
-        {/* Admin List */}
         <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg">
           <CardHeader>
             <div className="flex justify-between items-center">
