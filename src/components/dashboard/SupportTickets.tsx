@@ -1,7 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { safeSupabaseCast } from "@/utils/typeGuards";
 import {
   Card,
   CardContent,
@@ -104,7 +104,7 @@ const SupportTickets = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      if (data) setTickets(safeSupabaseCast<Ticket[]>(data));
+      if (data) setTickets(data as Ticket[]);
     } catch (error: any) {
       console.error("Error fetching tickets:", error.message);
       toast({
@@ -125,7 +125,7 @@ const SupportTickets = () => {
         .order("name");
 
       if (error) throw error;
-      if (data) setRdpInstances(safeSupabaseCast<RdpInstance[]>(data));
+      if (data) setRdpInstances(data);
     } catch (error: any) {
       console.error("Error fetching RDP instances:", error.message);
     }

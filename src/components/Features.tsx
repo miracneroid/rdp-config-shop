@@ -36,14 +36,14 @@ const features = [
 
 const Features = () => {
   return (
-    <div className="bg-black py-24 sm:py-32">
+    <div className="bg-white py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="lg:text-center">
-          <h2 className="text-base font-semibold uppercase tracking-wide text-blue-500">Features</h2>
-          <p className="mt-2 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+          <h2 className="text-base font-semibold uppercase tracking-wide text-rdp-blue">Features</h2>
+          <p className="mt-2 text-3xl font-bold leading-8 tracking-tight text-rdp-dark sm:text-4xl">
             Enterprise-Grade RDP Solutions
           </p>
-          <p className="mt-4 max-w-2xl text-xl text-gray-400 lg:mx-auto">
+          <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
             Our remote desktop environments are built for professionals who demand performance, 
             security, and reliability.
           </p>
@@ -52,16 +52,13 @@ const Features = () => {
         <div className="mt-16">
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => (
-              <div 
-                key={feature.name}
-                className="relative group rounded-2xl border border-gray-800 bg-gray-900/50 p-6 backdrop-blur-sm hover:bg-gray-800/50 transition-all duration-300"
-              >
+              <div key={feature.name} className="rdp-card p-6 transform hover:scale-105 transition-all duration-300">
                 <div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20 transition-colors duration-300">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-md bg-rdp-blue/10 text-rdp-blue">
                     <feature.icon className="h-6 w-6" aria-hidden="true" />
                   </div>
-                  <h3 className="mt-4 text-xl font-semibold text-white">{feature.name}</h3>
-                  <p className="mt-2 text-base text-gray-400">{feature.description}</p>
+                  <h3 className="mt-5 text-lg font-medium leading-6 text-rdp-dark">{feature.name}</h3>
+                  <p className="mt-2 text-base text-gray-500">{feature.description}</p>
                 </div>
               </div>
             ))}

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -23,8 +22,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Eye, RefreshCw } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
-import { isNotNullOrUndefined } from "@/utils/typeGuards";
-import { fetchData, updateData } from "@/services/supabaseService";
 
 interface RdpPlanDetails {
   cpu: number;
@@ -64,46 +61,43 @@ const AdminRdpList = () => {
   const fetchRdpInstances = async () => {
     setLoading(true);
     try {
-      // Fetch all RDP instances using our safe utility
-      const { data: rdpData } = await fetchData<RdpInstance[]>('rdp_instances', {
-        order: { column: 'created_at', ascending: false }
-      });
+      // Fetch all RDP instances
+      const { data: rdpData, error } = await supabase
+        .from("rdp_instances")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-      if (!rdpData || rdpData.length === 0) {
-        setRdpInstances([]);
-        return;
-      }
+      if (error) throw error;
 
       // Fetch user emails for each RDP instance
-      const rdpsWithEmails = await Promise.all(
-        rdpData.map(async (rdp) => {
-          if (!rdp || !rdp.user_id) {
-            return null; // Skip invalid instances
-          }
-          
-          // Get user email from auth.users
-          const { data: userData } = await supabase.auth.admin.getUserById(
-            rdp.user_id
-          );
-          
-          // Parse plan_details from JSON if needed
-          let parsedPlanDetails: RdpPlanDetails;
-          if (typeof rdp.plan_details === 'string') {
-            parsedPlanDetails = JSON.parse(rdp.plan_details);
-          } else {
-            parsedPlanDetails = rdp.plan_details as RdpPlanDetails;
-          }
-          
-          return {
-            ...rdp,
-            plan_details: parsedPlanDetails,
-            user_email: userData?.user?.email || "Unknown"
-          } as RdpInstance;
-        })
-      );
-      
-      // Filter out null values and set instances
-      setRdpInstances(rdpsWithEmails.filter(isNotNullOrUndefined));
+      if (rdpData && rdpData.length > 0) {
+        const rdpsWithEmails = await Promise.all(
+          rdpData.map(async (rdp) => {
+            // Get user email from auth.users
+            const { data: userData } = await supabase.auth.admin.getUserById(
+              rdp.user_id
+            );
+            
+            // Parse plan_details from JSON if needed
+            let parsedPlanDetails: RdpPlanDetails;
+            if (typeof rdp.plan_details === 'string') {
+              parsedPlanDetails = JSON.parse(rdp.plan_details);
+            } else {
+              parsedPlanDetails = rdp.plan_details as unknown as RdpPlanDetails;
+            }
+            
+            return {
+              ...rdp,
+              plan_details: parsedPlanDetails,
+              user_email: userData?.user?.email || "Unknown"
+            } as RdpInstance;
+          })
+        );
+        
+        setRdpInstances(rdpsWithEmails);
+      } else {
+        setRdpInstances([]);
+      }
     } catch (error: any) {
       console.error("Error fetching RDP instances:", error.message);
       toast({
@@ -118,14 +112,12 @@ const AdminRdpList = () => {
 
   const updateRdpStatus = async (id: string, status: string) => {
     try {
-      // Use our safe update utility
-      const { error } = await updateData<RdpInstance>(
-        'rdp_instances',
-        { id },
-        { status }
-      );
+      const { error } = await supabase
+        .from("rdp_instances")
+        .update({ status })
+        .eq("id", id);
 
-      if (error) throw new Error(error);
+      if (error) throw error;
 
       toast({
         title: "Status updated",

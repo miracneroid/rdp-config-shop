@@ -70,28 +70,26 @@ const pricingPlans: PricingPlan[] = [
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+    <div className="min-h-screen dark:bg-rdp-dark">
       <Navbar />
       <main>
         <Hero />
         <Features />
         
         {/* Pricing Section */}
-        <div className="py-24 sm:py-32 relative">
-          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_80%_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="bg-white dark:bg-rdp-dark py-16 sm:py-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="sm:text-center">
-              <h2 className="text-base font-semibold uppercase tracking-wide text-indigo-400">Pricing</h2>
-              <p className="mt-2 text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+              <h2 className="text-base font-semibold uppercase tracking-wide text-rdp-blue">Pricing</h2>
+              <p className="mt-2 text-3xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-4xl">
                 Choose your RDP plan
               </p>
-              <p className="mx-auto mt-4 max-w-2xl text-xl text-gray-400">
+              <p className="mx-auto mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-400">
                 Select from our pre-configured plans or customize your own.
               </p>
             </div>
             
-            <div className="mt-16 grid gap-8 lg:grid-cols-4 md:grid-cols-2">
+            <div className="mt-12 grid gap-8 lg:grid-cols-4 md:grid-cols-2">
               {pricingPlans.map((plan) => (
                 <PricingCard key={plan.name} plan={plan} />
               ))}

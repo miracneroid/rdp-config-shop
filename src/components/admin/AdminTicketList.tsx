@@ -30,8 +30,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2, RefreshCw, MessageCircle } from "lucide-react";
-import { isNotNullOrUndefined } from "@/utils/typeGuards";
-import { fetchData, updateData, insertData } from "@/services/supabaseService";
 
 interface Ticket {
   id: string;
@@ -74,52 +72,39 @@ const AdminTicketList = () => {
   const fetchTickets = async () => {
     setLoading(true);
     try {
-      // Fetch all support tickets using our safe utility
-      const { data: ticketData } = await fetchData<Ticket[]>('support_tickets', {
-        order: { column: 'created_at', ascending: false }
-      });
+      // Fetch all support tickets
+      const { data: ticketData, error } = await supabase
+        .from("support_tickets")
+        .select(`
+          *,
+          rdp_instance:rdp_instance_id (
+            name
+          )
+        `)
+        .order("created_at", { ascending: false });
 
-      if (!ticketData || ticketData.length === 0) {
-        setTickets([]);
-        return;
-      }
+      if (error) throw error;
 
       // Fetch user emails for each ticket
-      const ticketsWithEmails = await Promise.all(
-        ticketData.map(async (ticket) => {
-          if (!ticket || !ticket.user_id) {
-            return null; // Skip invalid tickets
-          }
-          
-          // Get user email from auth.users
-          const { data: userData } = await supabase.auth.admin.getUserById(
-            ticket.user_id
-          );
-          
-          // Fetch the RDP name if this ticket is related to an RDP instance
-          let rdpInstance = undefined;
-          if (ticket.rdp_instance_id) {
-            const { data: rdpData } = await fetchData('rdp_instances', {
-              select: 'name',
-              match: { id: ticket.rdp_instance_id },
-              single: true
-            });
+      if (ticketData && ticketData.length > 0) {
+        const ticketsWithEmails = await Promise.all(
+          ticketData.map(async (ticket) => {
+            // Get user email from auth.users
+            const { data: userData } = await supabase.auth.admin.getUserById(
+              ticket.user_id
+            );
             
-            if (rdpData) {
-              rdpInstance = { name: (rdpData as any).name };
-            }
-          }
-          
-          return {
-            ...ticket,
-            user_email: userData?.user?.email || "Unknown",
-            rdp_instance: rdpInstance
-          } as Ticket;
-        })
-      );
-      
-      // Filter out null values and set tickets
-      setTickets(ticketsWithEmails.filter(isNotNullOrUndefined));
+            return {
+              ...ticket,
+              user_email: userData?.user?.email || "Unknown"
+            };
+          })
+        );
+        
+        setTickets(ticketsWithEmails);
+      } else {
+        setTickets([]);
+      }
     } catch (error: any) {
       console.error("Error fetching tickets:", error.message);
       toast({
@@ -134,16 +119,14 @@ const AdminTicketList = () => {
 
   const fetchTicketResponses = async (ticketId: string) => {
     try {
-      const { data } = await fetchData<TicketResponse[]>('ticket_responses', {
-        match: { ticket_id: ticketId },
-        order: { column: 'created_at', ascending: true }
-      });
-      
-      if (data) {
-        setResponses(data as TicketResponse[]);
-      } else {
-        setResponses([]);
-      }
+      const { data, error } = await supabase
+        .from("ticket_responses")
+        .select("*")
+        .eq("ticket_id", ticketId)
+        .order("created_at");
+
+      if (error) throw error;
+      if (data) setResponses(data);
     } catch (error: any) {
       console.error("Error fetching ticket responses:", error.message);
       toast({
@@ -160,21 +143,16 @@ const AdminTicketList = () => {
     try {
       const { data: userData } = await supabase.auth.getUser();
       
-      if (!userData.user?.id) {
-        throw new Error("User not authenticated");
-      }
-      
-      const responseData = {
-        ticket_id: selectedTicket.id,
-        user_id: userData.user.id,
-        message: newResponse,
-        is_admin: true, // This is an admin response
-      };
-      
-      // Use our safe insert utility
-      const { error } = await insertData<TicketResponse>('ticket_responses', responseData);
+      const { error } = await supabase
+        .from("ticket_responses")
+        .insert({
+          ticket_id: selectedTicket.id,
+          user_id: userData.user?.id,
+          message: newResponse,
+          is_admin: true, // This is an admin response
+        });
 
-      if (error) throw new Error(error);
+      if (error) throw error;
       
       toast({
         title: "Response sent",
@@ -194,14 +172,12 @@ const AdminTicketList = () => {
 
   const updateTicketStatus = async (id: string, status: string) => {
     try {
-      // Use our safe update utility
-      const { error } = await updateData<Ticket>(
-        'support_tickets',
-        { id },
-        { status }
-      );
+      const { error } = await supabase
+        .from("support_tickets")
+        .update({ status })
+        .eq("id", id);
 
-      if (error) throw new Error(error);
+      if (error) throw error;
 
       toast({
         title: "Status updated",
@@ -231,14 +207,12 @@ const AdminTicketList = () => {
 
   const updateTicketPriority = async (id: string, priority: string) => {
     try {
-      // Use our safe update utility
-      const { error } = await updateData<Ticket>(
-        'support_tickets',
-        { id },
-        { priority }
-      );
+      const { error } = await supabase
+        .from("support_tickets")
+        .update({ priority })
+        .eq("id", id);
 
-      if (error) throw new Error(error);
+      if (error) throw error;
 
       toast({
         title: "Priority updated",
