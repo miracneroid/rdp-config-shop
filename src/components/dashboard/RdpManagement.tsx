@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -10,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -29,8 +29,19 @@ import {
   HardDrive,
   Database,
   Loader2,
+  Monitor,
+  Laptop,
+  Computer,
 } from "lucide-react";
 import RdpDetailView from "./RdpDetailView";
+
+const RDP_AVATARS = [
+  "/avatars/robot-red.png",
+  "/avatars/robot-blue.png", 
+  "/avatars/robot-green.png",
+  "/avatars/computer.png",
+  "/avatars/server.png"
+];
 
 interface PlanDetails {
   cpu: string;
@@ -51,6 +62,7 @@ interface RdpInstance {
   expiry_date: string;
   plan_details: PlanDetails;
   created_at: string;
+  avatar: string;
 }
 
 interface SupabaseRdpInstance {
@@ -76,10 +88,13 @@ const RdpManagement = () => {
     fetchRdpInstances();
   }, []);
 
+  const getRandomAvatar = () => {
+    return RDP_AVATARS[Math.floor(Math.random() * RDP_AVATARS.length)];
+  };
+
   const fetchRdpInstances = async () => {
     setLoading(true);
     try {
-      // Get current user id from the session
       const { data: sessionData } = await supabase.auth.getSession();
       const userId = sessionData.session?.user.id;
 
@@ -87,7 +102,6 @@ const RdpManagement = () => {
         throw new Error("User not authenticated");
       }
 
-      // Fetch RDP instances for the current user only
       const { data, error } = await supabase
         .from("rdp_instances")
         .select("*")
@@ -97,7 +111,6 @@ const RdpManagement = () => {
       if (error) throw error;
       
       if (data) {
-        // Cast Json to PlanDetails
         const formattedInstances: RdpInstance[] = (data as SupabaseRdpInstance[]).map((instance) => {
           const planDetailsJson = instance.plan_details as any;
           const planDetails: PlanDetails = {
@@ -113,7 +126,8 @@ const RdpManagement = () => {
             ip_address: instance.ip_address || "",
             port: instance.port || "3389",
             status: instance.status || "inactive",
-            plan_details: planDetails
+            plan_details: planDetails,
+            avatar: getRandomAvatar()
           };
         });
         
@@ -147,7 +161,6 @@ const RdpManagement = () => {
     setSelectedRdpId(null);
   };
 
-  // Display RDP details if one is selected
   if (selectedRdpId) {
     const rdp = rdpInstances.find(r => r.id === selectedRdpId);
     if (!rdp) {
@@ -212,7 +225,7 @@ const RdpManagement = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
+                  <TableHead>RDP Name</TableHead>
                   <TableHead className="hidden md:table-cell">Specs</TableHead>
                   <TableHead className="hidden md:table-cell">Expiry Date</TableHead>
                   <TableHead>Status</TableHead>
@@ -222,7 +235,15 @@ const RdpManagement = () => {
               <TableBody>
                 {rdpInstances.map((rdp) => (
                   <TableRow key={rdp.id}>
-                    <TableCell className="font-medium">{rdp.name}</TableCell>
+                    <TableCell className="font-medium flex items-center gap-3">
+                      <Avatar>
+                        <AvatarImage src={rdp.avatar} alt={`${rdp.name} avatar`} />
+                        <AvatarFallback>
+                          <Server className="h-5 w-5" />
+                        </AvatarFallback>
+                      </Avatar>
+                      {rdp.name}
+                    </TableCell>
                     <TableCell className="hidden md:table-cell">
                       <div className="flex flex-col">
                         <span className="flex items-center text-xs text-muted-foreground">
