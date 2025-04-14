@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -173,7 +172,6 @@ const Checkout = () => {
         throw new Error("User not authenticated");
       }
       
-      // Explicitly log the auth.uid to verify it's available
       console.log("Authenticated user ID:", session.user.id);
       
       const orderDetails = {
@@ -191,7 +189,6 @@ const Checkout = () => {
         }
       };
 
-      // Explicitly set user_id to the authenticated user's ID
       const { data: order, error: orderError } = await supabase
         .from("orders")
         .insert({
@@ -396,7 +393,7 @@ const Checkout = () => {
                             <FormItem>
                               <FormLabel>Phone</FormLabel>
                               <FormControl>
-                                <Input {...field} />
+                                <Input {...field} formatAs="phoneNumber" placeholder="(123) 456-7890" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>

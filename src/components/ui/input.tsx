@@ -4,7 +4,7 @@ import { useCallback } from "react"
 import { cn } from "@/lib/utils"
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  formatAs?: "creditCard" | "expiryDate"
+  formatAs?: "creditCard" | "expiryDate" | "phoneNumber"
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -40,16 +40,42 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       onChange?.(e);
     }, [onChange]);
 
+    // Handle phone number formatting
+    const handlePhoneNumberChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+      const inputVal = e.target.value.replace(/\D/g, ''); // Remove non-digits
+      if (inputVal.length > 10) return; // Limit to 10 digits for US numbers
+      
+      let formattedValue = inputVal;
+      if (inputVal.length > 6) {
+        // Format as (123) 456-7890
+        formattedValue = '(' + inputVal.substring(0, 3) + ') ' + 
+                         inputVal.substring(3, 6) + '-' + 
+                         inputVal.substring(6);
+      } else if (inputVal.length > 3) {
+        // Format as (123) 456
+        formattedValue = '(' + inputVal.substring(0, 3) + ') ' + 
+                         inputVal.substring(3);
+      } else if (inputVal.length > 0) {
+        // Format as (123
+        formattedValue = '(' + inputVal;
+      }
+      
+      e.target.value = formattedValue;
+      onChange?.(e);
+    }, [onChange]);
+
     // Choose which handler to use based on formatAs prop
     const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
       if (formatAs === "creditCard") {
         handleCreditCardChange(e);
       } else if (formatAs === "expiryDate") {
         handleExpiryDateChange(e);
+      } else if (formatAs === "phoneNumber") {
+        handlePhoneNumberChange(e);
       } else {
         onChange?.(e);
       }
-    }, [formatAs, handleCreditCardChange, handleExpiryDateChange, onChange]);
+    }, [formatAs, handleCreditCardChange, handleExpiryDateChange, handlePhoneNumberChange, onChange]);
 
     return (
       <input
