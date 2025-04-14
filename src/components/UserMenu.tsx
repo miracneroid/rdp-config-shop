@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -170,6 +169,10 @@ const UserMenu = () => {
           <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=profile')}>
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=rdp-management')}>
+            <User className="mr-2 h-4 w-4" />
+            <span>RDP Management</span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=orders')}>
             <History className="mr-2 h-4 w-4" />

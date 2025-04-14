@@ -18,9 +18,9 @@ interface SettingsContextType {
 // Default settings
 const defaultSettings: AppSettings = {
   currency: {
-    code: 'INR',
-    symbol: '₹',
-    name: 'Indian Rupee'
+    code: 'EUR',
+    symbol: '€',
+    name: 'Euro'
   }
 };
 

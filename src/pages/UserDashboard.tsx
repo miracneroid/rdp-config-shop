@@ -127,7 +127,7 @@ const UserDashboard = () => {
 
   // Update active tab when URL changes
   useEffect(() => {
-    if (tabFromUrl && ["profile", "orders", "wishlist", "coupons", "giftcards", "notifications", "rdp-management"].includes(tabFromUrl)) {
+    if (tabFromUrl && ["profile", "rdp-management", "orders", "wishlist", "coupons", "giftcards", "notifications"].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     } else {
       // If invalid tab parameter, default to profile and update URL
@@ -171,6 +171,10 @@ const UserDashboard = () => {
                   <User className="h-4 w-4 mr-2" /><span className="hidden md:inline">Profile</span>
                   <span className="inline md:hidden">Profile</span>
                 </TabsTrigger>
+                <TabsTrigger value="rdp-management" className="flex items-center justify-center">
+                  <Server className="h-4 w-4 mr-2" /><span className="hidden md:inline">RDP Management</span>
+                  <span className="inline md:hidden">RDPs</span>
+                </TabsTrigger>
                 <TabsTrigger value="orders" className="flex items-center justify-center">
                   <History className="h-4 w-4 mr-2" /><span className="hidden md:inline">Orders</span>
                   <span className="inline md:hidden">Orders</span>
@@ -190,10 +194,6 @@ const UserDashboard = () => {
                 <TabsTrigger value="notifications" className="flex items-center justify-center">
                   <Bell className="h-4 w-4 mr-2" /><span className="hidden md:inline">Notifications</span>
                   <span className="inline md:hidden">Alerts</span>
-                </TabsTrigger>
-                <TabsTrigger value="rdp-management" className="flex items-center justify-center">
-                  <Server className="h-4 w-4 mr-2" /><span className="hidden md:inline">RDP Management</span>
-                  <span className="inline md:hidden">RDPs</span>
                 </TabsTrigger>
               </TabsList>
               

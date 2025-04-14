@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, DollarSign, IndianRupee, EuroIcon, PoundSterling } from "lucide-react";
+import { User } from "lucide-react";
 
 interface BillingAddress {
   address1: string;
@@ -66,15 +66,8 @@ const UserProfile = () => {
     zip: "",
     country: "",
   });
-  const { settings, updateCurrency } = useSettings();
+  const { settings } = useSettings();
   const { toast } = useToast();
-
-  const currencies = [
-    { code: "INR", symbol: "₹", name: "Indian Rupee", icon: IndianRupee },
-    { code: "USD", symbol: "$", name: "US Dollar", icon: DollarSign },
-    { code: "EUR", symbol: "€", name: "Euro", icon: EuroIcon },
-    { code: "GBP", symbol: "£", name: "British Pound", icon: PoundSterling },
-  ];
 
   useEffect(() => {
     fetchProfile();
@@ -126,13 +119,6 @@ const UserProfile = () => {
         
         if (formattedProfile.billing_address) {
           setBillingAddress(formattedProfile.billing_address);
-        }
-        
-        if (formattedProfile.preferred_currency) {
-          const currency = currencies.find(c => c.code === formattedProfile.preferred_currency);
-          if (currency) {
-            updateCurrency(currency.code, currency.symbol, currency.name);
-          }
         }
       }
     } catch (error: any) {
@@ -220,42 +206,6 @@ const UserProfile = () => {
     }
   };
 
-  const updatePreferredCurrency = async (code: string, symbol: string, name: string) => {
-    setSaving(true);
-    try {
-      const { data: userData } = await supabase.auth.getUser();
-      
-      if (!userData.user) throw new Error("User not found");
-      
-      const { error } = await supabase
-        .from("profiles")
-        .update({
-          preferred_currency: code,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", userData.user.id);
-
-      if (error) throw error;
-      
-      updateCurrency(code, symbol, name);
-      
-      toast({
-        title: "Currency preference updated",
-        description: `Your preferred currency has been set to ${name}.`,
-      });
-      
-      fetchProfile();
-    } catch (error: any) {
-      toast({
-        title: "Error updating currency preference",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
-
   const getInitials = () => {
     if (userDetails.firstName && userDetails.lastName) {
       return `${userDetails.firstName.charAt(0)}${userDetails.lastName.charAt(0)}`;
@@ -276,10 +226,9 @@ const UserProfile = () => {
   return (
     <div className="space-y-6">
       <Tabs defaultValue="account" className="w-full">
-        <TabsList className="grid grid-cols-3 mb-6">
+        <TabsList className="grid grid-cols-2 mb-6">
           <TabsTrigger value="account">Account Information</TabsTrigger>
           <TabsTrigger value="billing">Billing Address</TabsTrigger>
-          <TabsTrigger value="preferences">Preferences</TabsTrigger>
         </TabsList>
         
         <TabsContent value="account">
@@ -335,6 +284,18 @@ const UserProfile = () => {
                 />
                 <p className="text-xs text-muted-foreground">
                   Email address cannot be changed
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Currency</label>
+                <Input 
+                  value={`${settings.currency.name} (${settings.currency.code}) ${settings.currency.symbol}`}
+                  disabled
+                  className="bg-gray-50 dark:bg-gray-800"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Currency settings can only be changed by an administrator
                 </p>
               </div>
             </CardContent>
@@ -422,51 +383,6 @@ const UserProfile = () => {
                 {saving ? "Saving..." : "Save Address"}
               </Button>
             </CardFooter>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="preferences">
-          <Card>
-            <CardHeader>
-              <CardTitle>Preferences</CardTitle>
-              <CardDescription>
-                Customize your experience
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <h3 className="text-sm font-medium mb-3">Preferred Currency</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Select your preferred currency for payments and invoices
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {currencies.map((currency) => (
-                    <Button
-                      key={currency.code}
-                      variant={settings.currency.code === currency.code ? "default" : "outline"}
-                      className="flex items-center"
-                      onClick={() => updatePreferredCurrency(currency.code, currency.symbol, currency.name)}
-                      disabled={saving}
-                    >
-                      <currency.icon className="w-4 h-4 mr-2" />
-                      {currency.code} - {currency.name}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="text-sm font-medium mb-3">Current Settings</h3>
-                <div className="p-4 bg-muted rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-muted-foreground">Currency</span>
-                    <span className="font-medium">
-                      {settings.currency.name} ({settings.currency.code}) {settings.currency.symbol}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
