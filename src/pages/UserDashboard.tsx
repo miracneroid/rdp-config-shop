@@ -89,7 +89,7 @@ const UserDashboard = () => {
   // Handle tab changes - update URL when tab changes
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    navigate(`/dashboard?tab=${value}`);
+    navigate(`/dashboard?tab=${value}`, { replace: true });
   };
 
   // Update active tab when URL changes

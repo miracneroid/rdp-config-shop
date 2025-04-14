@@ -1,15 +1,13 @@
 
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { 
   User, 
   LogOut, 
-  History, 
-  CreditCard, 
-  Server,
+  ShoppingCart,
   LayoutDashboard,
-  HelpCircle,
-  ShoppingCart
+  Settings,
+  HelpCircle
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -136,6 +134,11 @@ const UserMenu = () => {
     }
   };
   
+  const handleNavigation = (path: string) => {
+    // Close the dropdown menu and navigate
+    navigate(path);
+  };
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -162,31 +165,19 @@ const UserMenu = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+          <DropdownMenuItem onClick={() => handleNavigation('/dashboard')}>
             <LayoutDashboard className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => navigate('/dashboard?tab=profile')}>
+          <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=profile')}>
             <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
+            <span>Profile Settings</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => navigate('/dashboard?tab=rdp-management')}>
-            <Server className="mr-2 h-4 w-4" />
-            <span>My RDPs</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => navigate('/dashboard?tab=orders')}>
-            <History className="mr-2 h-4 w-4" />
-            <span>Order History</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => navigate('/dashboard?tab=system-usage')}>
-            <CreditCard className="mr-2 h-4 w-4" />
-            <span>System Usage</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => navigate('/cart')}>
+          <DropdownMenuItem onClick={() => handleNavigation('/cart')}>
             <ShoppingCart className="mr-2 h-4 w-4" />
-            <span>Shopping Cart</span>
+            <span>Cart</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => navigate('/faq')}>
+          <DropdownMenuItem onClick={() => handleNavigation('/faq')}>
             <HelpCircle className="mr-2 h-4 w-4" />
             <span>Help & FAQ</span>
           </DropdownMenuItem>
