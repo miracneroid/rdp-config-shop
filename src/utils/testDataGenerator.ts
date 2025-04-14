@@ -24,13 +24,13 @@ export const generateTestUser = async (email: string, password: string) => {
   }
 };
 
-// Add a specific test RDP for test@email.com
+// Add a specific test RDP for testing@gmail.com
 export const addTestRdp = async (email: string) => {
   try {
     console.log("Attempting to add test RDP for:", email);
     
-    if (email !== "test@email.com") {
-      return { success: false, error: "This function only works for test@email.com" };
+    if (email !== "testing@gmail.com") {
+      return { success: false, error: "This function only works for testing@gmail.com" };
     }
     
     // Call the dedicated edge function to handle this with admin privileges

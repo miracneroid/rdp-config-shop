@@ -38,9 +38,9 @@ serve(async (req) => {
       );
     }
 
-    if (email !== "test@email.com") {
+    if (email !== "testing@gmail.com") {
       return new Response(
-        JSON.stringify({ error: "This function only works for test@email.com" }),
+        JSON.stringify({ error: "This function only works for testing@gmail.com" }),
         { 
           status: 400, 
           headers: { ...corsHeaders, "Content-Type": "application/json" } 
@@ -75,7 +75,7 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ 
           success: true, 
-          message: "Test RDP already exists for test@gmail.com",
+          message: "Test RDP already exists for testing@gmail.com",
           data: { rdpExists: true }
         }),
         { 
@@ -160,7 +160,7 @@ serve(async (req) => {
         success: true, 
         data: { 
           rdpInstance,
-          message: "Test RDP added successfully for test@gmail.com" 
+          message: "Test RDP added successfully for testing@gmail.com" 
         }
       }),
       { 

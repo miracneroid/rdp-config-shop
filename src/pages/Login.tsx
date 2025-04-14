@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -66,12 +67,12 @@ const Login = () => {
   const handleAddTestRdp = async () => {
     setAddingRdp(true);
     try {
-      const result = await addTestRdp("test@email.com");
+      const result = await addTestRdp("testing@gmail.com");
       
       if (result.success) {
         toast({
           title: "Success",
-          description: "Added test RDP for test@email.com. You can now login with this account.",
+          description: "Added test RDP for testing@gmail.com. You can now login with this account.",
         });
       } else {
         toast({
@@ -167,14 +168,14 @@ const Login = () => {
                   {addingRdp ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Setting up test@email.com...
+                      Setting up testing@gmail.com...
                     </>
                   ) : (
-                    "Setup test@email.com with RDP (Test Only)"
+                    "Setup testing@gmail.com with RDP (Test Only)"
                   )}
                 </Button>
                 <p className="text-xs text-gray-500 mt-2 text-center">
-                  This will create an RDP for test@email.com with password "password123"
+                  This will create an RDP for testing@gmail.com with password "password123"
                 </p>
               </div>
             </CardFooter>

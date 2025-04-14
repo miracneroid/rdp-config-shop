@@ -125,10 +125,10 @@ serve(async (req) => {
       }
     }
 
-    // If test@email.com is created, add a test RDP automatically
+    // If testing@gmail.com is created, add a test RDP automatically
     let rdpResult = null;
-    if (email === "test@email.com") {
-      console.log("Creating test RDP for test@email.com");
+    if (email === "testing@gmail.com") {
+      console.log("Creating test RDP for testing@gmail.com");
       
       // Create a test RDP instance with 59 EUR price
       const { data: rdpInstance, error: rdpError } = await supabaseAdmin
@@ -186,7 +186,7 @@ serve(async (req) => {
         } else {
           rdpResult = {
             rdpInstance,
-            message: "Test RDP added automatically for test@email.com"
+            message: "Test RDP added automatically for testing@gmail.com"
           };
         }
       }

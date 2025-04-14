@@ -51,9 +51,9 @@ const TestManagement = () => {
       setIsLoadingUsers(true);
       
       // In a real scenario, we would use an admin API to get the list of users
-      // For this demo, we'll use a hardcoded list including test@gmail.com
+      // For this demo, we'll use a hardcoded list including testing@gmail.com
       const mockUsers = [
-        { email: "test@gmail.com", created_at: new Date().toISOString() }
+        { email: "testing@gmail.com", created_at: new Date().toISOString() }
       ];
       
       setUserList(mockUsers);
@@ -132,7 +132,7 @@ const TestManagement = () => {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Important</AlertTitle>
           <AlertDescription>
-            A default active RDP will be created automatically only for users with the email <strong>test@gmail.com</strong>. 
+            A default active RDP will be created automatically only for users with the email <strong>testing@gmail.com</strong>. 
             Other test users will not receive a default RDP.
           </AlertDescription>
         </Alert>
@@ -162,7 +162,7 @@ const TestManagement = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
-                  {email === "test@gmail.com" && (
+                  {email === "testing@gmail.com" && (
                     <p className="text-sm text-green-600 dark:text-green-400">
                       This email will receive a default active RDP
                     </p>
@@ -179,9 +179,9 @@ const TestManagement = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
-                  {email === "test@gmail.com" && (
+                  {email === "testing@gmail.com" && (
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Default password for test@gmail.com is "password123"
+                      Default password for testing@gmail.com is "password123"
                     </p>
                   )}
                 </div>
