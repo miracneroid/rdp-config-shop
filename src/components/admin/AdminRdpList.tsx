@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, safeSupabaseCast, asSupabaseUUID } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import {
   Table,
@@ -61,7 +62,7 @@ const AdminRdpList = () => {
   const fetchRdpInstances = async () => {
     setLoading(true);
     try {
-      // Fetch all RDP instances
+      // Fetch all RDP instances (not just active ones)
       const { data: rdpData, error } = await supabase
         .from("rdp_instances")
         .select("*")
@@ -69,32 +70,61 @@ const AdminRdpList = () => {
 
       if (error) throw error;
 
-      // Fetch user emails for each RDP instance
+      // Process RDP instances data
       if (rdpData && rdpData.length > 0) {
-        const rdpsWithEmails = await Promise.all(
-          rdpData.map(async (rdp) => {
-            // Get user email from auth.users
-            const { data: userData } = await supabase.auth.admin.getUserById(
-              rdp.user_id
-            );
-            
-            // Parse plan_details from JSON if needed
-            let parsedPlanDetails: RdpPlanDetails;
-            if (typeof rdp.plan_details === 'string') {
+        const processedRdps = rdpData.map(rdp => {
+          // Parse plan_details from JSON if needed
+          let parsedPlanDetails: RdpPlanDetails;
+          if (typeof rdp.plan_details === 'string') {
+            try {
               parsedPlanDetails = JSON.parse(rdp.plan_details);
-            } else {
-              parsedPlanDetails = rdp.plan_details as unknown as RdpPlanDetails;
+            } catch (e) {
+              console.error("Error parsing plan details:", e);
+              parsedPlanDetails = {
+                cpu: 0,
+                ram: 0,
+                storage: 0,
+                plan_name: "Unknown"
+              };
             }
-            
-            return {
-              ...rdp,
-              plan_details: parsedPlanDetails,
-              user_email: userData?.user?.email || "Unknown"
-            } as RdpInstance;
-          })
-        );
+          } else {
+            parsedPlanDetails = rdp.plan_details as unknown as RdpPlanDetails;
+          }
+          
+          return {
+            ...rdp,
+            plan_details: parsedPlanDetails,
+            user_email: "Loading..." // We'll fetch this separately
+          } as RdpInstance;
+        });
         
-        setRdpInstances(rdpsWithEmails);
+        setRdpInstances(processedRdps);
+        
+        // Now fetch user emails one by one
+        // In a production app, this would be done in a backend function
+        for (const rdp of processedRdps) {
+          const { data: userProfile } = await supabase
+            .from("profiles")
+            .select("display_name, first_name, last_name")
+            .eq("id", rdp.user_id)
+            .single();
+            
+          if (userProfile) {
+            // Update the RDP instance with user information
+            setRdpInstances(prev => 
+              prev.map(r => 
+                r.id === rdp.id 
+                  ? { 
+                    ...r, 
+                    user_email: userProfile.display_name || 
+                      `${userProfile.first_name || ''} ${userProfile.last_name || ''}`.trim() ||
+                      'User ' + rdp.user_id.substring(0, 6)
+                  } 
+                  : r
+              )
+            );
+          }
+        }
       } else {
         setRdpInstances([]);
       }
@@ -114,8 +144,8 @@ const AdminRdpList = () => {
     try {
       const { error } = await supabase
         .from("rdp_instances")
-        .update({ status })
-        .eq("id", id);
+        .update({ status, updated_at: new Date().toISOString() })
+        .eq("id", asSupabaseUUID(id));
 
       if (error) throw error;
 
@@ -154,15 +184,17 @@ const AdminRdpList = () => {
   };
 
   const getStatusBadge = (status: string) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case "active":
         return <Badge variant="default">Active</Badge>;
       case "expired":
         return <Badge variant="destructive">Expired</Badge>;
       case "suspended":
         return <Badge variant="secondary">Suspended</Badge>;
+      case "pending":
+        return <Badge variant="outline">Pending</Badge>;
       default:
-        return <Badge variant="outline">{status}</Badge>;
+        return <Badge variant="outline">{status || 'Unknown'}</Badge>;
     }
   };
 

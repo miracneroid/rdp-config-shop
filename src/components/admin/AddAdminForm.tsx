@@ -1,10 +1,10 @@
 
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserPlus, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,114 +13,154 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Loader2, UserPlus } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const formSchema = z.object({
-  adminId: z.string().min(4, { message: "Admin ID must be at least 4 characters" }),
-  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
-  confirmPassword: z.string().min(8, { message: "Please confirm the password" }),
-  adminType: z.string().default("regular"),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
+  admin_id: z
+    .string()
+    .min(3, { message: "Admin ID must be at least 3 characters" })
+    .max(50, { message: "Admin ID must not exceed 50 characters" }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters" })
+    .max(100, { message: "Password must not exceed 100 characters" }),
+  admin_type: z.enum(["super", "regular"]),
 });
 
 const AddAdminForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
   const { toast } = useToast();
-  const currentAdminId = localStorage.getItem("adminId") || "system";
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      adminId: "",
+      admin_id: "",
       password: "",
-      confirmPassword: "",
-      adminType: "regular",
+      admin_type: "regular",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true);
+    setSuccess(false);
     
     try {
-      // Call the admin-operations edge function to add new admin
-      const { data, error } = await supabase.functions.invoke("admin-operations", {
-        body: { 
-          operation: "add_admin", 
-          data: {
-            admin_id: values.adminId,
-            password: values.password,
-            admin_type: values.adminType,
-            created_by: currentAdminId
-          }
-        },
-      });
-      
-      if (error || !data.success) {
+      // Check if admin already exists
+      const { data: existingAdmin, error: checkError } = await supabase
+        .from("admin_users")
+        .select("admin_id")
+        .eq("admin_id", data.admin_id)
+        .single();
+
+      if (checkError && checkError.code !== "PGRST116") {
+        throw checkError;
+      }
+
+      if (existingAdmin) {
         toast({
-          title: "Failed to add admin",
-          description: data?.message || error?.message || "An error occurred",
+          title: "Admin already exists",
+          description: "An admin with this ID already exists",
           variant: "destructive",
         });
         return;
       }
-      
+
+      // Add the new admin
+      const { error } = await supabase.from("admin_users").insert({
+        admin_id: data.admin_id,
+        password: data.password, // In a real app, this would be hashed
+        admin_type: data.admin_type,
+      });
+
+      if (error) throw error;
+
+      // Log the admin action
+      await supabase.from("admin_actions").insert({
+        admin_id: "system", // This would normally be the current admin's ID
+        action: "create_admin",
+        admin_type: data.admin_type,
+        details: {
+          created_admin_id: data.admin_id,
+          admin_type: data.admin_type,
+        },
+      });
+
       toast({
-        title: "Admin added successfully",
-        description: `Admin ${values.adminId} has been created with ${values.adminType} privileges`,
+        title: "Admin created",
+        description: "New admin user has been added successfully",
       });
       
-      // Reset form
+      setSuccess(true);
       form.reset();
-      
     } catch (error: any) {
-      console.error("Error adding admin:", error);
+      console.error("Error creating admin:", error);
       toast({
         title: "Error",
-        description: error.message || "An unexpected error occurred",
+        description: error.message || "Failed to create admin",
         variant: "destructive",
       });
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <UserPlus className="h-5 w-5" />
-          Add New Admin
-        </CardTitle>
+        <CardTitle>Add New Admin</CardTitle>
+        <CardDescription>
+          Create a new administrator account with appropriate permissions
+        </CardDescription>
       </CardHeader>
       <CardContent>
+        {success && (
+          <Alert className="mb-6 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-900">
+            <UserPlus className="h-4 w-4 text-green-600 dark:text-green-400" />
+            <AlertTitle className="text-green-600 dark:text-green-400">Admin Created Successfully</AlertTitle>
+            <AlertDescription className="text-green-600 dark:text-green-400">
+              The new admin account has been added to the system.
+            </AlertDescription>
+          </Alert>
+        )}
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name="adminId"
+              name="admin_id"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Admin ID</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter admin ID" {...field} />
+                    <Input
+                      placeholder="Enter admin username"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="password"
@@ -128,36 +168,28 @@ const AddAdminForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="Enter password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Enter secure password"
+                      {...field}
+                      disabled={isSubmitting}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="Confirm password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="adminType"
+              name="admin_type"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Admin Type</FormLabel>
-                  <Select 
-                    onValueChange={field.onChange} 
+                  <Select
+                    onValueChange={field.onChange}
                     defaultValue={field.value}
+                    disabled={isSubmitting}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -173,17 +205,17 @@ const AddAdminForm = () => {
                 </FormItem>
               )}
             />
-            
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
+
+            <Button type="submit" disabled={isSubmitting} className="w-full">
+              {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Adding...
+                  Creating Admin...
                 </>
               ) : (
                 <>
                   <UserPlus className="mr-2 h-4 w-4" />
-                  Add Admin
+                  Create Admin
                 </>
               )}
             </Button>

@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, safeSupabaseCast } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,11 +20,20 @@ import {
   DollarSign 
 } from "lucide-react";
 
+interface AdminStats {
+  totalUsers: number;
+  activeUsers: number;
+  totalOrders: number;
+  totalRevenue: number;
+  activeRdps: number;
+  openTickets: number;
+}
+
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<AdminStats>({
     totalUsers: 0,
     activeUsers: 0,
     totalOrders: 0,
@@ -66,7 +75,10 @@ const AdminDashboard = () => {
         if (ordersError) throw ordersError;
 
         // Calculate total revenue
-        const totalRevenue = orders?.reduce((sum, order) => sum + (typeof order.amount === 'number' ? order.amount : 0), 0) || 0;
+        const totalRevenue = orders?.reduce((sum, order) => {
+          const amount = typeof order.amount === 'number' ? order.amount : parseFloat(order.amount as any);
+          return sum + (isNaN(amount) ? 0 : amount);
+        }, 0) || 0;
 
         // Get active RDPs
         const { count: rdpCount, error: rdpError } = await supabase

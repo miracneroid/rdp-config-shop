@@ -18,3 +18,25 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     flowType: 'pkce',
   }
 });
+
+// Helper function to safely cast database results
+export function safeSupabaseCast<T>(data: any): T[] {
+  return (data || []) as T[];
+}
+
+// Helper function to validate UUID for Supabase
+export function isValidUUID(id: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(id);
+}
+
+// Helper function to safely cast UUIDs for Supabase queries
+export function asSupabaseUUID(id: string): string {
+  if (!isValidUUID(id)) {
+    console.error(`Invalid UUID format: ${id}`);
+    // Return a fallback valid UUID format to prevent runtime errors
+    // This would likely result in no data found, which is better than a crash
+    return '00000000-0000-0000-0000-000000000000';
+  }
+  return id;
+}

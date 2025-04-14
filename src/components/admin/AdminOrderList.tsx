@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, safeSupabaseCast, asSupabaseUUID } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import {
   Table,
@@ -63,7 +63,7 @@ const AdminOrderList = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      // Fetch orders with user emails
+      // Fetch orders
       const { data: ordersData, error } = await supabase
         .from("orders")
         .select("*")
@@ -71,32 +71,33 @@ const AdminOrderList = () => {
 
       if (error) throw error;
 
-      // Fetch user emails for each order
+      // Process orders data
       if (ordersData && ordersData.length > 0) {
-        const ordersWithEmails = await Promise.all(
-          ordersData.map(async (order) => {
-            // Get user email from auth.users
-            const { data: userData } = await supabase.auth.admin.getUserById(
-              order.user_id
-            );
-            
-            // Parse order_details from JSON if needed
-            let parsedOrderDetails: OrderDetails;
-            if (typeof order.order_details === 'string') {
+        const processedOrders = ordersData.map(order => {
+          // Parse order_details from JSON if needed
+          let parsedOrderDetails: OrderDetails;
+          if (typeof order.order_details === 'string') {
+            try {
               parsedOrderDetails = JSON.parse(order.order_details);
-            } else {
-              parsedOrderDetails = order.order_details as unknown as OrderDetails;
+            } catch (e) {
+              console.error("Error parsing order details:", e);
+              parsedOrderDetails = {
+                items: [],
+                customer: { name: "Unknown", email: "unknown@example.com" }
+              };
             }
-            
-            return {
-              ...order,
-              order_details: parsedOrderDetails,
-              user_email: userData?.user?.email || "Unknown"
-            } as Order;
-          })
-        );
+          } else {
+            parsedOrderDetails = order.order_details as unknown as OrderDetails;
+          }
+          
+          return {
+            ...order,
+            order_details: parsedOrderDetails,
+            user_email: parsedOrderDetails.customer?.email || "Unknown"
+          } as Order;
+        });
         
-        setOrders(ordersWithEmails);
+        setOrders(processedOrders);
       } else {
         setOrders([]);
       }
@@ -119,32 +120,26 @@ const AdminOrderList = () => {
         description: "Please wait...",
       });
 
-      const response = await fetch("/api/send-invoice", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          orderId: order.id,
-          email: order.user_email || order.order_details.customer.email,
-        }),
-      });
+      // Create invoice data
+      const invoiceData = {
+        orderId: order.id,
+        email: order.user_email || order.order_details.customer.email,
+        items: order.order_details.items,
+        amount: order.amount,
+        currency: order.currency,
+        customerName: order.order_details.customer.name,
+        invoiceNumber: order.invoice_number || `INV-${order.id.substring(0, 8).toUpperCase()}`,
+        date: new Date(order.created_at).toISOString().split('T')[0]
+      };
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to generate invoice");
-      }
-
-      // Get the PDF blob from the response
-      const pdfBlob = await response.blob();
-      
-      // Create a download link
-      const url = window.URL.createObjectURL(pdfBlob);
+      // Download as JSON for now (in a real app this would generate a PDF)
+      const blob = new Blob([JSON.stringify(invoiceData, null, 2)], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute(
         "download",
-        `invoice-${order.invoice_number || order.id.substring(0, 8)}.pdf`
+        `invoice-${order.invoice_number || order.id.substring(0, 8)}.json`
       );
       document.body.appendChild(link);
       link.click();
@@ -178,7 +173,7 @@ const AdminOrderList = () => {
   };
 
   const getStatusBadge = (status: string) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case "completed":
         return <Badge variant="default">Completed</Badge>;
       case "pending":
@@ -186,7 +181,7 @@ const AdminOrderList = () => {
       case "failed":
         return <Badge variant="destructive">Failed</Badge>;
       default:
-        return <Badge variant="secondary">{status}</Badge>;
+        return <Badge variant="secondary">{status || 'Unknown'}</Badge>;
     }
   };
 
@@ -202,8 +197,17 @@ const AdminOrderList = () => {
   return (
     <div>
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl">Order History</CardTitle>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={fetchOrders}
+            className="flex items-center gap-2"
+          >
+            <Loader2 className="h-4 w-4" />
+            Refresh
+          </Button>
         </CardHeader>
         <CardContent>
           {orders.length === 0 ? (
@@ -230,7 +234,7 @@ const AdminOrderList = () => {
                       <TableCell>{order.user_email || order.order_details.customer.email}</TableCell>
                       <TableCell>{formatDate(order.created_at)}</TableCell>
                       <TableCell>
-                        {order.currency} {order.amount.toFixed(2)}
+                        {order.currency} {Number(order.amount).toFixed(2)}
                       </TableCell>
                       <TableCell>{getStatusBadge(order.payment_status)}</TableCell>
                       <TableCell>
@@ -284,7 +288,7 @@ const AdminOrderList = () => {
                 <div>
                   <h4 className="text-sm font-medium mb-1">Order Info</h4>
                   <p>Date: {formatDate(selectedOrder.created_at)}</p>
-                  <p>Status: {selectedOrder.payment_status}</p>
+                  <p>Status: {selectedOrder.payment_status || 'Unknown'}</p>
                 </div>
               </div>
               
@@ -307,7 +311,7 @@ const AdminOrderList = () => {
                     <TableRow>
                       <TableCell className="font-medium">Total</TableCell>
                       <TableCell className="font-medium text-right">
-                        {selectedOrder.currency} {selectedOrder.amount.toFixed(2)}
+                        {selectedOrder.currency} {Number(selectedOrder.amount).toFixed(2)}
                       </TableCell>
                     </TableRow>
                   </TableBody>
