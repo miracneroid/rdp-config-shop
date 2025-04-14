@@ -46,12 +46,19 @@ const AdminDashboard = () => {
     const fetchStats = async () => {
       setLoading(true);
       try {
+        console.log("Fetching admin stats...");
+        
         // Get total users
         const { count: userCount, error: userError } = await supabase
           .from('profiles')
           .select('*', { count: 'exact', head: true });
           
-        if (userError) throw userError;
+        if (userError) {
+          console.error("User count error:", userError);
+          throw userError;
+        }
+        
+        console.log("Total users:", userCount);
 
         // Get active users (users who have logged in within the last 30 days)
         const thirtyDaysAgo = new Date();
@@ -65,20 +72,32 @@ const AdminDashboard = () => {
           .select('*', { count: 'exact', head: true })
           .gte('updated_at', thirtyDaysAgoString);
           
-        if (activeUserError) throw activeUserError;
+        if (activeUserError) {
+          console.error("Active user count error:", activeUserError);
+          throw activeUserError;
+        }
+        
+        console.log("Active users:", activeUserCount);
 
         // Get order stats
         const { data: orders, error: ordersError } = await supabase
           .from('orders')
           .select('amount');
           
-        if (ordersError) throw ordersError;
+        if (ordersError) {
+          console.error("Orders error:", ordersError);
+          throw ordersError;
+        }
+        
+        console.log("Orders:", orders?.length);
 
         // Calculate total revenue
         const totalRevenue = orders?.reduce((sum, order) => {
           const amount = typeof order.amount === 'number' ? order.amount : parseFloat(order.amount as any);
           return sum + (isNaN(amount) ? 0 : amount);
         }, 0) || 0;
+        
+        console.log("Total revenue:", totalRevenue);
 
         // Get active RDPs
         const { count: rdpCount, error: rdpError } = await supabase
@@ -86,7 +105,12 @@ const AdminDashboard = () => {
           .select('*', { count: 'exact', head: true })
           .eq('status', 'active');
           
-        if (rdpError) throw rdpError;
+        if (rdpError) {
+          console.error("RDP count error:", rdpError);
+          throw rdpError;
+        }
+        
+        console.log("Active RDPs:", rdpCount);
 
         // Get open tickets
         const { count: ticketCount, error: ticketError } = await supabase
@@ -94,7 +118,12 @@ const AdminDashboard = () => {
           .select('*', { count: 'exact', head: true })
           .eq('status', 'open');
           
-        if (ticketError) throw ticketError;
+        if (ticketError) {
+          console.error("Ticket count error:", ticketError);
+          throw ticketError;
+        }
+        
+        console.log("Open tickets:", ticketCount);
 
         setStats({
           totalUsers: userCount || 0,
@@ -110,6 +139,15 @@ const AdminDashboard = () => {
           title: "Error",
           description: "Failed to load dashboard statistics: " + error.message,
           variant: "destructive",
+        });
+        // Set some default values to prevent UI issues
+        setStats({
+          totalUsers: 0,
+          activeUsers: 0,
+          totalOrders: 0,
+          totalRevenue: 0,
+          activeRdps: 0,
+          openTickets: 0
         });
       } finally {
         setLoading(false);

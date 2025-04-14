@@ -1,4 +1,6 @@
 
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
@@ -6,7 +8,8 @@ import PricingCard, { PricingPlan } from "@/components/PricingCard";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 
-const pricingPlans: PricingPlan[] = [
+// Default pricing plans as fallback
+const defaultPricingPlans: PricingPlan[] = [
   {
     name: "Basic",
     price: 29,
@@ -69,6 +72,22 @@ const pricingPlans: PricingPlan[] = [
 ];
 
 const Index = () => {
+  const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>(defaultPricingPlans);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        // Fetch plans from the database if available
+        // This is a placeholder - in a real implementation, you would have a table for plans
+        console.log("Connected to Supabase:", !!supabase);
+      } catch (error) {
+        console.error("Error fetching plans:", error);
+      }
+    };
+
+    fetchPlans();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-rdp-dark dark:to-black">
       <Navbar />

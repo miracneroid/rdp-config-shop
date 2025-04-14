@@ -63,6 +63,8 @@ const AddAdminForm = () => {
     setSuccess(false);
     
     try {
+      console.log("Creating admin:", data.admin_id);
+
       // Check if admin already exists
       const { data: existingAdmin, error: checkError } = await supabase
         .from("admin_users")
@@ -71,10 +73,12 @@ const AddAdminForm = () => {
         .single();
 
       if (checkError && checkError.code !== "PGRST116") {
+        console.error("Error checking existing admin:", checkError);
         throw checkError;
       }
 
       if (existingAdmin) {
+        console.log("Admin already exists:", existingAdmin);
         toast({
           title: "Admin already exists",
           description: "An admin with this ID already exists",
@@ -90,18 +94,32 @@ const AddAdminForm = () => {
         admin_type: data.admin_type,
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error creating admin:", error);
+        throw error;
+      }
+
+      console.log("Admin created successfully");
+
+      // Get the current date for the action log
+      const now = new Date().toISOString();
 
       // Log the admin action
-      await supabase.from("admin_actions").insert({
+      const { error: logError } = await supabase.from("admin_actions").insert({
         admin_id: "system", // This would normally be the current admin's ID
         action: "create_admin",
         admin_type: data.admin_type,
         details: {
           created_admin_id: data.admin_id,
           admin_type: data.admin_type,
+          timestamp: now
         },
       });
+
+      if (logError) {
+        console.error("Error logging admin action:", logError);
+        // Non-critical error, so we'll just log it and continue
+      }
 
       toast({
         title: "Admin created",
