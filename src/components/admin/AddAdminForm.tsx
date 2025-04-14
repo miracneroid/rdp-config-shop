@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -19,22 +20,23 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, User, Shield, Users, RefreshCw } from "lucide-react";
+import { User, Shield, Users, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-interface AdminUser {
-  id: string;
-  role: string;
-  name: string;
-  avatar?: string;
-}
-
+// Update interfaces to handle potential null/undefined values
 interface Profile {
   id: string;
   display_name?: string | null;
   first_name?: string | null;
   last_name?: string | null;
   avatar_url?: string | null;
+}
+
+interface AdminUser {
+  id: string;
+  role: string;
+  name: string;
+  avatar?: string;
 }
 
 const AddAdminForm = () => {
@@ -53,6 +55,7 @@ const AddAdminForm = () => {
     try {
       setLoadingAdmins(true);
       
+      // First, fetch user roles
       const { data: userRoles, error: rolesError } = await supabase
         .from('user_roles')
         .select('user_id, role')
@@ -62,12 +65,12 @@ const AddAdminForm = () => {
       
       if (!userRoles || userRoles.length === 0) {
         setAdmins([]);
-        setLoadingAdmins(false);
         return;
       }
       
       const userIds = userRoles.map(admin => admin.user_id);
       
+      // Then, fetch profiles for those users
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('id, display_name, first_name, last_name, avatar_url')
@@ -75,6 +78,7 @@ const AddAdminForm = () => {
         
       if (profilesError) throw profilesError;
       
+      // Map the data safely
       const formattedAdmins: AdminUser[] = userRoles.map(role => {
         const profile = (profiles || []).find(p => p.id === role.user_id) || {} as Profile;
         
@@ -329,3 +333,4 @@ const AddAdminForm = () => {
 };
 
 export default AddAdminForm;
+
