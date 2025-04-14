@@ -15,7 +15,7 @@ interface SettingsContextType {
   updateCurrency: (code: string, symbol: string, name: string) => void;
 }
 
-// Default settings
+// Default settings with Euro as the default currency
 const defaultSettings: AppSettings = {
   currency: {
     code: 'EUR',
