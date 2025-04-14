@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -81,7 +80,6 @@ const OrderHistory = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      // Get current user from session
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session || !session.user) {
@@ -91,17 +89,15 @@ const OrderHistory = () => {
       const { data, error } = await supabase
         .from("orders")
         .select("*")
-        .eq("user_id", session.user.id)  // Filter by the current user's ID
+        .eq("user_id", session.user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
       
       if (data) {
-        // Transform Supabase data to match our Order interface
         const formattedOrders: Order[] = (data as SupabaseOrder[]).map((order) => {
           const orderDetailsJson = order.order_details as any;
           
-          // Ensure the structure matches our OrderDetails interface
           const orderDetails: OrderDetails = {
             items: orderDetailsJson.items || [],
             customer: orderDetailsJson.customer || { name: "", email: "" }
@@ -138,24 +134,25 @@ const OrderHistory = () => {
       };
 
       const invoiceBlob = generateInvoice(invoiceData);
-      const url = URL.createObjectURL(invoiceBlob);
       
-      // Create a temporary link and trigger download
+      const url = URL.createObjectURL(invoiceBlob);
       const a = document.createElement("a");
       a.href = url;
       a.download = `Invoice-${order.invoice_number || order.id}.pdf`;
       document.body.appendChild(a);
       a.click();
       
-      // Clean up
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }, 100);
       
       toast({
         title: "Invoice downloaded",
         description: "Your invoice has been downloaded successfully.",
       });
     } catch (error: any) {
+      console.error("Error downloading invoice:", error);
       toast({
         title: "Error downloading invoice",
         description: error.message,
@@ -166,28 +163,23 @@ const OrderHistory = () => {
 
   const emailInvoiceToMe = async (order: Order) => {
     try {
-      const invoiceData = {
-        orderNumber: parseInt(order.invoice_number?.replace(/[^0-9]/g, "") || "0"),
-        customer: order.order_details.customer,
-        items: order.order_details.items,
-        total: `${order.currency} ${order.amount}`,
-        date: new Date(order.created_at).toLocaleDateString(),
-      };
-
-      const result = await emailInvoice(
-        order.order_details.customer.email,
-        invoiceData
-      );
-
-      if (result.success) {
-        toast({
-          title: "Invoice sent",
-          description: result.message,
-        });
-      } else {
-        throw new Error(result.message);
+      const response = await supabase.functions.invoke('send-invoice', {
+        body: {
+          orderId: order.id,
+          email: order.order_details.customer.email
+        }
+      });
+      
+      if (response.error) {
+        throw new Error(response.error.message);
       }
+      
+      toast({
+        title: "Invoice sent",
+        description: `Invoice has been sent to ${order.order_details.customer.email}`,
+      });
     } catch (error: any) {
+      console.error("Error sending invoice:", error);
       toast({
         title: "Error sending invoice",
         description: error.message,
@@ -205,7 +197,6 @@ const OrderHistory = () => {
   };
 
   const formatCurrency = (amount: number, currency: string) => {
-    // Use the user's preferred currency symbol if available
     const currencySymbol = 
       currency === settings.currency.code 
         ? settings.currency.symbol 
