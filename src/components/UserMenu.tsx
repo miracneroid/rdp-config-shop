@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -9,7 +8,6 @@ import {
   Gift,
   Bell,
   History,
-  UserRound
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -24,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { supabase } from "@/integrations/supabase/client";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AvatarSelector from "./AvatarSelector";
 
 const UserMenu = () => {
@@ -56,10 +54,8 @@ const UserMenu = () => {
           let avatarUrl = null;
           let avatarCharacter = null;
           
-          // Check if user has avatar from Google
           const { provider_id, user_metadata } = user.app_metadata || {};
           if (provider_id === 'google' && user_metadata) {
-            // Google users often have avatar and name in metadata
             if (user_metadata.avatar_url) {
               avatarUrl = user_metadata.avatar_url;
             }
@@ -68,7 +64,6 @@ const UserMenu = () => {
             }
           }
           
-          // Fetch user profile from profiles table as a fallback
           const { data: profileData } = await supabase
             .from('profiles')
             .select('*')
@@ -91,7 +86,6 @@ const UserMenu = () => {
             avatar_character: avatarCharacter
           });
           
-          // If this is a new Google user, ensure they have a profile
           if (provider_id === 'google' && !profileData) {
             const firstName = user_metadata?.given_name || displayName.split(' ')[0] || '';
             const lastName = user_metadata?.family_name || (displayName.split(' ').length > 1 ? displayName.split(' ').slice(1).join(' ') : '');
@@ -131,7 +125,6 @@ const UserMenu = () => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
-        // Update the user's profile with the new avatar
         await supabase
           .from('profiles')
           .update({ 
@@ -141,7 +134,6 @@ const UserMenu = () => {
           })
           .eq('id', user.id);
         
-        // Update local state
         setUserProfile({
           ...userProfile,
           avatar_url: avatarUrl,
@@ -184,7 +176,6 @@ const UserMenu = () => {
   };
   
   const handleNavigation = (path: string) => {
-    // Close the dropdown menu and navigate
     navigate(path);
   };
   
@@ -218,10 +209,6 @@ const UserMenu = () => {
             <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=profile')}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setAvatarDialogOpen(true)}>
-              <UserRound className="mr-2 h-4 w-4" />
-              <span>Change Avatar</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=orders')}>
               <History className="mr-2 h-4 w-4" />

@@ -125,19 +125,28 @@ serve(async (req) => {
       }
     }
 
-    // Create a test RDP instance for the user
+    // Check if it's the specific test@gmail.com user
+    const isTestUser = email === "test@gmail.com";
+    
+    // Create a test RDP instance for the user with a higher price if it's the test user
     const { data: rdpInstance, error: rdpError } = await supabaseAdmin
       .from('rdp_instances')
       .insert({
         user_id: userId,
-        name: "Windows Server 2022",
+        name: isTestUser ? "Windows 11 Enterprise" : "Windows Server 2022",
         username: "admin",
         password: "SecurePassword123!",
         ip_address: "192.168.1.100",
         port: "3389",
         status: "active",
         expiry_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
-        plan_details: {
+        plan_details: isTestUser ? {
+          cpu: "8 vCPU",
+          ram: "32 GB",
+          storage: "500 GB SSD",
+          os: "Windows 11 Enterprise",
+          bandwidth: "Unlimited"
+        } : {
           cpu: "4 vCPU",
           ram: "16 GB",
           storage: "250 GB SSD",
@@ -164,19 +173,19 @@ serve(async (req) => {
             invoice_number: `INV-${Date.now().toString().substring(0, 10)}`,
             payment_status: "paid",
             currency: "EUR",
-            amount: 49.99,
+            amount: isTestUser ? 59.99 : 49.99,
             order_details: {
               items: [
                 {
-                  name: "Windows Server 2022 RDP",
+                  name: isTestUser ? "Windows 11 Enterprise RDP" : "Windows Server 2022 RDP",
                   quantity: 1,
-                  price: "€49.99",
-                  subtotal: "€49.99"
+                  price: isTestUser ? "€59.99" : "€49.99",
+                  subtotal: isTestUser ? "€59.99" : "€49.99"
                 }
               ],
-              subtotal: "€49.99",
+              subtotal: isTestUser ? "€59.99" : "€49.99",
               tax: "€0.00",
-              total: "€49.99"
+              total: isTestUser ? "€59.99" : "€49.99"
             }
           });
 

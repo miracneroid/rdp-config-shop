@@ -13,12 +13,12 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { User, Loader2 } from "lucide-react";
+import { User, Loader2, Camera } from "lucide-react";
+import AvatarSelector from "../AvatarSelector";
 
 interface BillingAddress {
   address1: string;
@@ -35,6 +35,7 @@ interface Profile {
   last_name: string | null;
   display_name: string | null;
   avatar_url: string | null;
+  avatar_character: string | null;
   billing_address: BillingAddress | null;
   preferred_currency: string;
 }
@@ -46,6 +47,7 @@ interface SupabaseProfile {
   last_name: string | null;
   display_name: string | null;
   avatar_url: string | null;
+  avatar_character: string | null;
   billing_address: Json | null;
   preferred_currency: string;
 }
@@ -76,6 +78,9 @@ const UserProfile = () => {
   const [otpCode, setOtpCode] = useState("");
   const [otpSending, setOtpSending] = useState(false);
   const [otpVerifying, setOtpVerifying] = useState(false);
+  
+  // Avatar dialog state
+  const [avatarDialogOpen, setAvatarDialogOpen] = useState(false);
   
   const { toast } = useToast();
 
@@ -142,6 +147,46 @@ const UserProfile = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAvatarSelected = async (avatarUrl: string, character: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        // Update the user's profile with the new avatar
+        await supabase
+          .from('profiles')
+          .update({ 
+            avatar_url: avatarUrl,
+            avatar_character: character,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', user.id);
+        
+        // Update local state
+        if (profile) {
+          setProfile({
+            ...profile,
+            avatar_url: avatarUrl,
+            avatar_character: character
+          });
+        }
+        
+        toast({
+          title: "Avatar updated",
+          description: "Your profile picture has been updated."
+        });
+        
+        setAvatarDialogOpen(false);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error updating avatar",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
 
@@ -358,11 +403,19 @@ const UserProfile = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="flex justify-center">
+              <div className="flex justify-center relative">
                 <Avatar className="h-24 w-24">
                   <AvatarImage src={profile?.avatar_url || ""} />
                   <AvatarFallback className="text-2xl">{getInitials()}</AvatarFallback>
                 </Avatar>
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  className="absolute bottom-0 right-0 h-8 w-8 rounded-full"
+                  onClick={() => setAvatarDialogOpen(true)}
+                >
+                  <Camera className="h-4 w-4" />
+                </Button>
               </div>
               
               <div className="grid gap-4 md:grid-cols-2">
@@ -553,6 +606,16 @@ const UserProfile = () => {
               )}
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Avatar Dialog */}
+      <Dialog open={avatarDialogOpen} onOpenChange={setAvatarDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Choose your avatar</DialogTitle>
+          </DialogHeader>
+          <AvatarSelector onAvatarSelected={handleAvatarSelected} currentCharacter={profile?.avatar_character || null} />
         </DialogContent>
       </Dialog>
     </div>
