@@ -86,7 +86,8 @@ const UserMenu = () => {
             avatar_character: avatarCharacter
           });
           
-          if (provider_id === 'google' && !profileData) {
+          // If user signed up with Google and doesn't have a profile yet, create one with Google data
+          if ((provider_id === 'google' && !profileData) || (provider_id === 'google' && profileData && !profileData.avatar_url && avatarUrl)) {
             const firstName = user_metadata?.given_name || displayName.split(' ')[0] || '';
             const lastName = user_metadata?.family_name || (displayName.split(' ').length > 1 ? displayName.split(' ').slice(1).join(' ') : '');
             
@@ -108,6 +109,15 @@ const UserMenu = () => {
     };
     
     fetchUserProfile();
+    
+    // Set up auth state listener to refresh profile when session changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      fetchUserProfile();
+    });
+    
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
   
   const getInitialsFromName = (name: string) => {

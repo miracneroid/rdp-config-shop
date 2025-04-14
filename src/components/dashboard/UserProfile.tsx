@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Json } from "@/integrations/supabase/types";
@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { User, Loader2, Camera } from "lucide-react";
+import { User, Loader2, Camera, Upload, ImagePlus } from "lucide-react";
 import AvatarSelector from "../AvatarSelector";
 
 interface BillingAddress {
@@ -82,6 +82,11 @@ const UserProfile = () => {
   // Avatar dialog state
   const [avatarDialogOpen, setAvatarDialogOpen] = useState(false);
   
+  // Upload image state
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const { toast } = useToast();
 
   useEffect(() => {
@@ -96,6 +101,14 @@ const UserProfile = () => {
       if (!userData.user) throw new Error("User not found");
       
       setUserEmail(userData.user.email || "");
+      
+      // Check if user has a Google profile picture
+      const { provider_id, user_metadata } = userData.user.app_metadata || {};
+      let googleAvatarUrl = null;
+      
+      if (provider_id === 'google' && user_metadata) {
+        googleAvatarUrl = user_metadata.avatar_url || null;
+      }
       
       const { data, error } = await supabase
         .from("profiles")
@@ -120,6 +133,19 @@ const UserProfile = () => {
             zip: billingAddressJson.zip || "",
             country: billingAddressJson.country || "",
           };
+        }
+        
+        // If there's a Google avatar and user doesn't have a custom avatar yet, update the profile
+        if (googleAvatarUrl && !supabaseProfile.avatar_url) {
+          await supabase
+            .from('profiles')
+            .update({ 
+              avatar_url: googleAvatarUrl,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', userData.user.id);
+            
+          supabaseProfile.avatar_url = googleAvatarUrl;
         }
         
         const formattedProfile: Profile = {
@@ -187,6 +213,74 @@ const UserProfile = () => {
         description: error.message,
         variant: "destructive",
       });
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      return;
+    }
+    
+    const file = e.target.files[0];
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+    const filePath = `${fileName}`;
+    
+    setUploading(true);
+    
+    try {
+      // Upload the file to Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file);
+        
+      if (uploadError) throw uploadError;
+      
+      // Get the public URL
+      const { data } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath);
+        
+      // Update the profile with the new avatar URL
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        await supabase
+          .from('profiles')
+          .update({
+            avatar_url: data.publicUrl,
+            avatar_character: null, // Clear character since we're using a custom image
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', user.id);
+          
+        // Update local state
+        if (profile) {
+          setProfile({
+            ...profile,
+            avatar_url: data.publicUrl,
+            avatar_character: null
+          });
+        }
+        
+        toast({
+          title: "Avatar updated",
+          description: "Your profile picture has been uploaded successfully."
+        });
+      }
+      
+      setUploadDialogOpen(false);
+    } catch (error: any) {
+      toast({
+        title: "Error uploading image",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -382,6 +476,20 @@ const UserProfile = () => {
     return "U";
   };
 
+  const handleAvatarClick = () => {
+    setAvatarDialogOpen(true);
+  };
+  
+  const handleUploadClick = () => {
+    setUploadDialogOpen(true);
+  };
+  
+  const triggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   if (loading) {
     return <div className="w-full flex justify-center py-8">Loading profile...</div>;
   }
@@ -403,19 +511,38 @@ const UserProfile = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="flex justify-center relative">
-                <Avatar className="h-24 w-24">
-                  <AvatarImage src={profile?.avatar_url || ""} />
-                  <AvatarFallback className="text-2xl">{getInitials()}</AvatarFallback>
-                </Avatar>
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  className="absolute bottom-0 right-0 h-8 w-8 rounded-full"
-                  onClick={() => setAvatarDialogOpen(true)}
-                >
-                  <Camera className="h-4 w-4" />
-                </Button>
+              <div className="flex flex-col items-center space-y-4">
+                <div className="relative">
+                  <Avatar className="h-24 w-24 cursor-pointer" onClick={handleAvatarClick}>
+                    <AvatarImage src={profile?.avatar_url || ""} />
+                    <AvatarFallback className="text-2xl">{getInitials()}</AvatarFallback>
+                  </Avatar>
+                  
+                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      className="h-8 w-8 rounded-full bg-background"
+                      onClick={handleAvatarClick}
+                      title="Choose from avatars"
+                    >
+                      <User className="h-4 w-4" />
+                    </Button>
+                    
+                    <Button 
+                      variant="outline" 
+                      size="icon" 
+                      className="h-8 w-8 rounded-full bg-background"
+                      onClick={handleUploadClick}
+                      title="Upload custom image"
+                    >
+                      <ImagePlus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Click the avatar to change your profile picture
+                </p>
               </div>
               
               <div className="grid gap-4 md:grid-cols-2">
@@ -616,6 +743,51 @@ const UserProfile = () => {
             <DialogTitle>Choose your avatar</DialogTitle>
           </DialogHeader>
           <AvatarSelector onAvatarSelected={handleAvatarSelected} currentCharacter={profile?.avatar_character || null} />
+        </DialogContent>
+      </Dialog>
+      
+      {/* Upload Dialog */}
+      <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Upload profile picture</DialogTitle>
+            <DialogDescription>
+              Upload a custom image to use as your profile picture
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4 flex flex-col items-center space-y-4">
+            <div 
+              className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
+              onClick={triggerFileInput}
+            >
+              <Upload className="h-10 w-10 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground mb-1">Click to upload or drag and drop</p>
+              <p className="text-xs text-muted-foreground">PNG, JPG or GIF (max. 5MB)</p>
+              
+              <input 
+                type="file" 
+                ref={fileInputRef}
+                className="hidden" 
+                accept="image/*"
+                onChange={handleFileUpload}
+              />
+            </div>
+            
+            <Button 
+              onClick={triggerFileInput}
+              disabled={uploading}
+              className="w-full"
+            >
+              {uploading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                "Select Image"
+              )}
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
