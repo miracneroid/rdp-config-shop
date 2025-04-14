@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from "react";
-import { supabase, safeSupabaseCast } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,6 +8,8 @@ import AdminOrderList from "@/components/admin/AdminOrderList";
 import AdminTicketList from "@/components/admin/AdminTicketList";
 import AdminRdpList from "@/components/admin/AdminRdpList";
 import AdminAnalytics from "@/components/admin/AdminAnalytics";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { 
   Loader2, 
   User, 
@@ -48,7 +49,6 @@ const AdminDashboard = () => {
       try {
         console.log("Fetching admin stats...");
         
-        // Get total users
         const { count: userCount, error: userError } = await supabase
           .from('profiles')
           .select('*', { count: 'exact', head: true });
@@ -60,13 +60,11 @@ const AdminDashboard = () => {
         
         console.log("Total users:", userCount);
 
-        // Get active users (users who have logged in within the last 30 days)
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         
         const thirtyDaysAgoString = thirtyDaysAgo.toISOString();
         
-        // Using a filter for active users
         const { count: activeUserCount, error: activeUserError } = await supabase
           .from('profiles')
           .select('*', { count: 'exact', head: true })
@@ -79,7 +77,6 @@ const AdminDashboard = () => {
         
         console.log("Active users:", activeUserCount);
 
-        // Get order stats
         const { data: orders, error: ordersError } = await supabase
           .from('orders')
           .select('amount');
@@ -91,7 +88,6 @@ const AdminDashboard = () => {
         
         console.log("Orders:", orders?.length);
 
-        // Calculate total revenue
         const totalRevenue = orders?.reduce((sum, order) => {
           const amount = typeof order.amount === 'number' ? order.amount : parseFloat(order.amount as any);
           return sum + (isNaN(amount) ? 0 : amount);
@@ -99,7 +95,6 @@ const AdminDashboard = () => {
         
         console.log("Total revenue:", totalRevenue);
 
-        // Get active RDPs
         const { count: rdpCount, error: rdpError } = await supabase
           .from('rdp_instances')
           .select('*', { count: 'exact', head: true })
@@ -112,7 +107,6 @@ const AdminDashboard = () => {
         
         console.log("Active RDPs:", rdpCount);
 
-        // Get open tickets
         const { count: ticketCount, error: ticketError } = await supabase
           .from('support_tickets')
           .select('*', { count: 'exact', head: true })
@@ -140,7 +134,6 @@ const AdminDashboard = () => {
           description: "Failed to load dashboard statistics: " + error.message,
           variant: "destructive",
         });
-        // Set some default values to prevent UI issues
         setStats({
           totalUsers: 0,
           activeUsers: 0,
@@ -159,131 +152,169 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background dark:bg-gray-900">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2">Loading admin dashboard...</span>
+      <div className="min-h-screen flex flex-col dark:bg-gray-900">
+        <Navbar />
+        <div className="flex-grow flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-rdp-blue dark:text-rdp-blue-light" />
+          <span className="ml-2 text-foreground">Loading admin dashboard...</span>
+        </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-8 px-4 bg-background dark:bg-gray-900">
-      <h1 className="text-3xl font-bold mb-6 text-foreground">Admin Dashboard</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        <Card className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center">
-              <Users className="h-5 w-5 text-blue-500 mr-2" />
-              Total Users
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalUsers}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {stats.activeUsers} active in last 30 days
-            </p>
-          </CardContent>
-        </Card>
+    <div className="min-h-screen flex flex-col dark:bg-gray-900">
+      <Navbar />
+      <div className="flex-grow container mx-auto py-8 px-4">
+        <h1 className="text-3xl font-bold mb-6 text-foreground">Admin Dashboard</h1>
         
-        <Card className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center">
-              <Server className="h-5 w-5 text-indigo-500 mr-2" />
-              Active RDPs
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.activeRdps}</div>
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium flex items-center text-foreground">
+                <Users className="h-5 w-5 text-rdp-blue dark:text-rdp-blue-light mr-2" />
+                Total Users
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-foreground">{stats.totalUsers}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {stats.activeUsers} active in last 30 days
+              </p>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium flex items-center text-foreground">
+                <Server className="h-5 w-5 text-indigo-500 mr-2" />
+                Active RDPs
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.activeRdps}</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium flex items-center text-foreground">
+                <ShoppingCart className="h-5 w-5 text-emerald-500 mr-2" />
+                Total Orders
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.totalOrders}</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium flex items-center text-foreground">
+                <DollarSign className="h-5 w-5 text-green-500 mr-2" />
+                Revenue
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">₹{stats.totalRevenue.toFixed(2)}</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium flex items-center text-foreground">
+                <TicketCheck className="h-5 w-5 text-amber-500 mr-2" />
+                Open Tickets
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.openTickets}</div>
+            </CardContent>
+          </Card>
+        </div>
         
-        <Card className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center">
-              <ShoppingCart className="h-5 w-5 text-emerald-500 mr-2" />
-              Total Orders
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalOrders}</div>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center">
-              <DollarSign className="h-5 w-5 text-green-500 mr-2" />
-              Revenue
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">₹{stats.totalRevenue.toFixed(2)}</div>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center">
-              <TicketCheck className="h-5 w-5 text-amber-500 mr-2" />
-              Open Tickets
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.openTickets}</div>
-          </CardContent>
-        </Card>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <TabsList className="grid grid-cols-2 md:grid-cols-5 gap-2 bg-white/10 dark:bg-gray-800/50 backdrop-blur-sm p-1 rounded-lg border border-gray-200 dark:border-gray-700">
+            <TabsTrigger 
+              value="overview" 
+              className="flex items-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light rounded-md transition-colors"
+            >
+              <BarChart className="h-4 w-4 mr-2" />
+              <span>Overview</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="orders" 
+              className="flex items-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light rounded-md transition-colors"
+            >
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              <span>Orders</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="rdp" 
+              className="flex items-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light rounded-md transition-colors"
+            >
+              <Server className="h-4 w-4 mr-2" />
+              <span>RDP Instances</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="tickets" 
+              className="flex items-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light rounded-md transition-colors"
+            >
+              <TicketCheck className="h-4 w-4 mr-2" />
+              <span>Support Tickets</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="admins" 
+              className="flex items-center data-[state=active]:bg-rdp-blue data-[state=active]:text-white dark:data-[state=active]:bg-rdp-blue-light rounded-md transition-colors"
+            >
+              <User className="h-4 w-4 mr-2" />
+              <span>Admins</span>
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent 
+            value="overview" 
+            className="space-y-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 shadow-md border border-gray-200 dark:border-gray-700"
+          >
+            <h2 className="text-xl font-semibold mb-4 text-foreground">Dashboard Overview</h2>
+            <AdminAnalytics />
+          </TabsContent>
+          
+          <TabsContent 
+            value="orders" 
+            className="space-y-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 shadow-md border border-gray-200 dark:border-gray-700"
+          >
+            <h2 className="text-xl font-semibold mb-4 text-foreground">Order Management</h2>
+            <AdminOrderList />
+          </TabsContent>
+          
+          <TabsContent 
+            value="rdp" 
+            className="space-y-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 shadow-md border border-gray-200 dark:border-gray-700"
+          >
+            <h2 className="text-xl font-semibold mb-4 text-foreground">RDP Instance Management</h2>
+            <AdminRdpList />
+          </TabsContent>
+          
+          <TabsContent 
+            value="tickets" 
+            className="space-y-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 shadow-md border border-gray-200 dark:border-gray-700"
+          >
+            <h2 className="text-xl font-semibold mb-4 text-foreground">Support Ticket Management</h2>
+            <AdminTicketList />
+          </TabsContent>
+          
+          <TabsContent 
+            value="admins" 
+            className="space-y-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 shadow-md border border-gray-200 dark:border-gray-700"
+          >
+            <h2 className="text-xl font-semibold mb-4 text-foreground">Admin Management</h2>
+            <AddAdminForm />
+          </TabsContent>
+        </Tabs>
       </div>
-      
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid grid-cols-2 md:grid-cols-5 gap-2 bg-muted dark:bg-gray-800 p-1 rounded-lg">
-          <TabsTrigger value="overview" className="flex items-center data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 rounded-md">
-            <BarChart className="h-4 w-4 mr-2" />
-            <span>Overview</span>
-          </TabsTrigger>
-          <TabsTrigger value="orders" className="flex items-center data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 rounded-md">
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            <span>Orders</span>
-          </TabsTrigger>
-          <TabsTrigger value="rdp" className="flex items-center data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 rounded-md">
-            <Server className="h-4 w-4 mr-2" />
-            <span>RDP Instances</span>
-          </TabsTrigger>
-          <TabsTrigger value="tickets" className="flex items-center data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 rounded-md">
-            <TicketCheck className="h-4 w-4 mr-2" />
-            <span>Support Tickets</span>
-          </TabsTrigger>
-          <TabsTrigger value="admins" className="flex items-center data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 rounded-md">
-            <User className="h-4 w-4 mr-2" />
-            <span>Admins</span>
-          </TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="overview" className="space-y-4 bg-card dark:bg-gray-800 rounded-lg p-6 shadow-md">
-          <h2 className="text-xl font-semibold mb-4 text-card-foreground">Dashboard Overview</h2>
-          <AdminAnalytics />
-        </TabsContent>
-        
-        <TabsContent value="orders" className="space-y-4 bg-card dark:bg-gray-800 rounded-lg p-6 shadow-md">
-          <h2 className="text-xl font-semibold mb-4 text-card-foreground">Order Management</h2>
-          <AdminOrderList />
-        </TabsContent>
-        
-        <TabsContent value="rdp" className="space-y-4 bg-card dark:bg-gray-800 rounded-lg p-6 shadow-md">
-          <h2 className="text-xl font-semibold mb-4 text-card-foreground">RDP Instance Management</h2>
-          <AdminRdpList />
-        </TabsContent>
-        
-        <TabsContent value="tickets" className="space-y-4 bg-card dark:bg-gray-800 rounded-lg p-6 shadow-md">
-          <h2 className="text-xl font-semibold mb-4 text-card-foreground">Support Ticket Management</h2>
-          <AdminTicketList />
-        </TabsContent>
-        
-        <TabsContent value="admins" className="space-y-4 bg-card dark:bg-gray-800 rounded-lg p-6 shadow-md">
-          <h2 className="text-xl font-semibold mb-4 text-card-foreground">Admin Management</h2>
-          <AddAdminForm />
-        </TabsContent>
-      </Tabs>
+      <Footer />
     </div>
   );
 };
