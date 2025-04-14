@@ -27,23 +27,43 @@ interface UserWithRole {
 const TestManagement = () => {
   const [userList, setUserList] = useState<UserWithRole[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkAdmin = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/login");
-        return;
-      }
-      
-      const { data: isAdmin } = await supabase.rpc('has_role', { role_param: 'admin' });
-      
-      if (!isAdmin) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          navigate("/login");
+          return;
+        }
+        
+        const { data: isAdmin, error: roleError } = await supabase.rpc('has_role', { role_param: 'admin' });
+        
+        if (roleError) {
+          console.error("Error checking admin role:", roleError);
+          throw roleError;
+        }
+        
+        if (!isAdmin) {
+          toast({
+            title: "Access Denied",
+            description: "You don't have permission to access this page",
+            variant: "destructive",
+          });
+          navigate("/");
+          return;
+        }
+
+        // If we got here, the user is an admin, so load the users
+        loadUsers();
+      } catch (error: any) {
+        console.error("Admin check error:", error);
         toast({
-          title: "Access Denied",
-          description: "You don't have permission to access this page",
+          title: "Authentication Error",
+          description: error.message || "Failed to verify admin permissions",
           variant: "destructive",
         });
         navigate("/");
@@ -51,15 +71,16 @@ const TestManagement = () => {
     };
     
     checkAdmin();
-    loadUsers();
   }, [navigate, toast]);
 
   const loadUsers = async () => {
     try {
       setIsLoadingUsers(true);
+      setError(null);
       
-      // Fetch actual users from the database
-      const { data: users, error } = await supabase
+      // Fetch profiles from the database - we use profiles instead of auth.users
+      // since we don't have direct access to auth.users from the client
+      const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select(`
           id,
@@ -72,35 +93,44 @@ const TestManagement = () => {
         `)
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
+      if (profilesError) throw profilesError;
       
-      // Fetch user roles information
+      // Fetch user emails and roles
       const usersWithRoles: UserWithRole[] = await Promise.all(
-        (users || []).map(async (user) => {
-          const { data: roleData, error: roleError } = await supabase
+        (profiles || []).map(async (profile) => {
+          // Get user roles
+          const { data: roleData } = await supabase
             .from('user_roles')
             .select('role')
-            .eq('user_id', user.id)
+            .eq('user_id', profile.id)
             .maybeSingle();
           
-          // Create properly typed user object
+          // Get user auth info via RPC call (since we can't access auth.users directly)
+          const { data: authUser } = await supabase.auth.admin.getUserById(profile.id);
+          
+          // Get email from auth user or display name from profile
+          const email = authUser?.user?.email || 
+                        `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 
+                        profile.display_name || 
+                        'Unknown user';
+          
           return {
-            ...user,
-            email: user.display_name || 
-                  `${user.first_name || ''} ${user.last_name || ''}`.trim() || 
-                  'Unknown user',
+            ...profile,
+            email,
             role: roleData?.role || 'user'
           };
         })
       );
       
       setUserList(usersWithRoles || []);
+      
       toast({
         title: "Users Loaded",
-        description: `Loaded ${users?.length || 0} users`,
+        description: `Loaded ${profiles?.length || 0} users`,
       });
     } catch (error: any) {
       console.error("Error loading users:", error);
+      setError(error.message || "Failed to load users");
       toast({
         title: "Error",
         description: "Failed to load users: " + (error.message || "Unknown error"),
@@ -118,6 +148,14 @@ const TestManagement = () => {
         <h1 className="text-3xl font-bold mb-6 text-foreground">
           Admin User Management
         </h1>
+        
+        {error && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 shadow-lg">
