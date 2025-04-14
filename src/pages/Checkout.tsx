@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -188,7 +187,6 @@ const Checkout = () => {
         }
       };
 
-      // Make sure we explicitly set user_id to the authenticated user's ID
       const { data: order, error: orderError } = await supabase
         .from("orders")
         .insert({
@@ -532,7 +530,11 @@ const Checkout = () => {
                             <FormLabel>Card Number</FormLabel>
                             <FormControl>
                               <div className="relative">
-                                <Input {...field} placeholder="1234 5678 9012 3456" />
+                                <Input 
+                                  {...field} 
+                                  placeholder="1234 5678 9012 3456" 
+                                  formatAs="creditCard"
+                                />
                                 <div className="absolute right-3 top-2.5 flex items-center">
                                   <img src="https://cdn.jsdelivr.net/gh/creativetimofficial/public-assets@master/logos/visa.jpg" alt="visa" className="h-5 mr-2" />
                                   <img src="https://cdn.jsdelivr.net/gh/creativetimofficial/public-assets@master/logos/mastercard.jpg" alt="mastercard" className="h-5" />
@@ -566,7 +568,11 @@ const Checkout = () => {
                             <FormItem>
                               <FormLabel>Expiry Date (MM/YY)</FormLabel>
                               <FormControl>
-                                <Input {...field} placeholder="12/25" />
+                                <Input 
+                                  {...field} 
+                                  placeholder="MM/YY" 
+                                  formatAs="expiryDate"
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
