@@ -28,6 +28,17 @@ import AvatarSelector from "./AvatarSelector";
 import { isNotNullOrUndefined } from "@/utils/typeGuards";
 import { fetchData, updateData, insertData } from "@/services/supabaseService";
 
+// Define profile type to ensure type safety
+interface Profile {
+  id: string;
+  display_name?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  avatar_url?: string | null;
+  avatar_character?: string | null;
+  updated_at?: string;
+}
+
 const UserMenu = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -67,8 +78,8 @@ const UserMenu = () => {
             }
           }
           
-          // Use our new fetchData utility
-          const { data: profileData } = await fetchData<any>(
+          // Use our fetchData utility
+          const { data: profileData } = await fetchData<Profile>(
             'profiles',
             { 
               match: { id: user.id },
@@ -77,9 +88,9 @@ const UserMenu = () => {
           );
           
           if (profileData) {
-            displayName = profileData.display_name || displayName;
-            avatarUrl = profileData.avatar_url || avatarUrl;
-            avatarCharacter = profileData.avatar_character || null;
+            displayName = (profileData as Profile).display_name || displayName;
+            avatarUrl = (profileData as Profile).avatar_url || avatarUrl;
+            avatarCharacter = (profileData as Profile).avatar_character || null;
           }
           
           const initials = getInitialsFromName(displayName);
@@ -93,13 +104,13 @@ const UserMenu = () => {
           });
           
           // If user signed up with Google and doesn't have a profile yet, create one with Google data
-          if ((provider_id === 'google' && !profileData) || (provider_id === 'google' && profileData && !profileData.avatar_url && avatarUrl)) {
+          if ((provider_id === 'google' && !profileData) || (provider_id === 'google' && profileData && !(profileData as Profile).avatar_url && avatarUrl)) {
             const firstName = user_metadata?.given_name || displayName.split(' ')[0] || '';
             const lastName = user_metadata?.family_name || (displayName.split(' ').length > 1 ? displayName.split(' ').slice(1).join(' ') : '');
             
             // Use insertData/updateData utility
             if (!profileData) {
-              await insertData(
+              await insertData<Profile>(
                 'profiles', 
                 {
                   id: user.id,
@@ -111,7 +122,7 @@ const UserMenu = () => {
                 }
               );
             } else {
-              await updateData(
+              await updateData<Profile>(
                 'profiles',
                 { id: user.id },
                 {
@@ -158,7 +169,7 @@ const UserMenu = () => {
       
       if (user) {
         // Use updateData utility
-        const { error } = await updateData(
+        const { error } = await updateData<Profile>(
           'profiles',
           { id: user.id },
           { 

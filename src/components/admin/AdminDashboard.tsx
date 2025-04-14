@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from "react";
-import { supabase, handleQueryResult } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -24,6 +23,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { isNotNullOrUndefined } from "@/utils/typeGuards";
+import { fetchData } from "@/services/supabaseService";
+
+interface OrderItem {
+  amount: number;
+}
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -68,20 +72,17 @@ const AdminDashboard = () => {
   const fetchStats = async () => {
     setLoading(true);
     try {
-      // Get total users
       const { count: userCount, error: userError } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true });
         
       if (userError) throw userError;
 
-      // Get active users (users who have logged in within the last 30 days)
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       
       const thirtyDaysAgoString = thirtyDaysAgo.toISOString();
       
-      // Using a filter for active users
       const { count: activeUserCount, error: activeUserError } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
@@ -89,20 +90,15 @@ const AdminDashboard = () => {
         
       if (activeUserError) throw activeUserError;
 
-      // Get order stats
-      const { data: ordersData, error: ordersError } = await supabase
-        .from('orders')
-        .select('amount');
-      
-      const orders = handleQueryResult(ordersData, ordersError) || [];
+      const { data: orders } = await fetchData<OrderItem[]>('orders', {
+        select: 'amount'
+      });
 
-      // Calculate total revenue
-      const totalRevenue = orders.reduce((sum, order) => {
+      const totalRevenue = (orders || []).reduce((sum, order) => {
         const amount = typeof order.amount === 'number' ? order.amount : 0;
         return sum + amount;
       }, 0);
 
-      // Get active RDPs
       const { count: rdpCount, error: rdpError } = await supabase
         .from('rdp_instances')
         .select('*', { count: 'exact', head: true })
@@ -110,7 +106,6 @@ const AdminDashboard = () => {
         
       if (rdpError) throw rdpError;
 
-      // Get open tickets
       const { count: ticketCount, error: ticketError } = await supabase
         .from('support_tickets')
         .select('*', { count: 'exact', head: true })

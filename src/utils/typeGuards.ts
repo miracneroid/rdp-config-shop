@@ -51,3 +51,10 @@ export function processQueryResult<T>(data: T | null, error: any): { data: T | n
   }
   return { data, error: null };
 }
+
+/**
+ * Type guard to check if an error object was returned
+ */
+export function isError(obj: any): obj is { error: string } {
+  return typeof obj === 'object' && obj !== null && 'error' in obj;
+}

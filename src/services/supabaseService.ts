@@ -17,7 +17,7 @@ export async function fetchData<T>(
     limit?: number;
     single?: boolean;
   } = {}
-): Promise<{ data: T[] | null; error: string | null }> {
+): Promise<{ data: T | T[] | null; error: string | null }> {
   try {
     let query = supabase.from(tableName).select(options.select || '*');
 
@@ -45,7 +45,7 @@ export async function fetchData<T>(
       ? await query.maybeSingle() 
       : await query;
 
-    return processQueryResult(data as T[], error);
+    return processQueryResult(data as unknown as T, error);
   } catch (error: any) {
     console.error(`Error in fetchData(${tableName}):`, error);
     return { data: null, error: error.message || 'Unknown error occurred' };

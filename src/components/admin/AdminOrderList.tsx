@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { supabase, handleQueryResult } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import {
   Table,
@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Download, Eye } from "lucide-react";
 import { isNotNullOrUndefined } from "@/utils/typeGuards";
+import { fetchData } from "@/services/supabaseService";
 
 interface OrderItem {
   description: string;
@@ -64,22 +65,23 @@ const AdminOrderList = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      // Fetch orders with user emails
-      const { data: ordersData, error } = await supabase
-        .from("orders")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      const safeOrdersData = handleQueryResult(ordersData, error);
+      // Fetch orders with user emails using our new safe utility
+      const { data: ordersData } = await fetchData<Order[]>('orders', {
+        order: { column: 'created_at', ascending: false }
+      });
       
-      if (!safeOrdersData) {
+      if (!ordersData) {
         setOrders([]);
         return;
       }
 
       // Fetch user emails for each order
       const ordersWithEmails = await Promise.all(
-        safeOrdersData.map(async (order) => {
+        ordersData.map(async (order) => {
+          if (!order || !order.user_id) {
+            return null; // Skip invalid orders
+          }
+          
           // Get user email from auth.users
           const { data: userData } = await supabase.auth.admin.getUserById(
             order.user_id
@@ -90,7 +92,7 @@ const AdminOrderList = () => {
           if (typeof order.order_details === 'string') {
             parsedOrderDetails = JSON.parse(order.order_details);
           } else {
-            parsedOrderDetails = order.order_details as unknown as OrderDetails;
+            parsedOrderDetails = order.order_details as OrderDetails;
           }
           
           return {
@@ -101,7 +103,8 @@ const AdminOrderList = () => {
         })
       );
       
-      setOrders(ordersWithEmails);
+      // Filter out null values and set orders
+      setOrders(ordersWithEmails.filter(isNotNullOrUndefined));
     } catch (error: any) {
       console.error("Error fetching orders:", error.message);
       toast({
