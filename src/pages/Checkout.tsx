@@ -24,6 +24,7 @@ import { useSettings } from "@/context/SettingsContext";
 import { supabase } from "@/integrations/supabase/client";
 import { generateInvoice, emailInvoice, emailRdpCredentials } from "@/utils/invoiceGenerator";
 import { CreditCard, ShieldCheck, ArrowRight } from "lucide-react";
+import { Json } from "@/integrations/supabase/types";
 
 const billingFormSchema = z.object({
   firstName: z.string().min(2, { message: "First name must be at least 2 characters" }),
@@ -47,8 +48,8 @@ const paymentFormSchema = z.object({
 type BillingFormValues = z.infer<typeof billingFormSchema>;
 type PaymentFormValues = z.infer<typeof paymentFormSchema>;
 
-// Define interface for billing address to ensure type safety
-interface BillingAddress {
+// Define interface for billing address that can be converted to Json
+interface BillingAddressData {
   phone: string;
   address: string;
   city: string;
@@ -121,19 +122,25 @@ const Checkout = () => {
 
       // Pre-fill the form with user data if available
       if (profileData) {
-        // Make sure billing_address is treated as an object with correct type
-        const billingAddress = profileData.billing_address as BillingAddress | null;
+        // Safely access billing_address fields with proper type checking
+        const billingAddressJson = profileData.billing_address as Json;
+        let billingAddress: Partial<BillingAddressData> = {};
+        
+        // Check if billing_address exists and is an object
+        if (billingAddressJson && typeof billingAddressJson === 'object' && !Array.isArray(billingAddressJson)) {
+          billingAddress = billingAddressJson as Partial<BillingAddressData>;
+        }
         
         billingForm.reset({
           firstName: profileData.first_name || "",
           lastName: profileData.last_name || "",
           email: session.user.email || "",
-          phone: billingAddress?.phone || "",
-          address: billingAddress?.address || "",
-          city: billingAddress?.city || "",
-          state: billingAddress?.state || "",
-          zipCode: billingAddress?.zip_code || "",
-          country: billingAddress?.country || "",
+          phone: billingAddress.phone || "",
+          address: billingAddress.address || "",
+          city: billingAddress.city || "",
+          state: billingAddress.state || "",
+          zipCode: billingAddress.zip_code || "",
+          country: billingAddress.country || "",
         });
       } else {
         // Just fill the email if no profile data
@@ -195,7 +202,7 @@ const Checkout = () => {
           user_id: user.id,
           amount: getTotal(),
           currency: settings.currency.code,
-          order_details: orderDetails,
+          order_details: orderDetails as Json,
           payment_status: "completed",
         })
         .select()
@@ -225,7 +232,7 @@ const Checkout = () => {
             name: item.name,
             username: username,
             password: password,
-            plan_details: JSON.parse(JSON.stringify(item.configuration)),
+            plan_details: JSON.parse(JSON.stringify(item.configuration)) as Json,
             expiry_date: expiryDate.toISOString(),
           })
           .select()
@@ -272,7 +279,8 @@ const Checkout = () => {
         .eq("id", user.id)
         .single();
       
-      const billingAddress: BillingAddress = {
+      // Create billing address data that matches our expected structure
+      const billingAddressData: BillingAddressData = {
         address: billingInfo.address,
         city: billingInfo.city,
         state: billingInfo.state,
@@ -287,7 +295,7 @@ const Checkout = () => {
           .update({
             first_name: billingInfo.firstName || profile.first_name,
             last_name: billingInfo.lastName || profile.last_name,
-            billing_address: billingAddress,
+            billing_address: billingAddressData as unknown as Json,
           })
           .eq("id", user.id);
       }
