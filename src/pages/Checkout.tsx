@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -166,9 +167,9 @@ const Checkout = () => {
     setCurrentStep("processing");
     
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { session } } = await supabase.auth.getSession();
       
-      if (!user) {
+      if (!session || !session.user) {
         throw new Error("User not authenticated");
       }
       
@@ -180,22 +181,29 @@ const Checkout = () => {
           quantity: item.quantity,
           subtotal: `${settings.currency.symbol}${(item.price * item.quantity).toFixed(2)}`,
           configuration: JSON.parse(JSON.stringify(item.configuration))
-        }))
+        })),
+        customer: {
+          name: `${billingInfo.firstName} ${billingInfo.lastName}`,
+          email: billingInfo.email
+        }
       };
 
+      // Make sure we explicitly set user_id to the authenticated user's ID
       const { data: order, error: orderError } = await supabase
         .from("orders")
         .insert({
-          user_id: user.id,
+          user_id: session.user.id,
           amount: getTotal(),
           currency: settings.currency.code,
           order_details: orderDetails as Json,
           payment_status: "completed",
+          invoice_number: `INV-${Date.now()}`
         })
         .select()
         .single();
 
       if (orderError) {
+        console.error("Order creation error:", orderError);
         throw new Error(`Failed to create order: ${orderError.message}`);
       }
       
@@ -211,7 +219,7 @@ const Checkout = () => {
         const { data: rdpInstance, error: rdpError } = await supabase
           .from("rdp_instances")
           .insert({
-            user_id: user.id,
+            user_id: session.user.id,
             name: item.name,
             username: username,
             password: password,
@@ -254,7 +262,7 @@ const Checkout = () => {
       const { data: profile } = await supabase
         .from("profiles")
         .select("*")
-        .eq("id", user.id)
+        .eq("id", session.user.id)
         .single();
       
       const billingAddressData: BillingAddressData = {
@@ -274,7 +282,7 @@ const Checkout = () => {
             last_name: billingInfo.lastName || profile.last_name,
             billing_address: billingAddressData as unknown as Json,
           })
-          .eq("id", user.id);
+          .eq("id", session.user.id);
       }
 
       toast({

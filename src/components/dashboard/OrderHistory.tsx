@@ -81,9 +81,17 @@ const OrderHistory = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
+      // Get current user from session
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session || !session.user) {
+        throw new Error("User not authenticated");
+      }
+      
       const { data, error } = await supabase
         .from("orders")
         .select("*")
+        .eq("user_id", session.user.id)  // Filter by the current user's ID
         .order("created_at", { ascending: false });
 
       if (error) throw error;
