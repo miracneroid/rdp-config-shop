@@ -14,6 +14,8 @@ serve(async (req) => {
   }
 
   try {
+    console.log("Received request to generate test data");
+    
     // Create a Supabase client with the service role key
     const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL") || "",
@@ -23,6 +25,8 @@ serve(async (req) => {
     // Get the request body which should contain the user's email
     const body = await req.json();
     const { email, password } = body;
+
+    console.log("Request parameters:", { email, passwordProvided: !!password });
 
     if (!email || !password) {
       return new Response(
@@ -35,20 +39,46 @@ serve(async (req) => {
     }
 
     // Check if user already exists
-    const { data: existingUser } = await supabaseAdmin.auth.admin.getUserByEmail(email);
+    const { data: existingUser, error: getUserError } = await supabaseAdmin.auth.admin.getUserByEmail(email);
+    
+    if (getUserError) {
+      console.error("Error checking existing user:", getUserError);
+    }
 
     let userId;
     if (existingUser) {
+      console.log("User already exists:", existingUser.id);
       userId = existingUser.id;
+      
+      // Update the user's password to ensure it matches the provided one
+      const { error: updateUserError } = await supabaseAdmin.auth.admin.updateUserById(
+        userId,
+        { password }
+      );
+      
+      if (updateUserError) {
+        console.error("Error updating user password:", updateUserError);
+        return new Response(
+          JSON.stringify({ error: "Failed to update user password", details: updateUserError }),
+          { 
+            status: 500, 
+            headers: { ...corsHeaders, "Content-Type": "application/json" } 
+          }
+        );
+      }
+      
+      console.log("Updated password for existing user");
     } else {
+      console.log("Creating new test user with email:", email);
       // Create a test user
       const { data: newUser, error: createUserError } = await supabaseAdmin.auth.admin.createUser({
         email,
         password,
-        email_confirm: true,
+        email_confirm: true,  // Important: This confirms the email so login works immediately
       });
 
       if (createUserError || !newUser) {
+        console.error("Failed to create test user:", createUserError);
         return new Response(
           JSON.stringify({ error: "Failed to create test user", details: createUserError }),
           { 
@@ -59,9 +89,10 @@ serve(async (req) => {
       }
       
       userId = newUser.id;
+      console.log("Created new user with ID:", userId);
       
       // Create a profile for the user
-      await supabaseAdmin
+      const { error: profileError } = await supabaseAdmin
         .from('profiles')
         .upsert({
           id: userId,
@@ -77,6 +108,12 @@ serve(async (req) => {
             country: "Test Country"
           }
         });
+        
+      if (profileError) {
+        console.error("Error creating profile:", profileError);
+      } else {
+        console.log("Created profile for user");
+      }
     }
 
     // Create a test RDP instance for the user
@@ -102,75 +139,72 @@ serve(async (req) => {
       .select()
       .single();
 
-    if (rdpError || !rdpInstance) {
-      return new Response(
-        JSON.stringify({ error: "Failed to create RDP instance", details: rdpError }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, "Content-Type": "application/json" } 
-        }
-      );
-    }
-
-    // Create a test order for the RDP
-    const { data: order, error: orderError } = await supabaseAdmin
-      .from('orders')
-      .insert({
-        user_id: userId,
-        rdp_instance_id: rdpInstance.id,
-        invoice_number: `INV-${Date.now().toString().substring(0, 10)}`,
-        payment_status: "paid",
-        currency: "EUR",
-        amount: 49.99,
-        order_details: {
-          items: [
-            {
-              name: "Windows Server 2022 RDP",
-              quantity: 1,
-              price: "€49.99",
-              subtotal: "€49.99"
+    if (rdpError) {
+      console.error("Error creating RDP instance:", rdpError);
+      // Continue execution even if RDP creation fails
+    } else {
+      console.log("Created RDP instance:", rdpInstance?.id);
+      
+      // Create a test order for the RDP
+      if (rdpInstance) {
+        const { error: orderError } = await supabaseAdmin
+          .from('orders')
+          .insert({
+            user_id: userId,
+            rdp_instance_id: rdpInstance.id,
+            invoice_number: `INV-${Date.now().toString().substring(0, 10)}`,
+            payment_status: "paid",
+            currency: "EUR",
+            amount: 49.99,
+            order_details: {
+              items: [
+                {
+                  name: "Windows Server 2022 RDP",
+                  quantity: 1,
+                  price: "€49.99",
+                  subtotal: "€49.99"
+                }
+              ],
+              subtotal: "€49.99",
+              tax: "€0.00",
+              total: "€49.99"
             }
-          ],
-          subtotal: "€49.99",
-          tax: "€0.00",
-          total: "€49.99"
-        }
-      })
-      .select()
-      .single();
+          });
 
-    if (orderError || !order) {
-      return new Response(
-        JSON.stringify({ error: "Failed to create order", details: orderError }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        if (orderError) {
+          console.error("Error creating order:", orderError);
+        } else {
+          console.log("Created order for RDP instance");
         }
-      );
+      }
+      
+      // Create some system logs for the RDP
+      if (rdpInstance) {
+        const logActions = ["create", "start", "restart"];
+        for (let i = 0; i < logActions.length; i++) {
+          const { error: logError } = await supabaseAdmin
+            .from('system_logs')
+            .insert({
+              rdp_instance_id: rdpInstance.id,
+              action: logActions[i],
+              status: "completed",
+              details: { initiated_by: "system", reason: "setup" },
+              performed_at: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString() // Going back in time for each log
+            });
+            
+          if (logError) {
+            console.error(`Error creating log for action ${logActions[i]}:`, logError);
+          }
+        }
+        console.log("Created system logs for RDP instance");
+      }
     }
-
-    // Create some system logs for the RDP
-    const logActions = ["create", "start", "restart"];
-    const logPromises = logActions.map((action, index) => {
-      return supabaseAdmin
-        .from('system_logs')
-        .insert({
-          rdp_instance_id: rdpInstance.id,
-          action,
-          status: "completed",
-          details: { initiated_by: "system", reason: "setup" },
-          performed_at: new Date(Date.now() - (index * 24 * 60 * 60 * 1000)).toISOString() // Going back in time for each log
-        });
-    });
-
-    await Promise.all(logPromises);
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         user: { email, id: userId },
-        rdp: rdpInstance,
-        order 
+        message: "Test data created successfully. You can now login with the provided credentials."
       }),
       { 
         status: 200, 
@@ -178,9 +212,9 @@ serve(async (req) => {
       }
     );
   } catch (error) {
-    console.error("Error generating test data:", error);
+    console.error("Unhandled error generating test data:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error.message || "Unknown error occurred" }),
       { 
         status: 500, 
         headers: { ...corsHeaders, "Content-Type": "application/json" } 

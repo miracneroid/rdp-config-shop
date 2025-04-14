@@ -3,11 +3,19 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const generateTestUser = async (email: string, password: string) => {
   try {
+    // Log the attempt to generate test data
+    console.log("Attempting to generate test data for:", email);
+    
     const { data, error } = await supabase.functions.invoke('generate-test-data', {
       body: { email, password }
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error("Error from edge function:", error);
+      throw error;
+    }
+    
+    console.log("Test data generation successful:", data);
     return { success: true, data };
   } catch (error) {
     console.error("Error generating test data:", error);
