@@ -38,9 +38,9 @@ serve(async (req) => {
       );
     }
 
-    if (email !== "test@gmail.com") {
+    if (email !== "test@email.com") {
       return new Response(
-        JSON.stringify({ error: "This function only works for test@gmail.com" }),
+        JSON.stringify({ error: "This function only works for test@email.com" }),
         { 
           status: 400, 
           headers: { ...corsHeaders, "Content-Type": "application/json" } 

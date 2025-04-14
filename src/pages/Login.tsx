@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -47,7 +46,6 @@ const Login = () => {
         description: "Welcome back!",
       });
       
-      // Set admin flag if email is admin@example.com
       if (email === "admin@example.com" || email === "test@gmail.com") {
         localStorage.setItem("isAdmin", "true");
       }
@@ -65,16 +63,15 @@ const Login = () => {
     }
   };
 
-  // Function to add test RDP for test@gmail.com
   const handleAddTestRdp = async () => {
     setAddingRdp(true);
     try {
-      const result = await addTestRdp("test@gmail.com");
+      const result = await addTestRdp("test@email.com");
       
       if (result.success) {
         toast({
           title: "Success",
-          description: "Added test RDP for test@gmail.com. You can now login with this account.",
+          description: "Added test RDP for test@email.com. You can now login with this account.",
         });
       } else {
         toast({
@@ -159,7 +156,6 @@ const Login = () => {
                 </Link>
               </div>
               
-              {/* Test Helper Button */}
               <div className="pt-4 border-t w-full">
                 <Button 
                   type="button" 
@@ -171,14 +167,14 @@ const Login = () => {
                   {addingRdp ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Setting up test@gmail.com...
+                      Setting up test@email.com...
                     </>
                   ) : (
-                    "Setup test@gmail.com with RDP (Test Only)"
+                    "Setup test@email.com with RDP (Test Only)"
                   )}
                 </Button>
                 <p className="text-xs text-gray-500 mt-2 text-center">
-                  This will create an RDP for test@gmail.com with password "password123"
+                  This will create an RDP for test@email.com with password "password123"
                 </p>
               </div>
             </CardFooter>
