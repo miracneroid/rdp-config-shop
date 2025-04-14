@@ -32,6 +32,15 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
   }
 });
 
+// Helper to handle Supabase query results safely
+export function handleQueryResult<T>(data: T | null, error: any): T | null {
+  if (error) {
+    console.error('Supabase query error:', error);
+    return null;
+  }
+  return data;
+}
+
 // Helper function to check if the current user is an admin
 export const isUserAdmin = async (): Promise<boolean> => {
   // First check localStorage for quick access
