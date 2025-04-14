@@ -113,14 +113,14 @@ const AddAdminForm = () => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Add New Admin</CardTitle>
-        <CardDescription>
+    <Card className="border border-border">
+      <CardHeader className="bg-card dark:bg-gray-800 rounded-t-xl">
+        <CardTitle className="text-card-foreground">Add New Admin</CardTitle>
+        <CardDescription className="text-muted-foreground">
           Create a new administrator account with appropriate permissions
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="bg-card dark:bg-gray-800 pt-6">
         {success && (
           <Alert className="mb-6 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-900">
             <UserPlus className="h-4 w-4 text-green-600 dark:text-green-400" />
@@ -138,15 +138,16 @@ const AddAdminForm = () => {
               name="admin_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Admin ID</FormLabel>
+                  <FormLabel className="text-foreground dark:text-gray-200">Admin ID</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter admin username"
                       {...field}
                       disabled={isSubmitting}
+                      className="bg-background dark:bg-gray-700 text-foreground dark:text-white border-input"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-destructive" />
                 </FormItem>
               )}
             />
@@ -156,16 +157,17 @@ const AddAdminForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="text-foreground dark:text-gray-200">Password</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder="Enter secure password"
                       {...field}
                       disabled={isSubmitting}
+                      className="bg-background dark:bg-gray-700 text-foreground dark:text-white border-input"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-destructive" />
                 </FormItem>
               )}
             />
@@ -175,23 +177,23 @@ const AddAdminForm = () => {
               name="admin_type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Admin Type</FormLabel>
+                  <FormLabel className="text-foreground dark:text-gray-200">Admin Type</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                     disabled={isSubmitting}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-background dark:bg-gray-700 text-foreground dark:text-white border-input">
                         <SelectValue placeholder="Select admin type" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="regular">Regular Admin</SelectItem>
-                      <SelectItem value="super">Super Admin</SelectItem>
+                    <SelectContent className="bg-popover dark:bg-gray-800 text-popover-foreground dark:text-white border-border">
+                      <SelectItem value="regular" className="text-foreground dark:text-white">Regular Admin</SelectItem>
+                      <SelectItem value="super" className="text-foreground dark:text-white">Super Admin</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="text-destructive" />
                 </FormItem>
               )}
             />

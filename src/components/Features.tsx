@@ -36,14 +36,14 @@ const features = [
 
 const Features = () => {
   return (
-    <div className="bg-white py-16 sm:py-24">
+    <div className="bg-white dark:bg-gray-900 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="lg:text-center">
           <h2 className="text-base font-semibold uppercase tracking-wide text-rdp-blue">Features</h2>
-          <p className="mt-2 text-3xl font-bold leading-8 tracking-tight text-rdp-dark sm:text-4xl">
+          <p className="mt-2 text-3xl font-bold leading-8 tracking-tight text-rdp-dark dark:text-white sm:text-4xl">
             Enterprise-Grade RDP Solutions
           </p>
-          <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+          <p className="mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-300 lg:mx-auto">
             Our remote desktop environments are built for professionals who demand performance, 
             security, and reliability.
           </p>
@@ -57,8 +57,8 @@ const Features = () => {
                   <div className="flex h-12 w-12 items-center justify-center rounded-md bg-rdp-blue/10 text-rdp-blue">
                     <feature.icon className="h-6 w-6" aria-hidden="true" />
                   </div>
-                  <h3 className="mt-5 text-lg font-medium leading-6 text-rdp-dark">{feature.name}</h3>
-                  <p className="mt-2 text-base text-gray-500">{feature.description}</p>
+                  <h3 className="mt-5 text-lg font-medium leading-6 text-rdp-dark dark:text-white">{feature.name}</h3>
+                  <p className="mt-2 text-base text-gray-500 dark:text-gray-300">{feature.description}</p>
                 </div>
               </div>
             ))}

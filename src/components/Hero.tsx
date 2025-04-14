@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Hero = () => {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white py-16 sm:py-24">
+    <div className="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 py-16 sm:py-24">
       <div className="absolute inset-y-0 right-0 hidden w-1/2 opacity-20 sm:block">
         <svg
           className="h-full w-full"
@@ -23,6 +23,7 @@ const Hero = () => {
                 stroke="rgba(37, 99, 235, 0.1)"
                 strokeWidth="1.5"
                 fill="none"
+                className="dark:stroke-blue-400/10"
               />
             </pattern>
           </defs>
@@ -35,12 +36,12 @@ const Hero = () => {
           <div className="sm:text-center md:mx-auto lg:col-span-6 lg:text-left">
             <h1>
               <span className="block text-base font-semibold text-rdp-blue">Introducing</span>
-              <span className="mt-2 block text-4xl font-bold tracking-tight text-rdp-dark sm:text-5xl xl:text-6xl">
+              <span className="mt-2 block text-4xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-5xl xl:text-6xl">
                 Custom RDP<br />
                 <span className="gradient-text">Made Simple</span>
               </span>
             </h1>
-            <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+            <p className="mt-3 text-base text-gray-500 dark:text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
               Deploy secure, high-performance remote desktop environments 
               tailored to your exact specifications within minutes.
               Choose your performance tier, region, and software setup
@@ -65,8 +66,8 @@ const Hero = () => {
                   alt="Dashboard preview"
                 />
                 <div className="p-6">
-                  <h3 className="text-lg font-medium text-rdp-dark">Professional RDP Solutions</h3>
-                  <p className="mt-2 text-sm text-gray-500">
+                  <h3 className="text-lg font-medium text-rdp-dark dark:text-white">Professional RDP Solutions</h3>
+                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-300">
                     High-performance virtual machines with Windows or Linux, 
                     fully configured for your business needs.
                   </p>

@@ -159,7 +159,7 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-background dark:bg-gray-900">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <span className="ml-2">Loading admin dashboard...</span>
       </div>
@@ -167,8 +167,8 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+    <div className="container mx-auto py-8 px-4 bg-background dark:bg-gray-900">
+      <h1 className="text-3xl font-bold mb-6 text-foreground">Admin Dashboard</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         <Card className="bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -236,7 +236,7 @@ const AdminDashboard = () => {
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid grid-cols-2 md:grid-cols-5 gap-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+        <TabsList className="grid grid-cols-2 md:grid-cols-5 gap-2 bg-muted dark:bg-gray-800 p-1 rounded-lg">
           <TabsTrigger value="overview" className="flex items-center data-[state=active]:bg-white dark:data-[state=active]:bg-gray-700 rounded-md">
             <BarChart className="h-4 w-4 mr-2" />
             <span>Overview</span>
@@ -259,28 +259,28 @@ const AdminDashboard = () => {
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="overview" className="space-y-4 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Dashboard Overview</h2>
+        <TabsContent value="overview" className="space-y-4 bg-card dark:bg-gray-800 rounded-lg p-6 shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-card-foreground">Dashboard Overview</h2>
           <AdminAnalytics />
         </TabsContent>
         
-        <TabsContent value="orders" className="space-y-4 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Order Management</h2>
+        <TabsContent value="orders" className="space-y-4 bg-card dark:bg-gray-800 rounded-lg p-6 shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-card-foreground">Order Management</h2>
           <AdminOrderList />
         </TabsContent>
         
-        <TabsContent value="rdp" className="space-y-4 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-          <h2 className="text-xl font-semibold mb-4">RDP Instance Management</h2>
+        <TabsContent value="rdp" className="space-y-4 bg-card dark:bg-gray-800 rounded-lg p-6 shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-card-foreground">RDP Instance Management</h2>
           <AdminRdpList />
         </TabsContent>
         
-        <TabsContent value="tickets" className="space-y-4 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Support Ticket Management</h2>
+        <TabsContent value="tickets" className="space-y-4 bg-card dark:bg-gray-800 rounded-lg p-6 shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-card-foreground">Support Ticket Management</h2>
           <AdminTicketList />
         </TabsContent>
         
-        <TabsContent value="admins" className="space-y-4 bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Admin Management</h2>
+        <TabsContent value="admins" className="space-y-4 bg-card dark:bg-gray-800 rounded-lg p-6 shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-card-foreground">Admin Management</h2>
           <AddAdminForm />
         </TabsContent>
       </Tabs>
