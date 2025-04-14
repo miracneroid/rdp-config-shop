@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -252,10 +251,6 @@ const UserMenu = () => {
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setAvatarDialogOpen(true)}>
-              <Camera className="mr-2 h-4 w-4" />
-              <span>Change Avatar</span>
-            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleNavigation('/dashboard?tab=orders')}>
               <History className="mr-2 h-4 w-4" />
               <span>Orders</span>
@@ -280,15 +275,6 @@ const UserMenu = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <Dialog open={avatarDialogOpen} onOpenChange={setAvatarDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Choose your avatar</DialogTitle>
-          </DialogHeader>
-          <AvatarSelector onAvatarSelected={handleAvatarSelected} currentCharacter={userProfile.avatar_character} />
-        </DialogContent>
-      </Dialog>
     </>
   );
 };
