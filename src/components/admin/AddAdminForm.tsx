@@ -70,8 +70,10 @@ const AddAdminForm = () => {
         body: {
           operation: {
             action: "add_admin",
-            admin_id: "system", // This would normally be the current admin's ID
-            admin_type: "super", // This would normally be the current admin's type
+            // Use different property names for the caller admin credentials
+            caller_admin_id: "system", // This would normally be the current admin's ID
+            caller_admin_type: "super", // This would normally be the current admin's type
+            // New admin details
             admin_id: data.admin_id,
             password: data.password,
             admin_type: data.admin_type,

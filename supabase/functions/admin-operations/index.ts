@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.1.1";
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
@@ -9,8 +10,10 @@ const corsHeaders = {
 
 type AdminOperation = {
   action: string;
-  admin_id: string;
-  admin_type: string;
+  admin_id?: string;
+  admin_type?: string;
+  caller_admin_id?: string;
+  caller_admin_type?: string;
   [key: string]: any;
 };
 
@@ -45,9 +48,9 @@ serve(async (req) => {
     }
 
     const { action } = operation;
-    // Fixed: use different variables for caller vs new admin
-    const callerAdminId = operation.admin_id;
-    const callerAdminType = operation.admin_type;
+    // Use caller_admin_id/type if provided, otherwise fall back to admin_id/type
+    const callerAdminId = operation.caller_admin_id || operation.admin_id;
+    const callerAdminType = operation.caller_admin_type || operation.admin_type;
 
     let result;
     switch (action) {
