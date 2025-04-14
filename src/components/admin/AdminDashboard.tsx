@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { isNotNullOrUndefined } from "@/utils/typeGuards";
+import { isNotNullOrUndefined, asUUID } from "@/utils/typeGuards";
 import { fetchData } from "@/services/supabaseService";
 
 interface OrderItem {
@@ -104,14 +104,14 @@ const AdminDashboard = () => {
       const { count: rdpCount, error: rdpError } = await supabase
         .from('rdp_instances')
         .select('*', { count: 'exact', head: true })
-        .eq('status', asUUID('active'));
+        .eq('status', 'active');
         
       if (rdpError) throw rdpError;
 
       const { count: ticketCount, error: ticketError } = await supabase
         .from('support_tickets')
         .select('*', { count: 'exact', head: true })
-        .eq('status', asUUID('open'));
+        .eq('status', 'open');
         
       if (ticketError) throw ticketError;
 
