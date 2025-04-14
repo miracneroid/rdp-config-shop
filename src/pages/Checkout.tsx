@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -172,6 +173,9 @@ const Checkout = () => {
         throw new Error("User not authenticated");
       }
       
+      // Explicitly log the auth.uid to verify it's available
+      console.log("Authenticated user ID:", session.user.id);
+      
       const orderDetails = {
         items: cart.map(item => ({
           id: item.id,
@@ -187,6 +191,7 @@ const Checkout = () => {
         }
       };
 
+      // Explicitly set user_id to the authenticated user's ID
       const { data: order, error: orderError } = await supabase
         .from("orders")
         .insert({
