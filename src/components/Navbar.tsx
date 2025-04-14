@@ -12,14 +12,17 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { cart, getTotalItems } = useCart();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   const totalItems = getTotalItems();
   
   useEffect(() => {
     // Check if user is logged in on component mount
     const checkAuth = async () => {
+      setIsLoading(true);
       const { data: { session } } = await supabase.auth.getSession();
       setIsLoggedIn(!!session);
+      setIsLoading(false);
     };
 
     checkAuth();
@@ -74,7 +77,9 @@ const Navbar = () => {
               </Button>
             </Link>
             
-            {isLoggedIn ? (
+            {isLoading ? (
+              <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse"></div>
+            ) : isLoggedIn ? (
               <UserMenu />
             ) : (
               <div className="flex items-center space-x-2">
@@ -100,7 +105,9 @@ const Navbar = () => {
                 )}
               </Button>
             </Link>
-            {isLoggedIn ? (
+            {isLoading ? (
+              <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse mr-4"></div>
+            ) : isLoggedIn ? (
               <div className="mr-4">
                 <UserMenu />
               </div>

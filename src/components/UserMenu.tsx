@@ -42,25 +42,65 @@ const UserMenu = () => {
   
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (user) {
-        // Fetch user profile from profiles table
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .single();
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
         
-        const displayName = profileData?.display_name || user.email?.split('@')[0] || "User";
-        const initials = getInitialsFromName(displayName);
-        
-        setUserProfile({
-          name: displayName,
-          email: user.email || "",
-          initials: initials,
-          avatar_url: profileData?.avatar_url
-        });
+        if (user) {
+          let displayName = user.email?.split('@')[0] || "User";
+          let avatarUrl = null;
+          
+          // Check if user has avatar from Google
+          const { provider_id, user_metadata } = user.app_metadata || {};
+          if (provider_id === 'google' && user_metadata) {
+            // Google users often have avatar and name in metadata
+            if (user_metadata.avatar_url) {
+              avatarUrl = user_metadata.avatar_url;
+            }
+            if (user_metadata.full_name) {
+              displayName = user_metadata.full_name;
+            }
+          }
+          
+          // Fetch user profile from profiles table as a fallback
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .maybeSingle();
+          
+          if (profileData) {
+            displayName = profileData.display_name || displayName;
+            avatarUrl = profileData.avatar_url || avatarUrl;
+          }
+          
+          const initials = getInitialsFromName(displayName);
+          
+          setUserProfile({
+            name: displayName,
+            email: user.email || "",
+            initials: initials,
+            avatar_url: avatarUrl
+          });
+          
+          // If this is a new Google user, ensure they have a profile
+          if (provider_id === 'google' && !profileData) {
+            const firstName = user_metadata?.given_name || displayName.split(' ')[0] || '';
+            const lastName = user_metadata?.family_name || (displayName.split(' ').length > 1 ? displayName.split(' ').slice(1).join(' ') : '');
+            
+            await supabase
+              .from('profiles')
+              .upsert({
+                id: user.id,
+                display_name: displayName,
+                first_name: firstName,
+                last_name: lastName,
+                avatar_url: avatarUrl,
+                updated_at: new Date().toISOString()
+              });
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
       }
     };
     

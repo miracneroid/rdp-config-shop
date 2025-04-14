@@ -18,8 +18,10 @@ import {
   History, 
   HelpCircle, 
   User, 
-  BarChart
+  BarChart,
+  Loader2
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const UserDashboard = () => {
   const location = useLocation();
@@ -29,30 +31,60 @@ const UserDashboard = () => {
   
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [userName, setUserName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
   
   // Check if user is logged in
-  const checkSession = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      toast({
-        title: "Authentication required",
-        description: "Please log in to access your dashboard",
-        variant: "destructive",
-      });
-      navigate("/login", { state: { redirectTo: "/dashboard" } });
-    } else {
-      // Get user profile
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('display_name')
-        .eq('id', session.user.id)
-        .single();
-      
-      setUserName(profileData?.display_name || session.user.email?.split('@')[0] || "User");
-    }
-  };
+  useEffect(() => {
+    const checkSession = async () => {
+      setIsLoading(true);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          toast({
+            title: "Authentication required",
+            description: "Please log in to access your dashboard",
+            variant: "destructive",
+          });
+          navigate("/login", { state: { redirectTo: "/dashboard" } });
+          return;
+        }
+        
+        // Get user profile
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('display_name')
+          .eq('id', session.user.id)
+          .maybeSingle();
+        
+        // Check if user has profile data from Google login
+        let displayName = profileData?.display_name;
+        
+        if (!displayName) {
+          const { provider_id, user_metadata } = session.user.app_metadata || {};
+          if (provider_id === 'google' && user_metadata?.full_name) {
+            displayName = user_metadata.full_name;
+          } else {
+            displayName = session.user.email?.split('@')[0] || "User";
+          }
+        }
+        
+        setUserName(displayName);
+      } catch (error) {
+        console.error("Error checking session:", error);
+        toast({
+          title: "Error",
+          description: "There was a problem loading your dashboard",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkSession();
+  }, [navigate, toast]);
 
   // Handle tab changes - update URL when tab changes
   const handleTabChange = (value: string) => {
@@ -60,25 +92,27 @@ const UserDashboard = () => {
     navigate(`/dashboard?tab=${value}`);
   };
 
-  // Check session on component mount and when URL changes
-  useEffect(() => {
-    checkSession();
-  }, []);
-
   // Update active tab when URL changes
   useEffect(() => {
     if (tabFromUrl) {
       setActiveTab(tabFromUrl);
     }
-  }, [location]);
+  }, [location, tabFromUrl]);
 
-  const tabIcons = {
-    "rdp-management": <Server className="h-5 w-5 mr-2" />,
-    "system-usage": <BarChart className="h-5 w-5 mr-2" />,
-    "orders": <History className="h-5 w-5 mr-2" />,
-    "support": <HelpCircle className="h-5 w-5 mr-2" />,
-    "profile": <User className="h-5 w-5 mr-2" />
-  };
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col dark:bg-gray-900">
+        <Navbar />
+        <div className="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="h-10 w-10 animate-spin mx-auto text-rdp-blue dark:text-rdp-blue-light" />
+            <p className="mt-4 text-lg">Loading your dashboard...</p>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col dark:bg-gray-900">
