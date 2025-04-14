@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Server, Shield, Clock, Users, Monitor, CheckCircle } from 'lucide-react';
@@ -7,12 +6,12 @@ import Footer from '@/components/Footer';
 
 const About = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col w-full">
       <Navbar />
       
-      <main className="flex-grow">
+      <main className="flex-grow w-full">
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800 py-20">
+        <section className="bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800 py-20 w-full">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
               About <span className="text-rdp-blue dark:text-rdp-blue-light">RDP Config</span>
@@ -25,21 +24,21 @@ const About = () => {
         </section>
 
         {/* Our Story */}
-        <section className="py-16 bg-white dark:bg-gray-900">
+        <section className="py-16 bg-white dark:bg-gray-900 w-full">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto">
               <h2 className="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-white">Our Story</h2>
-              <div className="prose dark:prose-invert max-w-none">
-                <p className="mb-4">
+              <div className="prose dark:prose-invert max-w-none dark:text-gray-300">
+                <p className="mb-4 text-gray-700 dark:text-gray-300">
                   Founded in 2020, RDP Config was born out of a simple observation: accessing reliable remote desktop infrastructure was unnecessarily complex and expensive for many businesses and individuals.
                 </p>
-                <p className="mb-4">
+                <p className="mb-4 text-gray-700 dark:text-gray-300">
                   Our founders, with over 15 years of combined experience in cloud infrastructure and virtualization, set out to build a platform that makes RDP services accessible, affordable, and easy to use.
                 </p>
-                <p className="mb-4">
+                <p className="mb-4 text-gray-700 dark:text-gray-300">
                   What started as a small team working out of a shared office space has grown into a leading provider of Remote Desktop Protocol solutions serving thousands of customers worldwide. Our mission remains the same: to empower people to work from anywhere with secure, reliable remote access to computing resources.
                 </p>
-                <p>
+                <p className="text-gray-700 dark:text-gray-300">
                   Today, RDP Config continues to innovate in the remote desktop space, bringing enterprise-grade technology to businesses of all sizes while maintaining our commitment to security, performance, and customer satisfaction.
                 </p>
               </div>
@@ -48,7 +47,7 @@ const About = () => {
         </section>
 
         {/* Key Features */}
-        <section className="py-16 bg-gray-50 dark:bg-gray-800">
+        <section className="py-16 bg-gray-50 dark:bg-gray-800 w-full">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-12 text-center text-gray-900 dark:text-white">Why Choose Us</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -116,7 +115,7 @@ const About = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 bg-rdp-blue text-white dark:bg-rdp-dark">
+        <section className="py-16 bg-rdp-blue text-white dark:bg-rdp-dark w-full">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto">

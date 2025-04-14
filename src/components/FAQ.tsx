@@ -43,25 +43,25 @@ const faqItems = [
 
 const FAQ = () => {
   return (
-    <div className="bg-gray-50 py-16 sm:py-24">
+    <div className="bg-gray-50 dark:bg-gray-900 py-16 sm:py-24 w-full">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-base font-semibold uppercase tracking-wide text-rdp-blue">FAQ</h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight text-rdp-dark sm:text-4xl">
+          <p className="mt-2 text-3xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-4xl">
             Frequently Asked Questions
           </p>
-          <p className="mt-4 text-lg text-gray-500">
+          <p className="mt-4 text-lg text-gray-500 dark:text-gray-400">
             Everything you need to know about our RDP services.
           </p>
         </div>
         <div className="mt-12 mx-auto max-w-3xl">
           <Accordion type="single" collapsible className="w-full">
             {faqItems.map((item, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left font-medium text-rdp-dark">
+              <AccordionItem key={index} value={`item-${index}`} className="border-b border-gray-200 dark:border-gray-700">
+                <AccordionTrigger className="text-left font-medium text-rdp-dark dark:text-white py-4">
                   {item.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-gray-600">
+                <AccordionContent className="text-gray-600 dark:text-gray-300">
                   {item.answer}
                 </AccordionContent>
               </AccordionItem>

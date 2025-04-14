@@ -5,9 +5,9 @@ import Footer from "@/components/Footer";
 
 const FAQPage = () => {
   return (
-    <div className="min-h-screen flex flex-col dark:bg-rdp-dark">
+    <div className="min-h-screen flex flex-col dark:bg-rdp-dark w-full">
       <Navbar />
-      <div className="bg-white dark:bg-rdp-dark py-16 flex-grow">
+      <div className="bg-white dark:bg-rdp-dark py-16 flex-grow w-full">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h1 className="text-3xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-4xl">
