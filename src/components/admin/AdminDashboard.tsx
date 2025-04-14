@@ -35,9 +35,12 @@ const AdminDashboard = () => {
         // Get active users (users who have logged in within the last 30 days)
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        const { data: activeUsers } = await supabase.auth.admin.listUsers({
-          filter: `last_sign_in_at.gte.${thirtyDaysAgo.toISOString()}`
-        });
+        
+        // Using a custom query to get active users since filter is not supported
+        const { count: activeUserCount } = await supabase
+          .from('profiles')
+          .select('*', { count: 'exact', head: true })
+          .gte('updated_at', thirtyDaysAgo.toISOString());
 
         // Get order stats
         const { data: orders } = await supabase
@@ -45,7 +48,7 @@ const AdminDashboard = () => {
           .select('amount');
 
         // Calculate total revenue
-        const totalRevenue = orders?.reduce((sum, order) => sum + parseFloat(order.amount), 0) || 0;
+        const totalRevenue = orders?.reduce((sum, order) => sum + order.amount, 0) || 0;
 
         // Get active RDPs
         const { count: rdpCount } = await supabase
@@ -61,7 +64,7 @@ const AdminDashboard = () => {
 
         setStats({
           totalUsers: userCount || 0,
-          activeUsers: activeUsers?.users.length || 0,
+          activeUsers: activeUserCount || 0,
           totalOrders: orders?.length || 0,
           totalRevenue,
           activeRdps: rdpCount || 0,

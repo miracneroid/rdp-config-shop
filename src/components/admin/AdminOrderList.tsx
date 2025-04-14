@@ -37,12 +37,14 @@ interface OrderDetails {
 
 interface Order {
   id: string;
-  invoice_number: string;
+  invoice_number: string | null;
   user_id: string;
   amount: number;
   currency: string;
-  payment_status: string;
+  payment_status: string | null;
   created_at: string;
+  updated_at: string;
+  rdp_instance_id: string | null;
   order_details: OrderDetails;
   user_email?: string;
 }
@@ -62,7 +64,7 @@ const AdminOrderList = () => {
     setLoading(true);
     try {
       // Fetch orders with user emails
-      const { data: orders, error } = await supabase
+      const { data: ordersData, error } = await supabase
         .from("orders")
         .select("*")
         .order("created_at", { ascending: false });
@@ -70,18 +72,27 @@ const AdminOrderList = () => {
       if (error) throw error;
 
       // Fetch user emails for each order
-      if (orders && orders.length > 0) {
+      if (ordersData && ordersData.length > 0) {
         const ordersWithEmails = await Promise.all(
-          orders.map(async (order) => {
+          ordersData.map(async (order) => {
             // Get user email from auth.users
             const { data: userData } = await supabase.auth.admin.getUserById(
               order.user_id
             );
             
+            // Parse order_details from JSON if needed
+            let parsedOrderDetails: OrderDetails;
+            if (typeof order.order_details === 'string') {
+              parsedOrderDetails = JSON.parse(order.order_details);
+            } else {
+              parsedOrderDetails = order.order_details as unknown as OrderDetails;
+            }
+            
             return {
               ...order,
+              order_details: parsedOrderDetails,
               user_email: userData?.user?.email || "Unknown"
-            };
+            } as Order;
           })
         );
         

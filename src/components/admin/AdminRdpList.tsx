@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -24,23 +23,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Eye, RefreshCw } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
+interface RdpPlanDetails {
+  cpu: number;
+  ram: number;
+  storage: number;
+  plan_name: string;
+}
+
 interface RdpInstance {
   id: string;
   name: string;
   user_id: string;
-  ip_address: string;
-  port: string;
+  ip_address: string | null;
+  port: string | null;
   username: string;
   password: string;
-  status: string;
+  status: string | null;
   expiry_date: string;
   created_at: string;
-  plan_details: {
-    cpu: number;
-    ram: number;
-    storage: number;
-    plan_name: string;
-  };
+  updated_at: string;
+  plan_details: RdpPlanDetails;
   user_email?: string;
 }
 
@@ -76,10 +78,19 @@ const AdminRdpList = () => {
               rdp.user_id
             );
             
+            // Parse plan_details from JSON if needed
+            let parsedPlanDetails: RdpPlanDetails;
+            if (typeof rdp.plan_details === 'string') {
+              parsedPlanDetails = JSON.parse(rdp.plan_details);
+            } else {
+              parsedPlanDetails = rdp.plan_details as unknown as RdpPlanDetails;
+            }
+            
             return {
               ...rdp,
+              plan_details: parsedPlanDetails,
               user_email: userData?.user?.email || "Unknown"
-            };
+            } as RdpInstance;
           })
         );
         
@@ -149,9 +160,9 @@ const AdminRdpList = () => {
       case "expired":
         return <Badge variant="destructive">Expired</Badge>;
       case "suspended":
-        return <Badge variant="warning">Suspended</Badge>;
+        return <Badge variant="secondary">Suspended</Badge>;
       default:
-        return <Badge variant="secondary">{status}</Badge>;
+        return <Badge variant="outline">{status}</Badge>;
     }
   };
 
