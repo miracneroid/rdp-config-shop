@@ -89,8 +89,8 @@ const Navbar = () => {
             )}
             <ThemeToggle />
             <Link to="/cart" className="relative">
-              <Button variant="outline" size="icon">
-                <ShoppingCart className="h-5 w-5" />
+              <Button variant="outline" size="icon" className="border-gray-300 dark:border-gray-700 dark:bg-gray-800">
+                <ShoppingCart className="h-5 w-5 text-gray-700 dark:text-white" />
                 {totalItems > 0 && (
                   <span className="absolute -top-2 -right-2 bg-rdp-blue text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {totalItems}
@@ -118,8 +118,8 @@ const Navbar = () => {
           <div className="md:hidden flex items-center">
             <ThemeToggle />
             <Link to="/cart" className="relative mr-4">
-              <Button variant="outline" size="icon">
-                <ShoppingCart className="h-5 w-5" />
+              <Button variant="outline" size="icon" className="border-gray-300 dark:border-gray-700 dark:bg-gray-800">
+                <ShoppingCart className="h-5 w-5 text-gray-700 dark:text-white" />
                 {totalItems > 0 && (
                   <span className="absolute -top-2 -right-2 bg-rdp-blue text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {totalItems}
