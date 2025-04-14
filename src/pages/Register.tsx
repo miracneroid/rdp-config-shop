@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -32,7 +33,22 @@ const formSchema = z.object({
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+  
+  const redirectTo = location.state?.redirectTo || "/configure";
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate(redirectTo);
+      }
+    };
+
+    checkSession();
+  }, [navigate, redirectTo]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,17 +60,60 @@ const Register = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    // Simulate registration - in a real app this would call an authentication API
-    setTimeout(() => {
-      setIsLoading(false);
+    
+    try {
+      // Register the user
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+        options: {
+          data: {
+            full_name: values.name,
+          },
+        },
+      });
+
+      if (authError) throw authError;
+
+      // If registration successful, create a profile
+      if (authData.user) {
+        const nameParts = values.name.split(' ');
+        const firstName = nameParts[0];
+        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+        
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .upsert({
+            id: authData.user.id,
+            first_name: firstName,
+            last_name: lastName,
+            display_name: values.name,
+          });
+
+        if (profileError) {
+          console.error('Error creating profile:', profileError);
+        }
+      }
+
       toast({
         title: "Registration successful",
-        description: "Welcome to RDP Config! You can now log in.",
+        description: "Your account has been created. You can now log in.",
       });
-      navigate('/login');
-    }, 1500);
+      
+      // Since Supabase automatically logs in after signup, we can redirect
+      navigate(redirectTo);
+      
+    } catch (error: any) {
+      toast({
+        title: "Registration failed",
+        description: error.message || "An error occurred during registration",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -64,6 +123,11 @@ const Register = () => {
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold mb-2">Create an Account</h1>
           <p className="text-muted-foreground">Join RDP Config to start creating your custom RDP</p>
+          {location.state?.redirectTo && (
+            <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-md text-sm text-blue-600 dark:text-blue-300">
+              Sign up to continue with your checkout
+            </div>
+          )}
         </div>
 
         <Form {...form}>

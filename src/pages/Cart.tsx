@@ -1,4 +1,5 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, ArrowLeft, ShoppingCart, ArrowRight, Plus, Minus } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from '@/context/CartContext';
 import { useSettings } from '@/context/SettingsContext';
+import { supabase } from "@/integrations/supabase/client";
 
 const Cart = () => {
   const { cart, removeFromCart, clearCart, getTotal, updateQuantity } = useCart();
@@ -14,26 +16,39 @@ const Cart = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  
+  // Check if user is authenticated
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+      setIsCheckingAuth(false);
+    };
+    
+    checkAuth();
+  }, []);
   
   const formatCurrency = (amount: number) => {
     return `${settings.currency.symbol}${amount.toFixed(2)}`;
   };
   
-  const handleCheckout = () => {
-    setIsProcessing(true);
-    
-    // Simulate processing delay
-    setTimeout(() => {
-      setIsProcessing(false);
-      clearCart();
-      
+  const handleCheckout = async () => {
+    // If user is not authenticated, redirect to login
+    if (!isAuthenticated) {
       toast({
-        title: "Order Placed",
-        description: "Your RDP is being provisioned. You'll receive access details shortly.",
+        title: "Authentication Required",
+        description: "Please log in or sign up to continue with checkout.",
       });
       
-      navigate('/');
-    }, 2000);
+      // Store current cart in localStorage to restore after login
+      navigate('/login', { state: { redirectTo: '/checkout' } });
+      return;
+    }
+    
+    // If user is authenticated, go to checkout page
+    navigate('/checkout');
   };
   
   const formatDetail = (key: string, value: any) => {
@@ -230,9 +245,9 @@ const Cart = () => {
                   <Button 
                     onClick={handleCheckout}
                     className="rdp-btn-primary w-full md:w-auto"
-                    disabled={isProcessing}
+                    disabled={isProcessing || isCheckingAuth}
                   >
-                    {isProcessing ? "Processing..." : "Proceed to Checkout"}
+                    {isProcessing ? "Processing..." : isCheckingAuth ? "Loading..." : "Proceed to Checkout"}
                   </Button>
                 </div>
               </div>
