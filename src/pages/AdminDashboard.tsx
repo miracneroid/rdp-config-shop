@@ -221,31 +221,23 @@ const AdminDashboard = () => {
     navigate("/admin-login");
   };
 
-  // Create test user function
+  // Removing the actual test user creation functionality
   const createTestUser = async () => {
     setIsTestUserLoading(true);
     
     try {
-      const testEmail = "test@gmail.com";
-      const testPassword = "test@123";
-      
-      const result = await generateTestUser(testEmail, testPassword);
-      
-      if (!result.success) {
-        throw new Error(result.error?.message || "Failed to create test user");
-      }
-      
       toast({
-        title: "Test user created",
-        description: "Test user created with email: test@gmail.com and password: test@123",
+        title: "Test functionality removed",
+        description: "The test user creation functionality has been removed from the application.",
+        variant: "default",
       });
     } catch (error: any) {
       toast({
-        title: "Error creating test user",
-        description: error.message || "An error occurred while creating the test user",
+        title: "Error",
+        description: "An error occurred",
         variant: "destructive",
       });
-      console.error("Test user error:", error);
+      console.error("Error:", error);
     } finally {
       setIsTestUserLoading(false);
     }
