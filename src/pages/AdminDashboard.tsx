@@ -211,16 +211,20 @@ const AdminDashboard = () => {
       
       // Log this admin action
       if (adminId) {
-        await supabase
-          .from('admin_actions')
-          .insert([
-            { 
-              admin_id: adminId, 
-              action: 'Dashboard access', 
-              admin_type: adminType,
-              details: { timestamp: new Date().toISOString() }
-            }
-          ]);
+        try {
+          await supabase
+            .from('admin_actions')
+            .insert([
+              { 
+                admin_id: adminId, 
+                action: 'Dashboard access', 
+                admin_type: adminType,
+                details: { timestamp: new Date().toISOString() }
+              }
+            ]);
+        } catch (logError) {
+          console.error("Error logging admin action:", logError);
+        }
       }
       
     } catch (error) {
@@ -305,30 +309,31 @@ const AdminDashboard = () => {
     
     // Log this admin action
     if (adminId) {
-      supabase
-        .from('admin_actions')
-        .insert([
-          { 
-            admin_id: adminId, 
-            action: 'Generated admin key', 
-            admin_type: adminType,
-            details: { timestamp: new Date().toISOString() }
-          }
-        ])
-        .then(() => {
-          toast({
-            title: "Admin key generated",
-            description: "A new admin key has been generated successfully.",
+      try {
+        supabase
+          .from('admin_actions')
+          .insert([
+            { 
+              admin_id: adminId, 
+              action: 'Generated admin key', 
+              admin_type: adminType,
+              details: { timestamp: new Date().toISOString() }
+            }
+          ])
+          .then(() => {
+            toast({
+              title: "Admin key generated",
+              description: "A new admin key has been generated successfully.",
+            });
           });
-        })
-        .catch(error => {
-          console.error("Error logging action:", error);
-          // Still show the toast even if logging failed
-          toast({
-            title: "Admin key generated",
-            description: "A new admin key has been generated successfully.",
-          });
+      } catch (error) {
+        console.error("Error logging action:", error);
+        // Still show the toast even if logging failed
+        toast({
+          title: "Admin key generated",
+          description: "A new admin key has been generated successfully.",
         });
+      }
     } else {
       toast({
         title: "Admin key generated",
@@ -1238,10 +1243,10 @@ const AdminDashboard = () => {
                           <TableCell>{admin.lastLogin}</TableCell>
                           <TableCell>
                             <div className="flex space-x-1">
-                              {admin.permissions.manageAdmins && <ShieldCheck className="h-4 w-4 text-purple-500" title="Can manage admins" />}
-                              {admin.permissions.systemSettings && <Settings className="h-4 w-4 text-blue-500" title="Can change system settings" />}
-                              {admin.permissions.manageUsers && <User className="h-4 w-4 text-green-500" title="Can manage users" />}
-                              {admin.permissions.manageRdps && <Server className="h-4 w-4 text-orange-500" title="Can manage RDPs" />}
+                              {admin.permissions.manageAdmins && <ShieldCheck className="h-4 w-4 text-purple-500" aria-label="Can manage admins" />}
+                              {admin.permissions.systemSettings && <Settings className="h-4 w-4 text-blue-500" aria-label="Can change system settings" />}
+                              {admin.permissions.manageUsers && <User className="h-4 w-4 text-green-500" aria-label="Can manage users" />}
+                              {admin.permissions.manageRdps && <Server className="h-4 w-4 text-orange-500" aria-label="Can manage RDPs" />}
                             </div>
                           </TableCell>
                           <TableCell>
