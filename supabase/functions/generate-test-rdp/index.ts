@@ -48,13 +48,13 @@ serve(async (req) => {
       );
     }
 
-    // Get user by email using the admin auth API
-    const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserByEmail(email);
+    // Get user by email - using the correct method in v2 of the Supabase JS client
+    const { data: users, error: userError } = await supabaseAdmin.auth.admin.listUsers();
     
-    if (userError || !userData?.user) {
-      console.error("Error finding test user:", userError);
+    if (userError) {
+      console.error("Error listing users:", userError);
       return new Response(
-        JSON.stringify({ error: "Failed to find test user", details: userError }),
+        JSON.stringify({ error: "Failed to list users", details: userError }),
         { 
           status: 500, 
           headers: { ...corsHeaders, "Content-Type": "application/json" } 
@@ -62,7 +62,20 @@ serve(async (req) => {
       );
     }
     
-    const userId = userData.user.id;
+    const userData = users.users.find(user => user.email === email);
+    
+    if (!userData) {
+      console.error("Error: Test user not found");
+      return new Response(
+        JSON.stringify({ error: "Test user not found. Please create the test user first." }),
+        { 
+          status: 404, 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        }
+      );
+    }
+    
+    const userId = userData.id;
     
     // First check if an RDP instance already exists for the user
     const { data: existingRdp } = await supabaseAdmin
