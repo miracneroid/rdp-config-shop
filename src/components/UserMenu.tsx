@@ -135,8 +135,24 @@ const UserMenu = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
-      if (user) {
-        await supabase
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+      
+      // Check if profile exists before updating
+      const { data: existingProfile, error: profileCheckError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', user.id)
+        .maybeSingle();
+        
+      if (profileCheckError) {
+        console.error("Error checking profile:", profileCheckError);
+      }
+      
+      if (existingProfile) {
+        // Profile exists, update it
+        const { error: updateError } = await supabase
           .from('profiles')
           .update({ 
             avatar_url: avatarUrl,
@@ -144,21 +160,36 @@ const UserMenu = () => {
             updated_at: new Date().toISOString()
           })
           .eq('id', user.id);
-        
-        setUserProfile({
-          ...userProfile,
-          avatar_url: avatarUrl,
-          avatar_character: character
-        });
-        
-        toast({
-          title: "Avatar updated",
-          description: "Your profile picture has been updated."
-        });
-        
-        setAvatarDialogOpen(false);
+          
+        if (updateError) throw updateError;
+      } else {
+        // Profile doesn't exist, insert it
+        const { error: insertError } = await supabase
+          .from('profiles')
+          .insert({
+            id: user.id,
+            avatar_url: avatarUrl,
+            avatar_character: character,
+            updated_at: new Date().toISOString()
+          });
+          
+        if (insertError) throw insertError;
       }
+      
+      setUserProfile({
+        ...userProfile,
+        avatar_url: avatarUrl,
+        avatar_character: character
+      });
+      
+      toast({
+        title: "Avatar updated",
+        description: "Your profile picture has been updated."
+      });
+      
+      setAvatarDialogOpen(false);
     } catch (error: any) {
+      console.error("Error updating avatar:", error);
       toast({
         title: "Error updating avatar",
         description: error.message,

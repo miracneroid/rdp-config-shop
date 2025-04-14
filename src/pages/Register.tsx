@@ -96,17 +96,21 @@ const Register = () => {
         const firstName = nameParts[0];
         const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
         
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .upsert({
-            id: authData.user.id,
-            first_name: firstName,
-            last_name: lastName,
-            display_name: values.name,
-          });
+        try {
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert({
+              id: authData.user.id,
+              first_name: firstName,
+              last_name: lastName,
+              display_name: values.name,
+            });
 
-        if (profileError) {
-          console.error('Error creating profile:', profileError);
+          if (profileError) {
+            console.error('Error creating profile:', profileError);
+          }
+        } catch (profileErr) {
+          console.error('Error in profile creation:', profileErr);
         }
       }
 

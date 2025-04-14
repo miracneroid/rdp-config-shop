@@ -229,8 +229,15 @@ const UserProfile = () => {
     setUploading(true);
     
     try {
+      // Get current user before proceeding
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+      
       // Upload the file to Supabase Storage
-      const { error: uploadError } = await supabase.storage
+      const { error: uploadError, data: uploadData } = await supabase.storage
         .from('avatars')
         .upload(filePath, file);
         
@@ -241,11 +248,21 @@ const UserProfile = () => {
         .from('avatars')
         .getPublicUrl(filePath);
         
-      // Update the profile with the new avatar URL
-      const { data: { user } } = await supabase.auth.getUser();
+      // Check if profile exists before updating
+      const { data: existingProfile, error: profileCheckError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', user.id)
+        .maybeSingle();
+        
+      if (profileCheckError) {
+        console.error("Error checking profile:", profileCheckError);
+      }
       
-      if (user) {
-        await supabase
+      // Update the profile with the new avatar URL
+      if (existingProfile) {
+        // Profile exists, update it
+        const { error: updateError } = await supabase
           .from('profiles')
           .update({
             avatar_url: data.publicUrl,
@@ -254,23 +271,38 @@ const UserProfile = () => {
           })
           .eq('id', user.id);
           
-        // Update local state
-        if (profile) {
-          setProfile({
-            ...profile,
+        if (updateError) throw updateError;
+      } else {
+        // Profile doesn't exist, insert it
+        const { error: insertError } = await supabase
+          .from('profiles')
+          .insert({
+            id: user.id,
             avatar_url: data.publicUrl,
-            avatar_character: null
+            avatar_character: null,
+            updated_at: new Date().toISOString()
           });
-        }
-        
-        toast({
-          title: "Avatar updated",
-          description: "Your profile picture has been uploaded successfully."
+          
+        if (insertError) throw insertError;
+      }
+      
+      // Update local state
+      if (profile) {
+        setProfile({
+          ...profile,
+          avatar_url: data.publicUrl,
+          avatar_character: null
         });
       }
       
+      toast({
+        title: "Avatar updated",
+        description: "Your profile picture has been uploaded successfully."
+      });
+      
       setUploadDialogOpen(false);
     } catch (error: any) {
+      console.error("Error uploading image:", error);
       toast({
         title: "Error uploading image",
         description: error.message,
