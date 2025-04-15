@@ -237,14 +237,35 @@ const Index = () => {
               
               <div className="md:w-1/2">
                 <div className="relative">
-                  <div className="w-full h-64 md:h-80 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse">
-                    {/* This would be replaced with an actual image or animation */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-gray-500 dark:text-gray-400">Setup Animation</span>
+                  <div className="w-full h-64 md:h-80 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+                    <div className="absolute inset-0">
+                      <div className="animate-pulse space-y-4 p-6">
+                        <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                        <div className="space-y-3">
+                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+                          <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/6"></div>
+                        </div>
+                      </div>
+
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="space-y-4 text-center">
+                          <div className="flex items-center justify-center">
+                            <div className="w-8 h-8 border-4 border-rdp-blue border-t-transparent rounded-full animate-spin"></div>
+                          </div>
+                          <div className="text-sm font-medium text-gray-600 dark:text-gray-400 animate-pulse">
+                            Setting up your RDP...
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700">
+                        <div className="h-full bg-rdp-blue animate-[progressBar_5s_ease-in-out_infinite]"></div>
+                      </div>
                     </div>
                   </div>
                   
-                  <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg">
+                  <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg animate-bounce">
                     <div className="flex items-center">
                       <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
                       <span className="text-sm font-semibold text-gray-800 dark:text-white">Ready to use</span>
