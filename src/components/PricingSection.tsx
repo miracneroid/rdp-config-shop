@@ -160,7 +160,7 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
                       className={`w-full transform transition-all duration-300 hover:scale-105 
                         group-hover:bg-rdp-blue group-hover:text-white
                         ${plan.popular 
-                          ? "bg-rdp-blue hover:bg-rdp-blue-light text-white" 
+                          ? "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-rdp-dark dark:text-white hover:bg-rdp-blue hover:border-transparent hover:text-white" 
                           : "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-rdp-dark dark:text-white hover:bg-rdp-blue hover:border-transparent hover:text-white dark:hover:bg-rdp-blue"
                         }`}
                     >
