@@ -1,15 +1,19 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Features from "@/components/Features";
-import PricingCard, { PricingPlan } from "@/components/PricingCard";
+import ServiceOfferings from "@/components/ServiceOfferings";
+import PricingSection from "@/components/PricingSection";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Shield, Cpu, Zap, Server, Globe, Clock } from "lucide-react";
 
 // Default pricing plans as fallback
-const defaultPricingPlans: PricingPlan[] = [
+const defaultPricingPlans = [
   {
     name: "Basic",
     price: 29,
@@ -72,7 +76,7 @@ const defaultPricingPlans: PricingPlan[] = [
 ];
 
 const Index = () => {
-  const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>(defaultPricingPlans);
+  const [pricingPlans, setPricingPlans] = useState(defaultPricingPlans);
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -93,28 +97,164 @@ const Index = () => {
       <Navbar />
       <main className="w-full bg-transparent">
         <Hero />
-        <Features />
         
-        {/* Pricing Section */}
-        <div className="py-16 sm:py-24 w-full bg-white dark:bg-gray-900">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="sm:text-center">
-              <h2 className="text-base font-semibold uppercase tracking-wide text-rdp-blue">Pricing</h2>
-              <p className="mt-2 text-3xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-4xl">
-                Choose your RDP plan
-              </p>
-              <p className="mx-auto mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-300">
-                Select from our pre-configured plans or customize your own.
+        {/* Why Choose Us Section */}
+        <section className="py-16 bg-white dark:bg-gray-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Why Choose Us</Badge>
+              <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">The most powerful RDP solution</h2>
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Our Remote Desktop Protocol solutions are designed for performance, security, and reliability.
               </p>
             </div>
             
-            <div className="mt-12 grid gap-8 lg:grid-cols-4 md:grid-cols-2">
-              {pricingPlans.map((plan) => (
-                <PricingCard key={plan.name} plan={plan} />
-              ))}
+            <div className="grid md:grid-cols-3 gap-8 mt-12">
+              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-lg mb-4">
+                  <Zap className="h-6 w-6 text-rdp-blue" />
+                </div>
+                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">Lightning Fast</h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Our servers are optimized for speed with the latest hardware and network infrastructure.
+                </p>
+              </div>
+              
+              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 flex items-center justify-center rounded-lg mb-4">
+                  <Shield className="h-6 w-6 text-green-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">Ultra Secure</h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Enterprise-grade security protocols and encryption to keep your data safe.
+                </p>
+              </div>
+              
+              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center rounded-lg mb-4">
+                  <Server className="h-6 w-6 text-purple-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">99.9% Uptime</h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Reliable infrastructure with redundant systems and automatic failover.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mt-12 text-center">
+              <Link to="/configure">
+                <Button size="lg" className="bg-rdp-blue hover:bg-rdp-blue-light">
+                  Get Started
+                </Button>
+              </Link>
             </div>
           </div>
-        </div>
+        </section>
+        
+        <ServiceOfferings />
+        
+        <PricingSection plans={pricingPlans} />
+        
+        {/* Global Network Section */}
+        <section className="py-16 bg-gray-50 dark:bg-gray-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Global Infrastructure</Badge>
+              <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">Choose from data centers around the world</h2>
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Deploy your RDP in any of our strategic locations for optimal performance and compliance.
+              </p>
+            </div>
+            
+            <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4">
+                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-full mx-auto mb-3">
+                  <Globe className="h-8 w-8 text-rdp-blue" />
+                </div>
+                <h3 className="font-semibold text-rdp-dark dark:text-white">North America</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">US, Canada</p>
+              </div>
+              
+              <div className="text-center p-4">
+                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-full mx-auto mb-3">
+                  <Globe className="h-8 w-8 text-rdp-blue" />
+                </div>
+                <h3 className="font-semibold text-rdp-dark dark:text-white">Europe</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Germany, UK, France</p>
+              </div>
+              
+              <div className="text-center p-4">
+                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-full mx-auto mb-3">
+                  <Globe className="h-8 w-8 text-rdp-blue" />
+                </div>
+                <h3 className="font-semibold text-rdp-dark dark:text-white">Asia Pacific</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Singapore, Japan, India</p>
+              </div>
+              
+              <div className="text-center p-4">
+                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-full mx-auto mb-3">
+                  <Globe className="h-8 w-8 text-rdp-blue" />
+                </div>
+                <h3 className="font-semibold text-rdp-dark dark:text-white">Australia</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Sydney, Melbourne</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Setup Time Section */}
+        <section className="py-16 bg-white dark:bg-gray-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row items-center md:space-x-12">
+              <div className="md:w-1/2 mb-8 md:mb-0">
+                <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Fast Setup</Badge>
+                <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">Ready in minutes, not hours</h2>
+                <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+                  Our automated provisioning system gets your RDP environment up and running in just minutes after payment. 
+                  No waiting for manual setup or approval.
+                </p>
+                
+                <div className="mt-8 flex items-center space-x-6">
+                  <div className="flex items-center">
+                    <Clock className="h-5 w-5 text-rdp-blue mr-2" />
+                    <span className="text-gray-700 dark:text-gray-300">5-10 minute setup</span>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <Cpu className="h-5 w-5 text-rdp-blue mr-2" />
+                    <span className="text-gray-700 dark:text-gray-300">Instant scaling</span>
+                  </div>
+                </div>
+                
+                <div className="mt-8">
+                  <Link to="/configure">
+                    <Button size="lg" className="bg-rdp-blue hover:bg-rdp-blue-light">
+                      Configure Your RDP
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              
+              <div className="md:w-1/2">
+                <div className="relative">
+                  <div className="w-full h-64 md:h-80 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse">
+                    {/* This would be replaced with an actual image or animation */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-gray-500 dark:text-gray-400">Setup Animation</span>
+                    </div>
+                  </div>
+                  
+                  <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg">
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                      <span className="text-sm font-semibold text-gray-800 dark:text-white">Ready to use</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
         
         <FAQ />
       </main>
