@@ -68,7 +68,7 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
               className={`relative bg-white dark:bg-gray-800 rounded-xl border transform transition-all duration-300 
                 hover:scale-105 hover:shadow-2xl hover:border-rdp-blue dark:hover:border-rdp-blue
                 ${plan.popular 
-                  ? "shadow-lg" 
+                  ? "shadow-lg border-rdp-blue" 
                   : "border-gray-200 dark:border-gray-700 shadow-sm"
                 } hover:shadow-xl transition-all overflow-hidden`}
             >
@@ -158,11 +158,9 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
                   <Link to="/configure" className="w-full block">
                     <Button 
                       className={`w-full transform transition-all duration-300 hover:scale-105 
-                        group-hover:bg-rdp-blue group-hover:text-white
-                        ${plan.popular 
-                          ? "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-rdp-dark dark:text-white hover:bg-rdp-blue hover:border-transparent hover:text-white" 
-                          : "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-rdp-dark dark:text-white hover:bg-rdp-blue hover:border-transparent hover:text-white dark:hover:bg-rdp-blue"
-                        }`}
+                        bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 
+                        text-rdp-dark dark:text-white hover:bg-rdp-blue hover:border-transparent 
+                        hover:text-white dark:hover:bg-rdp-blue`}
                     >
                       {plan.popular ? "Get Started" : "Choose Plan"}
                     </Button>
