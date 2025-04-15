@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
@@ -16,6 +15,8 @@ import TestManagement from './pages/TestManagement';
 import FAQ from './pages/FAQ';
 import NotFound from './pages/NotFound';
 import UserDashboard from './pages/UserDashboard';
+import Pricing from './pages/Pricing';
+import Documentation from './pages/Documentation';
 
 import { Toaster } from './components/ui/toaster';
 import { CartProvider } from './context/CartContext';
@@ -40,6 +41,8 @@ function App() {
             <Route path="/admin/users" element={<TestManagement />} />
             <Route path="/dashboard" element={<UserDashboard />} />
             <Route path="/faq" element={<FAQ />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/docs" element={<Documentation />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
