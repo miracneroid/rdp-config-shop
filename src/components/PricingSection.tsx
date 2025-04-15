@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -66,11 +65,12 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
           {plans.map((plan, index) => (
             <div 
               key={index}
-              className={`relative bg-white dark:bg-gray-800 rounded-xl border transform transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
-                plan.popular 
-                  ? "border-rdp-blue shadow-lg dark:border-rdp-blue" 
+              className={`relative bg-white dark:bg-gray-800 rounded-xl border transform transition-all duration-300 
+                hover:scale-105 hover:shadow-2xl hover:border-rdp-blue dark:hover:border-rdp-blue
+                ${plan.popular 
+                  ? "shadow-lg" 
                   : "border-gray-200 dark:border-gray-700 shadow-sm"
-              } hover:shadow-xl transition-all overflow-hidden`}
+                } hover:shadow-xl transition-all overflow-hidden`}
             >
               {plan.popular && (
                 <div className="absolute top-0 right-0 bg-rdp-blue text-white py-1 px-4 text-sm font-medium rounded-bl-lg">
@@ -157,11 +157,12 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
                 <div className="mt-8">
                   <Link to="/configure" className="w-full block">
                     <Button 
-                      className={`w-full transform transition-all duration-300 hover:scale-105 ${
-                        plan.popular 
+                      className={`w-full transform transition-all duration-300 hover:scale-105 
+                        group-hover:bg-rdp-blue group-hover:text-white
+                        ${plan.popular 
                           ? "bg-rdp-blue hover:bg-rdp-blue-light text-white" 
-                          : "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-rdp-dark dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
-                      }`}
+                          : "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-rdp-dark dark:text-white hover:bg-rdp-blue hover:border-transparent hover:text-white dark:hover:bg-rdp-blue"
+                        }`}
                     >
                       {plan.popular ? "Get Started" : "Choose Plan"}
                     </Button>
@@ -193,4 +194,3 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
 };
 
 export default PricingSection;
-
