@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import PricingSection from "@/components/PricingSection";
 import Footer from "@/components/Footer";
@@ -68,16 +67,16 @@ const defaultPricingPlans = [
 
 const PricingPage = () => {
   return (
-    <div className="min-h-screen flex flex-col dark:bg-rdp-dark w-full">
+    <div className="min-h-screen flex flex-col dark:bg-rdp-dark">
       <Navbar />
-      <div className="bg-white dark:bg-rdp-dark py-16 flex-grow w-full">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+      <div className="bg-white dark:bg-rdp-dark py-16 flex-grow">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
             <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Pricing</Badge>
-            <h1 className="text-3xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-4xl">
+            <h1 className="text-4xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-5xl lg:text-6xl">
               Simple, transparent pricing for everyone
             </h1>
-            <p className="mt-4 text-xl text-gray-500 dark:text-gray-400">
+            <p className="mt-6 text-xl text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
               Choose the plan that works best for you. All plans include 24/7 support and a 99.9% uptime guarantee.
             </p>
           </div>
@@ -91,4 +90,3 @@ const PricingPage = () => {
 };
 
 export default PricingPage;
-
