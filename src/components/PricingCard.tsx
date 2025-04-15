@@ -1,6 +1,6 @@
 
 import { CheckCircle } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
 import { useSettings } from '@/context/SettingsContext';
 
@@ -51,12 +51,16 @@ const PricingCard = ({ plan }: PricingCardProps) => {
   };
   
   return (
-    <div className={`rdp-card p-6 flex flex-col ${plan.popular ? 'border-rdp-blue ring-2 ring-rdp-blue' : ''}`}>
+    <div 
+      className={`rdp-card p-6 flex flex-col transition-all duration-300 hover:border-rdp-blue hover:shadow-lg relative
+        ${plan.popular ? 'border-rdp-blue ring-2 ring-rdp-blue' : 'border-gray-200 dark:border-gray-700'}`}
+    >
       {plan.popular && (
         <div className="absolute top-0 right-0 bg-rdp-blue text-white py-1 px-4 text-sm font-medium rounded-bl-lg rounded-tr-lg">
           Most Popular
         </div>
       )}
+      
       <h3 className="text-xl font-bold text-rdp-dark dark:text-white">{plan.name}</h3>
       <div className="mt-4 flex items-baseline">
         <span className="text-4xl font-bold text-rdp-dark dark:text-white">{settings.currency.symbol}{plan.price}</span>
@@ -91,7 +95,10 @@ const PricingCard = ({ plan }: PricingCardProps) => {
       
       <button 
         onClick={handleChoosePlan}
-        className={`mt-8 ${plan.popular ? 'rdp-btn-primary' : 'rdp-btn-secondary'} w-full justify-center`}
+        className={`mt-8 w-full py-3 px-6 rounded-lg font-medium transition-all duration-300
+          ${plan.popular 
+            ? 'bg-rdp-blue text-white hover:bg-rdp-blue-light' 
+            : 'bg-white dark:bg-gray-800 text-rdp-dark dark:text-white border border-gray-200 dark:border-gray-700 hover:bg-rdp-blue hover:text-white hover:border-transparent'}`}
       >
         Choose Plan
       </button>
