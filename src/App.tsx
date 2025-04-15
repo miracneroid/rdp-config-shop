@@ -17,6 +17,8 @@ import NotFound from './pages/NotFound';
 import UserDashboard from './pages/UserDashboard';
 import Pricing from './pages/Pricing';
 import Documentation from './pages/Documentation';
+import Help from './pages/Help';
+import Contact from './pages/Contact';
 
 import { Toaster } from './components/ui/toaster';
 import { CartProvider } from './context/CartContext';
@@ -43,6 +45,8 @@ function App() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/docs" element={<Documentation />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />

@@ -17,13 +17,11 @@ const Navbar = () => {
   const totalItems = getTotalItems();
   
   useEffect(() => {
-    // Check if user is logged in on component mount
     const checkAuth = async () => {
       setIsLoading(true);
       const { data: { session } } = await supabase.auth.getSession();
       setIsLoggedIn(!!session);
       
-      // Check if user is admin
       if (session) {
         const { data: userData } = await supabase.auth.getUser();
         const email = userData?.user?.email;
@@ -35,11 +33,9 @@ const Navbar = () => {
 
     checkAuth();
 
-    // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setIsLoggedIn(!!session);
       
-      // Check if user is admin
       if (session) {
         const email = session.user?.email;
         setIsAdmin(email === 'admin@example.com');
@@ -75,20 +71,12 @@ const Navbar = () => {
             <Link to="/pricing" className="text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light transition-colors">
               Pricing
             </Link>
-            <Link to="/docs" className="text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light transition-colors">
-              Documentation
+            <Link to="/help" className="text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light transition-colors">
+              Help
             </Link>
-            <Link to="/configure" className="text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light transition-colors">
-              Configure
+            <Link to="/contact" className="text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light transition-colors">
+              Contact
             </Link>
-            <Link to="/faq" className="text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light transition-colors">
-              FAQ
-            </Link>
-            {isAdmin && (
-              <Link to="/admin" className="text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light transition-colors">
-                Admin
-              </Link>
-            )}
             <ThemeToggle />
             <Link to="/cart" className="relative">
               <Button variant="outline" size="icon" className="border-gray-300 dark:border-gray-700 dark:bg-gray-800">
@@ -159,7 +147,6 @@ const Navbar = () => {
         </div>
       </div>
       
-      {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-white dark:bg-rdp-dark shadow-lg">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -178,51 +165,19 @@ const Navbar = () => {
               Pricing
             </Link>
             <Link 
-              to="/docs" 
+              to="/help" 
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
               onClick={() => setIsMenuOpen(false)}
             >
-              Documentation
+              Help
             </Link>
             <Link 
-              to="/configure" 
+              to="/contact" 
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
               onClick={() => setIsMenuOpen(false)}
             >
-              Configure
+              Contact
             </Link>
-            <Link 
-              to="/about" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About
-            </Link>
-            <Link 
-              to="/faq" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              FAQ
-            </Link>
-            {isLoggedIn && (
-              <Link 
-                to="/dashboard" 
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Dashboard
-              </Link>
-            )}
-            {isAdmin && (
-              <Link 
-                to="/admin" 
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-gray-50 dark:hover:bg-gray-800"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Admin
-              </Link>
-            )}
           </div>
         </div>
       )}
