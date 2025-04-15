@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -93,17 +92,12 @@ const Login = () => {
     try {
       setGoogleLoading(true);
       
-      // Get the current site URL for the redirect
-      const siteUrl = window.location.origin;
-      console.log("Site URL for redirect:", siteUrl);
-      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${siteUrl}/dashboard`,
+          redirectTo: `${window.location.origin}/dashboard`,
           queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
+            prompt: 'select_account',
           }
         },
       });
