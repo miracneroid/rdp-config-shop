@@ -136,13 +136,14 @@ const Register = () => {
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
     try {
-      // Get the current domain for the redirect URL
-      const currentDomain = window.location.origin;
+      // Get the current site URL for the redirect
+      const siteUrl = window.location.origin;
+      console.log("Site URL for redirect:", siteUrl);
       
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${currentDomain}/dashboard`,
+          redirectTo: `${siteUrl}/dashboard`,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',

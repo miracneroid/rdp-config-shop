@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -54,16 +55,23 @@ const UserMenu = () => {
           let avatarUrl = null;
           let avatarCharacter = null;
           
-          const { provider_id, user_metadata } = user.app_metadata || {};
-          if (provider_id === 'google' && user_metadata) {
-            if (user_metadata.avatar_url) {
-              avatarUrl = user_metadata.avatar_url;
-            }
-            if (user_metadata.full_name) {
-              displayName = user_metadata.full_name;
+          // Check for Google provider metadata
+          const { app_metadata } = user;
+          if (app_metadata && app_metadata.provider === 'google') {
+            const { user_metadata } = user;
+            if (user_metadata) {
+              if (user_metadata.avatar_url) {
+                avatarUrl = user_metadata.avatar_url;
+              }
+              if (user_metadata.full_name) {
+                displayName = user_metadata.full_name;
+              } else if (user_metadata.name) {
+                displayName = user_metadata.name;
+              }
             }
           }
           
+          // Get profile data from our profiles table
           const { data: profileData } = await supabase
             .from('profiles')
             .select('*')
@@ -87,7 +95,10 @@ const UserMenu = () => {
           });
           
           // If user signed up with Google and doesn't have a profile yet, create one with Google data
-          if ((provider_id === 'google' && !profileData) || (provider_id === 'google' && profileData && !profileData.avatar_url && avatarUrl)) {
+          if ((app_metadata?.provider === 'google' && !profileData) || 
+              (app_metadata?.provider === 'google' && profileData && !profileData.avatar_url && avatarUrl)) {
+            
+            const { user_metadata } = user;
             const firstName = user_metadata?.given_name || displayName.split(' ')[0] || '';
             const lastName = user_metadata?.family_name || (displayName.split(' ').length > 1 ? displayName.split(' ').slice(1).join(' ') : '');
             
