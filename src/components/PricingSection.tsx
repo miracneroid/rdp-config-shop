@@ -1,10 +1,11 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useSettings } from "@/context/SettingsContext";
 import PricingCard from "@/components/PricingCard";
-import { CheckCircle, XCircle, HelpCircle } from "lucide-react";
+import { CheckCircle, XCircle, HelpCircle, ChevronUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface PricingPlan {
   name: string;
@@ -20,8 +21,46 @@ interface PricingSectionProps {
   plans: PricingPlan[];
 }
 
+interface StatsData {
+  deployedServers: number;
+  ticketReplies: number;
+}
+
 const PricingSection = ({ plans }: PricingSectionProps) => {
   const { settings } = useSettings();
+  const [stats, setStats] = useState<StatsData>({
+    deployedServers: 146402,
+    ticketReplies: 130414
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const { count: serversCount, error: serversError } = await supabase
+          .from('rdp_instances')
+          .select('*', { count: 'exact', head: true });
+        
+        const { count: repliesCount, error: repliesError } = await supabase
+          .from('ticket_responses')
+          .select('*', { count: 'exact', head: true });
+        
+        if (!serversError && !repliesError && serversCount !== null && repliesCount !== null) {
+          setStats({
+            deployedServers: serversCount + 146402,
+            ticketReplies: repliesCount + 130414
+          });
+        }
+        
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   const featureComparison = [
     {
@@ -53,7 +92,6 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
     }
   ];
 
-  // Plan-specific values for each feature
   const planValues = {
     "Basic": {
       "CPU Performance": { value: "Good", status: "check" },
@@ -128,6 +166,37 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
 
   return (
     <section className="py-16 bg-white dark:bg-gray-900 w-full">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 rounded-xl overflow-hidden">
+          <div className="py-12 px-8 flex flex-col md:flex-row items-center justify-around text-center md:text-left">
+            <div className="mb-8 md:mb-0">
+              <h2 className="text-4xl font-bold text-rdp-dark dark:text-white">100%</h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400">Satisfaction Guarantee</p>
+            </div>
+            <div className="mb-8 md:mb-0">
+              <h2 className="text-4xl font-bold text-rdp-dark dark:text-white animate-count">
+                {loading ? (
+                  <span className="inline-block w-28 h-10 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></span>
+                ) : (
+                  new Intl.NumberFormat().format(stats.deployedServers)
+                )}
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400">Deployed Servers</p>
+            </div>
+            <div>
+              <h2 className="text-4xl font-bold text-rdp-dark dark:text-white animate-count">
+                {loading ? (
+                  <span className="inline-block w-28 h-10 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></span>
+                ) : (
+                  new Intl.NumberFormat().format(stats.ticketReplies)
+                )}
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400">Ticket Replies</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
           {plans.map((plan, index) => (
@@ -135,7 +204,6 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
           ))}
         </div>
         
-        {/* Icing section - Feature comparison table */}
         <div className="mt-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-rdp-dark dark:text-white mb-6">Compare Plans in Detail</h2>
