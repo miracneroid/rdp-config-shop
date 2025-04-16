@@ -52,8 +52,9 @@ const PricingCard = ({ plan }: PricingCardProps) => {
   
   return (
     <div 
-      className={`rdp-card p-6 flex flex-col transition-all duration-300 hover:border-rdp-blue hover:shadow-lg relative
-        ${plan.popular ? 'border-rdp-blue ring-2 ring-rdp-blue' : 'border-gray-200 dark:border-gray-700'}`}
+      className={`rdp-card p-6 flex flex-col transition-all duration-300 
+        hover:border-rdp-blue hover:ring-2 hover:ring-rdp-blue/50 hover:shadow-lg relative
+        ${plan.popular ? 'border-gray-200 dark:border-gray-700' : 'border-gray-200 dark:border-gray-700'}`}
     >
       {plan.popular && (
         <div className="absolute top-0 right-0 bg-rdp-blue text-white py-1 px-4 text-sm font-medium rounded-bl-lg rounded-tr-lg">
