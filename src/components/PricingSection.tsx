@@ -1,10 +1,10 @@
+import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useSettings } from "@/context/SettingsContext";
 import PricingCard from "@/components/PricingCard";
 import { CheckCircle, XCircle, HelpCircle, ChevronUp } from "lucide-react";
-import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export interface PricingPlan {
