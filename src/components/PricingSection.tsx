@@ -1,11 +1,16 @@
+
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useSettings } from "@/context/SettingsContext";
 import PricingCard from "@/components/PricingCard";
-import { CheckCircle, XCircle, HelpCircle, ChevronUp } from "lucide-react";
+import { CheckCircle, XCircle, HelpCircle, ChevronUp, ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export interface PricingPlan {
   name: string;
@@ -33,7 +38,13 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
     ticketReplies: 130414
   });
   const [loading, setLoading] = useState(true);
-
+  const [selectedPlan, setSelectedPlan] = useState<string>(plans.find(p => p.popular)?.name || plans[0].name);
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({
+    'Performance': true,
+    'Features': false,
+    'Support': false,
+  });
+  
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -62,35 +73,33 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
     fetchStats();
   }, []);
 
-  const featureComparison = [
-    {
-      category: "Performance",
-      features: [
-        { name: "CPU Performance", tooltip: "Higher is better" },
-        { name: "SLA Uptime", tooltip: "Guaranteed server uptime" },
-        { name: "Storage Type", tooltip: "Type of storage used" },
-        { name: "Network Speed", tooltip: "Maximum network throughput" }
-      ]
-    },
-    {
-      category: "Features",
-      features: [
-        { name: "Automated Backups", tooltip: "Regular system backups" },
-        { name: "Multiple OS Options", tooltip: "Choice of operating systems" },
-        { name: "Root Access", tooltip: "Full administrator access" },
-        { name: "Dedicated Resources", tooltip: "Non-shared CPU & RAM" }
-      ]
-    },
-    {
-      category: "Support",
-      features: [
-        { name: "24/7 Technical Support", tooltip: "Round-the-clock assistance" },
-        { name: "Response Time", tooltip: "Average time to first response" },
-        { name: "Managed Services", tooltip: "We handle maintenance & updates" },
-        { name: "Priority Support Queue", tooltip: "Jump ahead in support queue" }
-      ]
-    }
-  ];
+  const toggleCategory = (category: string) => {
+    setOpenCategories(prev => ({
+      ...prev,
+      [category]: !prev[category]
+    }));
+  };
+
+  const featureCategories = {
+    "Performance": [
+      { name: "CPU Performance", tooltip: "Higher is better" },
+      { name: "SLA Uptime", tooltip: "Guaranteed server uptime" },
+      { name: "Storage Type", tooltip: "Type of storage used" },
+      { name: "Network Speed", tooltip: "Maximum network throughput" }
+    ],
+    "Features": [
+      { name: "Automated Backups", tooltip: "Regular system backups" },
+      { name: "Multiple OS Options", tooltip: "Choice of operating systems" },
+      { name: "Root Access", tooltip: "Full administrator access" },
+      { name: "Dedicated Resources", tooltip: "Non-shared CPU & RAM" }
+    ],
+    "Support": [
+      { name: "24/7 Technical Support", tooltip: "Round-the-clock assistance" },
+      { name: "Response Time", tooltip: "Average time to first response" },
+      { name: "Managed Services", tooltip: "We handle maintenance & updates" },
+      { name: "Priority Support Queue", tooltip: "Jump ahead in support queue" }
+    ]
+  };
 
   const planValues = {
     "Basic": {
@@ -200,75 +209,131 @@ const PricingSection = ({ plans }: PricingSectionProps) => {
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
           {plans.map((plan, index) => (
-            <PricingCard key={index} plan={plan} />
+            <div 
+              key={index} 
+              onClick={() => setSelectedPlan(plan.name)}
+              className={`cursor-pointer transition-all duration-300 transform ${selectedPlan === plan.name ? 'scale-105' : 'hover:scale-102'}`}
+            >
+              <PricingCard plan={plan} isSelected={selectedPlan === plan.name} />
+            </div>
           ))}
         </div>
         
-        <div className="mt-20">
+        <div className="mt-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-rdp-dark dark:text-white mb-6">Compare Plans in Detail</h2>
+            <h2 className="text-3xl font-bold text-rdp-dark dark:text-white mb-6">Plan Details</h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              See how our plans stack up against each other with this detailed feature comparison.
+              See what's included in your selected plan
             </p>
           </div>
           
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                  <th className="p-4 text-left font-semibold text-gray-700 dark:text-gray-300 w-1/5"></th>
-                  {plans.map((plan, index) => (
-                    <th key={index} className="p-4 text-center font-semibold text-rdp-dark dark:text-white">
-                      <div className={`text-xl ${plan.popular ? 'text-rdp-blue' : ''}`}>{plan.name}</div>
-                      <div className="text-xl font-bold mt-1">
-                        {settings.currency.symbol}{plan.price}<span className="text-sm font-normal text-gray-500 dark:text-gray-400">/mo</span>
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              
-              <tbody>
-                {featureComparison.map((category, categoryIndex) => (
-                  <React.Fragment key={categoryIndex}>
-                    <tr className="bg-gray-100 dark:bg-gray-800/50">
-                      <td colSpan={plans.length + 1} className="p-4 font-semibold text-rdp-dark dark:text-white text-lg">
-                        {category.category}
-                      </td>
-                    </tr>
-                    
-                    {category.features.map((feature, featureIndex) => (
-                      <tr 
-                        key={featureIndex} 
-                        className={`border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors duration-150`}
-                      >
-                        <td className="p-4 text-left font-medium text-gray-700 dark:text-gray-300 group relative">
-                          {feature.name}
-                          {feature.tooltip && (
-                            <div className="absolute left-0 -bottom-10 z-10 w-64 p-2 bg-gray-800 text-white text-sm rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                              {feature.tooltip}
-                            </div>
-                          )}
-                        </td>
-                        
-                        {plans.map((plan, planIndex) => {
-                          const featureData = planValues[plan.name as keyof typeof planValues][feature.name as keyof typeof planValues["Basic"]];
-                          
-                          return (
-                            <td key={planIndex} className="p-4 text-center align-middle">
-                              <div className="flex flex-col items-center">
-                                <div className="mb-1">{renderIcon(featureData.status)}</div>
-                                <div className="text-sm text-gray-600 dark:text-gray-400">{featureData.value}</div>
-                              </div>
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
-                  </React.Fragment>
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 md:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
+            <Tabs value={selectedPlan} onValueChange={setSelectedPlan} className="w-full">
+              <TabsList className="w-full flex justify-center mb-6 bg-transparent overflow-x-auto p-1 md:p-0 space-x-2">
+                {plans.map((plan, index) => (
+                  <TabsTrigger 
+                    key={index} 
+                    value={plan.name}
+                    className={`px-4 py-2 rounded-lg font-medium 
+                      ${plan.popular ? 'data-[state=active]:bg-rdp-blue data-[state=active]:text-white' : 
+                      'data-[state=active]:bg-gray-200 dark:data-[state=active]:bg-gray-700'}`}
+                  >
+                    {plan.name}
+                    {plan.popular && (
+                      <span className="ml-2 text-xs font-semibold bg-green-500 text-white px-2 py-0.5 rounded-full">Popular</span>
+                    )}
+                  </TabsTrigger>
                 ))}
-              </tbody>
-            </table>
+              </TabsList>
+              
+              {plans.map((plan, index) => (
+                <TabsContent key={index} value={plan.name} className="space-y-6">
+                  <div className="bg-white dark:bg-gray-800/50 rounded-lg p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                      <div>
+                        <h3 className="text-2xl font-bold text-rdp-dark dark:text-white">{plan.name} Plan</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mt-1">
+                          {settings.currency.symbol}{plan.price}/month
+                        </p>
+                      </div>
+                      
+                      <Link to="/configure" className="mt-4 md:mt-0">
+                        <Button className="bg-rdp-blue hover:bg-rdp-blue-light text-white">
+                          Choose {plan.name}
+                        </Button>
+                      </Link>
+                    </div>
+                    
+                    <div className="grid md:grid-cols-3 gap-4 mb-6">
+                      <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">CPU</p>
+                        <p className="text-lg font-semibold text-rdp-dark dark:text-white">{plan.cpu}</p>
+                      </div>
+                      <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">RAM</p>
+                        <p className="text-lg font-semibold text-rdp-dark dark:text-white">{plan.ram}</p>
+                      </div>
+                      <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Storage</p>
+                        <p className="text-lg font-semibold text-rdp-dark dark:text-white">{plan.storage}</p>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      {Object.entries(featureCategories).map(([category, features], i) => (
+                        <Collapsible
+                          key={category}
+                          open={openCategories[category]}
+                          onOpenChange={() => toggleCategory(category)}
+                          className="mb-4 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
+                        >
+                          <CollapsibleTrigger className="w-full flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800/80 text-left">
+                            <h4 className="text-lg font-semibold text-rdp-dark dark:text-white">{category}</h4>
+                            {openCategories[category] ? 
+                              <ChevronUp className="h-5 w-5 text-gray-500" /> : 
+                              <ChevronDown className="h-5 w-5 text-gray-500" />
+                            }
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <div className="p-4 space-y-3">
+                              {features.map((feature, j) => {
+                                const featureData = planValues[plan.name as keyof typeof planValues][feature.name as keyof typeof planValues["Basic"]];
+                                
+                                // Only show included features (check or partial)
+                                if (featureData.status === 'x') return null;
+                                
+                                return (
+                                  <div key={j} className="flex items-start space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg">
+                                    <div className="mt-0.5">
+                                      {renderIcon(featureData.status)}
+                                    </div>
+                                    <div>
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger asChild>
+                                            <p className="font-medium text-gray-800 dark:text-gray-200 cursor-help">
+                                              {feature.name}
+                                            </p>
+                                          </TooltipTrigger>
+                                          <TooltipContent side="right">
+                                            <p>{feature.tooltip}</p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
+                                      <p className="text-sm text-gray-600 dark:text-gray-400">{featureData.value}</p>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+              ))}
+            </Tabs>
           </div>
         </div>
         

@@ -16,9 +16,10 @@ export interface PricingPlan {
 
 interface PricingCardProps {
   plan: PricingPlan;
+  isSelected?: boolean;
 }
 
-const PricingCard = ({ plan }: PricingCardProps) => {
+const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { settings } = useSettings();
@@ -53,8 +54,9 @@ const PricingCard = ({ plan }: PricingCardProps) => {
   return (
     <div 
       className={`rdp-card p-6 flex flex-col transition-all duration-300 
-        hover:border-rdp-blue hover:ring-2 hover:ring-rdp-blue/50 hover:shadow-lg relative
-        ${plan.popular ? 'border-gray-200 dark:border-gray-700' : 'border-gray-200 dark:border-gray-700'}`}
+        ${isSelected ? 'border-rdp-blue ring-2 ring-rdp-blue/50 shadow-lg' : 
+        'hover:border-rdp-blue hover:ring-2 hover:ring-rdp-blue/50 hover:shadow-lg'}
+        ${plan.popular ? 'border-gray-200 dark:border-gray-700' : 'border-gray-200 dark:border-gray-700'} relative`}
     >
       {plan.popular && (
         <div className="absolute top-0 right-0 bg-rdp-blue text-white py-1 px-4 text-sm font-medium rounded-bl-lg rounded-tr-lg">
@@ -97,7 +99,7 @@ const PricingCard = ({ plan }: PricingCardProps) => {
       <button 
         onClick={handleChoosePlan}
         className={`mt-8 w-full py-3 px-6 rounded-lg font-medium transition-all duration-300
-          ${plan.popular 
+          ${plan.popular || isSelected
             ? 'bg-rdp-blue text-white hover:bg-rdp-blue-light' 
             : 'bg-white dark:bg-gray-800 text-rdp-dark dark:text-white border border-gray-200 dark:border-gray-700 hover:bg-rdp-blue hover:text-white hover:border-transparent'}`}
       >
