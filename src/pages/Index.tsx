@@ -137,49 +137,27 @@ const Index = () => {
         
         <ServiceOfferings />
         
-        {/* Global Network Section */}
-        <section className="py-16 bg-gray-50 dark:bg-gray-800">
+        {/* Pricing Section */}
+        <section className="py-16 bg-white dark:bg-gray-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Global Infrastructure</Badge>
-              <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">Choose from data centers around the world</h2>
+              <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Pricing</Badge>
+              <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">Choose the plan that fits your needs</h2>
               <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Deploy your RDP in any of our strategic locations for optimal performance and compliance.
+                Simple, transparent pricing for everyone. No hidden fees or surprise charges.
               </p>
             </div>
             
-            <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4">
-                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-full mx-auto mb-3">
-                  <Globe className="h-8 w-8 text-rdp-blue" />
+            <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
+              {defaultPricingPlans.map((plan, index) => (
+                <div 
+                  key={index} 
+                  onClick={() => setSelectedPlan(plan.name)}
+                  className={`cursor-pointer transition-all duration-300 transform ${selectedPlan === plan.name ? 'scale-105' : 'hover:scale-102'}`}
+                >
+                  <PricingCard plan={plan} isSelected={selectedPlan === plan.name} />
                 </div>
-                <h3 className="font-semibold text-rdp-dark dark:text-white">North America</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">US, Canada</p>
-              </div>
-              
-              <div className="text-center p-4">
-                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-full mx-auto mb-3">
-                  <Globe className="h-8 w-8 text-rdp-blue" />
-                </div>
-                <h3 className="font-semibold text-rdp-dark dark:text-white">Europe</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Germany, UK, France</p>
-              </div>
-              
-              <div className="text-center p-4">
-                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-full mx-auto mb-3">
-                  <Globe className="h-8 w-8 text-rdp-blue" />
-                </div>
-                <h3 className="font-semibold text-rdp-dark dark:text-white">Asia Pacific</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Singapore, Japan, India</p>
-              </div>
-              
-              <div className="text-center p-4">
-                <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-full mx-auto mb-3">
-                  <Globe className="h-8 w-8 text-rdp-blue" />
-                </div>
-                <h3 className="font-semibold text-rdp-dark dark:text-white">Australia</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Sydney, Melbourne</p>
-              </div>
+              ))}
             </div>
           </div>
         </section>
@@ -255,31 +233,6 @@ const Index = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-        
-        {/* Pricing Section */}
-        <section className="py-16 bg-white dark:bg-gray-900">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Pricing</Badge>
-              <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">Choose the plan that fits your needs</h2>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Simple, transparent pricing for everyone. No hidden fees or surprise charges.
-              </p>
-            </div>
-            
-            <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
-              {defaultPricingPlans.map((plan, index) => (
-                <div 
-                  key={index} 
-                  onClick={() => setSelectedPlan(plan.name)}
-                  className={`cursor-pointer transition-all duration-300 transform ${selectedPlan === plan.name ? 'scale-105' : 'hover:scale-102'}`}
-                >
-                  <PricingCard plan={plan} isSelected={selectedPlan === plan.name} />
-                </div>
-              ))}
             </div>
           </div>
         </section>
