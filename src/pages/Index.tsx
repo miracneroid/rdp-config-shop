@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
@@ -10,8 +9,73 @@ import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Shield, Cpu, Zap, Server, Globe, Clock } from "lucide-react";
+import PricingCard from "@/components/PricingCard";
+
+const defaultPricingPlans = [
+  {
+    name: "Basic",
+    price: 29,
+    cpu: "2 Cores",
+    ram: "4 GB",
+    storage: "64 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Basic Software Package",
+      "24/7 Access",
+      "Standard Support"
+    ]
+  },
+  {
+    name: "Standard",
+    price: 59,
+    cpu: "4 Cores",
+    ram: "8 GB",
+    storage: "128 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Basic Software Package",
+      "24/7 Access",
+      "Priority Support",
+      "Daily Backups"
+    ],
+    popular: true
+  },
+  {
+    name: "Premium",
+    price: 99,
+    cpu: "8 Cores",
+    ram: "16 GB",
+    storage: "256 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Professional Software Package",
+      "24/7 Access",
+      "Priority Support",
+      "Daily Backups",
+      "Enhanced Security"
+    ]
+  },
+  {
+    name: "Enterprise",
+    price: 199,
+    cpu: "16 Cores",
+    ram: "32 GB",
+    storage: "512 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Enterprise Software Package",
+      "24/7 Access",
+      "Priority Support",
+      "Hourly Backups",
+      "Advanced Security",
+      "Dedicated Resources"
+    ]
+  }
+];
 
 const Index = () => {
+  const [selectedPlan, setSelectedPlan] = useState<string>(defaultPricingPlans.find(p => p.popular)?.name || defaultPricingPlans[0].name);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-black w-full">
       <Navbar />
@@ -191,6 +255,39 @@ const Index = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Pricing Section */}
+        <section className="py-16 bg-white dark:bg-gray-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Pricing</Badge>
+              <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">Choose the plan that fits your needs</h2>
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Simple, transparent pricing for everyone. No hidden fees or surprise charges.
+              </p>
+            </div>
+            
+            <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
+              {defaultPricingPlans.map((plan, index) => (
+                <div 
+                  key={index} 
+                  onClick={() => setSelectedPlan(plan.name)}
+                  className={`cursor-pointer transition-all duration-300 transform ${selectedPlan === plan.name ? 'scale-105' : 'hover:scale-102'}`}
+                >
+                  <PricingCard plan={plan} isSelected={selectedPlan === plan.name} />
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-12 text-center">
+              <Link to="/pricing">
+                <Button size="lg" className="bg-rdp-blue hover:bg-rdp-blue-light">
+                  Compare All Plans
+                </Button>
+              </Link>
             </div>
           </div>
         </section>

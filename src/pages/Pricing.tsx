@@ -1,3 +1,4 @@
+
 import Navbar from "@/components/Navbar";
 import PricingSection from "@/components/PricingSection";
 import Footer from "@/components/Footer";
@@ -81,7 +82,7 @@ const PricingPage = () => {
             </p>
           </div>
           
-          <PricingSection plans={defaultPricingPlans} />
+          <PricingSection plans={defaultPricingPlans} showDetailedComparison={true} />
         </div>
       </div>
       <Footer />
