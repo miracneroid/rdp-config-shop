@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -280,14 +280,6 @@ const Index = () => {
                   <PricingCard plan={plan} isSelected={selectedPlan === plan.name} />
                 </div>
               ))}
-            </div>
-            
-            <div className="mt-12 text-center">
-              <Link to="/pricing">
-                <Button size="lg" className="bg-rdp-blue hover:bg-rdp-blue-light">
-                  Compare All Plans
-                </Button>
-              </Link>
             </div>
           </div>
         </section>
