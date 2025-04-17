@@ -5,93 +5,13 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ServiceOfferings from "@/components/ServiceOfferings";
-import PricingSection from "@/components/PricingSection";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Shield, Cpu, Zap, Server, Globe, Clock } from "lucide-react";
 
-// Default pricing plans as fallback
-const defaultPricingPlans = [
-  {
-    name: "Basic",
-    price: 29,
-    cpu: "2 Cores",
-    ram: "4 GB",
-    storage: "64 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Basic Software Package",
-      "24/7 Access",
-      "Standard Support"
-    ]
-  },
-  {
-    name: "Standard",
-    price: 59,
-    cpu: "4 Cores",
-    ram: "8 GB",
-    storage: "128 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Basic Software Package",
-      "24/7 Access",
-      "Priority Support",
-      "Daily Backups"
-    ],
-    popular: true
-  },
-  {
-    name: "Premium",
-    price: 99,
-    cpu: "8 Cores",
-    ram: "16 GB",
-    storage: "256 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Professional Software Package",
-      "24/7 Access",
-      "Priority Support",
-      "Daily Backups",
-      "Enhanced Security"
-    ]
-  },
-  {
-    name: "Enterprise",
-    price: 199,
-    cpu: "16 Cores",
-    ram: "32 GB",
-    storage: "512 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Enterprise Software Package",
-      "24/7 Access",
-      "Priority Support",
-      "Hourly Backups",
-      "Advanced Security",
-      "Dedicated Resources"
-    ]
-  }
-];
-
 const Index = () => {
-  const [pricingPlans, setPricingPlans] = useState(defaultPricingPlans);
-
-  useEffect(() => {
-    const fetchPlans = async () => {
-      try {
-        // Fetch plans from the database if available
-        // This is a placeholder - in a real implementation, you would have a table for plans
-        console.log("Connected to Supabase:", !!supabase);
-      } catch (error) {
-        console.error("Error fetching plans:", error);
-      }
-    };
-
-    fetchPlans();
-  }, []);
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-black w-full">
       <Navbar />
@@ -152,8 +72,6 @@ const Index = () => {
         </section>
         
         <ServiceOfferings />
-        
-        <PricingSection plans={pricingPlans} />
         
         {/* Global Network Section */}
         <section className="py-16 bg-gray-50 dark:bg-gray-800">
