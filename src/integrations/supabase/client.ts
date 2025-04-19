@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
@@ -34,4 +35,9 @@ export function asSupabaseUUID(id: string): string {
     return '00000000-0000-0000-0000-000000000000';
   }
   return id;
+}
+
+// Get the current site URL for OAuth redirects
+export function getSiteUrl() {
+  return window.location.origin;
 }

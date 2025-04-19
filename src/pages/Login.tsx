@@ -1,6 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, getSiteUrl } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -92,11 +93,15 @@ const Login = () => {
     try {
       setGoogleLoading(true);
       
+      const redirectURL = `${getSiteUrl()}/dashboard`;
+      console.log("Google login redirect URL:", redirectURL);
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: redirectURL,
           queryParams: {
+            access_type: 'offline',
             prompt: 'select_account',
           }
         },
