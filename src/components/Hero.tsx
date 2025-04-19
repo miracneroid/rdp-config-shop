@@ -1,4 +1,3 @@
-
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
@@ -34,8 +33,8 @@ const Hero = () => {
               with our easy-to-use configuration system.
             </p>
             <div className="mt-8 flex gap-4 sm:justify-center lg:justify-start">
-              <Link to="/configure" className="inline-flex items-center justify-center rounded-md border border-transparent bg-rdp-blue px-5 py-3 text-base font-medium text-white hover:bg-rdp-blue-light transition-colors">
-                <span>Configure Your RDP</span>
+              <Link to="/pricing" className="inline-flex items-center justify-center rounded-md border border-transparent bg-rdp-blue px-5 py-3 text-base font-medium text-white hover:bg-rdp-blue-light transition-colors">
+                <span>Get Started</span>
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
               <Link to="/faq" className="inline-flex items-center justify-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-5 py-3 text-base font-medium text-rdp-dark dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
