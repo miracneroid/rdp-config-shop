@@ -114,12 +114,12 @@ const EuropeVPS = () => {
             </p>
             <div className="mt-10 flex justify-center gap-4">
               <Link to="/configure">
-                <Button size="lg" className="bg-gradient-to-r from-rdp-blue to-rdp-purple rounded-xl px-8 py-6 hover:shadow-lg hover:shadow-indigo-500/20 transform hover:-translate-y-1 transition-all duration-300">
+                <Button size="lg" className="bg-gradient-to-r from-rdp-blue to-rdp-purple text-white rounded-xl px-8 py-6 hover:shadow-lg hover:shadow-indigo-500/20 transform hover:-translate-y-1 transition-all duration-300">
                   Configure Your VPS
                 </Button>
               </Link>
               <Link to="#eu-locations">
-                <Button variant="outline" size="lg" className="rounded-xl px-8 py-6 border-indigo-200 dark:border-indigo-800/40">
+                <Button variant="outline" size="lg" className="rounded-xl px-8 py-6 border-indigo-200 dark:border-indigo-600/40 text-gray-800 dark:text-white">
                   View EU Locations
                 </Button>
               </Link>
@@ -134,38 +134,38 @@ const EuropeVPS = () => {
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">EU Advantage</Badge>
             <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">Why choose a Europe-based VPS?</h2>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Our European virtual private servers offer unique advantages for businesses targeting EU markets and requiring GDPR compliance.
             </p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8 mt-12">
             <div className="neon-card p-6">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-lg mb-4">
-                <Zap className="h-6 w-6 text-blue-600" />
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center rounded-lg mb-4">
+                <Zap className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">GDPR Compliance</h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-600 dark:text-gray-300">
                 Fully compliant with EU data protection regulations and privacy laws.
               </p>
             </div>
             
             <div className="neon-card p-6">
-              <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center rounded-lg mb-4">
-                <Shield className="h-6 w-6 text-indigo-600" />
+              <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center rounded-lg mb-4">
+                <Shield className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
               </div>
               <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">EU Network</h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-600 dark:text-gray-300">
                 High-speed connectivity across European networks with minimal latency.
               </p>
             </div>
             
             <div className="neon-card p-6">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 flex items-center justify-center rounded-lg mb-4">
-                <Globe className="h-6 w-6 text-green-600" />
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/50 flex items-center justify-center rounded-lg mb-4">
+                <Globe className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
               <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">EU-Based IP Address</h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-600 dark:text-gray-300">
                 Access EU-specific content and services with genuine European IP addresses.
               </p>
             </div>
@@ -179,7 +179,7 @@ const EuropeVPS = () => {
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">European Coverage</Badge>
             <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">Strategic EU Datacenter Locations</h2>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Our VPS servers are hosted in premium datacenters across Europe, providing optimal coverage and redundancy.
             </p>
           </div>
@@ -188,13 +188,13 @@ const EuropeVPS = () => {
             {datacenterLocations.map((location, index) => (
               <div key={index} className="neon-card p-5 flex items-start">
                 <div className="mr-4 mt-1">
-                  <MapPin className="h-5 w-5 text-rdp-blue" />
+                  <MapPin className="h-5 w-5 text-rdp-blue dark:text-rdp-blue-light" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-rdp-dark dark:text-white">{location.city}, {location.country}</h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">{location.region}</p>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm">{location.region}</p>
                   <div className="mt-2 flex items-center">
-                    <span className="text-xs bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 px-2 py-1 rounded-full">
+                    <span className="text-xs bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 px-2 py-1 rounded-full">
                       {location.latency} Latency
                     </span>
                   </div>
@@ -211,7 +211,7 @@ const EuropeVPS = () => {
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Pricing</Badge>
             <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">EU VPS Pricing Plans</h2>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Transparent pricing with no hidden fees. All plans include GDPR compliance.
             </p>
           </div>
@@ -232,7 +232,7 @@ const EuropeVPS = () => {
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Features</Badge>
             <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">EU VPS Features</h2>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               All of our EU-based VPS plans include these premium features.
             </p>
           </div>
