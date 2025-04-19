@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { z } from "zod";
@@ -17,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, getSiteUrl } from "@/integrations/supabase/client";
 import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({
@@ -135,11 +136,15 @@ const Register = () => {
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
     try {
+      const redirectURL = `${getSiteUrl()}/dashboard`;
+      console.log("Google signup redirect URL:", redirectURL);
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: redirectURL,
           queryParams: {
+            access_type: 'offline',
             prompt: 'select_account', 
           }
         }

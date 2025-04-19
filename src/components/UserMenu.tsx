@@ -56,13 +56,16 @@ const UserMenu = () => {
           let avatarCharacter = null;
           
           // Check for Google provider metadata
-          const { app_metadata } = user;
+          const { app_metadata, user_metadata } = user;
+          
           if (app_metadata && app_metadata.provider === 'google') {
-            const { user_metadata } = user;
             if (user_metadata) {
+              console.log("Google user metadata:", user_metadata);
+              
               if (user_metadata.avatar_url) {
                 avatarUrl = user_metadata.avatar_url;
               }
+              
               if (user_metadata.full_name) {
                 displayName = user_metadata.full_name;
               } else if (user_metadata.name) {
@@ -72,11 +75,15 @@ const UserMenu = () => {
           }
           
           // Get profile data from our profiles table
-          const { data: profileData } = await supabase
+          const { data: profileData, error: profileError } = await supabase
             .from('profiles')
             .select('*')
             .eq('id', user.id)
             .maybeSingle();
+          
+          if (profileError) {
+            console.error("Error fetching profile:", profileError);
+          }
           
           if (profileData) {
             displayName = profileData.display_name || displayName;
@@ -98,11 +105,18 @@ const UserMenu = () => {
           if ((app_metadata?.provider === 'google' && !profileData) || 
               (app_metadata?.provider === 'google' && profileData && !profileData.avatar_url && avatarUrl)) {
             
-            const { user_metadata } = user;
             const firstName = user_metadata?.given_name || displayName.split(' ')[0] || '';
             const lastName = user_metadata?.family_name || (displayName.split(' ').length > 1 ? displayName.split(' ').slice(1).join(' ') : '');
             
-            await supabase
+            console.log("Creating/updating profile for Google user:", {
+              id: user.id,
+              display_name: displayName,
+              first_name: firstName,
+              last_name: lastName,
+              avatar_url: avatarUrl
+            });
+            
+            const { error: upsertError } = await supabase
               .from('profiles')
               .upsert({
                 id: user.id,
@@ -112,6 +126,10 @@ const UserMenu = () => {
                 avatar_url: avatarUrl,
                 updated_at: new Date().toISOString()
               });
+              
+            if (upsertError) {
+              console.error("Error upserting profile:", upsertError);
+            }
           }
         }
       } catch (error) {
