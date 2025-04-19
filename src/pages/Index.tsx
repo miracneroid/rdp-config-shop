@@ -1,11 +1,9 @@
-
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import ServiceOfferings from "@/components/ServiceOfferings";
-import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 import StatsBanner from "@/components/StatsBanner";
 import { Badge } from "@/components/ui/badge";
@@ -238,8 +236,6 @@ const Index = () => {
             </div>
           </div>
         </section>
-        
-        <FAQ />
       </main>
       
       <StatsBanner />
