@@ -54,7 +54,7 @@ const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
       className={`rdp-card h-full p-6 flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-lg border-gray-200 dark:border-gray-700 relative`}
     >
       {plan.popular && (
-        <div className="absolute top-0 right-0 bg-gray-200 text-rdp-blue py-1 px-4 text-sm font-medium rounded-bl-lg rounded-tr-lg">
+        <div className="absolute top-0 right-0 bg-blue-100 dark:bg-blue-900/30 text-rdp-blue border border-rdp-blue/20 py-1 px-4 text-sm font-medium rounded-bl-lg rounded-tr-lg">
           Most Popular
         </div>
       )}
