@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -93,8 +94,12 @@ const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
       <button 
         onClick={handleChoosePlan}
         className="mt-8 w-full py-3 px-6 rounded-lg font-medium transition-all duration-300
-          bg-white dark:bg-gray-800 text-rdp-dark dark:text-white border border-gray-200 dark:border-gray-700 
-          hover:bg-rdp-blue hover:text-white hover:border-transparent"
+          bg-white dark:bg-gray-800 text-rdp-dark dark:text-white 
+          border border-gray-200 dark:border-gray-700 
+          hover:bg-rdp-blue hover:text-white 
+          hover:border-transparent 
+          dark:hover:bg-rdp-blue dark:hover:text-white 
+          dark:hover:border-rdp-blue"
       >
         Choose Plan
       </button>
