@@ -1,7 +1,7 @@
-
 import Navbar from "@/components/Navbar";
 import PricingSection from "@/components/PricingSection";
 import Footer from "@/components/Footer";
+import StatsBanner from "@/components/StatsBanner";
 import { Badge } from "@/components/ui/badge";
 
 const defaultPricingPlans = [
@@ -85,6 +85,7 @@ const PricingPage = () => {
           <PricingSection plans={defaultPricingPlans} showDetailedComparison={true} />
         </div>
       </div>
+      <StatsBanner />
       <Footer />
     </div>
   );

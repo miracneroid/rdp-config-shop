@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
@@ -6,6 +7,7 @@ import Hero from "@/components/Hero";
 import ServiceOfferings from "@/components/ServiceOfferings";
 import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
+import StatsBanner from "@/components/StatsBanner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Shield, Cpu, Zap, Server, Globe, Clock } from "lucide-react";
@@ -239,6 +241,8 @@ const Index = () => {
         
         <FAQ />
       </main>
+      
+      <StatsBanner />
       <Footer />
     </div>
   );
