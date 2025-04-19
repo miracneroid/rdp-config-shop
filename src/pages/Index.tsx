@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -237,58 +237,7 @@ const Index = () => {
           </div>
         </section>
         
-        {/* 100% Satisfaction Guarantee Section */}
-        <section className="py-16 bg-white dark:bg-gray-900">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <Badge variant="outline" className="mb-2 text-green-600 border-green-600">100% Guarantee</Badge>
-              <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">Unmatched Satisfaction Promise</h2>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                We're committed to delivering the best remote desktop experience, backed by our comprehensive guarantee.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-8 mt-12">
-              <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-xl border border-green-100 dark:border-green-700 shadow-sm hover:shadow-md transition-all">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 flex items-center justify-center rounded-lg mb-4">
-                  <CheckCircle className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">100% Uptime Guarantee</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  If we fail to meet our 99.9% uptime promise, we'll credit your account.
-                </p>
-              </div>
-              
-              <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-xl border border-green-100 dark:border-green-700 shadow-sm hover:shadow-md transition-all">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 flex items-center justify-center rounded-lg mb-4">
-                  <Shield className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">30-Day Money-Back</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Not satisfied? Get a full refund within 30 days of your purchase.
-                </p>
-              </div>
-              
-              <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-xl border border-green-100 dark:border-green-700 shadow-sm hover:shadow-md transition-all">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 flex items-center justify-center rounded-lg mb-4">
-                  <Zap className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">24/7 Priority Support</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Our expert team is always ready to help you resolve any issues quickly.
-                </p>
-              </div>
-            </div>
-            
-            <div className="mt-12 text-center">
-              <Link to="/configure">
-                <Button size="lg" className="bg-green-600 hover:bg-green-700">
-                  Get Started Risk-Free
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
+        {/* Removed 100% Satisfaction Guarantee Section */}
       </main>
       
       <StatsBanner />
