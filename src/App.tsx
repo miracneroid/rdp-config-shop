@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
@@ -21,6 +20,7 @@ import Documentation from './pages/Documentation';
 import Help from './pages/Help';
 import Contact from './pages/Contact';
 import USAVPS from './pages/USAVPS';
+import EuropeVPS from './pages/EuropeVPS';
 
 import StatsBanner from './components/StatsBanner';
 import { Toaster } from './components/ui/toaster';
@@ -51,6 +51,7 @@ function App() {
             <Route path="/help" element={<Help />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/usa-vps" element={<USAVPS />} />
+            <Route path="/europe-vps" element={<EuropeVPS />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
