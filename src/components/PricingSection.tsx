@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -345,12 +344,12 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
             <div>
               <h3 className="text-2xl font-bold text-rdp-dark dark:text-white">Need a custom solution?</h3>
               <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">
-                Contact us for custom configurations, bulk pricing, or enterprise solutions.
+                Configure your RDP with custom specifications tailored to your needs.
               </p>
             </div>
-            <Link to="/contact" className="mt-6 md:mt-0">
-              <Button variant="outline" className="border-rdp-blue text-rdp-blue hover:bg-rdp-blue/10 transform transition-all duration-300 hover:scale-105 text-lg px-8 py-6 h-auto">
-                Contact Sales
+            <Link to="/configure" className="mt-6 md:mt-0">
+              <Button className="bg-rdp-blue hover:bg-rdp-blue-light text-white text-lg px-8 py-6 h-auto transform transition-all duration-300 hover:scale-105">
+                Configure Your RDP
               </Button>
             </Link>
           </div>
