@@ -74,8 +74,6 @@ const defaultPricingPlans = [
 ];
 
 const Index = () => {
-  const [selectedPlan, setSelectedPlan] = useState<string>(defaultPricingPlans.find(p => p.popular)?.name || defaultPricingPlans[0].name);
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-black w-full">
       <Navbar />
@@ -150,12 +148,8 @@ const Index = () => {
             
             <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
               {defaultPricingPlans.map((plan, index) => (
-                <div 
-                  key={index} 
-                  onClick={() => setSelectedPlan(plan.name)}
-                  className={`cursor-pointer transition-all duration-300 transform ${selectedPlan === plan.name ? 'scale-105' : 'hover:scale-102'}`}
-                >
-                  <PricingCard plan={plan} isSelected={selectedPlan === plan.name} />
+                <div key={index}>
+                  <PricingCard plan={plan} />
                 </div>
               ))}
             </div>
@@ -236,8 +230,6 @@ const Index = () => {
             </div>
           </div>
         </section>
-        
-        {/* Removed 100% Satisfaction Guarantee Section */}
       </main>
       
       <StatsBanner />
