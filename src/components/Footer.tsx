@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Monitor } from 'lucide-react';
 
@@ -12,14 +11,14 @@ const Footer = () => {
         <div className="mb-12">
           <div className="flex items-center mb-4">
             <Monitor className="h-8 w-8 text-white" />
-            <h2 className="ml-3 text-xl font-bold">RDP.sh</h2>
+            <h2 className="ml-3 text-xl font-bold">Quantum Servers</h2>
           </div>
           <p className="text-gray-400 max-w-md">
             Fast & reliable Windows RDPs and Linux servers.
           </p>
           <div className="flex items-center mt-4 text-[#00ff66]">
             <div className="w-2 h-2 rounded-full bg-[#00ff66] mr-2"></div>
-            <span>^100% All Systems Operational</span>
+            <span>100% All Systems Operational</span>
           </div>
         </div>
 
@@ -132,7 +131,7 @@ const Footer = () => {
         {/* Footer Bottom */}
         <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-800">
           <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            © 2020-{currentYear} RDP.sh - A 1337 Services GmbH product
+            © 2020-{currentYear} Quantum Servers - A Technology Solutions Company
           </p>
           <div className="flex items-center">
             <span className="text-[#0FA0CE] flex items-center">
