@@ -73,7 +73,6 @@ const PricingPage = () => {
       <div className="bg-white dark:bg-rdp-dark py-16 flex-grow">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Pricing</Badge>
             <h1 className="text-4xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-5xl lg:text-6xl">
               Simple, transparent pricing for everyone
             </h1>
