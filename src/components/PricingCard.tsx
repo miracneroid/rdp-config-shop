@@ -25,12 +25,10 @@ const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
   const { settings } = useSettings();
   
   const handleChoosePlan = () => {
-    // Extract numeric values for CPU cores and RAM
     const cpuCores = parseInt(plan.cpu.split(' ')[0]) || 2;
     const ramGB = parseInt(plan.ram.split(' ')[0]) || 4;
     const storageGB = parseInt(plan.storage.split(' ')[0]) || 64;
     
-    // Create a configured RDP item based on the plan
     const rdpItem = {
       id: `plan-${plan.name.toLowerCase().replace(' ', '-')}`,
       name: `${plan.name} RDP`,
@@ -42,11 +40,10 @@ const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
         os: "Windows 10 Pro",
         region: "India",
         applications: [],
-        duration: 1 // 1 month duration
+        duration: 1
       }
     };
     
-    // Add to cart and navigate to cart page
     addToCart(rdpItem);
     navigate('/cart');
   };
