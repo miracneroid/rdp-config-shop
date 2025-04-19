@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Monitor, GitHub, Twitter, Linkedin, Mail, ExternalLink } from 'lucide-react';
+import { Monitor, Github, Twitter, Linkedin, Mail, ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const Footer = () => {
@@ -30,7 +30,7 @@ const Footer = () => {
               <Twitter className="h-5 w-5" />
             </a>
             <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-rdp-blue dark:text-gray-400 dark:hover:text-rdp-blue-light transition-colors">
-              <GitHub className="h-5 w-5" />
+              <Github className="h-5 w-5" />
             </a>
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-rdp-blue dark:text-gray-400 dark:hover:text-rdp-blue-light transition-colors">
               <Linkedin className="h-5 w-5" />
