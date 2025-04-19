@@ -46,6 +46,16 @@ const StatsBanner = () => {
     <div className="w-full py-10 bg-white dark:bg-gray-800 border-t border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap justify-center md:justify-around items-center gap-12 md:gap-0">
+        <div className="text-center">
+            <h2 className="text-4xl font-bold text-rdp-dark dark:text-white animate-count">
+              {loading ? (
+                <span className="inline-block w-28 h-10 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></span>
+              ) : (
+                new Intl.NumberFormat().format(stats.uptime)
+              )}
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">Uptime</p>
+          </div>
           <div className="text-center">
             <h2 className="text-4xl font-bold text-rdp-dark dark:text-white animate-count">
               {loading ? (

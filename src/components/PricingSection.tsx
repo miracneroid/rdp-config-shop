@@ -175,36 +175,7 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
 
   return (
     <section className="py-16 bg-white dark:bg-gray-900 w-full">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/40 dark:to-indigo-950/40 rounded-xl overflow-hidden">
-          <div className="py-12 px-8 flex flex-col md:flex-row items-center justify-around text-center md:text-left">
-            <div className="mb-8 md:mb-0">
-              <h2 className="text-4xl font-bold text-rdp-dark dark:text-white">100%</h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">Satisfaction Guarantee</p>
-            </div>
-            <div className="mb-8 md:mb-0">
-              <h2 className="text-4xl font-bold text-rdp-dark dark:text-white animate-count">
-                {loading ? (
-                  <span className="inline-block w-28 h-10 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></span>
-                ) : (
-                  new Intl.NumberFormat().format(stats.deployedServers)
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">Deployed Servers</p>
-            </div>
-            <div>
-              <h2 className="text-4xl font-bold text-rdp-dark dark:text-white animate-count">
-                {loading ? (
-                  <span className="inline-block w-28 h-10 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></span>
-                ) : (
-                  new Intl.NumberFormat().format(stats.ticketReplies)
-                )}
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">Ticket Replies</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      
 
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
