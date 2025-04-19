@@ -55,7 +55,7 @@ const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
         ${plan.popular ? 'border-gray-200 dark:border-gray-700' : 'border-gray-200 dark:border-gray-700'} relative`}
     >
       {plan.popular && (
-        <div className="absolute top-0 right-0 bg-gray-200 text-gray-700 py-1 px-4 text-sm font-medium rounded-bl-lg rounded-tr-lg">
+        <div className="absolute top-0 right-0 bg-gray-200 text-rdp-blue py-1 px-4 text-sm font-medium rounded-bl-lg rounded-tr-lg">
           Most Popular
         </div>
       )}
