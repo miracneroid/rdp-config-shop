@@ -159,12 +159,12 @@ const InteractiveGraph = () => {
   }, []);
 
   return (
-    <div ref={graphRef} className="h-32 flex items-end justify-center space-x-3 mt-4">
-      <TrendingUp className="absolute text-puzzle-green opacity-40 h-full w-full -z-10" />
+    <div ref={graphRef} className="h-32 flex items-end justify-center space-x-3 mt-4 relative">
+      <TrendingUp className="absolute text-puzzle-blue opacity-40 h-full w-full transform scale-150 -z-10" />
       {[20, 35, 50, 65, 80, 95].map((height, i) => (
         <div 
           key={i} 
-          className={`w-4 bg-puzzle-green/80 rounded-t transition-all duration-1000 animate-bounce-graph`}
+          className={`w-4 bg-puzzle-blue/80 rounded-t transition-all duration-1000 animate-bounce-graph`}
           style={{ 
             height: isVisible ? `${height}%` : '0%',
             animationDelay: `${i * 0.2}s`,
@@ -183,16 +183,16 @@ const PuzzleHero = () => {
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20">
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold text-black dark:text-white mb-6">
+          <h1 className="text-5xl md:text-6xl font-bold font-mono text-black dark:text-white mb-6">
             Remote Desktop<br/>
-            <span className="text-puzzle-green">Made Simple</span>
+            <span className="text-puzzle-blue">Made Simple</span>
           </h1>
-          <p className="text-gray-600 dark:text-white/70 text-xl max-w-2xl mx-auto mb-8">
+          <p className="text-gray-600 dark:text-white/70 text-xl font-mono max-w-2xl mx-auto mb-8">
             Deploy secure, high-performance remote desktop environments tailored to your needs.
           </p>
           
           <div className="flex justify-center gap-4 mb-16">
-            <Link to="/pricing" className="puzzle-btn-primary inline-flex items-center">
+            <Link to="/pricing" className="bg-puzzle-blue hover:bg-puzzle-blue-dark text-white font-mono px-6 py-3 rounded-lg inline-flex items-center transition-all">
               Get Started
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>

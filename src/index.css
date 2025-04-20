@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -5,75 +6,65 @@
 
 @layer base {
   :root {
-    --background: 260 20% 14%;
-    --foreground: 0 0% 98%;
-
-    --card: 260 20% 10%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 260 20% 10%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 152 99% 66%;
-    --primary-foreground: 260 20% 10%;
-
-    --secondary: 260 20% 18%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 260 20% 18%;
-    --muted-foreground: 215 20% 75%;
-
-    --accent: 260 20% 18%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 260 20% 24%;
-    --input: 260 20% 24%;
-    --ring: 152 99% 66%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 260 20% 10%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 152 99% 66%;
-    --sidebar-primary-foreground: 260 20% 10%;
-    --sidebar-accent: 260 20% 16%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 260 20% 24%;
-    --sidebar-ring: 152 99% 66%;
-  }
-
-  /* We're focusing on the dark theme exclusively */
-  .light {
     --background: 0 0% 100%;
-    --foreground: 260 20% 14%;
+    --foreground: 0 0% 0%;
 
     --card: 0 0% 100%;
-    --card-foreground: 260 20% 14%;
+    --card-foreground: 0 0% 0%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 260 20% 14%;
+    --popover-foreground: 0 0% 0%;
 
-    --primary: 152 99% 45%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 213 68% 51%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 260 10% 92%;
-    --secondary-foreground: 260 20% 14%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 260 10% 92%;
-    --muted-foreground: 260 20% 40%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 260 10% 92%;
-    --accent-foreground: 260 20% 14%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 260 10% 85%;
-    --input: 260 10% 85%;
-    --ring: 152 99% 45%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 213 68% 51%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 213 68% 51%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 63%;
+
+    --accent: 0 0% 8%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 213 68% 51%;
   }
 }
 

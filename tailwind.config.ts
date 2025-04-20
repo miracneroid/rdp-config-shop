@@ -18,6 +18,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        mono: ['JetBrains Mono', 'Courier New', 'monospace'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -66,10 +69,11 @@ export default {
           dark: '#000000',
           darker: '#050505',
           'dark-light': '#121212',
+          blue: '#2A7DDE',
+          'blue-dark': '#1E5EAE',
           green: '#54FEB8',
           'green-dark': '#37B686',
           purple: '#9B87F5',
-          blue: '#2A7DDE',
           gray: {
             50: '#F9FAFB',
             100: '#F3F4F6',
