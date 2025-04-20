@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -54,9 +55,9 @@ const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
       onClick={onClick}
       className={`
         bg-white rounded-xl p-8 flex flex-col h-full transition-all duration-300 
-        shadow-sm hover:shadow-xl border cursor-pointer
-        ${selected ? 'border-blue-500 ring-2 ring-blue-300' : 'border-transparent'}
-        group relative
+        shadow-sm hover:shadow-xl border
+        ${selected ? 'border-blue-500 ring-2 ring-blue-300' : 'border-transparent hover:border-blue-500'}
+        group relative cursor-pointer
       `}
     >
       {plan.popular && (
@@ -107,7 +108,7 @@ const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
         className={`mt-8 w-full py-3 px-6 rounded-lg font-medium transition-all duration-300
           ${selected
             ? 'bg-blue-600 text-white hover:bg-blue-700'
-            : 'bg-white text-[#1e2537] border border-gray-200 hover:border-blue-300 hover:text-blue-600'
+            : 'bg-white text-[#1e2537] border border-gray-200 group-hover:border-blue-500 group-hover:text-blue-600'
           }`}
       >
         Choose Plan
