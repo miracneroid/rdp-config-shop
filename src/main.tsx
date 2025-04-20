@@ -20,7 +20,7 @@ if (!rootElement) throw new Error('Root element not found');
 const root = createRoot(rootElement);
 
 root.render(
-  <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+  <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
     <QueryClientProvider client={queryClient}>
       <App />
     </QueryClientProvider>

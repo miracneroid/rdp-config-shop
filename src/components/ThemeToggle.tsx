@@ -30,13 +30,13 @@ const ThemeToggle = () => {
             variant="outline"
             size="icon"
             onClick={toggleTheme}
-            className="w-10 h-10 rounded-full border-2 transition-all hover:scale-105 border-purple-200 dark:border-purple-800/40 dark:bg-gray-800"
+            className="w-10 h-10 rounded-full border-2 transition-all hover:scale-105 dark:bg-gray-800 dark:border-gray-700"
             aria-label="Toggle theme"
           >
             {theme === "dark" ? (
               <Sun className="h-5 w-5 text-yellow-400" />
             ) : (
-              <Moon className="h-5 w-5 text-rdp-purple" />
+              <Moon className="h-5 w-5 text-rdp-blue" />
             )}
           </Button>
         </TooltipTrigger>

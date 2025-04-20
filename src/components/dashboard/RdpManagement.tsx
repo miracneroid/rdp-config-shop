@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -34,9 +33,7 @@ import {
   Laptop,
   Computer,
   Pencil,
-  AlertCircle,
 } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import RdpDetailView from "./RdpDetailView";
 import AdminEditButton from "../admin/AdminEditButton";
 
@@ -87,42 +84,14 @@ const RdpManagement = () => {
   const [rdpInstances, setRdpInstances] = useState<RdpInstance[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedRdpId, setSelectedRdpId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const { toast } = useToast();
 
   useEffect(() => {
-    checkAuthAndFetchRdpInstances();
+    fetchRdpInstances();
   }, []);
 
   const getRandomAvatar = () => {
     return RDP_AVATARS[Math.floor(Math.random() * RDP_AVATARS.length)];
-  };
-
-  const checkAuthAndFetchRdpInstances = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError) throw sessionError;
-      
-      const userId = sessionData.session?.user.id;
-
-      if (!userId) {
-        setIsAuthenticated(false);
-        setError("You need to be logged in to view your RDP instances");
-        setLoading(false);
-        return;
-      }
-      
-      setIsAuthenticated(true);
-      await fetchRdpInstances();
-    } catch (error: any) {
-      console.error("Authentication check error:", error.message);
-      setError("Authentication error: " + error.message);
-      setLoading(false);
-    }
   };
 
   const fetchRdpInstances = async () => {
@@ -168,7 +137,6 @@ const RdpManagement = () => {
       }
     } catch (error: any) {
       console.error("Error fetching RDP instances:", error.message);
-      setError(`Error fetching RDP instances: ${error.message}`);
       toast({
         title: "Error fetching RDP instances",
         description: error.message,
@@ -246,41 +214,9 @@ const RdpManagement = () => {
 
   if (loading) {
     return (
-      <div className="w-full flex items-center justify-center py-8">
-        <Loader2 className="h-8 w-8 animate-spin mr-2" />
-        <span>Loading RDP instances...</span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="space-y-6">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-        
-        <Card>
-          <CardContent className="py-10 text-center">
-            <Button 
-              onClick={checkAuthAndFetchRdpInstances} 
-              variant="outline" 
-              size="sm"
-              className="flex items-center gap-1 mb-4"
-            >
-              <RefreshCw className="h-4 w-4" />
-              Try Again
-            </Button>
-            
-            {!isAuthenticated && (
-              <Button onClick={() => window.location.href = "/login"} className="ml-2">
-                Log In
-              </Button>
-            )}
-          </CardContent>
-        </Card>
+      <div className="w-full flex justify-center py-8">
+        <Loader2 className="h-8 w-8 animate-spin" />
+        <span className="ml-2">Loading RDP instances...</span>
       </div>
     );
   }
