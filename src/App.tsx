@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
@@ -21,6 +20,7 @@ import Documentation from './pages/Documentation';
 import Help from './pages/Help';
 import Contact from './pages/Contact';
 
+import StatsBanner from './components/StatsBanner';
 import { Toaster } from './components/ui/toaster';
 import { CartProvider } from './context/CartContext';
 import { SettingsProvider } from './context/SettingsContext';
@@ -48,9 +48,6 @@ function App() {
             <Route path="/docs" element={<Documentation />} />
             <Route path="/help" element={<Help />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/company" element={<About />} />
-            <Route path="/customers" element={<About />} />
-            <Route path="/product" element={<About />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
