@@ -74,10 +74,10 @@ const NotionHero = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
             <div className="text-left">
-              <Badge variant="outline" className="mb-4 text-black border-black">
+              <Badge variant="outline" className="mb-8 text-black border-black text-base px-4 py-1">
                 Build Your Perfect RDP
               </Badge>
-              <h1 className="text-[64px] font-bold leading-[1.1] tracking-[-0.02em] text-black">
+              <h1 className="text-[72px] font-bold leading-[1.1] tracking-[-0.02em] text-black">
                 The happier<br />
                 <span>workspace puzzle</span>
               </h1>
@@ -112,10 +112,10 @@ const NotionHero = () => {
                 Pricing
               </Badge>
               <h2 className="text-4xl font-bold mb-4 text-black">
-                Choose the plan that fits your needs
+                Choose your perfect plan
               </h2>
-              <p className="text-xl text-gray-500">
-                Simple, transparent pricing for everyone. No hidden fees or surprise charges.
+              <p className="text-xl text-gray-500 max-w-2xl mx-auto">
+                Simple, transparent pricing that grows with you. No hidden fees or surprise charges.
               </p>
             </div>
             <PricingSection plans={defaultPricingPlans} showDetailedComparison={false} />
