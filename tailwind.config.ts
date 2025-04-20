@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -29,19 +28,19 @@ export default {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: '#0D9488', // Teal
-          light: '#14B8A6',
-          dark: '#0F766E',
-        },
-        secondary: {
-          DEFAULT: '#475569', // Grey
-          light: '#64748B',
-          dark: '#334155',
-        },
-        accent: {
-          DEFAULT: '#2563EB', // Blue
+          DEFAULT: '#2563EB', // Primary blue
           light: '#3B82F6',
           dark: '#1D4ED8',
+        },
+        secondary: {
+          DEFAULT: '#1E40AF', // Darker blue
+          light: '#2563EB',
+          dark: '#1E3A8A',
+        },
+        accent: {
+          DEFAULT: '#60A5FA', // Light blue
+          light: '#93C5FD',
+          dark: '#3B82F6',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
@@ -52,17 +51,18 @@ export default {
           foreground: '#64748B',
         },
         rdp: {
-          'primary': '#0D9488',
-          'secondary': '#475569',
-          'accent': '#2563EB',
+          'primary': '#2563EB',
+          'secondary': '#1E40AF',
+          'accent': '#60A5FA',
           'dark': '#1E293B',
           'dark-light': '#334155',
           'light': '#F8FAFC',
-          'success': '#059669',
-          'warning': '#D97706',
-          'error': '#DC2626',
-          'purple': '#8B5CF6',
-          'purple-light': '#A78BFA', // Added the missing purple-light color
+          'success': '#0EA5E9',
+          'warning': '#0284C7',
+          'error': '#0C4A6E',
+          'blue': '#2563EB',
+          'blue-light': '#3B82F6',
+          'blue-dark': '#1D4ED8',
           'gray': {
             100: '#F1F5F9',
             200: '#E2E8F0',
@@ -73,11 +73,7 @@ export default {
             700: '#334155',
             800: '#1E293B',
             900: '#0F172A',
-          },
-          'teal': '#0D9488',
-          'teal-light': '#14B8A6',
-          'blue': '#2563EB',
-          'blue-light': '#3B82F6',
+          }
         }
       },
       borderRadius: {
@@ -125,7 +121,7 @@ export default {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'mesh-pattern': 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h4v22H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20z\' fill=\'%236D28D9\' fill-opacity=\'0.05\' fill-rule=\'evenodd\'/%3E%3C/svg%3E")',
+        'mesh-pattern': 'url("data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h4v22H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20z\' fill=\'%234338CA\' fill-opacity=\'0.05\' fill-rule=\'evenodd\'/%3E%3C/svg%3E")',
       }
     }
   },
