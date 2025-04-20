@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -63,6 +64,8 @@ export default {
           'blue': '#2563EB',
           'blue-light': '#3B82F6',
           'blue-dark': '#1D4ED8',
+          'purple': '#4F46E5',    // Adding the purple color for gradient
+          'purple-light': '#6366F1', // Adding the light purple color
           'gray': {
             100: '#F1F5F9',
             200: '#E2E8F0',

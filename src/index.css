@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -94,7 +95,7 @@
   }
   
   .gradient-text {
-    @apply bg-gradient-to-r from-rdp-blue to-rdp-purple text-transparent bg-clip-text;
+    @apply bg-gradient-to-r from-rdp-blue to-rdp-blue-dark text-transparent bg-clip-text;
   }
   
   .rdp-card {
@@ -102,7 +103,7 @@
   }
   
   .rdp-btn-primary {
-    @apply bg-gradient-to-r from-rdp-blue to-rdp-purple text-white font-medium rounded-xl px-6 py-3 shadow-md shadow-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/30 transform hover:-translate-y-1 transition-all duration-300;
+    @apply bg-gradient-to-r from-rdp-blue to-rdp-blue-dark text-white font-medium rounded-xl px-6 py-3 shadow-md shadow-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/30 transform hover:-translate-y-1 transition-all duration-300;
   }
   
   .rdp-btn-secondary {
@@ -118,7 +119,7 @@
   }
   
   .nav-link {
-    @apply text-gray-700 dark:text-gray-300 hover:text-rdp-purple dark:hover:text-rdp-purple-light font-medium transition-colors duration-200;
+    @apply text-gray-700 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light font-medium transition-colors duration-200;
   }
   
   .form-input {
@@ -150,11 +151,11 @@
   }
 
   .glowing-border {
-    @apply border border-transparent bg-gradient-to-r from-indigo-500 to-purple-500 dark:from-indigo-600 dark:to-purple-600 p-[1px] rounded-xl;
+    @apply border border-transparent bg-gradient-to-r from-rdp-blue to-rdp-accent dark:from-rdp-blue dark:to-rdp-accent p-[1px] rounded-xl;
   }
 
   .highlight-tab {
-    @apply relative overflow-hidden z-0 before:absolute before:inset-0 before:bg-gradient-to-r before:from-indigo-600/80 before:to-purple-600/80 before:rounded before:opacity-0 hover:before:opacity-100 before:transition-opacity before:-z-10;
+    @apply relative overflow-hidden z-0 before:absolute before:inset-0 before:bg-gradient-to-r before:from-rdp-blue/80 before:to-rdp-blue-dark/80 before:rounded before:opacity-0 hover:before:opacity-100 before:transition-opacity before:-z-10;
   }
 }
 
