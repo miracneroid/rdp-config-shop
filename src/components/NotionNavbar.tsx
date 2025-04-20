@@ -26,35 +26,40 @@ const NotionNavbar = () => {
           </div>
           
           {/* Desktop navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-sm text-gray-600 hover:text-black transition-colors">
-              Home
-            </Link>
-            <Link to="/pricing" className="text-sm text-gray-600 hover:text-black transition-colors">
-              Pricing
-            </Link>
-            <Link to="/help" className="text-sm text-gray-600 hover:text-black transition-colors">
-              Help
-            </Link>
-            <Link to="/contact" className="text-sm text-gray-600 hover:text-black transition-colors">
-              Contact
-            </Link>
-            
-            {/* Theme toggle button */}
-            <button
-              onClick={() => setTheme('dark')}
-              className="p-2 text-gray-600 hover:text-black transition-colors"
-              aria-label="Switch to dark mode"
-            >
-              <Moon className="h-5 w-5" />
-            </button>
-            
-            {/* Login button */}
-            <Link to="/login">
-              <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
-                Log In
-              </Button>
-            </Link>
+          <div className="hidden md:flex items-center space-x-4">
+            <div className="flex items-center space-x-4">
+              <Link to="/" className="text-sm text-gray-600 hover:text-black transition-colors">
+                Home
+              </Link>
+              <Link to="/pricing" className="text-sm text-gray-600 hover:text-black transition-colors">
+                Pricing
+              </Link>
+              <Link to="/help" className="text-sm text-gray-600 hover:text-black transition-colors">
+                Help
+              </Link>
+              <Link to="/contact" className="text-sm text-gray-600 hover:text-black transition-colors">
+                Contact
+              </Link>
+              
+              {/* Divider */}
+              <div className="h-5 w-px bg-gray-300" />
+              
+              {/* Theme toggle button */}
+              <button
+                onClick={() => setTheme('dark')}
+                className="p-2 text-gray-600 hover:text-black transition-colors"
+                aria-label="Switch to dark mode"
+              >
+                <Moon className="h-5 w-5" />
+              </button>
+              
+              {/* Login button */}
+              <Link to="/login">
+                <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+                  Log In
+                </Button>
+              </Link>
+            </div>
           </div>
           
           {/* Mobile menu button */}
