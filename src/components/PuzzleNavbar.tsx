@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Monitor, Menu, X } from 'lucide-react';
@@ -24,14 +25,23 @@ const PuzzleNavbar = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/product" className="font-mono text-black dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue transition-colors">
-              Product
-            </Link>
-            <Link to="/features" className="font-mono text-black dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue transition-colors">
-              Features
+            <Link to="/" className="font-mono text-black dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue transition-colors">
+              Home
             </Link>
             <Link to="/pricing" className="font-mono text-black dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue transition-colors">
               Pricing
+            </Link>
+            <Link to="/help" className="font-mono text-black dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue transition-colors">
+              Help
+            </Link>
+            <Link to="/contact" className="font-mono text-black dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue transition-colors">
+              Contact
+            </Link>
+            <Link to="/login" className="font-mono text-black dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue transition-colors">
+              Login
+            </Link>
+            <Link to="/pricing" className="bg-puzzle-blue hover:bg-puzzle-blue-dark text-white font-mono px-4 py-2 rounded-lg transition-colors">
+              Get Started
             </Link>
             <ThemeToggle />
           </div>
@@ -54,35 +64,49 @@ const PuzzleNavbar = () => {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
+        <div className="md:hidden bg-white dark:bg-puzzle-dark border-t border-gray-200 dark:border-white/10">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link 
               to="/" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-puzzle-blue hover:bg-gray-50"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue hover:bg-gray-50 dark:hover:bg-white/5"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
             </Link>
             <Link 
-              to="/product" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-puzzle-blue hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Product
-            </Link>
-            <Link 
-              to="/features" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-puzzle-blue hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Features
-            </Link>
-            <Link 
               to="/pricing" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-puzzle-blue hover:bg-gray-50"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue hover:bg-gray-50 dark:hover:bg-white/5"
               onClick={() => setIsMenuOpen(false)}
             >
               Pricing
+            </Link>
+            <Link 
+              to="/help" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue hover:bg-gray-50 dark:hover:bg-white/5"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Help
+            </Link>
+            <Link 
+              to="/contact" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue hover:bg-gray-50 dark:hover:bg-white/5"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Contact
+            </Link>
+            <Link 
+              to="/login" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue hover:bg-gray-50 dark:hover:bg-white/5"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Login
+            </Link>
+            <Link 
+              to="/pricing" 
+              className="block px-3 py-2 rounded-md text-base font-medium bg-puzzle-blue text-white hover:bg-puzzle-blue-dark"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Get Started
             </Link>
           </div>
         </div>

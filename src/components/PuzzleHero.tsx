@@ -1,4 +1,3 @@
-
 import { ArrowRight, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
@@ -159,8 +158,7 @@ const InteractiveGraph = () => {
   }, []);
 
   return (
-    <div ref={graphRef} className="h-32 flex items-end justify-center space-x-3 mt-4 relative">
-      <TrendingUp className="absolute text-puzzle-blue opacity-40 h-full w-full transform scale-150 -z-10" />
+    <div ref={graphRef} className="h-32 flex items-end justify-center space-x-3 mt-4">
       {[20, 35, 50, 65, 80, 95].map((height, i) => (
         <div 
           key={i} 
@@ -202,15 +200,15 @@ const PuzzleHero = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="puzzle-card p-6">
             <h3 className="text-xl font-semibold text-black dark:text-white mb-3">Instant Deployment</h3>
-            <div className="bg-gray-50 dark:bg-black/20 p-4 rounded-lg mb-4">
+            <div className="bg-puzzle-blue/10 dark:bg-puzzle-blue/5 p-4 rounded-lg mb-4">
               <div className="flex flex-col space-y-2">
-                <div className="bg-puzzle-green/20 text-puzzle-green text-sm px-3 py-1 rounded w-max">
+                <div className="bg-puzzle-blue/20 text-puzzle-blue text-sm px-3 py-1 rounded w-max">
                   5 Minutes Setup
                 </div>
-                <div className="bg-gray-200/50 dark:bg-white/5 text-gray-600 dark:text-white/70 text-sm px-3 py-1 rounded w-max">
+                <div className="bg-puzzle-blue/20 text-puzzle-blue text-sm px-3 py-1 rounded w-max">
                   Quick Configuration
                 </div>
-                <div className="bg-gray-200/50 dark:bg-white/5 text-gray-600 dark:text-white/70 text-sm px-3 py-1 rounded w-max">
+                <div className="bg-puzzle-blue/20 text-puzzle-blue text-sm px-3 py-1 rounded w-max">
                   Instant Access
                 </div>
               </div>
@@ -258,7 +256,7 @@ const PuzzleHero = () => {
                 <div key={i} className="flex items-center text-xs">
                   <div className="text-gray-600 dark:text-white/70 w-16">{item.from}</div>
                   <div className="mx-2 flex-grow border-t border-dashed border-gray-300 dark:border-white/20"></div>
-                  <div className="text-puzzle-green w-20">{item.to}</div>
+                  <div className="text-puzzle-blue w-20">{item.to}</div>
                 </div>
               ))}
             </div>
