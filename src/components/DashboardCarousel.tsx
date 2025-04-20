@@ -30,7 +30,7 @@ const DashboardCarousel = () => {
     
     const interval = setInterval(() => {
       api.scrollNext();
-    }, 2500); // Changed to 2.5 seconds
+    }, 3000);
     
     return () => {
       clearInterval(interval);
@@ -39,16 +39,16 @@ const DashboardCarousel = () => {
   }, [api]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto mt-8">
+    <div className="w-full max-w-5xl mx-auto mt-12">
       <Carousel className="relative" setApi={setApi}>
         <CarouselContent>
           {images.map((image, index) => (
             <CarouselItem key={index}>
-              <div className="relative overflow-hidden rounded-lg shadow-notion">
+              <div className="relative overflow-hidden rounded-lg shadow-notion-lg">
                 <img
                   src={image}
                   alt={`Dashboard screenshot ${index + 1}`}
-                  className="w-full h-[350px] object-cover"
+                  className="w-full h-[400px] object-cover"
                 />
               </div>
             </CarouselItem>
