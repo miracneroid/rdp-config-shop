@@ -33,7 +33,7 @@ const CircleProgress = ({
   const strokeDashoffset = circumference - (currentPercent / 100) * circumference;
   
   return (
-    <div className="flex items-center space-x-3">
+    <div className="flex items-center space-x-4">
       <div className="relative" style={{ width: size, height: size }}>
         <svg width={size} height={size} viewBox="0 0 100 100" className="transform -rotate-90">
           <circle 
@@ -42,7 +42,7 @@ const CircleProgress = ({
             r={radius} 
             fill="none" 
             stroke="currentColor" 
-            className="text-gray-200 dark:text-white/10" 
+            className="text-gray-200 dark:text-white/20" 
             strokeWidth="6"
           />
           <circle 
@@ -62,14 +62,14 @@ const CircleProgress = ({
             y="50" 
             textAnchor="middle" 
             dominantBaseline="middle" 
-            className="text-lg font-medium" 
+            className="text-lg font-bold text-black dark:text-white" 
             fill="currentColor"
           >
             {Math.round(currentPercent)}%
           </text>
         </svg>
       </div>
-      <div className="text-sm text-black dark:text-white">{label}</div>
+      <div className="text-sm font-medium text-black dark:text-white">{label}</div>
     </div>
   );
 };
