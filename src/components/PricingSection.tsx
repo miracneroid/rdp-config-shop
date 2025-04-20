@@ -101,65 +101,6 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
     ]
   };
 
-  const planValues = {
-    "Basic": {
-      "CPU Performance": { value: "Good", status: "check" },
-      "SLA Uptime": { value: "99.9%", status: "check" },
-      "Storage Type": { value: "SSD", status: "check" },
-      "Network Speed": { value: "1 Gbps", status: "check" },
-      "Automated Backups": { value: "Weekly", status: "check" },
-      "Multiple OS Options": { value: "Limited", status: "partial" },
-      "Root Access": { value: "Yes", status: "check" },
-      "Dedicated Resources": { value: "No", status: "x" },
-      "24/7 Technical Support": { value: "Email Only", status: "partial" },
-      "Response Time": { value: "24 hours", status: "partial" },
-      "Managed Services": { value: "No", status: "x" },
-      "Priority Support Queue": { value: "No", status: "x" }
-    },
-    "Standard": {
-      "CPU Performance": { value: "Very Good", status: "check" },
-      "SLA Uptime": { value: "99.95%", status: "check" },
-      "Storage Type": { value: "NVMe SSD", status: "check" },
-      "Network Speed": { value: "1 Gbps", status: "check" },
-      "Automated Backups": { value: "Daily", status: "check" },
-      "Multiple OS Options": { value: "Yes", status: "check" },
-      "Root Access": { value: "Yes", status: "check" },
-      "Dedicated Resources": { value: "Partial", status: "partial" },
-      "24/7 Technical Support": { value: "Email & Chat", status: "check" },
-      "Response Time": { value: "12 hours", status: "check" },
-      "Managed Services": { value: "Basic", status: "partial" },
-      "Priority Support Queue": { value: "No", status: "x" }
-    },
-    "Premium": {
-      "CPU Performance": { value: "Excellent", status: "check" },
-      "SLA Uptime": { value: "99.99%", status: "check" },
-      "Storage Type": { value: "NVMe SSD", status: "check" },
-      "Network Speed": { value: "2 Gbps", status: "check" },
-      "Automated Backups": { value: "Daily", status: "check" },
-      "Multiple OS Options": { value: "Yes", status: "check" },
-      "Root Access": { value: "Yes", status: "check" },
-      "Dedicated Resources": { value: "Yes", status: "check" },
-      "24/7 Technical Support": { value: "Email, Chat & Phone", status: "check" },
-      "Response Time": { value: "6 hours", status: "check" },
-      "Managed Services": { value: "Yes", status: "check" },
-      "Priority Support Queue": { value: "Yes", status: "check" }
-    },
-    "Enterprise": {
-      "CPU Performance": { value: "Ultimate", status: "check" },
-      "SLA Uptime": { value: "99.99%", status: "check" },
-      "Storage Type": { value: "NVMe SSD RAID", status: "check" },
-      "Network Speed": { value: "10 Gbps", status: "check" },
-      "Automated Backups": { value: "Hourly", status: "check" },
-      "Multiple OS Options": { value: "Custom", status: "check" },
-      "Root Access": { value: "Yes", status: "check" },
-      "Dedicated Resources": { value: "Yes", status: "check" },
-      "24/7 Technical Support": { value: "Dedicated Team", status: "check" },
-      "Response Time": { value: "1 hour", status: "check" },
-      "Managed Services": { value: "Premium", status: "check" },
-      "Priority Support Queue": { value: "Yes", status: "check" }
-    }
-  };
-
   const renderIcon = (status: string) => {
     switch (status) {
       case "check":
@@ -174,16 +115,14 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
   };
 
   return (
-    <section className="py-16 bg-white dark:bg-gray-900 w-full">
-      
-
+    <section className="py-16 bg-white w-full">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
           {plans.map((plan, index) => (
             <div 
               key={index} 
               onClick={() => setSelectedPlan(plan.name)}
-              className={`cursor-pointer transition-all duration-300 transform ${selectedPlan === plan.name ? 'scale-105' : 'hover:scale-102'}`}
+              className={`cursor-pointer transition-all duration-300 transform ${selectedPlan === plan.name ? 'scale-105 border-black' : 'hover:scale-105 hover:border-black hover:outline hover:outline-1 hover:outline-black'}`}
             >
               <PricingCard plan={plan} isSelected={selectedPlan === plan.name} />
             </div>
@@ -193,13 +132,13 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
         {showDetailedComparison && (
           <div className="mt-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-rdp-dark dark:text-white mb-6">Plan Details</h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Plan Details</h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 See what's included in your selected plan
               </p>
             </div>
             
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 md:p-8 border border-gray-200 dark:border-gray-700 shadow-sm">
+            <div className="bg-gray-50 rounded-xl p-6 md:p-8 border border-gray-200 shadow-sm">
               <Tabs value={selectedPlan} onValueChange={setSelectedPlan} className="w-full">
                 <TabsList className="w-full flex justify-center mb-6 bg-transparent overflow-x-auto p-1 md:p-0 space-x-2">
                   {plans.map((plan, index) => (
@@ -207,8 +146,8 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                       key={index} 
                       value={plan.name}
                       className={`px-4 py-2 rounded-lg font-medium 
-                        ${plan.popular ? 'data-[state=active]:bg-rdp-blue data-[state=active]:text-white' : 
-                        'data-[state=active]:bg-gray-200 dark:data-[state=active]:bg-gray-700'}`}
+                        ${plan.popular ? 'data-[state=active]:bg-blue-600 data-[state=active]:text-white' : 
+                        'data-[state=active]:bg-gray-200'}`}
                     >
                       {plan.name}
                       {plan.popular && (
@@ -220,34 +159,34 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                 
                 {plans.map((plan, index) => (
                   <TabsContent key={index} value={plan.name} className="space-y-6">
-                    <div className="bg-white dark:bg-gray-800/50 rounded-lg p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
                       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                         <div>
-                          <h3 className="text-2xl font-bold text-rdp-dark dark:text-white">{plan.name} Plan</h3>
-                          <p className="text-gray-600 dark:text-gray-400 mt-1">
+                          <h3 className="text-2xl font-bold text-gray-900">{plan.name} Plan</h3>
+                          <p className="text-gray-600 mt-1">
                             {settings.currency.symbol}{plan.price}/month
                           </p>
                         </div>
                         
                         <Link to="/configure" className="mt-4 md:mt-0">
-                          <Button className="bg-rdp-blue hover:bg-rdp-blue-light text-white">
+                          <Button className="bg-blue-600 hover:bg-blue-500 text-white">
                             Choose {plan.name}
                           </Button>
                         </Link>
                       </div>
                       
                       <div className="grid md:grid-cols-3 gap-4 mb-6">
-                        <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">CPU</p>
-                          <p className="text-lg font-semibold text-rdp-dark dark:text-white">{plan.cpu}</p>
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <p className="text-sm font-medium text-gray-500">CPU</p>
+                          <p className="text-lg font-semibold text-gray-900">{plan.cpu}</p>
                         </div>
-                        <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">RAM</p>
-                          <p className="text-lg font-semibold text-rdp-dark dark:text-white">{plan.ram}</p>
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <p className="text-sm font-medium text-gray-500">RAM</p>
+                          <p className="text-lg font-semibold text-gray-900">{plan.ram}</p>
                         </div>
-                        <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Storage</p>
-                          <p className="text-lg font-semibold text-rdp-dark dark:text-white">{plan.storage}</p>
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <p className="text-sm font-medium text-gray-500">Storage</p>
+                          <p className="text-lg font-semibold text-gray-900">{plan.storage}</p>
                         </div>
                       </div>
                       
@@ -257,10 +196,10 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                             key={category}
                             open={openCategories[category]}
                             onOpenChange={() => toggleCategory(category)}
-                            className="mb-4 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
+                            className="mb-4 border border-gray-200 rounded-lg overflow-hidden"
                           >
-                            <CollapsibleTrigger className="w-full flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800/80 text-left">
-                              <h4 className="text-lg font-semibold text-rdp-dark dark:text-white">{category}</h4>
+                            <CollapsibleTrigger className="w-full flex items-center justify-between p-4 bg-gray-100 text-left">
+                              <h4 className="text-lg font-semibold text-gray-900">{category}</h4>
                               {openCategories[category] ? 
                                 <ChevronUp className="h-5 w-5 text-gray-500" /> : 
                                 <ChevronDown className="h-5 w-5 text-gray-500" />
@@ -271,11 +210,10 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                                 {features.map((feature, j) => {
                                   const featureData = planValues[plan.name as keyof typeof planValues][feature.name as keyof typeof planValues["Basic"]];
                                   
-                                  // Only show included features (check or partial)
                                   if (featureData.status === 'x') return null;
                                   
                                   return (
-                                    <div key={j} className="flex items-start space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg">
+                                    <div key={j} className="flex items-start space-x-3 p-2 hover:bg-gray-50 rounded-lg">
                                       <div className="mt-0.5">
                                         {renderIcon(featureData.status)}
                                       </div>
@@ -283,7 +221,7 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                                         <TooltipProvider>
                                           <Tooltip>
                                             <TooltipTrigger asChild>
-                                              <p className="font-medium text-gray-800 dark:text-gray-200 cursor-help">
+                                              <p className="font-medium text-gray-800 cursor-help">
                                                 {feature.name}
                                               </p>
                                             </TooltipTrigger>
@@ -292,7 +230,7 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                                             </TooltipContent>
                                           </Tooltip>
                                         </TooltipProvider>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">{featureData.value}</p>
+                                        <p className="text-sm text-gray-600">{featureData.value}</p>
                                       </div>
                                     </div>
                                   );
@@ -310,19 +248,17 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
           </div>
         )}
         
-        <div className="mt-16 bg-gray-50 dark:bg-gray-800 rounded-xl p-8 md:p-10 border border-gray-200 dark:border-gray-700">
+        <div className="mt-16 bg-gray-50 rounded-xl p-8 md:p-10 border border-gray-200">
           <div className="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto">
             <div>
-              <h3 className="text-2xl font-bold text-rdp-dark dark:text-white">Need a custom solution?</h3>
-              <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">
-                Configure your RDP with custom specifications tailored to your needs.
-              </p>
+              <h3 className="text-2xl font-bold text-gray-900">Need a custom solution?</h3>
+              <p className="mt-2 text-lg text-gray-600">Contact our sales team to get a tailored plan for your business needs.</p>
             </div>
-            <Link to="/configure" className="mt-6 md:mt-0">
-              <Button className="bg-rdp-blue hover:bg-rdp-blue-light text-white text-lg px-8 py-6 h-auto transform transition-all duration-300 hover:scale-105">
-                Configure Your RDP
+            <div className="mt-6 md:mt-0">
+              <Button className="bg-blue-600 text-white hover:bg-blue-500">
+                Contact Sales
               </Button>
-            </Link>
+            </div>
           </div>
         </div>
       </div>

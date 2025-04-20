@@ -63,7 +63,7 @@ const NotionNavbar = () => {
               </button>
               
               <Link to="/login">
-                <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2">
+                <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-2">
                   <LogIn className="h-4 w-4" />
                   <span>Log In</span>
                 </Button>

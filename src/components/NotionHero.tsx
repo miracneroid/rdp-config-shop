@@ -70,7 +70,7 @@ const defaultPricingPlans = [
 const NotionHero = () => {
   return (
     <div className="bg-white w-full">
-      <div className="notion-page-container py-16 sm:py-24">
+      <div className="notion-page-container py-16 sm:py-18 md:py-16">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
             <div className="text-left">
@@ -83,11 +83,11 @@ const NotionHero = () => {
                 with our easy-to-use building blocks.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <Link to="/configure" className="inline-flex items-center justify-center bg-[#e5e7eb] text-black px-6 py-2.5 rounded-md hover:bg-gray-200 transition-colors">
-                  <PuzzleIcon className="mr-2 h-5 w-5" />
+                <Link to="/register" className="inline-flex items-center justify-center bg-blue-500 text-white px-6 py-2.5 rounded-md transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-lg cursor-pointer">
+                  <PuzzleIcon className="mr-2 h-5 w-5 text-white" />
                   Start Building
                 </Link>
-                <Link to="/pricing" className="inline-flex items-center justify-center bg-[#e5e7eb] text-black px-6 py-2.5 rounded-md hover:bg-gray-200 transition-colors">
+                <Link to="/pricing" className="inline-flex items-center justify-center bg-[#e5e7eb] text-black px-6 py-2.5 rounded-md transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-lg cursor-pointer">
                   View Pricing
                 </Link>
               </div>
@@ -105,14 +105,11 @@ const NotionHero = () => {
 
           <div className="mt-24">
             <div className="text-center">
-              <Badge variant="secondary" className="mb-6 bg-[#4285f4] hover:bg-[#4285f4] text-white px-4 py-1">
-                Pricing
-              </Badge>
               <h2 className="text-4xl font-bold mb-4 text-[#1e2537]">
-                Choose the plan that fits your needs
+                Choose your puzzle pieces
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-16">
-                Simple, transparent pricing for everyone. No hidden fees or surprise charges.
+                Simple, transparent pricing for building your perfect workspace.
               </p>
             </div>
             <PricingSection plans={defaultPricingPlans} showDetailedComparison={false} />
