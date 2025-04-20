@@ -8,68 +8,53 @@ import Footer from "@/components/Footer";
 import StatsBanner from "@/components/StatsBanner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Shield, Cpu, Zap, Server, Globe, Clock, CheckCircle } from "lucide-react";
-import PricingCard from "@/components/PricingCard";
+import { Shield, Cpu, Zap, Server, Clock } from 'lucide-react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-const defaultPricingPlans = [
+const pricingPlans = [
   {
-    name: "Basic",
+    name: 'Basic RDP',
+    cpu: '2× Cores',
+    ram: '4GB RAM',
+    storage: '64GB NVMe',
+    bandwidth: '1G',
+    status: 'Available',
     price: 29,
-    cpu: "2 Cores",
-    ram: "4 GB",
-    storage: "64 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Basic Software Package",
-      "24/7 Access",
-      "Standard Support"
-    ]
   },
   {
-    name: "Standard",
+    name: 'Standard RDP',
+    cpu: '4× Cores',
+    ram: '8GB RAM',
+    storage: '128GB NVMe',
+    bandwidth: '1G',
+    status: 'Available',
     price: 59,
-    cpu: "4 Cores",
-    ram: "8 GB",
-    storage: "128 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Basic Software Package",
-      "24/7 Access",
-      "Priority Support",
-      "Daily Backups"
-    ],
-    popular: true
+    popular: true,
   },
   {
-    name: "Premium",
+    name: 'Premium RDP',
+    cpu: '8× Cores',
+    ram: '16GB RAM',
+    storage: '256GB NVMe',
+    bandwidth: '1G',
+    status: 'Available',
     price: 99,
-    cpu: "8 Cores",
-    ram: "16 GB",
-    storage: "256 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Professional Software Package",
-      "24/7 Access",
-      "Priority Support",
-      "Daily Backups",
-      "Enhanced Security"
-    ]
   },
   {
-    name: "Enterprise",
+    name: 'Enterprise RDP',
+    cpu: '16× Cores',
+    ram: '32GB RAM',
+    storage: '512GB NVMe',
+    bandwidth: '1G',
+    status: 'Available',
     price: 199,
-    cpu: "16 Cores",
-    ram: "32 GB",
-    storage: "512 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Enterprise Software Package",
-      "24/7 Access",
-      "Priority Support",
-      "Hourly Backups",
-      "Advanced Security",
-      "Dedicated Resources"
-    ]
   }
 ];
 
@@ -139,19 +124,79 @@ const Index = () => {
         <section className="py-16 bg-white dark:bg-gray-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Pricing</Badge>
-              <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">Choose the plan that fits your needs</h2>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Simple, transparent pricing for everyone. No hidden fees or surprise charges.
+              <Badge variant="outline" className="mb-2 text-primary border-primary">PRICING</Badge>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                Choose Your Perfect Plan
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                High-performance Windows RDP servers with full admin access, instant setup, and 24/7 support
               </p>
             </div>
-            
-            <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
-              {defaultPricingPlans.map((plan, index) => (
-                <div key={index}>
-                  <PricingCard plan={plan} />
+
+            {/* Server Location */}
+            <div className="flex justify-center mb-12 space-x-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg px-6 py-3 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center space-x-3">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                  </span>
+                  <span className="text-gray-900 dark:text-white font-medium">USA Server</span>
+                  <span className="text-gray-500 dark:text-gray-400">(~50ms)</span>
                 </div>
-              ))}
+              </div>
+            </div>
+
+            {/* Pricing Table */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead className="w-[200px]">PLAN</TableHead>
+                    <TableHead>CPU</TableHead>
+                    <TableHead>RAM</TableHead>
+                    <TableHead>STORAGE</TableHead>
+                    <TableHead>BANDWIDTH</TableHead>
+                    <TableHead className="text-right">PRICE</TableHead>
+                    <TableHead className="w-[100px]"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {pricingPlans.map((plan, index) => (
+                    <TableRow key={plan.name} className={plan.popular ? 'bg-primary/5 dark:bg-primary/10' : ''}>
+                      <TableCell className="font-medium">
+                        <div className="flex flex-col">
+                          <span className="text-gray-900 dark:text-white">{plan.name}</span>
+                          <div className="flex items-center mt-1">
+                            <span className="relative flex h-2 w-2">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                            </span>
+                            <span className="text-xs text-gray-500 ml-2">{plan.status}</span>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>{plan.cpu}</TableCell>
+                      <TableCell>{plan.ram}</TableCell>
+                      <TableCell>{plan.storage}</TableCell>
+                      <TableCell>{plan.bandwidth}</TableCell>
+                      <TableCell className="text-right font-semibold">
+                        ${plan.price}<span className="text-sm text-gray-500">/month</span>
+                      </TableCell>
+                      <TableCell>
+                        <Link to="/configure">
+                          <Button 
+                            variant={plan.popular ? "default" : "outline"}
+                            className={plan.popular ? "w-full bg-primary hover:bg-primary/90" : "w-full"}
+                          >
+                            Purchase
+                          </Button>
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           </div>
         </section>
