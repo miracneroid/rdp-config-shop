@@ -51,55 +51,61 @@ const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
   
   return (
     <div 
-      className={`rdp-card h-full p-8 flex flex-col transition-all duration-300 hover:scale-105 
-        group hover:border-rdp-blue hover:shadow-lg hover:shadow-rdp-blue/20 min-h-[500px] w-full`}
+      className={`relative bg-white dark:bg-gray-800 rounded-xl border border-gray-200 
+        dark:border-gray-700 p-8 flex flex-col transition-all duration-300 
+        group hover:border-rdp-blue hover:shadow-xl hover:shadow-rdp-blue/10 
+        min-h-[600px] w-full`}
     >
       {plan.popular && (
-        <div className="absolute top-0 right-0 bg-rdp-blue text-white dark:bg-rdp-blue dark:text-white py-1 px-4 text-sm font-medium rounded-bl-lg rounded-tr-lg">
+        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-rdp-blue text-white 
+          py-1 px-4 text-sm font-medium rounded-full">
           Most Popular
         </div>
       )}
       
-      <h3 className="text-2xl font-bold text-rdp-dark dark:text-white">{plan.name}</h3>
+      <h3 className="text-2xl font-bold text-rdp-dark dark:text-white mt-4">{plan.name}</h3>
       <div className="mt-4 flex items-baseline">
-        <span className="text-5xl font-bold text-rdp-dark dark:text-white">{settings.currency.symbol}{plan.price}</span>
-        <span className="ml-1 text-gray-500 dark:text-gray-400">/month</span>
+        <span className="text-5xl font-bold text-rdp-dark dark:text-white">
+          {settings.currency.symbol}{plan.price}
+        </span>
+        <span className="ml-2 text-gray-500 dark:text-gray-400">/month</span>
       </div>
       
-      <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-6">
-        <div className="space-y-4">
-          <div className="flex items-center">
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400 w-20">CPU</span>
-            <span className="text-sm font-semibold text-rdp-dark dark:text-white">{plan.cpu}</span>
-          </div>
-          <div className="flex items-center">
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400 w-20">RAM</span>
-            <span className="text-sm font-semibold text-rdp-dark dark:text-white">{plan.ram}</span>
-          </div>
-          <div className="flex items-center">
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400 w-20">Storage</span>
-            <span className="text-sm font-semibold text-rdp-dark dark:text-white">{plan.storage}</span>
-          </div>
+      <div className="mt-8 space-y-4">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">CPU</span>
+          <span className="text-sm font-semibold text-rdp-dark dark:text-white">{plan.cpu}</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">RAM</span>
+          <span className="text-sm font-semibold text-rdp-dark dark:text-white">{plan.ram}</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Storage</span>
+          <span className="text-sm font-semibold text-rdp-dark dark:text-white">{plan.storage}</span>
         </div>
       </div>
       
-      <ul className="mt-8 space-y-4 flex-grow">
-        {plan.features.map((feature, index) => (
-          <li key={index} className="flex items-start">
-            <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mr-2" />
-            <span className="text-sm text-gray-600 dark:text-gray-300">{feature}</span>
-          </li>
-        ))}
-      </ul>
+      <div className="mt-8 flex-grow">
+        <ul className="space-y-4">
+          {plan.features.map((feature, index) => (
+            <li key={index} className="flex items-center space-x-3">
+              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+              <span className="text-sm text-gray-600 dark:text-gray-300">{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
       
       <button 
         onClick={handleChoosePlan}
-        className="mt-8 w-full py-4 px-6 rounded-lg font-medium text-lg transition-all duration-300
+        className="mt-8 w-full py-4 px-6 rounded-lg text-base font-medium 
           bg-white dark:bg-gray-800 text-rdp-dark dark:text-white 
           border border-gray-200 dark:border-gray-700 
-          group-hover:bg-gray-100 group-hover:text-gray-700
-          dark:group-hover:bg-gray-700 dark:group-hover:text-gray-100
-          dark:hover:border-rdp-blue"
+          transition-all duration-300
+          group-hover:bg-rdp-blue group-hover:border-rdp-blue 
+          group-hover:text-white dark:group-hover:bg-rdp-blue 
+          dark:group-hover:border-rdp-blue"
       >
         Choose Plan
       </button>
