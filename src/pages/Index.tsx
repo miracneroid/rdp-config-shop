@@ -65,61 +65,6 @@ const Index = () => {
       <main className="w-full bg-transparent">
         <Hero />
         
-        {/* Why Choose Us Section */}
-        <section className="py-16 bg-white dark:bg-gray-900">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Why Choose Us</Badge>
-              <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">The most powerful RDP solution</h2>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Our Remote Desktop Protocol solutions are designed for performance, security, and reliability.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-8 mt-12">
-              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-lg mb-4">
-                  <Zap className="h-6 w-6 text-rdp-blue" />
-                </div>
-                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">Lightning Fast</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Our servers are optimized for speed with the latest hardware and network infrastructure.
-                </p>
-              </div>
-              
-              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 flex items-center justify-center rounded-lg mb-4">
-                  <Shield className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">Ultra Secure</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Enterprise-grade security protocols and encryption to keep your data safe.
-                </p>
-              </div>
-              
-              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center rounded-lg mb-4">
-                  <Server className="h-6 w-6 text-purple-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">99.9% Uptime</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Reliable infrastructure with redundant systems and automatic failover.
-                </p>
-              </div>
-            </div>
-            
-            <div className="mt-12 text-center">
-              <Link to="/configure">
-                <Button size="lg" className="bg-rdp-blue hover:bg-rdp-blue-light">
-                  Get Started
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
-        
-        <ServiceOfferings />
-        
         {/* Pricing Section */}
         <section className="py-16 bg-white dark:bg-gray-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -200,6 +145,61 @@ const Index = () => {
             </div>
           </div>
         </section>
+        
+        {/* Why Choose Us Section */}
+        <section className="py-16 bg-gray-50 dark:bg-gray-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Why Choose Us</Badge>
+              <h2 className="text-3xl font-bold text-rdp-dark dark:text-white">The most powerful RDP solution</h2>
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Our Remote Desktop Protocol solutions are designed for performance, security, and reliability.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8 mt-12">
+              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center rounded-lg mb-4">
+                  <Zap className="h-6 w-6 text-rdp-blue" />
+                </div>
+                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">Lightning Fast</h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Our servers are optimized for speed with the latest hardware and network infrastructure.
+                </p>
+              </div>
+              
+              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 flex items-center justify-center rounded-lg mb-4">
+                  <Shield className="h-6 w-6 text-green-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">Ultra Secure</h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Enterprise-grade security protocols and encryption to keep your data safe.
+                </p>
+              </div>
+              
+              <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all">
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center rounded-lg mb-4">
+                  <Server className="h-6 w-6 text-purple-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-rdp-dark dark:text-white mb-2">99.9% Uptime</h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Reliable infrastructure with redundant systems and automatic failover.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mt-12 text-center">
+              <Link to="/configure">
+                <Button size="lg" className="bg-rdp-blue hover:bg-rdp-blue-light">
+                  Get Started
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        
+        <ServiceOfferings />
         
         {/* Setup Time Section */}
         <section className="py-16 bg-white dark:bg-gray-900">
