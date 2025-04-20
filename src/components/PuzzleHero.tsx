@@ -2,6 +2,7 @@ import { ArrowRight, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import PricingSection from './PricingSection';
+import ComparisonSection from './ComparisonSection';
 
 const CircleProgress = ({ 
   percent, 
@@ -199,7 +200,7 @@ const PuzzleHero = () => {
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="puzzle-card p-6">
+          <div className="puzzle-card p-6 bg-white/80 dark:bg-puzzle-dark-light/80 hover:bg-white dark:hover:bg-puzzle-dark-light border border-gray-200 dark:border-white/5 rounded-xl shadow-lg hover:shadow-xl backdrop-blur-sm transition-all duration-300">
             <h3 className="text-xl font-semibold text-black dark:text-white mb-3">Instant Deployment</h3>
             <div className="bg-puzzle-blue/10 dark:bg-puzzle-blue/5 p-4 rounded-lg mb-4">
               <div className="flex flex-col space-y-2">
@@ -216,7 +217,7 @@ const PuzzleHero = () => {
             </div>
           </div>
           
-          <div className="puzzle-card p-6">
+          <div className="puzzle-card p-6 bg-white/80 dark:bg-puzzle-dark-light/80 hover:bg-white dark:hover:bg-puzzle-dark-light border border-gray-200 dark:border-white/5 rounded-xl shadow-lg hover:shadow-xl backdrop-blur-sm transition-all duration-300">
             <h3 className="text-xl font-semibold text-black dark:text-white mb-3">Global Infrastructure</h3>
             <div className="mb-3">
               <div className="inline-flex items-center bg-gray-100 dark:bg-white/10 text-black dark:text-white text-xs px-2 py-1 rounded">
@@ -227,7 +228,7 @@ const PuzzleHero = () => {
             <div className="text-xs text-black dark:text-white mt-2">Multi-region deployment</div>
           </div>
           
-          <div className="puzzle-card p-6">
+          <div className="puzzle-card p-6 bg-white/80 dark:bg-puzzle-dark-light/80 hover:bg-white dark:hover:bg-puzzle-dark-light border border-gray-200 dark:border-white/5 rounded-xl shadow-lg hover:shadow-xl backdrop-blur-sm transition-all duration-300">
             <h3 className="text-xl font-semibold text-black dark:text-white mb-3">Performance Metrics</h3>
             <div className="flex flex-col space-y-4 mt-4">
               <CircleProgress 
@@ -243,7 +244,7 @@ const PuzzleHero = () => {
             </div>
           </div>
           
-          <div className="puzzle-card p-6">
+          <div className="puzzle-card p-6 bg-white/80 dark:bg-puzzle-dark-light/80 hover:bg-white dark:hover:bg-puzzle-dark-light border border-gray-200 dark:border-white/5 rounded-xl shadow-lg hover:shadow-xl backdrop-blur-sm transition-all duration-300">
             <h3 className="text-xl font-semibold text-black dark:text-white mb-3">Resource Optimization</h3>
             <div className="space-y-3 mt-4">
               {[
@@ -265,42 +266,10 @@ const PuzzleHero = () => {
       </div>
       
       <div className="mt-20">
-        <PricingSection plans={[
-          {
-            name: "Basic",
-            price: 29,
-            cpu: "2 vCPU",
-            ram: "4 GB RAM",
-            storage: "80 GB SSD",
-            features: ["Windows/Linux OS", "24/7 Support", "99.9% Uptime"],
-          },
-          {
-            name: "Standard",
-            price: 59,
-            cpu: "4 vCPU",
-            ram: "8 GB RAM",
-            storage: "160 GB SSD",
-            features: ["Windows/Linux OS", "Priority Support", "99.9% Uptime", "Automated Backups"],
-            popular: true
-          },
-          {
-            name: "Premium",
-            price: 99,
-            cpu: "8 vCPU",
-            ram: "16 GB RAM",
-            storage: "320 GB SSD",
-            features: ["Windows/Linux OS", "24/7 Priority Support", "99.99% Uptime", "Daily Backups", "Dedicated Resources"],
-          },
-          {
-            name: "Enterprise",
-            price: 299,
-            cpu: "16 vCPU",
-            ram: "32 GB RAM",
-            storage: "640 GB SSD",
-            features: ["Custom OS Options", "Dedicated Support Team", "99.99% Uptime", "Hourly Backups", "Dedicated Resources", "Custom Network Config"],
-          }
-        ]} />
+        <PricingSection plans={[]} />
       </div>
+
+      <ComparisonSection />
     </div>
   );
 };
