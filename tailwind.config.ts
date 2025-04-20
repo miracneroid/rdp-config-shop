@@ -63,9 +63,9 @@ export default {
           ring: 'hsl(var(--sidebar-ring))'
         },
         puzzle: {
-          dark: '#191731',
-          darker: '#141328',
-          'dark-light': '#252348',
+          dark: '#000000',
+          darker: '#050505',
+          'dark-light': '#121212',
           green: '#54FEB8',
           'green-dark': '#37B686',
           purple: '#9B87F5',
@@ -109,12 +109,23 @@ export default {
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
+        },
+        bounceGraph: {
+          '0%, 100%': { transform: 'scaleY(1)' },
+          '50%': { transform: 'scaleY(1.1)' },
+        },
+        pulseConnection: {
+          '0%': { opacity: '0.3', transform: 'scale(1)' },
+          '50%': { opacity: '1', transform: 'scale(1.2)' },
+          '100%': { opacity: '0.3', transform: 'scale(1)' },
         }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'float': 'float 5s ease-in-out infinite'
+        'float': 'float 5s ease-in-out infinite',
+        'bounce-graph': 'bounceGraph 1.5s ease-in-out infinite',
+        'pulse-connection': 'pulseConnection 3s infinite'
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
