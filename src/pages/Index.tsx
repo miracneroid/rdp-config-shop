@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -195,7 +194,10 @@ const Index = () => {
         </section>
         
         {/* Pricing Section */}
-        <section id="pricing" className="py-16 bg-gray-900 dark:bg-black/40">
+        <section 
+          id="pricing" 
+          className="py-16 bg-gray-900 dark:bg-black/40 border-t border-b border-gray-800"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">PRICING</Badge>
@@ -276,7 +278,7 @@ const Index = () => {
         </section>
         
         {/* Why Choose Us Section */}
-        <section className="py-16 bg-gray-950 dark:bg-black/60">
+        <section className="py-16 bg-gray-950 dark:bg-black/60 border-b border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <Badge variant="outline" className="mb-2 text-rdp-blue border-rdp-blue">Why Choose Us</Badge>
@@ -328,10 +330,8 @@ const Index = () => {
           </div>
         </section>
         
-        <ServiceOfferings />
-        
         {/* Setup Time Section */}
-        <section className="py-16 bg-gray-900 dark:bg-black/60">
+        <section className="py-16 bg-gray-900 dark:bg-black/60 border-b border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row items-center md:space-x-12">
               <div className="md:w-1/2 mb-8 md:mb-0">
@@ -367,28 +367,55 @@ const Index = () => {
                 <div className="relative">
                   <div className="w-full h-64 md:h-80 bg-gray-800 dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
                     <div className="absolute inset-0">
-                      <div className="animate-pulse space-y-4 p-6">
-                        <div className="h-6 bg-gray-700 dark:bg-gray-700 rounded w-3/4"></div>
+                      <div className="bg-gray-900 h-8 flex items-center px-4">
+                        <div className="flex space-x-2">
+                          <div className="h-3 w-3 rounded-full bg-red-500"></div>
+                          <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
+                          <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center mb-6 p-4">
+                        <Server className="h-6 w-6 text-rdp-blue mr-2" />
+                        <span className="text-white font-medium">RDP Config</span>
+                        <span className="ml-auto px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full flex items-center">
+                          <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+                          All services are up and running
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-4 mb-6">
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <div className="text-gray-400 text-xs mb-1">Active Servers</div>
+                          <div className="flex items-center">
+                            <span className="text-white font-bold text-xl">3</span>
+                            <CheckCircle className="h-4 w-4 text-green-500 ml-2" />
+                          </div>
+                        </div>
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <div className="text-gray-400 text-xs mb-1">Suspended</div>
+                          <div className="text-white font-bold text-xl">1</div>
+                        </div>
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <div className="text-gray-400 text-xs mb-1">Pending</div>
+                          <div className="text-white font-bold text-xl">0</div>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-gray-700/30 rounded-lg p-4">
+                        <div className="text-gray-300 font-medium mb-4">Active Services</div>
                         <div className="space-y-3">
-                          <div className="h-4 bg-gray-700 dark:bg-gray-700 rounded"></div>
-                          <div className="h-4 bg-gray-700 dark:bg-gray-700 rounded w-5/6"></div>
-                          <div className="h-4 bg-gray-700 dark:bg-gray-700 rounded w-4/6"></div>
-                        </div>
-                      </div>
-
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="space-y-4 text-center">
-                          <div className="flex items-center justify-center">
-                            <div className="w-8 h-8 border-4 border-rdp-blue border-t-transparent rounded-full animate-spin"></div>
-                          </div>
-                          <div className="text-sm font-medium text-gray-400 animate-pulse">
-                            Setting up your RDP...
+                          <div className="flex items-center p-2 bg-gray-700/50 rounded-md">
+                            <div className="w-8 h-8 bg-red-500/20 rounded-full flex items-center justify-center mr-3">
+                              <Server className="h-4 w-4 text-red-400" />
+                            </div>
+                            <div>
+                              <div className="text-white text-sm">Standard-RDP</div>
+                              <div className="text-gray-400 text-xs">4GB RAM, 4 Cores</div>
+                            </div>
+                            <div className="ml-auto text-green-400 text-xs">Active</div>
                           </div>
                         </div>
-                      </div>
-
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
-                        <div className="h-full bg-rdp-blue animate-[progressBar_5s_ease-in-out_infinite]"></div>
                       </div>
                     </div>
                   </div>
@@ -404,6 +431,8 @@ const Index = () => {
             </div>
           </div>
         </section>
+        
+        <ServiceOfferings />
       </main>
       
       <StatsBanner />
