@@ -1,9 +1,9 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Monitor, Menu, X, LogIn, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import PuzzleIcon from '@/components/ui/puzzle-icon';
 
 const NotionNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,7 +24,9 @@ const NotionNavbar = () => {
           {/* Logo and brand name */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2">
-              <Monitor className="h-6 w-6 text-black" />
+              <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded">
+                <PuzzleIcon className="h-5 w-5 text-white" />
+              </div>
               <span className="text-lg font-medium tracking-tight text-black">Puzzle RDP</span>
             </Link>
           </div>

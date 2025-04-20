@@ -48,7 +48,7 @@ const DashboardCarousel = () => {
                 <img
                   src={image}
                   alt={`Dashboard screenshot ${index + 1}`}
-                  className="w-full h-[350px] object-cover"
+                  className="w-full h-64 object-cover" // Adjusted height
                 />
               </div>
             </CarouselItem>
