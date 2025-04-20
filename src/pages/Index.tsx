@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-puzzle-dark w-full">
+    <div className="min-h-screen bg-white dark:bg-puzzle-dark w-full">
       <PuzzleNavbar />
       <main className="w-full bg-transparent">
         <PuzzleHero />

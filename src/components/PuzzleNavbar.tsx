@@ -1,9 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
 import UserMenu from './UserMenu';
+import ThemeToggle from './ThemeToggle';
 
 const PuzzleNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,7 +34,7 @@ const PuzzleNavbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-puzzle-dark/80 backdrop-blur-lg border-b border-white/5">
+    <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-puzzle-dark/80 backdrop-blur-lg border-b border-gray-200 dark:border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -53,35 +53,37 @@ const PuzzleNavbar = () => {
                     C19,16.3,18.8,16.5,18.5,16.5z"/>
                 </svg>
               </div>
-              <span className="text-xl font-bold text-white">Puzzle RDP</span>
+              <span className="text-xl font-bold text-puzzle-dark dark:text-white">Puzzle RDP</span>
             </Link>
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/product" className="text-white/80 hover:text-white transition-colors">
+            <Link to="/product" className="nav-link">
               Product
             </Link>
-            <Link to="/customers" className="text-white/80 hover:text-white transition-colors">
+            <Link to="/customers" className="nav-link">
               Customers
             </Link>
-            <Link to="/company" className="text-white/80 hover:text-white transition-colors">
+            <Link to="/company" className="nav-link">
               Company
             </Link>
-            <Link to="/pricing" className="text-white/80 hover:text-white transition-colors">
+            <Link to="/pricing" className="nav-link">
               Pricing
             </Link>
             
+            <ThemeToggle />
+            
             {isLoading ? (
-              <div className="h-8 w-8 rounded-full bg-white/10 animate-pulse"></div>
+              <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-white/10 animate-pulse"></div>
             ) : isLoggedIn ? (
               <UserMenu />
             ) : (
               <div className="flex items-center space-x-3">
-                <Link to="/login" className="text-white border border-white/20 px-5 py-2 rounded-lg hover:bg-white/5 transition-colors">
+                <Link to="/login" className="text-gray-700 dark:text-white border border-gray-200 dark:border-white/20 px-5 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                   Log in
                 </Link>
-                <Link to="/register" className="bg-puzzle-green text-puzzle-dark px-5 py-2 rounded-lg hover:bg-puzzle-green-dark transition-colors">
-                  Get started for free
+                <Link to="/pricing" className="bg-puzzle-green text-puzzle-dark px-5 py-2 rounded-lg hover:bg-puzzle-green-dark transition-colors">
+                  Get Started
                 </Link>
               </div>
             )}
@@ -91,7 +93,7 @@ const PuzzleNavbar = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-puzzle-green focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-white hover:text-puzzle-green focus:outline-none"
             >
               {isMenuOpen ? (
                 <X className="h-6 w-6" />
@@ -105,39 +107,39 @@ const PuzzleNavbar = () => {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-puzzle-dark border-t border-white/5">
+        <div className="md:hidden bg-white dark:bg-puzzle-dark border-t border-gray-200 dark:border-white/5">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link 
               to="/" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/5"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
             </Link>
             <Link 
               to="/product" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/5"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5"
               onClick={() => setIsMenuOpen(false)}
             >
               Product
             </Link>
             <Link 
               to="/customers" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/5"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5"
               onClick={() => setIsMenuOpen(false)}
             >
               Customers
             </Link>
             <Link 
               to="/company" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/5"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5"
               onClick={() => setIsMenuOpen(false)}
             >
               Company
             </Link>
             <Link 
               to="/pricing" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/5"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5"
               onClick={() => setIsMenuOpen(false)}
             >
               Pricing
@@ -147,17 +149,17 @@ const PuzzleNavbar = () => {
               <>
                 <Link 
                   to="/login" 
-                  className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/5"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Log in
                 </Link>
                 <Link 
-                  to="/register" 
+                  to="/pricing" 
                   className="block px-3 py-2 rounded-md text-base font-medium bg-puzzle-green text-puzzle-dark hover:bg-puzzle-green-dark"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Get started for free
+                  Get Started
                 </Link>
               </>
             )}
