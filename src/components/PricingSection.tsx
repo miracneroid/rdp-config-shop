@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -30,6 +31,66 @@ interface StatsData {
   deployedServers: number;
   ticketReplies: number;
 }
+
+// Define the planValues object to address the TypeScript errors
+const planValues = {
+  "Basic": {
+    "CPU Performance": { status: "check", value: "Standard" },
+    "SLA Uptime": { status: "check", value: "99.9%" },
+    "Storage Type": { status: "check", value: "SSD" },
+    "Network Speed": { status: "check", value: "Up to 1 Gbps" },
+    "Automated Backups": { status: "partial", value: "Daily" },
+    "Multiple OS Options": { status: "check", value: "Windows & Linux" },
+    "Root Access": { status: "check", value: "Yes" },
+    "Dedicated Resources": { status: "x", value: "No" },
+    "24/7 Technical Support": { status: "check", value: "Yes" },
+    "Response Time": { status: "check", value: "Within 24 hours" },
+    "Managed Services": { status: "x", value: "No" },
+    "Priority Support Queue": { status: "x", value: "No" }
+  },
+  "Standard": {
+    "CPU Performance": { status: "check", value: "Enhanced" },
+    "SLA Uptime": { status: "check", value: "99.95%" },
+    "Storage Type": { status: "check", value: "SSD" },
+    "Network Speed": { status: "check", value: "Up to 2 Gbps" },
+    "Automated Backups": { status: "check", value: "Daily" },
+    "Multiple OS Options": { status: "check", value: "Windows & Linux" },
+    "Root Access": { status: "check", value: "Yes" },
+    "Dedicated Resources": { status: "partial", value: "Partial" },
+    "24/7 Technical Support": { status: "check", value: "Yes" },
+    "Response Time": { status: "check", value: "Within 12 hours" },
+    "Managed Services": { status: "x", value: "No" },
+    "Priority Support Queue": { status: "check", value: "Yes" }
+  },
+  "Premium": {
+    "CPU Performance": { status: "check", value: "High Performance" },
+    "SLA Uptime": { status: "check", value: "99.99%" },
+    "Storage Type": { status: "check", value: "NVMe SSD" },
+    "Network Speed": { status: "check", value: "Up to 5 Gbps" },
+    "Automated Backups": { status: "check", value: "Daily" },
+    "Multiple OS Options": { status: "check", value: "Windows & Linux" },
+    "Root Access": { status: "check", value: "Yes" },
+    "Dedicated Resources": { status: "check", value: "Yes" },
+    "24/7 Technical Support": { status: "check", value: "Yes" },
+    "Response Time": { status: "check", value: "Within 6 hours" },
+    "Managed Services": { status: "partial", value: "Basic" },
+    "Priority Support Queue": { status: "check", value: "Yes" }
+  },
+  "Enterprise": {
+    "CPU Performance": { status: "check", value: "Maximum Performance" },
+    "SLA Uptime": { status: "check", value: "99.999%" },
+    "Storage Type": { status: "check", value: "NVMe SSD" },
+    "Network Speed": { status: "check", value: "Up to 10 Gbps" },
+    "Automated Backups": { status: "check", value: "Hourly" },
+    "Multiple OS Options": { status: "check", value: "Windows & Linux" },
+    "Root Access": { status: "check", value: "Yes" },
+    "Dedicated Resources": { status: "check", value: "Yes" },
+    "24/7 Technical Support": { status: "check", value: "Yes" },
+    "Response Time": { status: "check", value: "Within 1 hour" },
+    "Managed Services": { status: "check", value: "Full" },
+    "Priority Support Queue": { status: "check", value: "Yes" }
+  }
+};
 
 const PricingSection = ({ plans, showDetailedComparison = true }: PricingSectionProps) => {
   const { settings } = useSettings();
