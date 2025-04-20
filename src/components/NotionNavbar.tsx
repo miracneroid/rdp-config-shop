@@ -1,9 +1,10 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Monitor, Menu, X, LogIn, Moon, Sun } from 'lucide-react';
+import { Menu, X, LogIn, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import PuzzleIcon from '@/components/ui/puzzle-icon';
+import PuzzleIcon from './ui/puzzle-icon';
 
 const NotionNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
