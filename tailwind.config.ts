@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -60,8 +61,8 @@ export default {
           'success': '#059669',
           'warning': '#D97706',
           'error': '#DC2626',
-          // Add the missing purple color as indicated
-          'purple': '#8B5CF6', // <-- Newly added
+          'purple': '#8B5CF6',
+          'purple-light': '#A78BFA', // Added the missing purple-light color
           'gray': {
             100: '#F1F5F9',
             200: '#E2E8F0',
