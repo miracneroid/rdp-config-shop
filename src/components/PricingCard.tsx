@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -87,7 +88,7 @@ const PricingCard = ({ plan }: PricingCardProps) => {
         {plan.features.map((feature, index) => (
           <div key={index} className="flex items-start gap-2">
             <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-            <span className="text-gray-600 text-sm">{feature}</span>
+            <span className="text-gray-600 text-sm truncate">{feature}</span>
           </div>
         ))}
       </div>

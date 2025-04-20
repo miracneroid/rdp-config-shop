@@ -1,3 +1,4 @@
+
 import React from "react";
 import NotionNavbar from "@/components/NotionNavbar";
 import NotionHero from "@/components/NotionHero";
@@ -18,7 +19,7 @@ const defaultPricingPlans = [
     storage: "64 GB SSD",
     features: [
       "Windows or Linux OS",
-      "Basic Software Package",
+      "Basic Software Suite",
       "24/7 Access",
       "Standard Support"
     ]
@@ -31,7 +32,7 @@ const defaultPricingPlans = [
     storage: "128 GB SSD",
     features: [
       "Windows or Linux OS",
-      "Basic Software Package",
+      "Standard Software Suite",
       "24/7 Access",
       "Priority Support",
       "Daily Backups"
@@ -46,7 +47,7 @@ const defaultPricingPlans = [
     storage: "256 GB SSD",
     features: [
       "Windows or Linux OS",
-      "Professional Software Package",
+      "Professional Suite",
       "24/7 Access",
       "Priority Support",
       "Daily Backups",
@@ -61,7 +62,7 @@ const defaultPricingPlans = [
     storage: "512 GB SSD",
     features: [
       "Windows or Linux OS",
-      "Enterprise Software Package",
+      "Enterprise Suite",
       "24/7 Access",
       "Priority Support",
       "Hourly Backups",
