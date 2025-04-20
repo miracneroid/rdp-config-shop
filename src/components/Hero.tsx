@@ -1,5 +1,5 @@
 
-import { ArrowRight, LaptopIcon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -7,11 +7,14 @@ import { motion } from 'framer-motion';
 
 const Hero = () => {
   return (
-    <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-gray-50/50 to-white dark:from-gray-950 dark:to-gray-900">
-      {/* Background gradients */}
+    <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-rdp-primary/5 to-white dark:from-rdp-dark dark:to-rdp-dark/90">
+      {/* Unique mesh background pattern */}
+      <div className="absolute inset-0 bg-mesh-pattern opacity-50"></div>
+      
+      {/* Animated gradient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-purple-300/30 dark:bg-purple-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-300/30 dark:bg-blue-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute -top-20 -left-20 w-[500px] h-[500px] bg-rdp-secondary/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-20 -right-20 w-[500px] h-[500px] bg-rdp-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 flex flex-col items-center text-center">
@@ -21,9 +24,9 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Badge variant="outline" className="mb-8 px-4 py-2 text-sm bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border-gray-200 dark:border-gray-800">
-            <span className="text-rdp-blue dark:text-rdp-blue-light">New:</span>
-            <span className="ml-2 text-gray-600 dark:text-gray-400">Instant RDP Deployment Available</span>
+          <Badge variant="outline" className="mb-8 px-4 py-2 text-sm bg-white/80 dark:bg-rdp-dark/80 backdrop-blur-sm border-rdp-primary/20 dark:border-rdp-primary/40">
+            <span className="text-rdp-primary">New:</span>
+            <span className="ml-2 text-rdp-gray-600 dark:text-rdp-gray-300">Instant RDP Deployment Available</span>
           </Badge>
         </motion.div>
 
@@ -36,7 +39,7 @@ const Hero = () => {
         >
           Deploy Your RDP
           <br />
-          <span className="bg-gradient-to-r from-rdp-blue via-purple-500 to-rdp-purple text-transparent bg-clip-text">
+          <span className="bg-gradient-to-r from-rdp-primary via-rdp-secondary to-rdp-accent bg-clip-text text-transparent">
             In Minutes
           </span>
         </motion.h1>
@@ -46,7 +49,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl"
+          className="text-xl md:text-2xl text-rdp-gray-600 dark:text-rdp-gray-300 mb-12 max-w-3xl"
         >
           High-performance remote desktop environments with enterprise-grade security.
           Configure and deploy your RDP instance in just a few clicks.
@@ -60,28 +63,28 @@ const Hero = () => {
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <Link to="/configure">
-            <Button size="lg" className="h-14 px-8 text-lg bg-gradient-to-r from-rdp-blue to-rdp-purple hover:opacity-90 transition-opacity">
+            <Button size="lg" className="h-14 px-8 text-lg bg-gradient-to-r from-rdp-primary to-rdp-secondary hover:opacity-90 transition-opacity">
               Start Configuring
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
           <Link to="/pricing">
-            <Button size="lg" variant="outline" className="h-14 px-8 text-lg">
+            <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-rdp-primary/20 dark:border-rdp-primary/40 hover:bg-rdp-primary/5">
               View Pricing
             </Button>
           </Link>
         </motion.div>
 
-        {/* Preview Image */}
+        {/* Preview Container */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="mt-20 relative w-full max-w-5xl mx-auto"
         >
-          <div className="relative rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-tr from-rdp-blue/10 to-rdp-purple/10 dark:from-rdp-blue/20 dark:to-rdp-purple/20"></div>
-            <div className="bg-gray-800 h-8 flex items-center px-4">
+          <div className="relative rounded-xl overflow-hidden border border-rdp-primary/20 dark:border-rdp-primary/40 shadow-2xl">
+            <div className="absolute inset-0 bg-gradient-to-tr from-rdp-primary/5 to-rdp-secondary/5"></div>
+            <div className="bg-rdp-gray-800 h-8 flex items-center px-4">
               <div className="flex space-x-2">
                 <div className="h-3 w-3 rounded-full bg-red-500"></div>
                 <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
@@ -96,19 +99,29 @@ const Hero = () => {
           </div>
           
           {/* Floating Cards */}
-          <div className="absolute -left-4 top-1/4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 animate-float">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="absolute -left-4 top-1/4 bg-white dark:bg-rdp-dark p-4 rounded-xl shadow-lg border border-rdp-primary/20 dark:border-rdp-primary/40 animate-float"
+          >
             <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium">Server Status: Online</span>
+              <div className="w-2 h-2 bg-rdp-success rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-rdp-gray-700 dark:text-rdp-gray-300">Server Status: Online</span>
             </div>
-          </div>
+          </motion.div>
           
-          <div className="absolute -right-4 bottom-1/4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 animate-float" style={{ animationDelay: '0.2s' }}>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="absolute -right-4 bottom-1/4 bg-white dark:bg-rdp-dark p-4 rounded-xl shadow-lg border border-rdp-primary/20 dark:border-rdp-primary/40 animate-float"
+            style={{ animationDelay: '0.2s' }}
+          >
             <div className="flex items-center space-x-2">
-              <LaptopIcon className="h-4 w-4 text-rdp-blue" />
-              <span className="text-sm font-medium">Ready to Connect</span>
+              <span className="text-sm font-medium text-rdp-gray-700 dark:text-rdp-gray-300">Ready to Connect</span>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </div>

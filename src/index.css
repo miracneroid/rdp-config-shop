@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,34 +6,34 @@
   :root {
     --background: 226 100% 98%;
     --foreground: 224 71% 4%;
-
+    
     --card: 0 0% 100%;
     --card-foreground: 224 71% 4%;
-
+    
     --popover: 0 0% 100%;
     --popover-foreground: 224 71% 4%;
-
+    
     --primary: 252 56% 57%;
     --primary-foreground: 210 40% 98%;
-
+    
     --secondary: 199 89% 48%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-
+    
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
+    
     --accent: 250 95% 76%;
     --accent-foreground: 222.2 47.4% 11.2%;
-
+    
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
+    
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 252 56% 57%;
-
+    
     --radius: 1rem;
-
+    
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -46,30 +45,30 @@
   }
 
   .dark {
-    --background: 224 71% 4%;
+    --background: 233 47% 14%;
     --foreground: 210 40% 98%;
-
+    
     --card: 224 71% 4%;
     --card-foreground: 210 40% 98%;
-
+    
     --popover: 224 71% 4%;
     --popover-foreground: 210 40% 98%;
-
+    
     --primary: 252 56% 57%;
     --primary-foreground: 222.2 47.4% 11.2%;
-
+    
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
+    
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
+    
     --accent: 250 95% 76%;
     --accent-foreground: 210 40% 98%;
-
+    
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
+    
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 252 56% 57%;
@@ -94,7 +93,6 @@
     @apply bg-background text-foreground transition-colors duration-300;
   }
 
-  /* Force body to have theme classes */
   body.dark {
     @apply bg-rdp-dark text-white;
   }
@@ -121,7 +119,6 @@
     @apply bg-white dark:bg-rdp-dark-light text-rdp-dark dark:text-white font-medium rounded-xl px-6 py-3 border border-indigo-100 dark:border-indigo-950/20 shadow-sm hover:shadow hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all duration-300;
   }
   
-  /* Redesigned styles */
   .glass-card {
     @apply bg-white/10 dark:bg-black/20 backdrop-blur-md border border-indigo-200/50 dark:border-indigo-800/50 rounded-xl shadow-lg;
   }
@@ -138,7 +135,6 @@
     @apply bg-white dark:bg-gray-800 border border-indigo-200 dark:border-indigo-800/40 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-rdp-blue dark:focus:ring-rdp-blue-light transition-all duration-200;
   }
 
-  /* New Unique Design Components */
   .neon-card {
     @apply bg-gradient-to-br from-white/95 to-white/80 dark:from-rdp-dark-light/90 dark:to-black/80 backdrop-blur-lg rounded-2xl border border-indigo-100 dark:border-indigo-500/10 shadow-[0_10px_20px_-5px_rgba(79,70,229,0.3)] dark:shadow-[0_5px_20px_-5px_rgba(99,102,241,0.6)] overflow-hidden;
   }
@@ -187,12 +183,10 @@
   100% { width: 100%; }
 }
 
-/* Smooth transitions for theme changes */
 .transition-theme {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
