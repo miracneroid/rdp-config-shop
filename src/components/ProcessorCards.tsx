@@ -1,21 +1,21 @@
 
-import { Server, BarChart, Clock } from 'lucide-react';
+import { Shield, Clock, Server } from 'lucide-react';
 
 const stats = [
   { 
-    icon: Server,
-    value: '147k+',
-    label: 'deployed servers'
+    icon: Shield,
+    value: '100%',
+    label: 'secure hosting'
   },
   { 
-    icon: BarChart,
-    value: '99.9%',
-    label: 'uptime'
+    icon: Server,
+    value: '24/7',
+    label: 'live support'
   },
   {
     icon: Clock,
-    value: '5min',
-    label: 'setup time'
+    value: '2min',
+    label: 'instant setup'
   }
 ];
 
