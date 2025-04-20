@@ -1,4 +1,3 @@
-
 import { Shield, Cpu, Zap, Server, Globe, Clock } from 'lucide-react';
 
 const features = [
@@ -36,7 +35,7 @@ const features = [
 
 const NotionFeatures = () => {
   return (
-    <div className="bg-white dark:bg-rdp-dark py-16 sm:py-24">
+    <div className="bg-white py-16 sm:py-24">
       <div className="notion-page-container">
         <div className="text-center mb-16">
           <h2 className="notion-heading-2">Enterprise-Grade RDP Solutions</h2>
@@ -49,11 +48,11 @@ const NotionFeatures = () => {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => (
             <div key={feature.name} className="notion-card group hover:-translate-y-1 transition-all duration-300">
-              <div className="flex h-12 w-12 items-center justify-center rounded-md bg-gray-100 dark:bg-gray-800 mb-5 group-hover:bg-black group-hover:text-white dark:group-hover:bg-white dark:group-hover:text-black transition-colors duration-300">
+              <div className="flex h-12 w-12 items-center justify-center rounded-md bg-gray-100 mb-5 group-hover:bg-black group-hover:text-white transition-colors duration-300">
                 <feature.icon className="h-6 w-6" aria-hidden="true" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">{feature.name}</h3>
-              <p className="text-notion-text-light dark:text-gray-400">{feature.description}</p>
+              <h3 className="text-xl font-semibold mb-2 text-[#1e2537]">{feature.name}</h3>
+              <p className="text-gray-500">{feature.description}</p>
             </div>
           ))}
         </div>

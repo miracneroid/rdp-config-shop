@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -24,7 +23,6 @@ import {
   Bell
 } from "lucide-react";
 
-// Placeholder components for the new tabs
 const Coupons = () => (
   <div className="p-4">
     <h2 className="text-2xl font-bold mb-4">Your Coupons</h2>
@@ -58,7 +56,6 @@ const UserDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Check if user is logged in
   useEffect(() => {
     const checkSession = async () => {
       setIsLoading(true);
@@ -74,14 +71,12 @@ const UserDashboard = () => {
           return;
         }
         
-        // Get user profile
         const { data: profileData } = await supabase
           .from('profiles')
           .select('display_name')
           .eq('id', session.user.id)
           .maybeSingle();
         
-        // Check if user has profile data from Google login
         let displayName = profileData?.display_name;
         
         if (!displayName) {
@@ -109,18 +104,15 @@ const UserDashboard = () => {
     checkSession();
   }, [navigate, toast]);
 
-  // Handle tab changes - update URL when tab changes
   const handleTabChange = (value: string) => {
     setActiveTab(value);
     navigate(`/dashboard?tab=${value}`, { replace: true });
   };
 
-  // Update active tab when URL changes
   useEffect(() => {
     if (tabFromUrl && ["profile", "rdp-management", "orders", "support", "coupons", "giftcards", "notifications"].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     } else {
-      // If invalid tab parameter, default to profile and update URL
       setActiveTab("profile");
       navigate(`/dashboard?tab=profile`, { replace: true });
     }
@@ -128,7 +120,7 @@ const UserDashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background/95 to-background/90 dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-800/90">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-white/95 to-white/90">
         <Navbar />
         <div className="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
           <div className="text-center">
@@ -142,22 +134,22 @@ const UserDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background/95 to-background/90 dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-800/90">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-white/95 to-white/90">
       <Navbar />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-full bg-rdp-blue/10 dark:bg-rdp-blue-light/10">
-            <User className="h-8 w-8 text-rdp-blue dark:text-rdp-blue-light" />
+          <div className="p-2 rounded-full bg-rdp-blue/10">
+            <User className="h-8 w-8 text-rdp-blue" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-foreground/80 dark:from-white dark:to-white/80 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold text-[#1e2537]">
               My Account
             </h1>
-            <p className="text-muted-foreground">Welcome back, {userName}</p>
+            <p className="text-gray-500">Welcome back, {userName}</p>
           </div>
         </div>
         
-        <Card className="mb-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
+        <Card className="mb-8 bg-white border border-gray-200/50 shadow-xl">
           <CardContent className="p-0">
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
               <TabsList className="w-full grid grid-cols-2 md:grid-cols-6 rounded-none bg-white/50 dark:bg-gray-900/50 border-b border-gray-200/50 dark:border-gray-700/50">
