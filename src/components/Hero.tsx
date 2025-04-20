@@ -1,81 +1,79 @@
+
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 
 const Hero = () => {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 py-16 sm:py-24">
-      <div className="absolute inset-0">
-        <div className="absolute inset-y-0 right-0 -translate-x-1/3 translate-y-1/4 transform">
-          <div className="h-56 w-56 rounded-full bg-rdp-blue/10 blur-3xl"></div>
-        </div>
-        <div className="absolute inset-y-0 left-0 translate-x-1/4 -translate-y-1/4 transform">
-          <div className="h-72 w-72 rounded-full bg-rdp-blue/20 blur-3xl"></div>
-        </div>
-      </div>
+    <div className="relative min-h-screen pt-20 overflow-hidden bg-gradient-radial from-rdp-gray-50 to-white">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]"></div>
+      
+      {/* Gradient Orbs */}
+      <div className="absolute -top-40 -right-40 w-96 h-96 bg-rdp-accent-purple/10 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-rdp-accent-cyan/10 rounded-full blur-3xl"></div>
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20">
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-          <div className="sm:text-center md:mx-auto lg:col-span-6 lg:text-left flex flex-col justify-center">
+          <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left flex flex-col justify-center">
             <Badge variant="outline" className="mb-4 md:ml-0 inline-flex mx-auto lg:mx-0 text-rdp-blue border-rdp-blue w-fit">
-              Desktop on Demand
+              Remote Desktop Platform
             </Badge>
             <h1>
-              <span className="mt-2 block text-4xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-5xl xl:text-6xl">
-                Custom RDP<br />
-                <span className="bg-gradient-to-r from-rdp-blue to-rdp-blue-light text-transparent bg-clip-text">Made Simple</span>
+              <span className="mt-1 block text-4xl tracking-tight font-extrabold sm:text-5xl xl:text-6xl">
+                <span className="block text-gray-900">Remote Desktop</span>
+                <span className="block bg-gradient-to-r from-rdp-blue via-rdp-accent-purple to-rdp-accent-cyan bg-clip-text text-transparent">
+                  Made Simple
+                </span>
               </span>
             </h1>
-            <p className="mt-3 text-base text-gray-500 dark:text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-              Deploy secure, high-performance remote desktop environments 
-              tailored to your exact specifications within minutes.
-              Choose your performance tier, region, and software setup
-              with our easy-to-use configuration system.
+            <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+              Deploy secure, high-performance remote desktop environments tailored to your needs in minutes.
+              Choose your specs, region, and software setup with our intuitive configuration system.
             </p>
             <div className="mt-8 flex gap-4 sm:justify-center lg:justify-start">
-              <Link to="/pricing" className="inline-flex items-center justify-center rounded-md border border-transparent bg-rdp-blue px-5 py-3 text-base font-medium text-white hover:bg-rdp-blue-light transition-colors">
-                <span>Get Started</span>
+              <Link to="/configure" className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-rdp-blue hover:bg-rdp-blue-dark transition-colors">
+                Configure Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
-              <Link to="/faq" className="inline-flex items-center justify-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-5 py-3 text-base font-medium text-rdp-dark dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                Learn More
+              <Link to="/demo" className="inline-flex items-center px-6 py-3 border border-gray-200 text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                View Demo
               </Link>
             </div>
           </div>
-          <div className="relative mt-12 sm:mx-auto lg:col-span-6 lg:mx-0 lg:mt-0 lg:flex lg:max-w-none lg:items-center">
-            <div className="relative w-full">
-              <div className="relative overflow-hidden rounded-xl shadow-2xl">
-                <div className="bg-white dark:bg-gray-800 overflow-hidden">
-                  <div className="bg-gray-800 h-6 flex items-center px-4">
-                    <div className="flex space-x-1">
-                      <div className="h-2 w-2 rounded-full bg-red-500"></div>
-                      <div className="h-2 w-2 rounded-full bg-yellow-500"></div>
-                      <div className="h-2 w-2 rounded-full bg-green-500"></div>
+          
+          <div className="mt-16 sm:mt-24 lg:mt-0 lg:col-span-6">
+            <div className="relative">
+              {/* Dashboard Preview */}
+              <div className="relative backdrop-blur-xl bg-white/50 border border-gray-200 rounded-2xl shadow-2xl overflow-hidden">
+                <div className="h-[480px]">
+                  <div className="flex items-center border-b border-gray-200 bg-gray-50 p-2">
+                    <div className="flex space-x-1.5">
+                      <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                      <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                      <div className="w-3 h-3 rounded-full bg-green-400"></div>
                     </div>
                   </div>
-                  <img
-                    className="w-full"
-                    src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-                    alt="RDP dashboard preview"
+                  <img 
+                    src="/placeholder.svg"
+                    alt="RDP Dashboard"
+                    className="w-full object-cover"
                   />
                 </div>
               </div>
               
-              <div className="absolute -bottom-8 -left-8 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-w-xs animate-float">
-                <div className="flex items-center mb-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                  <span className="text-sm font-semibold text-rdp-dark dark:text-white">Ready in 5 minutes</span>
+              {/* Floating Stats Card */}
+              <div className="absolute -top-4 -right-4 bg-white rounded-lg shadow-lg p-4 border border-gray-200">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <span className="text-sm font-semibold text-gray-900">99.9% Uptime</span>
                 </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400">
-                  Your RDP server is configured and ready for immediate access.
-                </p>
               </div>
-
-              <div className="absolute -top-6 -right-6 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 animate-float" style={{ animationDelay: "0.5s" }}>
-                <div className="text-center">
-                  <span className="text-3xl font-bold text-rdp-blue">100%</span>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Uptime Guarantee</p>
-                </div>
+              
+              {/* Floating Features Card */}
+              <div className="absolute -bottom-4 -left-4 bg-white rounded-lg shadow-lg p-4 border border-gray-200">
+                <div className="text-sm font-medium text-gray-900">Instant Setup</div>
+                <p className="text-xs text-gray-500">Ready in 5 minutes</p>
               </div>
             </div>
           </div>
