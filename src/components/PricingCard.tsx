@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -17,10 +16,9 @@ export interface PricingPlan {
 
 interface PricingCardProps {
   plan: PricingPlan;
-  isSelected?: boolean;
 }
 
-const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
+const PricingCard = ({ plan }: PricingCardProps) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { settings } = useSettings();
@@ -53,7 +51,7 @@ const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
     <div className={`
       bg-white rounded-xl p-8 flex flex-col h-full transition-all duration-300 
       shadow-sm hover:shadow-xl border border-transparent
-      ${isSelected ? 'ring-2 ring-blue-500 ring-opacity-50' : 'hover:ring-1 hover:ring-blue-300 hover:ring-opacity-30'}
+      hover:ring-1 hover:ring-blue-300 hover:ring-opacity-30
       group relative
     `}>
       {plan.popular && (

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -99,7 +98,6 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
     ticketReplies: 130414
   });
   const [loading, setLoading] = useState(true);
-  const [selectedPlan, setSelectedPlan] = useState<string>(plans.find(p => p.popular)?.name || plans[0].name);
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({
     'Performance': true,
     'Features': false,
@@ -181,11 +179,10 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
         <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
           {plans.map((plan, index) => (
             <div 
-              key={index} 
-              onClick={() => setSelectedPlan(plan.name)}
-              className={`cursor-pointer transition-all duration-300 transform ${selectedPlan === plan.name ? 'scale-105 border-black' : 'hover:scale-105 hover:border-black hover:outline hover:outline-1 hover:outline-black'}`}
+              key={index}
+              className="transition-all duration-300 transform hover:scale-105"
             >
-              <PricingCard plan={plan} isSelected={selectedPlan === plan.name} />
+              <PricingCard plan={plan} />
             </div>
           ))}
         </div>
@@ -200,7 +197,7 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
             </div>
             
             <div className="bg-gray-50 rounded-xl p-6 md:p-8 border border-gray-200 shadow-sm">
-              <Tabs value={selectedPlan} onValueChange={setSelectedPlan} className="w-full">
+              <Tabs value={plans.find(p => p.popular)?.name || plans[0].name} onValueChange={() => {}} className="w-full">
                 <TabsList className="w-full flex justify-center mb-6 bg-transparent overflow-x-auto p-1 md:p-0 space-x-2">
                   {plans.map((plan, index) => (
                     <TabsTrigger 
