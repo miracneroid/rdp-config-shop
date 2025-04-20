@@ -1,5 +1,5 @@
 
-import { blocks } from 'lucide-react';
+import { Blocks } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 
@@ -23,7 +23,7 @@ const NotionHero = () => {
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center sm:justify-start">
               <Link to="/configure" className="notion-button inline-flex items-center justify-center">
-                <blocks className="mr-2 h-5 w-5" />
+                <Blocks className="mr-2 h-5 w-5" />
                 Start Building
               </Link>
               <Link to="/pricing" className="notion-button-outline inline-flex items-center justify-center">
