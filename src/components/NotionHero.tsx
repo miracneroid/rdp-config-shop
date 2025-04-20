@@ -103,12 +103,12 @@ const NotionHero = () => {
           
           <DashboardCarousel />
 
-          <div className="mt-24">
+          <div className="mt-16">
             <div className="text-center">
-              <h2 className="text-4xl font-bold mb-4 text-[#1e2537]">
+              <h2 className="text-3xl font-bold mb-4 text-[#1e2537]">
                 Choose your puzzle pieces
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-16">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-10">
                 Simple, transparent pricing for building your perfect workspace.
               </p>
             </div>
