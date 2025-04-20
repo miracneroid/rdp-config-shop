@@ -1,3 +1,4 @@
+
 import { ArrowRight, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
@@ -177,6 +178,69 @@ const InteractiveGraph = () => {
 };
 
 const PuzzleHero = () => {
+  // Define default pricing plans
+  const defaultPricingPlans = [
+    {
+      name: "Basic",
+      price: 29,
+      cpu: "2 Cores",
+      ram: "4 GB",
+      storage: "64 GB SSD",
+      features: [
+        "Windows or Linux OS",
+        "Basic Software Package",
+        "24/7 Access",
+        "Standard Support"
+      ]
+    },
+    {
+      name: "Standard",
+      price: 59,
+      cpu: "4 Cores",
+      ram: "8 GB",
+      storage: "128 GB SSD",
+      features: [
+        "Windows or Linux OS",
+        "Basic Software Package",
+        "24/7 Access",
+        "Priority Support",
+        "Daily Backups"
+      ],
+      popular: true
+    },
+    {
+      name: "Premium",
+      price: 99,
+      cpu: "8 Cores",
+      ram: "16 GB",
+      storage: "256 GB SSD",
+      features: [
+        "Windows or Linux OS",
+        "Professional Software Package",
+        "24/7 Access",
+        "Priority Support",
+        "Daily Backups",
+        "Enhanced Security"
+      ]
+    },
+    {
+      name: "Enterprise",
+      price: 199,
+      cpu: "16 Cores",
+      ram: "32 GB",
+      storage: "512 GB SSD",
+      features: [
+        "Windows or Linux OS",
+        "Enterprise Software Package",
+        "24/7 Access",
+        "Priority Support",
+        "Hourly Backups",
+        "Advanced Security",
+        "Dedicated Resources"
+      ]
+    }
+  ];
+
   return (
     <div className="relative min-h-screen pt-20 overflow-hidden bg-white dark:bg-puzzle-dark">
       <ConnectedCirclesBackground />
@@ -266,7 +330,7 @@ const PuzzleHero = () => {
       </div>
       
       <div className="mt-20">
-        <PricingSection plans={[]} />
+        <PricingSection plans={defaultPricingPlans} showDetailedComparison={false} />
       </div>
 
       <ComparisonSection />
