@@ -70,7 +70,7 @@ const defaultPricingPlans = [
 const NotionHero = () => {
   return (
     <div className="bg-white w-full">
-      <div className="notion-page-container py-16 sm:py-18 md:py-16">
+      <div className="notion-page-container py-12 sm:py-14 md:py-12">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
             <div className="text-left">
@@ -103,12 +103,12 @@ const NotionHero = () => {
           
           <DashboardCarousel />
 
-          <div className="mt-16">
+          <div className="mt-12">
             <div className="text-center">
-              <h2 className="text-3xl font-bold mb-4 text-[#1e2537]">
+              <h2 className="text-3xl font-bold mb-3 text-[#1e2537]">
                 Choose your puzzle pieces
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-10">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
                 Simple, transparent pricing for building your perfect workspace.
               </p>
             </div>

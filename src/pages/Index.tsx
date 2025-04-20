@@ -80,9 +80,9 @@ const Index = () => {
         <NotionHero />
         <NotionFeatures />
         
-        <section className="bg-white py-12">
+        <section className="bg-white py-8">
           <div className="notion-page-container">
-            <div className="text-center mb-8">
+            <div className="text-center mb-6">
               <Badge variant="outline" className="mb-2 text-black border-black">Pricing</Badge>
               <h2 className="notion-heading-2">Choose your puzzle pieces</h2>
               <p className="notion-paragraph max-w-2xl mx-auto">
@@ -92,7 +92,7 @@ const Index = () => {
             
             <PricingSection plans={defaultPricingPlans} showDetailedComparison={false} />
             
-            <div className="mt-8 text-center">
+            <div className="mt-6 text-center">
               <Link to="/pricing">
                 <Button className="notion-button">
                   View Full Pricing Details
