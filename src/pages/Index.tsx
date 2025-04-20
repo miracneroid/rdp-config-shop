@@ -223,56 +223,73 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Pricing Table */}
-            <div className="bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden border border-gray-700">
-              <Table>
-                <TableHeader>
-                  <TableRow className="hover:bg-transparent border-gray-700">
-                    <TableHead className="w-[200px] text-gray-300">PLAN</TableHead>
-                    <TableHead className="text-gray-300">CPU</TableHead>
-                    <TableHead className="text-gray-300">RAM</TableHead>
-                    <TableHead className="text-gray-300">STORAGE</TableHead>
-                    <TableHead className="text-gray-300">BANDWIDTH</TableHead>
-                    <TableHead className="text-right text-gray-300">PRICE</TableHead>
-                    <TableHead className="w-[100px]"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {pricingPlans.map((plan, index) => (
-                    <TableRow key={plan.name} className={`${plan.popular ? 'bg-rdp-blue/10' : ''} border-gray-700 hover:bg-gray-700/20`}>
-                      <TableCell className="font-medium">
-                        <div className="flex flex-col">
-                          <span className="text-white">{plan.name}</span>
-                          <div className="flex items-center mt-1">
-                            <span className="relative flex h-2 w-2">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                            </span>
-                            <span className="text-xs text-gray-400 ml-2">{plan.status}</span>
-                          </div>
+            {/* Pricing Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {pricingPlans.map((plan) => (
+                <div 
+                  key={plan.name}
+                  className="bg-gray-800/80 backdrop-blur-sm rounded-xl border border-gray-700 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-rdp-blue/20"
+                >
+                  <div className="p-6">
+                    <div className="flex flex-col">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-xl font-semibold text-white">{plan.name}</h3>
+                        {plan.popular && (
+                          <span className="px-2 py-1 text-xs font-medium text-rdp-blue bg-rdp-blue/10 rounded-full">
+                            Popular
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="mb-6">
+                        <div className="flex items-baseline">
+                          <span className="text-4xl font-bold text-white">${plan.price}</span>
+                          <span className="ml-2 text-gray-400">/month</span>
                         </div>
-                      </TableCell>
-                      <TableCell className="text-gray-300">{plan.cpu}</TableCell>
-                      <TableCell className="text-gray-300">{plan.ram}</TableCell>
-                      <TableCell className="text-gray-300">{plan.storage}</TableCell>
-                      <TableCell className="text-gray-300">{plan.bandwidth}</TableCell>
-                      <TableCell className="text-right font-semibold text-white">
-                        ${plan.price}<span className="text-sm text-gray-400">/month</span>
-                      </TableCell>
-                      <TableCell>
-                        <Link to="/configure">
-                          <Button 
-                            variant={plan.popular ? "default" : "outline"}
-                            className={plan.popular ? "w-full bg-rdp-blue hover:bg-rdp-blue-light" : "w-full border-gray-600 text-gray-300 hover:bg-gray-700"}
-                          >
-                            Purchase
-                          </Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                      </div>
+                      
+                      <div className="space-y-4 mb-6">
+                        <div className="flex items-center text-gray-300">
+                          <span className="w-24 text-sm">CPU</span>
+                          <span className="text-sm font-medium">{plan.cpu}</span>
+                        </div>
+                        <div className="flex items-center text-gray-300">
+                          <span className="w-24 text-sm">RAM</span>
+                          <span className="text-sm font-medium">{plan.ram}</span>
+                        </div>
+                        <div className="flex items-center text-gray-300">
+                          <span className="w-24 text-sm">Storage</span>
+                          <span className="text-sm font-medium">{plan.storage}</span>
+                        </div>
+                        <div className="flex items-center text-gray-300">
+                          <span className="w-24 text-sm">Bandwidth</span>
+                          <span className="text-sm font-medium">{plan.bandwidth}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2 mb-6">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                        <span className="text-sm text-gray-400">{plan.status}</span>
+                      </div>
+                      
+                      <Link to="/configure" className="mt-auto">
+                        <Button 
+                          className={`w-full ${
+                            plan.popular 
+                              ? "bg-rdp-blue hover:bg-rdp-blue-light text-white" 
+                              : "border border-gray-600 text-gray-300 hover:bg-gray-700"
+                          }`}
+                        >
+                          Purchase
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
