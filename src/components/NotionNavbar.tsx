@@ -1,0 +1,189 @@
+
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
+import { Monitor, Menu, X, ShoppingCart, LogIn } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
+import ThemeToggle from './ThemeToggle';
+import UserMenu from './UserMenu';
+import { supabase } from "@/integrations/supabase/client";
+
+const NotionNavbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { cart, getTotalItems } = useCart();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  
+  const totalItems = getTotalItems();
+  
+  useEffect(() => {
+    const checkAuth = async () => {
+      setIsLoading(true);
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsLoggedIn(!!session);
+      
+      if (session) {
+        const { data: userData } = await supabase.auth.getUser();
+        const email = userData?.user?.email;
+        setIsAdmin(email === 'admin@example.com');
+      }
+      
+      setIsLoading(false);
+    };
+
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsLoggedIn(!!session);
+      
+      if (session) {
+        const email = session.user?.email;
+        setIsAdmin(email === 'admin@example.com');
+      } else {
+        setIsAdmin(false);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+  
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  return (
+    <nav className="bg-white dark:bg-rdp-dark border-b border-notion-border dark:border-gray-800 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center">
+              <Monitor className="h-8 w-8 text-black dark:text-white" />
+              <span className="ml-2 text-xl font-bold text-notion-text dark:text-white">Puzzle RDP</span>
+            </Link>
+          </div>
+          
+          <div className="hidden md:flex items-center space-x-8">
+            <Link to="/" className="nav-link font-medium">
+              Home
+            </Link>
+            <Link to="/pricing" className="nav-link font-medium">
+              Pricing
+            </Link>
+            <Link to="/help" className="nav-link font-medium">
+              Help
+            </Link>
+            <Link to="/contact" className="nav-link font-medium">
+              Contact
+            </Link>
+            <ThemeToggle />
+            <Link to="/cart" className="relative">
+              <Button variant="outline" size="icon" className="border-notion-border dark:border-gray-700 rounded-md">
+                <ShoppingCart className="h-5 w-5 text-notion-text dark:text-white" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-black dark:bg-white text-white dark:text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </Button>
+            </Link>
+            
+            {isLoading ? (
+              <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+            ) : isLoggedIn ? (
+              <UserMenu />
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Link to="/login">
+                  <Button variant="default" size="sm" className="notion-button flex items-center gap-2">
+                    <LogIn className="h-4 w-4" />
+                    <span>Login</span>
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
+          
+          <div className="md:hidden flex items-center">
+            <ThemeToggle />
+            <Link to="/cart" className="relative mr-4">
+              <Button variant="outline" size="icon" className="border-notion-border dark:border-gray-700 rounded-md">
+                <ShoppingCart className="h-5 w-5 text-notion-text dark:text-white" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-black dark:bg-white text-white dark:text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </Button>
+            </Link>
+            {isLoading ? (
+              <div className="h-8 w-8 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse mr-4"></div>
+            ) : isLoggedIn ? (
+              <div className="mr-4">
+                <UserMenu />
+              </div>
+            ) : (
+              <div className="flex items-center mr-4 space-x-2">
+                <Link to="/login">
+                  <Button variant="default" size="sm" className="notion-button flex items-center gap-1">
+                    <LogIn className="h-4 w-4" />
+                    <span className="sr-only md:not-sr-only">Login</span>
+                  </Button>
+                </Link>
+              </div>
+            )}
+            <button
+              onClick={toggleMenu}
+              className="inline-flex items-center justify-center p-2 rounded-md text-notion-text dark:text-gray-300 hover:text-black dark:hover:text-white focus:outline-none"
+            >
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {isMenuOpen && (
+        <div className="md:hidden bg-white dark:bg-rdp-dark border-t border-notion-border dark:border-gray-800">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <Link 
+              to="/" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-notion-text dark:text-gray-200 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link 
+              to="/pricing" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-notion-text dark:text-gray-200 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Pricing
+            </Link>
+            <Link 
+              to="/help" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-notion-text dark:text-gray-200 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Help
+            </Link>
+            <Link 
+              to="/contact" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-notion-text dark:text-gray-200 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Contact
+            </Link>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+export default NotionNavbar;
