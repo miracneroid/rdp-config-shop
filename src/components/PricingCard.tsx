@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -17,18 +16,20 @@ export interface PricingPlan {
 
 interface PricingCardProps {
   plan: PricingPlan;
+  selected?: boolean;
+  onClick?: () => void;
 }
 
-const PricingCard = ({ plan }: PricingCardProps) => {
+const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { settings } = useSettings();
-  
+
   const handleChoosePlan = () => {
     const cpuCores = parseInt(plan.cpu.split(' ')[0]) || 2;
     const ramGB = parseInt(plan.ram.split(' ')[0]) || 4;
     const storageGB = parseInt(plan.storage.split(' ')[0]) || 64;
-    
+
     const rdpItem = {
       id: `plan-${plan.name.toLowerCase().replace(' ', '-')}`,
       name: `${plan.name} RDP`,
@@ -43,31 +44,36 @@ const PricingCard = ({ plan }: PricingCardProps) => {
         duration: 1
       }
     };
-    
+
     addToCart(rdpItem);
     navigate('/cart');
   };
-  
+
   return (
-    <div className={`
-      bg-white rounded-xl p-8 flex flex-col h-full transition-all duration-300 
-      shadow-sm hover:shadow-xl border border-transparent
-      hover:ring-1 hover:ring-blue-300 hover:ring-opacity-30
-      group relative
-    `}>
+    <div
+      onClick={onClick}
+      className={`
+        bg-white rounded-xl p-8 flex flex-col h-full transition-all duration-300 
+        shadow-sm hover:shadow-xl border cursor-pointer
+        ${selected ? 'border-blue-500 ring-2 ring-blue-300' : 'border-transparent'}
+        group relative
+      `}
+    >
       {plan.popular && (
         <div className="absolute top-0 right-0 bg-[#4285f4] text-white text-sm font-medium px-4 py-1 rounded-tr-xl rounded-bl-xl">
           Most Popular
         </div>
       )}
-      
+
       <div className="relative">
         <h3 className="text-2xl font-bold text-[#1e2537] mb-4">{plan.name}</h3>
         <div className="flex items-baseline">
-          <span className="text-4xl font-bold text-[#1e2537]">{settings.currency.symbol}{plan.price}</span>
+          <span className="text-4xl font-bold text-[#1e2537]">
+            {settings.currency.symbol}{plan.price}
+          </span>
           <span className="ml-1 text-gray-500">/month</span>
         </div>
-        
+
         <div className="mt-8 space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-gray-500">CPU</span>
@@ -83,7 +89,7 @@ const PricingCard = ({ plan }: PricingCardProps) => {
           </div>
         </div>
       </div>
-      
+
       <div className="mt-8 space-y-3 flex-grow">
         {plan.features.map((feature, index) => (
           <div key={index} className="flex items-start gap-2">
@@ -92,11 +98,17 @@ const PricingCard = ({ plan }: PricingCardProps) => {
           </div>
         ))}
       </div>
-      
-      <button 
-        onClick={handleChoosePlan}
-        className="mt-8 w-full py-3 px-6 rounded-lg font-medium text-[#1e2537] bg-white border border-gray-200 
-          hover:border-blue-300 hover:text-blue-600 transition-all duration-300"
+
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          handleChoosePlan();
+        }}
+        className={`mt-8 w-full py-3 px-6 rounded-lg font-medium transition-all duration-300
+          ${selected
+            ? 'bg-blue-600 text-white hover:bg-blue-700'
+            : 'bg-white text-[#1e2537] border border-gray-200 hover:border-blue-300 hover:text-blue-600'
+          }`}
       >
         Choose Plan
       </button>

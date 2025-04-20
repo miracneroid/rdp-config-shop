@@ -47,7 +47,7 @@ const defaultPricingPlans = [
     storage: "256 GB SSD",
     features: [
       "Windows or Linux OS",
-      "Professional Suite",
+      "Professional Software Suite",
       "24/7 Access",
       "Priority Support",
       "Daily Backups",
@@ -62,7 +62,7 @@ const defaultPricingPlans = [
     storage: "512 GB SSD",
     features: [
       "Windows or Linux OS",
-      "Enterprise Suite",
+      "Enterprise Software Suite",
       "24/7 Access",
       "Priority Support",
       "Hourly Backups",
