@@ -1,25 +1,39 @@
 
-import { Cpu } from 'lucide-react';
+import { Server, BarChart, Clock } from 'lucide-react';
 
-const processors = [
-  { name: 'Basic', cores: '2 Cores' },
-  { name: 'Standard', cores: '4 Cores' },
-  { name: 'Premium', cores: '8 Cores' },
-  { name: 'Enterprise', cores: '16 Cores' }
+const stats = [
+  { 
+    icon: Server,
+    value: '147k+',
+    label: 'deployed servers'
+  },
+  { 
+    icon: BarChart,
+    value: '99.9%',
+    label: 'uptime'
+  },
+  {
+    icon: Clock,
+    value: '5min',
+    label: 'setup time'
+  }
 ];
 
 const ProcessorCards = () => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-      {processors.map((processor) => (
-        <div key={processor.name} className="bg-white p-4 rounded-lg shadow-notion border border-notion-border animate-fade-in">
-          <div className="flex items-center justify-center mb-2">
-            <Cpu className="w-6 h-6 text-blue-500" />
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+      {stats.map((stat) => {
+        const IconComponent = stat.icon;
+        return (
+          <div key={stat.label} className="bg-white p-6 rounded-lg shadow-notion border border-notion-border animate-fade-in flex items-center gap-4">
+            <IconComponent className="w-6 h-6 text-blue-500 shrink-0" />
+            <div>
+              <h3 className="text-2xl font-semibold">{stat.value}</h3>
+              <p className="text-sm text-gray-600">{stat.label}</p>
+            </div>
           </div>
-          <h3 className="text-lg font-semibold text-center">{processor.name}</h3>
-          <p className="text-sm text-gray-600 text-center">{processor.cores}</p>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
