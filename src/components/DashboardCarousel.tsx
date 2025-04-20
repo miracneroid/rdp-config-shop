@@ -24,7 +24,7 @@ const DashboardCarousel = () => {
     if (!api) return;
     
     const interval = setInterval(() => {
-      api.next();
+      api.scrollNext();
     }, 3000);
     
     return () => clearInterval(interval);

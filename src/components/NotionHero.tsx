@@ -1,4 +1,3 @@
-
 import { PuzzleIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
@@ -24,7 +23,7 @@ const NotionHero = () => {
                 with our easy-to-use building blocks.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <Link to="/configure" className="inline-flex items-center justify-center bg-[#0284c7] text-white px-6 py-2.5 rounded-md hover:bg-[#0369a1] transition-colors">
+                <Link to="/configure" className="inline-flex items-center justify-center bg-[#e5e7eb] text-black px-6 py-2.5 rounded-md hover:bg-gray-200 transition-colors">
                   <PuzzleIcon className="mr-2 h-5 w-5" />
                   Start Building
                 </Link>
