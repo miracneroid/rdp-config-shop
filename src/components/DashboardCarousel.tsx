@@ -19,35 +19,56 @@ const images = [
 
 const DashboardCarousel = () => {
   const [api, setApi] = useState<any>();
+  const [currentIndex, setCurrentIndex] = useState(0);
   
   useEffect(() => {
     if (!api) return;
+    
+    api.on('select', () => {
+      setCurrentIndex(api.selectedScrollSnap());
+    });
     
     const interval = setInterval(() => {
       api.scrollNext();
     }, 3000);
     
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      api.off('select');
+    };
   }, [api]);
 
   return (
-    <Carousel className="w-full max-w-5xl mx-auto mt-12" setApi={setApi}>
-      <CarouselContent>
-        {images.map((image, index) => (
-          <CarouselItem key={index}>
-            <div className="relative overflow-hidden rounded-lg shadow-notion-lg">
-              <img
-                src={image}
-                alt={`Dashboard screenshot ${index + 1}`}
-                className="w-full h-[400px] object-cover"
-              />
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
+    <div className="w-full max-w-5xl mx-auto mt-12">
+      <Carousel className="relative" setApi={setApi}>
+        <CarouselContent>
+          {images.map((image, index) => (
+            <CarouselItem key={index}>
+              <div className="relative overflow-hidden rounded-lg shadow-notion-lg">
+                <img
+                  src={image}
+                  alt={`Dashboard screenshot ${index + 1}`}
+                  className="w-full h-[400px] object-cover"
+                />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                currentIndex === index ? 'bg-black' : 'bg-gray-300'
+              }`}
+              onClick={() => api?.scrollTo(index)}
+            />
+          ))}
+        </div>
+      </Carousel>
+    </div>
   );
 };
 

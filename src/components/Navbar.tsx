@@ -17,12 +17,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+    <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <Monitor className="h-10 w-10 text-black" />
+              <Monitor className="h-12 w-12 text-black" />
               <span className="ml-3 text-2xl font-bold text-black">RDP Config</span>
             </Link>
           </div>
@@ -47,17 +47,15 @@ const Navbar = () => {
             ) : isLoggedIn ? (
               <UserMenu />
             ) : (
-              <div className="flex items-center space-x-2">
-                <Link to="/login">
-                  <Button variant="default" size="sm" className="flex items-center gap-2">
-                    Login
-                  </Button>
-                </Link>
-              </div>
+              <Link to="/login">
+                <Button variant="default" size="sm" className="bg-black text-white hover:bg-gray-800">
+                  Login
+                </Button>
+              </Link>
             )}
           </div>
           
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center space-x-4">
             <ThemeToggle />
             <button
               onClick={toggleMenu}
