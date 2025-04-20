@@ -1,7 +1,71 @@
+
 import { PuzzleIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import DashboardCarousel from './DashboardCarousel';
+import PricingSection from './PricingSection';
+
+const defaultPricingPlans = [
+  {
+    name: "Basic",
+    price: 29,
+    cpu: "2 Cores",
+    ram: "4 GB",
+    storage: "64 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Basic Software Package",
+      "24/7 Access",
+      "Standard Support"
+    ]
+  },
+  {
+    name: "Standard",
+    price: 59,
+    cpu: "4 Cores",
+    ram: "8 GB",
+    storage: "128 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Basic Software Package",
+      "24/7 Access",
+      "Priority Support",
+      "Daily Backups"
+    ],
+    popular: true
+  },
+  {
+    name: "Premium",
+    price: 99,
+    cpu: "8 Cores",
+    ram: "16 GB",
+    storage: "256 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Professional Software Package",
+      "24/7 Access",
+      "Priority Support",
+      "Daily Backups",
+      "Enhanced Security"
+    ]
+  },
+  {
+    name: "Enterprise",
+    price: 199,
+    cpu: "16 Cores",
+    ram: "32 GB",
+    storage: "512 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Enterprise Software Package",
+      "24/7 Access",
+      "Priority Support",
+      "Hourly Backups",
+      "Advanced Security",
+      "Dedicated Resources"
+    ]
+  }
+];
 
 const NotionHero = () => {
   return (
@@ -41,6 +105,21 @@ const NotionHero = () => {
           </div>
           
           <DashboardCarousel />
+
+          <div className="mt-24">
+            <div className="text-center mb-12">
+              <Badge variant="outline" className="mb-4 text-black border-black">
+                Pricing
+              </Badge>
+              <h2 className="text-4xl font-bold mb-4 text-black">
+                Choose the plan that fits your needs
+              </h2>
+              <p className="text-xl text-gray-500">
+                Simple, transparent pricing for everyone. No hidden fees or surprise charges.
+              </p>
+            </div>
+            <PricingSection plans={defaultPricingPlans} showDetailedComparison={false} />
+          </div>
         </div>
       </div>
     </div>
