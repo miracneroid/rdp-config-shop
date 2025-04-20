@@ -49,7 +49,13 @@ const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
   };
   
   return (
-    <div className={`bg-white rounded-xl p-8 flex flex-col h-full transition-all duration-300 shadow-sm hover:shadow-xl border border-gray-100 ${isSelected ? 'ring-2 ring-[#4285f4]' : ''}`}>
+    <div className={`
+      bg-white rounded-xl p-8 flex flex-col h-full transition-all duration-300 
+      shadow-sm hover:shadow-xl border border-gray-100 
+      hover:ring-2 hover:ring-[#0EA5E9] hover:ring-opacity-50 
+      ${isSelected ? 'ring-2 ring-[#4285f4]' : ''}
+      group
+    `}>
       {plan.popular && (
         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#4285f4] text-white text-sm font-medium px-4 py-1 rounded-full">
           Most Popular
