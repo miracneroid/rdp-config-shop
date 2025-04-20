@@ -1,3 +1,4 @@
+
 import { PuzzleIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
@@ -44,16 +45,6 @@ const NotionHero = () => {
           <ProcessorCards />
           
           <DashboardCarousel />
-          
-          <div className="absolute -bottom-8 left-8 bg-white p-4 rounded-lg shadow-notion border border-notion-border max-w-xs animate-float">
-            <div className="flex items-center mb-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-              <span className="text-sm font-semibold">Instant Setup</span>
-            </div>
-            <p className="text-xs text-gray-500">
-              Your puzzle pieces come together in minutes.
-            </p>
-          </div>
         </div>
       </div>
     </div>

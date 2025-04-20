@@ -1,21 +1,21 @@
 
-import { Shield, Clock, Server } from 'lucide-react';
+import { Globe, Lock, Zap } from 'lucide-react';
 
 const stats = [
   { 
-    icon: Shield,
-    value: '100%',
-    label: 'secure hosting'
+    icon: Globe,
+    value: '147k+',
+    label: 'Global Servers'
   },
   { 
-    icon: Server,
-    value: '24/7',
-    label: 'live support'
+    icon: Lock,
+    value: '99.9%',
+    label: 'Network Security'
   },
   {
-    icon: Clock,
-    value: '2min',
-    label: 'instant setup'
+    icon: Zap,
+    value: '5ms',
+    label: 'Low Latency'
   }
 ];
 
