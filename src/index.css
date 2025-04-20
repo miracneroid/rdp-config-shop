@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -74,6 +75,11 @@
   body {
     @apply bg-background text-foreground font-sans transition-colors duration-300;
   }
+  
+  /* Add clear text colors for light mode */
+  .nav-link {
+    @apply text-gray-700 dark:text-gray-300;
+  }
 }
 
 @layer components {
@@ -114,7 +120,7 @@
   }
   
   .nav-link {
-    @apply text-gray-700 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light font-medium transition-colors duration-200;
+    @apply text-gray-700 dark:text-gray-300 hover:text-rdp-purple dark:hover:text-rdp-purple-light font-medium transition-colors duration-200;
   }
   
   .form-input {

@@ -209,8 +209,8 @@ const Navbar = () => {
             <Link 
               to="/" 
               className={`block px-3 py-2 rounded-xl text-base font-medium ${isActive('/') 
-                ? 'bg-indigo-50 dark:bg-indigo-900/20 text-rdp-blue dark:text-rdp-blue-light' 
-                : 'text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-indigo-50 dark:hover:bg-indigo-900/20'}`}
+                ? 'bg-purple-50 dark:bg-purple-900/20 text-rdp-purple dark:text-rdp-purple-light' 
+                : 'text-gray-700 dark:text-gray-200 hover:text-rdp-purple dark:hover:text-rdp-purple-light hover:bg-purple-50 dark:hover:bg-purple-900/20'}`}
               onClick={() => setIsMenuOpen(false)}
             >
               Home
@@ -221,31 +221,31 @@ const Navbar = () => {
                 <span>Solutions</span>
                 <ChevronDown className="h-4 w-4" />
               </div>
-              <div className="pl-4 mt-2 space-y-1 border-l-2 border-indigo-100 dark:border-indigo-800/40">
+              <div className="pl-4 mt-2 space-y-1 border-l-2 border-purple-100 dark:border-purple-800/40">
                 <Link 
                   to="/windows-rdp" 
-                  className="block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light"
+                  className="block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-rdp-purple dark:hover:text-rdp-purple-light"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Windows RDP
                 </Link>
                 <Link 
                   to="/linux-vps" 
-                  className="block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light"
+                  className="block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-rdp-purple dark:hover:text-rdp-purple-light"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Linux VPS
                 </Link>
                 <Link 
                   to="/usa-vps" 
-                  className="block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light"
+                  className="block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-rdp-purple dark:hover:text-rdp-purple-light"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   USA VPS
                 </Link>
                 <Link 
                   to="/europe-vps" 
-                  className="block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-rdp-blue dark:hover:text-rdp-blue-light"
+                  className="block py-1 text-sm text-gray-600 dark:text-gray-300 hover:text-rdp-purple dark:hover:text-rdp-purple-light"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Europe VPS
@@ -256,8 +256,8 @@ const Navbar = () => {
             <Link 
               to="/pricing" 
               className={`block px-3 py-2 rounded-xl text-base font-medium ${isActive('/pricing') 
-                ? 'bg-indigo-50 dark:bg-indigo-900/20 text-rdp-blue dark:text-rdp-blue-light' 
-                : 'text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-indigo-50 dark:hover:bg-indigo-900/20'}`}
+                ? 'bg-purple-50 dark:bg-purple-900/20 text-rdp-purple dark:text-rdp-purple-light' 
+                : 'text-gray-700 dark:text-gray-200 hover:text-rdp-purple dark:hover:text-rdp-purple-light hover:bg-purple-50 dark:hover:bg-purple-900/20'}`}
               onClick={() => setIsMenuOpen(false)}
             >
               Pricing
@@ -266,8 +266,8 @@ const Navbar = () => {
             <Link 
               to="/help" 
               className={`block px-3 py-2 rounded-xl text-base font-medium ${isActive('/help') 
-                ? 'bg-indigo-50 dark:bg-indigo-900/20 text-rdp-blue dark:text-rdp-blue-light' 
-                : 'text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-indigo-50 dark:hover:bg-indigo-900/20'}`}
+                ? 'bg-purple-50 dark:bg-purple-900/20 text-rdp-purple dark:text-rdp-purple-light' 
+                : 'text-gray-700 dark:text-gray-200 hover:text-rdp-purple dark:hover:text-rdp-purple-light hover:bg-purple-50 dark:hover:bg-purple-900/20'}`}
               onClick={() => setIsMenuOpen(false)}
             >
               Help
@@ -276,8 +276,8 @@ const Navbar = () => {
             <Link 
               to="/contact" 
               className={`block px-3 py-2 rounded-xl text-base font-medium ${isActive('/contact') 
-                ? 'bg-indigo-50 dark:bg-indigo-900/20 text-rdp-blue dark:text-rdp-blue-light' 
-                : 'text-gray-700 dark:text-gray-200 hover:text-rdp-blue dark:hover:text-rdp-blue-light hover:bg-indigo-50 dark:hover:bg-indigo-900/20'}`}
+                ? 'bg-purple-50 dark:bg-purple-900/20 text-rdp-purple dark:text-rdp-purple-light' 
+                : 'text-gray-700 dark:text-gray-200 hover:text-rdp-purple dark:hover:text-rdp-purple-light hover:bg-purple-50 dark:hover:bg-purple-900/20'}`}
               onClick={() => setIsMenuOpen(false)}
             >
               Contact
