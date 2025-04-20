@@ -39,35 +39,37 @@ const DashboardCarousel = () => {
   }, [api]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto mt-8">
-      <Carousel className="relative" setApi={setApi}>
-        <CarouselContent>
-          {images.map((image, index) => (
-            <CarouselItem key={index}>
-              <div className="relative overflow-hidden rounded-lg shadow-notion">
-                <img
-                  src={image}
-                  alt={`Dashboard screenshot ${index + 1}`}
-                  className="w-full h-64 object-cover" // Adjusted height
-                />
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {images.map((_, index) => (
-            <button
-              key={index}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                currentIndex === index ? 'bg-black' : 'bg-gray-300'
-              }`}
-              onClick={() => api?.scrollTo(index)}
-            />
-          ))}
-        </div>
-      </Carousel>
+    <div className="w-full relative -mx-4 sm:-mx-6 lg:-mx-8">
+      <div className="max-w-[100vw]">
+        <Carousel className="relative" setApi={setApi}>
+          <CarouselContent>
+            {images.map((image, index) => (
+              <CarouselItem key={index}>
+                <div className="relative overflow-hidden">
+                  <img
+                    src={image}
+                    alt={`Dashboard screenshot ${index + 1}`}
+                    className="w-full h-[500px] object-cover"
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="absolute left-4" />
+          <CarouselNext className="absolute right-4" />
+          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
+            {images.map((_, index) => (
+              <button
+                key={index}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  currentIndex === index ? 'bg-black' : 'bg-gray-300'
+                }`}
+                onClick={() => api?.scrollTo(index)}
+              />
+            ))}
+          </div>
+        </Carousel>
+      </div>
     </div>
   );
 };

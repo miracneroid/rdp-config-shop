@@ -1,8 +1,6 @@
-
 import { PuzzleIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
-import ProcessorCards from './ProcessorCards';
 import DashboardCarousel from './DashboardCarousel';
 
 const NotionHero = () => {
@@ -41,8 +39,6 @@ const NotionHero = () => {
               />
             </div>
           </div>
-
-          <ProcessorCards />
           
           <DashboardCarousel />
         </div>
