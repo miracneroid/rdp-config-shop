@@ -1,10 +1,9 @@
-
 import React from "react";
 import NotionNavbar from "@/components/NotionNavbar";
 import NotionHero from "@/components/NotionHero";
 import NotionFeatures from "@/components/NotionFeatures";
 import NotionComparison from "@/components/NotionComparison";
-import NotionFooter from "@/components/NotionFooter";
+import SimpleFooter from "@/components/SimpleFooter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -78,10 +77,8 @@ const Index = () => {
       <NotionNavbar />
       <main className="w-full bg-transparent">
         <NotionHero />
-        
         <NotionFeatures />
         
-        {/* Pricing Section with Notion styling */}
         <section className="bg-white py-16">
           <div className="notion-page-container">
             <div className="text-center mb-12">
@@ -107,7 +104,7 @@ const Index = () => {
         <NotionComparison />
       </main>
       
-      <NotionFooter />
+      <SimpleFooter />
     </div>
   );
 };
