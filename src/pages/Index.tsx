@@ -72,23 +72,27 @@ const Index = () => {
         <section className="relative py-20 sm:py-32 overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="text-left">
-                <motion.h1 
+              <div className="text-left space-y-6">
+                <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="text-4xl md:text-6xl font-bold text-white mb-6"
+                  className="space-y-2"
                 >
-                  <span className="block">100%</span>
-                  <span className="bg-rdp-blue px-3 py-1 rounded">privacy</span> 
-                  <span className="block mt-2">focused hosting</span>
-                </motion.h1>
+                  <h1 className="text-4xl md:text-6xl font-bold text-white">
+                    <span className="block mb-2">100%</span>
+                    <div className="bg-rdp-blue inline-block px-4 py-2 rounded-lg">
+                      privacy
+                    </div>
+                    <span className="block mt-2">focused hosting</span>
+                  </h1>
+                </motion.div>
                 
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-lg text-gray-300 mb-8 max-w-xl"
+                  className="text-lg text-gray-300 max-w-xl"
                 >
                   Cloud provider backed by US-legislation and high quality
                   standards, with servers located in Phoenix 🇺🇸
@@ -129,54 +133,61 @@ const Index = () => {
                 transition={{ duration: 0.7 }}
                 className="relative w-full"
               >
-                <div className="bg-gray-800 rounded-lg overflow-hidden shadow-2xl border border-gray-700">
-                  <div className="bg-gray-900 h-8 flex items-center px-4">
-                    <div className="flex space-x-2">
-                      <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                      <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                      <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                <div className="bg-gray-800/80 backdrop-blur-sm rounded-lg overflow-hidden shadow-2xl border border-gray-700">
+                  <img
+                    src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb"
+                    alt="Digital Security"
+                    className="w-full h-full object-cover opacity-40 absolute inset-0"
+                  />
+                  <div className="relative z-10">
+                    <div className="bg-gray-900 h-8 flex items-center px-4">
+                      <div className="flex space-x-2">
+                        <div className="h-3 w-3 rounded-full bg-red-500"></div>
+                        <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
+                        <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="p-4 bg-gray-800">
-                    <div className="flex items-center mb-6">
-                      <Server className="h-6 w-6 text-rdp-blue mr-2" />
-                      <span className="text-white font-medium">rdp.sh</span>
-                      <span className="ml-auto px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full flex items-center">
-                        <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-                        All services are up and running
-                      </span>
-                    </div>
-                    
-                    <div className="grid grid-cols-3 gap-4 mb-6">
-                      <div className="bg-gray-700/50 p-4 rounded-lg">
-                        <div className="text-gray-400 text-xs mb-1">Active Servers</div>
-                        <div className="flex items-center">
-                          <span className="text-white font-bold text-xl">3</span>
-                          <CheckCircle className="h-4 w-4 text-green-500 ml-2" />
+                    <div className="p-4 bg-gray-800">
+                      <div className="flex items-center mb-6">
+                        <Server className="h-6 w-6 text-rdp-blue mr-2" />
+                        <span className="text-white font-medium">rdp.sh</span>
+                        <span className="ml-auto px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full flex items-center">
+                          <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+                          All services are up and running
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-4 mb-6">
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <div className="text-gray-400 text-xs mb-1">Active Servers</div>
+                          <div className="flex items-center">
+                            <span className="text-white font-bold text-xl">3</span>
+                            <CheckCircle className="h-4 w-4 text-green-500 ml-2" />
+                          </div>
+                        </div>
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <div className="text-gray-400 text-xs mb-1">Suspended</div>
+                          <div className="text-white font-bold text-xl">1</div>
+                        </div>
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <div className="text-gray-400 text-xs mb-1">Pending</div>
+                          <div className="text-white font-bold text-xl">0</div>
                         </div>
                       </div>
-                      <div className="bg-gray-700/50 p-4 rounded-lg">
-                        <div className="text-gray-400 text-xs mb-1">Suspended</div>
-                        <div className="text-white font-bold text-xl">1</div>
-                      </div>
-                      <div className="bg-gray-700/50 p-4 rounded-lg">
-                        <div className="text-gray-400 text-xs mb-1">Pending</div>
-                        <div className="text-white font-bold text-xl">0</div>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-gray-700/30 rounded-lg p-4">
-                      <div className="text-gray-300 font-medium mb-4">Active Services</div>
-                      <div className="space-y-3">
-                        <div className="flex items-center p-2 bg-gray-700/50 rounded-md">
-                          <div className="w-8 h-8 bg-red-500/20 rounded-full flex items-center justify-center mr-3">
-                            <Server className="h-4 w-4 text-red-400" />
+                      
+                      <div className="bg-gray-700/30 rounded-lg p-4">
+                        <div className="text-gray-300 font-medium mb-4">Active Services</div>
+                        <div className="space-y-3">
+                          <div className="flex items-center p-2 bg-gray-700/50 rounded-md">
+                            <div className="w-8 h-8 bg-red-500/20 rounded-full flex items-center justify-center mr-3">
+                              <Server className="h-4 w-4 text-red-400" />
+                            </div>
+                            <div>
+                              <div className="text-white text-sm">Standard-RDP</div>
+                              <div className="text-gray-400 text-xs">4GB RAM, 4 Cores</div>
+                            </div>
+                            <div className="ml-auto text-green-400 text-xs">Active</div>
                           </div>
-                          <div>
-                            <div className="text-white text-sm">Standard-RDP</div>
-                            <div className="text-gray-400 text-xs">4GB RAM, 4 Cores</div>
-                          </div>
-                          <div className="ml-auto text-green-400 text-xs">Active</div>
                         </div>
                       </div>
                     </div>
