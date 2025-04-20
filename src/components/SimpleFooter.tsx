@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Globe } from 'lucide-react';
 import { Button } from './ui/button';
@@ -10,6 +9,8 @@ import {
 } from './ui/dropdown-menu';
 
 const SimpleFooter = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="border-t border-gray-200 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
@@ -59,6 +60,15 @@ const SimpleFooter = () => {
               <li><Link to="/imprint" className="text-gray-500 hover:text-gray-900">Imprint</Link></li>
             </ul>
           </div>
+        </div>
+
+        <div className="mt-12 pt-8 border-t border-gray-200 flex justify-between items-center">
+          <p className="text-sm text-gray-500">
+            &copy; {currentYear} Puzzle RDP. All rights reserved since 2025
+          </p>
+          <p className="text-sm text-gray-500">
+            Made in Europe
+          </p>
         </div>
       </div>
     </footer>
