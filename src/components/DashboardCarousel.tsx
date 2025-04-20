@@ -45,18 +45,20 @@ const DashboardCarousel = () => {
           <CarouselContent>
             {images.map((image, index) => (
               <CarouselItem key={index}>
-                <div className="relative overflow-hidden">
-                  <img
-                    src={image}
-                    alt={`Dashboard screenshot ${index + 1}`}
-                    className="w-full h-[500px] object-cover"
-                  />
+                <div className="relative overflow-hidden px-4 sm:px-6 lg:px-8">
+                  <div className="rounded-[2rem] overflow-hidden">
+                    <img
+                      src={image}
+                      alt={`Dashboard screenshot ${index + 1}`}
+                      className="w-full h-[500px] object-cover"
+                    />
+                  </div>
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="absolute left-4" />
-          <CarouselNext className="absolute right-4" />
+          <CarouselPrevious className="absolute left-8" />
+          <CarouselNext className="absolute right-8" />
           <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
             {images.map((_, index) => (
               <button
