@@ -1,4 +1,3 @@
-
 import { PuzzleIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
@@ -74,10 +73,7 @@ const NotionHero = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
             <div className="text-left">
-              <Badge variant="outline" className="mb-8 text-black border-black text-base px-4 py-1">
-                Build Your Perfect RDP
-              </Badge>
-              <h1 className="text-[72px] font-bold leading-[1.1] tracking-[-0.02em] text-black">
+              <h1 className="text-[80px] font-bold leading-[1.1] tracking-[-0.02em] text-black">
                 The happier<br />
                 <span>workspace puzzle</span>
               </h1>
@@ -108,14 +104,11 @@ const NotionHero = () => {
 
           <div className="mt-24">
             <div className="text-center mb-12">
-              <Badge variant="outline" className="mb-4 text-black border-black">
-                Pricing
-              </Badge>
-              <h2 className="text-4xl font-bold mb-4 text-black">
-                Choose your perfect plan
+              <h2 className="text-5xl font-bold mb-6 text-black">
+                Ready to start building?
               </h2>
-              <p className="text-xl text-gray-500 max-w-2xl mx-auto">
-                Simple, transparent pricing that grows with you. No hidden fees or surprise charges.
+              <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-12">
+                Choose a plan that best suits your needs. Every plan includes unlimited builds and deployments.
               </p>
             </div>
             <PricingSection plans={defaultPricingPlans} showDetailedComparison={false} />
