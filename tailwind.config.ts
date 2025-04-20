@@ -63,13 +63,16 @@ export default {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))'
         },
-        rdp: {
-          dark: '#222222',
-          'dark-light': '#333333',
+        puzzle: {
+          dark: '#191731',
+          darker: '#141328',
+          'dark-light': '#252348',
+          green: '#54FEB8',
+          'green-dark': '#37B686',
+          purple: '#9B87F5',
           blue: {
-            light: '#60A5FA',
-            DEFAULT: '#2563EB',
-            dark: '#1E40AF'
+            DEFAULT: '#2A7DDE', 
+            light: '#60A5FA'
           },
           gray: {
             50: '#F9FAFB',
@@ -80,7 +83,8 @@ export default {
           },
           accent: {
             purple: '#8B5CF6',
-            cyan: '#06B6D4'
+            cyan: '#06B6D4',
+            blue: '#3B82F6'
           }
         }
       },
@@ -119,7 +123,9 @@ export default {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'puzzle-pattern': "url('/lovable-uploads/8ac3c465-4eb6-4489-b057-3817ac439819.png')",
         'grid-pattern': "url(\"data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M96 96h4v4h-4v-4zm-4 0h4v4h-4v-4zm-4 0h4v4h-4v-4zm-4 0h4v4h-4v-4zm-4 0h4v4h-4v-4z' fill='%239C92AC' fill-opacity='0.05'/%3E%3C/svg%3E\")",
+        'puzzle-circles': "url(\"data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='40' stroke='%239C92AC' stroke-width='0.5' fill='none' fill-opacity='0.05'/%3E%3C/svg%3E\")",
       }
     }
   },
