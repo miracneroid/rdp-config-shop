@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -99,7 +100,7 @@
   }
   
   body:not(.dark) {
-    @apply bg-white text-rdp-dark;
+    @apply bg-white text-gray-800;
   }
 }
 
@@ -117,7 +118,7 @@
   }
   
   .rdp-btn-secondary {
-    @apply bg-white dark:bg-rdp-dark-light text-rdp-dark dark:text-white font-medium rounded-lg px-6 py-3 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300;
+    @apply bg-white dark:bg-rdp-dark-light text-gray-800 dark:text-white font-medium rounded-lg px-6 py-3 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300;
   }
   
   /* New added styles */
