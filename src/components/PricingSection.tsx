@@ -305,20 +305,6 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
             </div>
           </div>
         )}
-        
-        <div className="mt-16 bg-gray-50 rounded-xl p-8 md:p-10 border border-gray-200">
-          <div className="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900">Need a custom solution?</h3>
-              <p className="mt-2 text-lg text-gray-600">Contact our sales team to get a tailored plan for your business needs.</p>
-            </div>
-            <div className="mt-6 md:mt-0">
-              <Button className="bg-blue-600 text-white hover:bg-blue-500">
-                Contact Sales
-              </Button>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );

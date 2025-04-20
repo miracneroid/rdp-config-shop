@@ -19,13 +19,6 @@ const SimpleFooter = () => {
               <img src="/lovable-uploads/ce82569c-c62b-488d-9d1d-7ac9fdbb14e6.png" alt="Logo" className="h-8 w-8" />
               <span className="ml-2 text-xl font-bold">Puzzle RDP</span>
             </div>
-            <p className="mt-2 text-sm text-gray-500">
-              Fast & reliable Windows RDPs and Linux servers.
-            </p>
-            <div className="mt-4 flex items-center space-x-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full w-fit text-sm">
-              <span className="h-2 w-2 bg-emerald-500 rounded-full"></span>
-              <span>^100% All Systems Operational</span>
-            </div>
           </div>
 
           <div>
@@ -66,31 +59,6 @@ const SimpleFooter = () => {
               <li><Link to="/imprint" className="text-gray-500 hover:text-gray-900">Imprint</Link></li>
             </ul>
           </div>
-        </div>
-
-        <div className="mt-12 pt-8 border-t border-gray-200 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <p className="text-sm text-gray-500">© 2025 Puzzle RDP</p>
-            <div className="flex items-center">
-              <img src="/lovable-uploads/ce82569c-c62b-488d-9d1d-7ac9fdbb14e6.png" alt="EU Flag" className="h-5 w-7" />
-              <span className="ml-2 text-sm text-gray-500">Made in Europe</span>
-            </div>
-          </div>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="text-gray-500">
-                <Globe className="mr-2 h-4 w-4" />
-                English
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>English</DropdownMenuItem>
-              <DropdownMenuItem>Deutsch</DropdownMenuItem>
-              <DropdownMenuItem>Español</DropdownMenuItem>
-              <DropdownMenuItem>Français</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
     </footer>
