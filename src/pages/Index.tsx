@@ -74,7 +74,7 @@ const defaultPricingPlans = [
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-notion-background dark:bg-rdp-dark w-full">
+    <div className="min-h-screen bg-notion-background w-full">
       <NotionNavbar />
       <main className="w-full bg-transparent">
         <NotionHero />
@@ -82,13 +82,13 @@ const Index = () => {
         <NotionFeatures />
         
         {/* Pricing Section with Notion styling */}
-        <section className="bg-white dark:bg-rdp-dark py-16">
+        <section className="bg-white py-16">
           <div className="notion-page-container">
             <div className="text-center mb-12">
-              <Badge variant="outline" className="mb-2 text-black dark:text-white border-black dark:border-white">Pricing</Badge>
-              <h2 className="notion-heading-2">Choose the plan that fits your needs</h2>
+              <Badge variant="outline" className="mb-2 text-black border-black">Pricing</Badge>
+              <h2 className="notion-heading-2">Choose your puzzle pieces</h2>
               <p className="notion-paragraph max-w-2xl mx-auto">
-                Simple, transparent pricing for everyone. No hidden fees or surprise charges.
+                Simple, transparent pricing for building your perfect workspace.
               </p>
             </div>
             
