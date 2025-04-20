@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -50,56 +49,49 @@ const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
   };
   
   return (
-    <div 
-      className={`rdp-card h-full p-6 flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-lg border-gray-200 dark:border-gray-700 relative`}
-    >
+    <div className={`bg-white rounded-xl p-8 flex flex-col h-full transition-all duration-300 shadow-sm hover:shadow-xl border border-gray-100 ${isSelected ? 'ring-2 ring-[#4285f4]' : ''}`}>
       {plan.popular && (
-        <div className="absolute top-0 right-0 bg-rdp-blue text-white dark:bg-rdp-blue dark:text-white py-1 px-4 text-sm font-medium rounded-bl-lg rounded-tr-lg">
+        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#4285f4] text-white text-sm font-medium px-4 py-1 rounded-full">
           Most Popular
         </div>
       )}
       
-      <h3 className="text-xl font-bold text-rdp-dark dark:text-white">{plan.name}</h3>
-      <div className="mt-4 flex items-baseline">
-        <span className="text-4xl font-bold text-rdp-dark dark:text-white">{settings.currency.symbol}{plan.price}</span>
-        <span className="ml-1 text-gray-500 dark:text-gray-400">/month</span>
-      </div>
-      
-      <div className="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6">
-        <div className="space-y-4">
-          <div className="flex items-center">
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400 w-20">CPU</span>
-            <span className="text-sm font-semibold text-rdp-dark dark:text-white">{plan.cpu}</span>
+      <div className="relative">
+        <h3 className="text-2xl font-bold text-[#1e2537] mb-4">{plan.name}</h3>
+        <div className="flex items-baseline">
+          <span className="text-4xl font-bold text-[#1e2537]">{settings.currency.symbol}{plan.price}</span>
+          <span className="ml-1 text-gray-500">/month</span>
+        </div>
+        
+        <div className="mt-8 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-gray-500">CPU</span>
+            <span className="font-medium text-[#1e2537]">{plan.cpu}</span>
           </div>
-          <div className="flex items-center">
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400 w-20">RAM</span>
-            <span className="text-sm font-semibold text-rdp-dark dark:text-white">{plan.ram}</span>
+          <div className="flex items-center justify-between">
+            <span className="text-gray-500">RAM</span>
+            <span className="font-medium text-[#1e2537]">{plan.ram}</span>
           </div>
-          <div className="flex items-center">
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400 w-20">Storage</span>
-            <span className="text-sm font-semibold text-rdp-dark dark:text-white">{plan.storage}</span>
+          <div className="flex items-center justify-between">
+            <span className="text-gray-500">Storage</span>
+            <span className="font-medium text-[#1e2537]">{plan.storage}</span>
           </div>
         </div>
       </div>
       
-      <ul className="mt-6 space-y-3 flex-grow">
+      <div className="mt-8 space-y-3 flex-grow">
         {plan.features.map((feature, index) => (
-          <li key={index} className="flex items-start">
-            <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mr-2" />
-            <span className="text-sm text-gray-600 dark:text-gray-300">{feature}</span>
-          </li>
+          <div key={index} className="flex items-start gap-2">
+            <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+            <span className="text-gray-600 text-sm">{feature}</span>
+          </div>
         ))}
-      </ul>
+      </div>
       
       <button 
         onClick={handleChoosePlan}
-        className="mt-8 w-full py-3 px-6 rounded-lg font-medium transition-all duration-300
-          bg-white dark:bg-gray-800 text-rdp-dark dark:text-white 
-          border border-gray-200 dark:border-gray-700 
-          hover:bg-rdp-blue hover:text-white 
-          hover:border-transparent 
-          dark:hover:bg-rdp-blue dark:hover:text-white 
-          dark:hover:border-rdp-blue"
+        className="mt-8 w-full py-3 px-6 rounded-lg font-medium text-[#1e2537] bg-white border border-gray-200 
+          hover:border-[#4285f4] hover:text-[#4285f4] transition-all duration-300"
       >
         Choose Plan
       </button>

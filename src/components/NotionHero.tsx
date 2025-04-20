@@ -1,3 +1,4 @@
+
 import { PuzzleIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
@@ -103,12 +104,15 @@ const NotionHero = () => {
           <DashboardCarousel />
 
           <div className="mt-24">
-            <div className="text-center mb-12">
-              <h2 className="text-5xl font-bold mb-6 text-black">
-                Ready to start building?
+            <div className="text-center">
+              <Badge variant="secondary" className="mb-6 bg-[#4285f4] hover:bg-[#4285f4] text-white px-4 py-1">
+                Pricing
+              </Badge>
+              <h2 className="text-4xl font-bold mb-4 text-[#1e2537]">
+                Choose the plan that fits your needs
               </h2>
-              <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-12">
-                Choose a plan that best suits your needs. Every plan includes unlimited builds and deployments.
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-16">
+                Simple, transparent pricing for everyone. No hidden fees or surprise charges.
               </p>
             </div>
             <PricingSection plans={defaultPricingPlans} showDetailedComparison={false} />
