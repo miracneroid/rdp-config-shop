@@ -96,11 +96,11 @@
   }
   
   .puzzle-btn-primary {
-    @apply bg-puzzle-green hover:bg-puzzle-green-dark text-puzzle-dark font-medium rounded-lg px-6 py-3 shadow-md hover:shadow-lg transition-all duration-300;
+    @apply bg-puzzle-blue hover:bg-puzzle-blue-dark text-white font-medium rounded-lg px-6 py-3 shadow-md hover:shadow-lg transition-all duration-300;
   }
   
   .puzzle-btn-secondary {
-    @apply bg-transparent border border-puzzle-green/50 text-puzzle-green font-medium rounded-lg px-6 py-3 hover:bg-puzzle-green/10 transition-all duration-300;
+    @apply bg-transparent border border-puzzle-blue text-puzzle-blue font-medium rounded-lg px-6 py-3 hover:bg-puzzle-blue/10 transition-all duration-300;
   }
   
   .puzzle-stats-card {

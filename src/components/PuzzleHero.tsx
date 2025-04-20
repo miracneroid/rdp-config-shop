@@ -1,6 +1,7 @@
 import { ArrowRight, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
+import PricingSection from './PricingSection';
 
 const CircleProgress = ({ 
   percent, 
@@ -68,7 +69,7 @@ const CircleProgress = ({
           </text>
         </svg>
       </div>
-      <div className="text-sm text-gray-600 dark:text-white/70">{label}</div>
+      <div className="text-sm text-black dark:text-white">{label}</div>
     </div>
   );
 };
@@ -185,7 +186,7 @@ const PuzzleHero = () => {
             Remote Desktop<br/>
             <span className="text-puzzle-blue">Made Simple</span>
           </h1>
-          <p className="text-gray-600 dark:text-white/70 text-xl font-mono max-w-2xl mx-auto mb-8">
+          <p className="text-xl font-mono text-black dark:text-white max-w-2xl mx-auto mb-8">
             Deploy secure, high-performance remote desktop environments tailored to your needs.
           </p>
           
@@ -218,13 +219,12 @@ const PuzzleHero = () => {
           <div className="puzzle-card p-6">
             <h3 className="text-xl font-semibold text-black dark:text-white mb-3">Global Infrastructure</h3>
             <div className="mb-3">
-              <div className="inline-flex items-center space-x-1 bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white/80 text-xs px-2 py-1 rounded">
+              <div className="inline-flex items-center bg-gray-100 dark:bg-white/10 text-black dark:text-white text-xs px-2 py-1 rounded">
                 <span>Worldwide Availability</span>
-                <ArrowRight size={12} />
               </div>
             </div>
             <InteractiveGraph />
-            <div className="text-xs text-gray-500 dark:text-white/40 mt-2">Multi-region deployment</div>
+            <div className="text-xs text-black dark:text-white mt-2">Multi-region deployment</div>
           </div>
           
           <div className="puzzle-card p-6">
@@ -232,12 +232,12 @@ const PuzzleHero = () => {
             <div className="flex flex-col space-y-4 mt-4">
               <CircleProgress 
                 percent={98} 
-                color="#54FEB8" 
+                color="#2A7DDE" 
                 label="uptime guarantee" 
               />
               <CircleProgress 
                 percent={96} 
-                color="#9B87F5" 
+                color="#2A7DDE" 
                 label="connection speed" 
               />
             </div>
@@ -254,7 +254,7 @@ const PuzzleHero = () => {
                 { from: 'Security', to: 'Enhanced' },
               ].map((item, i) => (
                 <div key={i} className="flex items-center text-xs">
-                  <div className="text-gray-600 dark:text-white/70 w-16">{item.from}</div>
+                  <div className="text-black dark:text-white w-16">{item.from}</div>
                   <div className="mx-2 flex-grow border-t border-dashed border-gray-300 dark:border-white/20"></div>
                   <div className="text-puzzle-blue w-20">{item.to}</div>
                 </div>
@@ -262,6 +262,44 @@ const PuzzleHero = () => {
             </div>
           </div>
         </div>
+      </div>
+      
+      <div className="mt-20">
+        <PricingSection plans={[
+          {
+            name: "Basic",
+            price: 29,
+            cpu: "2 vCPU",
+            ram: "4 GB RAM",
+            storage: "80 GB SSD",
+            features: ["Windows/Linux OS", "24/7 Support", "99.9% Uptime"],
+          },
+          {
+            name: "Standard",
+            price: 59,
+            cpu: "4 vCPU",
+            ram: "8 GB RAM",
+            storage: "160 GB SSD",
+            features: ["Windows/Linux OS", "Priority Support", "99.9% Uptime", "Automated Backups"],
+            popular: true
+          },
+          {
+            name: "Premium",
+            price: 99,
+            cpu: "8 vCPU",
+            ram: "16 GB RAM",
+            storage: "320 GB SSD",
+            features: ["Windows/Linux OS", "24/7 Priority Support", "99.99% Uptime", "Daily Backups", "Dedicated Resources"],
+          },
+          {
+            name: "Enterprise",
+            price: 299,
+            cpu: "16 vCPU",
+            ram: "32 GB RAM",
+            storage: "640 GB SSD",
+            features: ["Custom OS Options", "Dedicated Support Team", "99.99% Uptime", "Hourly Backups", "Dedicated Resources", "Custom Network Config"],
+          }
+        ]} />
       </div>
     </div>
   );

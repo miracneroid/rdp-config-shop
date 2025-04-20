@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Monitor, Menu, X } from 'lucide-react';
@@ -37,7 +36,7 @@ const PuzzleNavbar = () => {
             <Link to="/contact" className="font-mono text-black dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue transition-colors">
               Contact
             </Link>
-            <Link to="/login" className="font-mono text-black dark:text-white hover:text-puzzle-blue dark:hover:text-puzzle-blue transition-colors">
+            <Link to="/login" className="font-mono text-black dark:text-white hover:bg-puzzle-blue/10 px-4 py-2 rounded-lg transition-colors">
               Login
             </Link>
             <Link to="/pricing" className="bg-puzzle-blue hover:bg-puzzle-blue-dark text-white font-mono px-4 py-2 rounded-lg transition-colors">
@@ -46,7 +45,6 @@ const PuzzleNavbar = () => {
             <ThemeToggle />
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMenu}
@@ -62,7 +60,6 @@ const PuzzleNavbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-white dark:bg-puzzle-dark border-t border-gray-200 dark:border-white/10">
           <div className="px-2 pt-2 pb-3 space-y-1">
