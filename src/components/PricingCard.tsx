@@ -54,10 +54,10 @@ const PricingCard = ({ plan, isSelected = false }: PricingCardProps) => {
       bg-white rounded-xl p-8 flex flex-col h-full transition-all duration-300 
       shadow-sm hover:shadow-xl border border-transparent
       ${isSelected ? 'ring-2 ring-blue-500 ring-opacity-50' : 'hover:ring-1 hover:ring-blue-300 hover:ring-opacity-30'}
-      group
+      group relative
     `}>
       {plan.popular && (
-        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#4285f4] text-white text-sm font-medium px-4 py-1 rounded-full">
+        <div className="absolute top-0 right-0 bg-[#4285f4] text-white text-sm font-medium px-4 py-1 rounded-tr-xl rounded-bl-xl">
           Most Popular
         </div>
       )}
