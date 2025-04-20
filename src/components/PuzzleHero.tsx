@@ -1,4 +1,3 @@
-
 import { ArrowRight, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
@@ -178,7 +177,6 @@ const InteractiveGraph = () => {
 };
 
 const PuzzleHero = () => {
-  // Define default pricing plans
   const defaultPricingPlans = [
     {
       name: "Basic",
