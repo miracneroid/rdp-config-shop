@@ -46,7 +46,7 @@ const DashboardCarousel = () => {
             {images.map((image, index) => (
               <CarouselItem key={index}>
                 <div className="relative overflow-hidden px-4 sm:px-6 lg:px-8">
-                  <div className="rounded-[2rem] overflow-hidden">
+                  <div className="rounded-[2rem] overflow-hidden mx-auto">
                     <img
                       src={image}
                       alt={`Dashboard screenshot ${index + 1}`}
