@@ -19,7 +19,7 @@ const Index = () => {
         <StatsBanner />
         <NotionFeatures />
         <ServiceOfferings />
-        <HomeFAQ />
+        {/* Removed HomeFAQ from home as requested */}
       </main>
       <SimpleFooter />
     </div>

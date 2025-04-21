@@ -31,7 +31,6 @@ interface StatsData {
   ticketReplies: number;
 }
 
-// Define the planValues object to address the TypeScript errors
 const planValues = {
   "Basic": {
     "CPU Performance": { status: "check", value: "Standard" },
@@ -175,8 +174,8 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
 
   return (
     <section className="py-16 bg-white w-full">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
+      <div className="w-full px-2 sm:px-4 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2 w-full">
           {plans.map((plan, index) => (
             <div 
               key={index}
@@ -188,15 +187,14 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
         </div>
         
         {showDetailedComparison && (
-          <div className="mt-16">
+          <div className="mt-16 w-full">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Plan Details</h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 See what's included in your selected plan
               </p>
             </div>
-            
-            <div className="bg-gray-50 rounded-xl p-6 md:p-8 border border-gray-200 shadow-sm">
+            <div className="bg-gray-50 rounded-xl p-6 md:p-8 border border-gray-200 shadow-sm w-full">
               <Tabs value={plans.find(p => p.popular)?.name || plans[0].name} onValueChange={() => {}} className="w-full">
                 <TabsList className="w-full flex justify-center mb-6 bg-transparent overflow-x-auto p-1 md:p-0 space-x-2">
                   {plans.map((plan, index) => (
