@@ -5,6 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, LogIn, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import PuzzleIcon from './ui/puzzle-icon';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from "@/components/ui/dropdown-menu";
 
 const NotionNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,7 +21,7 @@ const NotionNavbar = () => {
   const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
 
   return (
-    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 w-full transition-shadow">
+    <nav className="fixed top-0 left-0 right-0 z-50 w-full bg-white border-b border-gray-100 transition-shadow px-0 m-0">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 relative">
           {/* Logo and brand name */}
@@ -32,9 +38,32 @@ const NotionNavbar = () => {
             <Link to="/" className="mx-2 text-gray-600 hover:text-black text-base px-2 py-1.5 rounded transition-colors duration-150">
               Home
             </Link>
-            <Link to="/pricing" className="mx-2 text-gray-600 hover:text-black text-base px-2 py-1.5 rounded transition-colors duration-150">
-              Pricing
-            </Link>
+            {/* Pricing as dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="mx-2 text-gray-600 hover:text-black text-base font-normal px-2 py-1.5 rounded transition-colors flex items-center gap-1 bg-transparent"
+                >
+                  Pricing
+                  <span className="ml-1">&#x25BE;</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="min-w-[260px] p-1 z-[100]">
+                <DropdownMenuItem asChild>
+                  <Link to="/pricing?type=windows" className="flex flex-col px-2 py-2 w-full">
+                    <span className="font-medium text-gray-900 text-base">Windows Server</span>
+                    <span className="text-xs text-gray-500 mt-0.5">Unmetered Windows RDPs</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/pricing?type=linux" className="flex flex-col px-2 py-2 w-full">
+                    <span className="font-medium text-gray-900 text-base">Linux VPS</span>
+                    <span className="text-xs text-gray-500 mt-0.5">Unmetered Linux Servers</span>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link to="/help" className="mx-2 text-gray-600 hover:text-black text-base px-2 py-1.5 rounded transition-colors duration-150">
               Help
             </Link>
@@ -108,13 +137,26 @@ const NotionNavbar = () => {
           >
             Home
           </Link>
-          <Link
-            to="/pricing"
-            className="py-2 px-3 rounded text-gray-800 hover:bg-gray-100 transition"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Pricing
-          </Link>
+          <div className="flex flex-col gap-0.5">
+            {/* Inline pricing options for mobile */}
+            <span className="text-[15px] font-semibold text-gray-900 px-3 pt-2 pb-1">Pricing</span>
+            <Link
+              to="/pricing?type=windows"
+              className="flex flex-col px-4 py-2 rounded text-gray-800 hover:bg-gray-100 transition"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span className="text-base font-medium">Windows Server</span>
+              <span className="text-xs text-gray-500 -mt-0.5">Unmetered Windows RDPs</span>
+            </Link>
+            <Link
+              to="/pricing?type=linux"
+              className="flex flex-col px-4 py-2 rounded text-gray-800 hover:bg-gray-100 transition"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span className="text-base font-medium">Linux VPS</span>
+              <span className="text-xs text-gray-500 -mt-0.5">Unmetered Linux Servers</span>
+            </Link>
+          </div>
           <Link
             to="/help"
             className="py-2 px-3 rounded text-gray-800 hover:bg-gray-100 transition"
@@ -144,3 +186,4 @@ const NotionNavbar = () => {
 };
 
 export default NotionNavbar;
+
