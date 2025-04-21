@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -15,14 +14,12 @@ import {
 const NotionNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
-  // New state to control dropdown menu for hover interaction
   const [isPricingOpen, setIsPricingOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen((v) => !v);
 
   const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
 
-  // Handlers for hover-to-open dropdown
   const handlePricingMouseEnter = () => setIsPricingOpen(true);
   const handlePricingMouseLeave = () => setIsPricingOpen(false);
 
@@ -30,7 +27,6 @@ const NotionNavbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 w-full bg-white border-b border-gray-100 transition-shadow px-0 m-0">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 relative">
-          {/* Logo and brand name */}
           <Link to="/" className="flex items-center gap-2 shrink-0">
             <div className="flex items-center justify-center w-9 h-9 bg-gradient-to-br from-purple-500 to-blue-500 rounded">
               <PuzzleIcon className="h-5 w-5 text-white" />
@@ -39,12 +35,10 @@ const NotionNavbar = () => {
               Puzzle RDP
             </span>
           </Link>
-          {/* Desktop navigation */}
           <div className="hidden md:flex items-center gap-2">
             <Link to="/" className="mx-2 text-gray-600 hover:text-black text-base px-2 py-1.5 rounded transition-colors duration-150">
               Home
             </Link>
-            {/* Pricing as dropdown, open on hover */}
             <div
               className="relative"
               onMouseEnter={handlePricingMouseEnter}
@@ -55,29 +49,30 @@ const NotionNavbar = () => {
                   <Button
                     variant="ghost"
                     className="mx-2 text-gray-600 hover:text-black text-base font-normal px-2 py-1.5 rounded transition-colors flex items-center gap-1 bg-transparent"
-                    // Ensure focus styles for accessibility
                     tabIndex={0}
                   >
                     Pricing
                     <span className="ml-1 flex items-center">
-                      {/* Bigger chevron icon for dropdown arrow */}
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth={2.8} strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="min-w-[260px] p-1 z-[100]">
+                <DropdownMenuContent
+                  align="start"
+                  className="min-w-[300px] p-3 z-[150] bg-[#1A1F2C] text-gray-200 border border-gray-700 rounded-md shadow-lg"
+                >
                   <DropdownMenuItem asChild>
-                    <Link to="/pricing?type=windows" className="flex flex-col px-2 py-2 w-full">
-                      <span className="font-medium text-gray-900 text-base">Windows Server</span>
-                      <span className="text-xs text-gray-500 mt-0.5">Unmetered Windows RDPs</span>
+                    <Link to="/pricing?type=windows" className="flex flex-col px-3 py-3 w-full hover:bg-gray-700 rounded-md transition-colors">
+                      <span className="font-medium text-white text-base">Windows Server</span>
+                      <span className="text-xs text-gray-300 mt-1">Unmetered Windows RDPs</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/pricing?type=linux" className="flex flex-col px-2 py-2 w-full">
-                      <span className="font-medium text-gray-900 text-base">Linux VPS</span>
-                      <span className="text-xs text-gray-500 mt-0.5">Unmetered Linux Servers</span>
+                    <Link to="/pricing?type=linux" className="flex flex-col px-3 py-3 w-full hover:bg-gray-700 rounded-md transition-colors">
+                      <span className="font-medium text-white text-base">Linux VPS</span>
+                      <span className="text-xs text-gray-300 mt-1">Unmetered Linux Servers</span>
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -107,7 +102,6 @@ const NotionNavbar = () => {
               </Button>
             </Link>
           </div>
-          {/* Mobile menu button */}
           <div className="md:hidden flex items-center gap-1">
             <button
               onClick={toggleTheme}
@@ -126,7 +120,6 @@ const NotionNavbar = () => {
           </div>
         </div>
       </div>
-      {/* Mobile menu popover */}
       <div
         className={`md:hidden fixed top-0 left-0 w-full h-full z-40 bg-black bg-opacity-25 backdrop-blur-sm transition-opacity duration-200 ${isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
         onClick={() => setIsMenuOpen(false)}
@@ -157,7 +150,6 @@ const NotionNavbar = () => {
             Home
           </Link>
           <div className="flex flex-col gap-0.5">
-            {/* Inline pricing options for mobile */}
             <span className="text-[15px] font-semibold text-gray-900 px-3 pt-2 pb-1">Pricing</span>
             <Link
               to="/pricing?type=windows"
@@ -205,4 +197,3 @@ const NotionNavbar = () => {
 };
 
 export default NotionNavbar;
-
