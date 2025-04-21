@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,18 +11,23 @@
     padding: 0;
     overflow-x: hidden;
   }
-  
+
   html {
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     letter-spacing: -0.01em;
   }
-  
+
   body {
     @apply bg-white text-notion-text w-full min-h-screen m-0 p-0 font-sans;
+  }
+  /* DARK MODE BASE */
+  .dark body {
+    @apply bg-black text-white;
   }
 }
 
 @layer components {
+  /* Notion custom classes - dark variants */
   .notion-page-container {
     @apply w-full max-w-full px-4 sm:px-8 md:px-10;
   }
@@ -29,21 +35,36 @@
   .notion-heading-1 {
     @apply text-5xl md:text-[64px] font-bold leading-[1.1] tracking-[-0.03em] text-black mb-4 font-sans;
   }
+  .dark .notion-heading-1 {
+    @apply text-white;
+  }
 
   .notion-heading-2 {
     @apply text-4xl sm:text-[44px] md:text-[52px] font-bold leading-tight tracking-[-0.03em] text-black mb-8 mt-2 font-sans;
+  }
+  .dark .notion-heading-2 {
+    @apply text-white;
   }
 
   .notion-heading-3 {
     @apply font-semibold text-lg md:text-xl text-black flex items-center gap-1 mb-1 tracking-tight font-sans;
   }
+  .dark .notion-heading-3 {
+    @apply text-white;
+  }
 
   .notion-paragraph {
     @apply text-lg leading-relaxed mb-4 text-gray-500 font-sans;
   }
+  .dark .notion-paragraph {
+    @apply text-gray-300;
+  }
 
   .notion-card {
     @apply bg-white border border-notion-border rounded-lg p-6 transition-all duration-200 hover:shadow-notion;
+  }
+  .dark .notion-card {
+    @apply bg-[#111] border-[#222] text-white;
   }
 
   .notion-button {
@@ -53,8 +74,56 @@
   .notion-button-outline {
     @apply bg-[#e5e7eb] text-black rounded-md px-6 py-2.5 transition-all duration-200 hover:bg-gray-200;
   }
+  .dark .notion-button-outline {
+    @apply bg-[#212c42] text-white border border-[#306ecf] hover:bg-[#30569a];
+  }
 }
 
+/* Section background overrides */
+.bg-white {
+  /* Used for content sections */
+  @apply bg-white;
+}
+.dark .bg-white {
+  @apply bg-black;
+}
+.border-gray-100 {
+  @apply border-gray-100;
+}
+.dark .border-gray-100 {
+  @apply border-[#222];
+}
+
+.bg-gray-50 {
+  @apply bg-gray-50;
+}
+.dark .bg-gray-50 {
+  @apply bg-[#222];
+}
+
+.bg-blue-50 {
+  @apply bg-blue-50;
+}
+.dark .bg-blue-50 {
+  @apply bg-[#22223b];
+}
+
+/* Utility for icon color swap */
+.icon-dark {
+  color: #fff !important;
+  stroke: #fff !important;
+  fill: #fff !important;
+}
+.icon-light {
+  color: #333 !important;
+}
+
+/* Custom shadow for dark mode */
+.dark .shadow-notion-lg {
+  box-shadow: 0 6px 20px rgba(255,255,255,0.08), 0 2px 8px rgba(0,0,0,0.28) !important;
+}
+
+/* Animations remain unchanged */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
@@ -72,3 +141,4 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+

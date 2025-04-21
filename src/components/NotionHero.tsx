@@ -149,13 +149,13 @@ function InfinityBrandStrip() {
   return (
     <div className="relative w-full flex justify-center py-6 lg:py-10 bg-transparent z-10 select-none">
       {/* faint top border */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gray-100" />
+      <div className="absolute top-0 left-0 w-full h-px bg-gray-100 dark:bg-[#181818]" />
       {/* lighter fade overlays (left/right) */}
       <div className="absolute left-0 top-0 h-full w-24 z-20 pointer-events-none" style={{
-        background: 'linear-gradient(90deg, #fafaff 75%, rgba(255,255,255,0))'
+        background: 'linear-gradient(90deg, #fafaff 75%, rgba(0,0,0,0))'
       }}/>
       <div className="absolute right-0 top-0 h-full w-24 z-20 pointer-events-none" style={{
-        background: 'linear-gradient(270deg, #fafaff 70%, rgba(255,255,255,0))'
+        background: 'linear-gradient(270deg, #fafaff 70%, rgba(0,0,0,0))'
       }}/>
       {/* Marquee */}
       <div
@@ -194,18 +194,18 @@ function InfinityBrandStrip() {
 
 const STAT_BADGES = [
   {
-    icon: <LayoutGrid className="h-4 w-4 mr-1" />,
+    icon: <LayoutGrid className="h-4 w-4 mr-1 text-blue-700 dark:text-white" />,
     label: "147k+ deployed servers"
   },
   {
-    icon: <Image className="h-4 w-4 mr-1" />,
+    icon: <Image className="h-4 w-4 mr-1 text-blue-700 dark:text-white" />,
     label: "99.9% uptime"
   },
   {
     icon: (
       <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <circle cx="12" cy="12" r="10" strokeWidth="2" />
-        <path strokeWidth="2" d="M12 6v6l4 2"/>
+        <circle cx="12" cy="12" r="10" strokeWidth="2" className="stroke-blue-700 dark:stroke-white"/>
+        <path strokeWidth="2" d="M12 6v6l4 2" className="stroke-blue-700 dark:stroke-white"/>
       </svg>
     ),
     label: "5min setup time"
@@ -217,17 +217,17 @@ const NotionHero = () => {
   return (
     <>
       {/* HERO SECTION */}
-      <section className="relative w-full font-sans flex flex-col items-center justify-center min-h-[70vh] bg-white pt-8 lg:pt-14">
+      <section className="relative w-full font-sans flex flex-col items-center justify-center min-h-[70vh] bg-white dark:bg-black pt-8 lg:pt-14 transition-colors">
         {/* soft purple bg blur, behind headline+text (left) */}
         <div className="absolute left-0 top-16 z-0 pointer-events-none">
           <div className="w-[320px] h-[320px] rounded-full bg-[#bca3fa]/30 blur-3xl" />
         </div>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center w-full z-10 relative px-4 lg:px-10">
           <div className="flex flex-col flex-1 items-start max-w-xl sm:mt-2 md:mt-8">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#111827] leading-tight mb-6 tracking-tight font-sans">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#111827] dark:text-white leading-tight mb-6 tracking-tight font-sans">
               100%{" "}
               <span className="inline-block relative align-baseline">
-                <span className="bg-[#e6eeff] rounded-md px-2 pb-1 text-[#202f5a] animate-[pulse_2.5s_ease-in-out_infinite]">
+                <span className="bg-[#e6eeff] rounded-md px-2 pb-1 text-[#202f5a] dark:bg-[#312545] dark:text-[#f1eefc] animate-[pulse_2.5s_ease-in-out_infinite]">
                   privacy
                 </span>
               </span>{" "}
@@ -235,7 +235,7 @@ const NotionHero = () => {
               <br/>
               hosting
             </h1>
-            <p className="text-lg md:text-xl text-[#2f323a] font-sans mb-7 max-w-lg" style={{ fontWeight: 400 }}>
+            <p className="text-lg md:text-xl text-[#2f323a] dark:text-[#eee] font-sans mb-7 max-w-lg" style={{ fontWeight: 400 }}>
               Cloud provider backed by EU-legislation and high quality standards from The Netherlands <span role="img" aria-label="NL">🇳🇱</span>, Phoenix <span role="img" aria-label="US">🇺🇸</span> and Poland <span role="img" aria-label="PL">🇵🇱</span>
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-5">
@@ -247,7 +247,7 @@ const NotionHero = () => {
             {/* STAT BADGES */}
             <div className="flex flex-wrap gap-3 mb-2 mt-2">
               {STAT_BADGES.map((b, i) => (
-                <div key={i} className="flex items-center px-3 py-2 bg-[#f7f8fa] border border-[#e4eaf3] rounded-lg text-[#333D51] font-mono text-base shadow-sm hover:shadow transition">
+                <div key={i} className="flex items-center px-3 py-2 bg-[#f7f8fa] dark:bg-[#232323] border border-[#e4eaf3] dark:border-[#353549] rounded-lg text-[#333D51] dark:text-white font-mono text-base shadow-sm hover:shadow transition">
                   {b.icon}
                   {b.label}
                 </div>
@@ -256,7 +256,7 @@ const NotionHero = () => {
           </div>
           {/* Dashboard illustrative image mockup */}
           <div className="flex-1 flex justify-center items-center z-10 mt-10 md:mt-0 md:ml-8 lg:ml-14">
-            <div className="relative shadow-2xl rounded-2xl border border-[#eff1f8] bg-white overflow-hidden w-[92vw] max-w-xl md:w-[490px] md:max-w-none lg:w-[570px]">
+            <div className="relative shadow-2xl rounded-2xl border border-[#eff1f8] dark:border-[#222] bg-white dark:bg-[#18181a] overflow-hidden w-[92vw] max-w-xl md:w-[490px] md:max-w-none lg:w-[570px]">
               <img
                 src="/lovable-uploads/dashboard-v3-dark-DkIL4YRw.webp"
                 alt="Dashboard preview"
@@ -265,7 +265,7 @@ const NotionHero = () => {
                 style={{objectFit: "cover"}}
               />
               {/* Soft highlight at top */}
-              <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-b from-[#efeffd] to-transparent pointer-events-none" />
+              <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-b from-[#efeffd] dark:from-[#222] to-transparent pointer-events-none" />
             </div>
           </div>
         </div>
@@ -276,7 +276,7 @@ const NotionHero = () => {
       </section>
 
       {/* SLIDESHOW SECTION and PRICING below */}
-      <section className="bg-white w-full pt-8 pb-4 font-sans border-t border-gray-100">
+      <section className="bg-white dark:bg-black w-full pt-8 pb-4 font-sans border-t border-gray-100 dark:border-[#222]">
         <div className="notion-page-container">
           {/* Dashboard Slideshow */}
           <div className="mb-12">
@@ -301,4 +301,3 @@ const NotionHero = () => {
 };
 
 export default NotionHero;
-

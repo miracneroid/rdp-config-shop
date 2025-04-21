@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   Monitor,
@@ -54,7 +55,7 @@ const FEATURES = [
 ];
 
 const NotionFeatures = () => (
-  <section className="bg-white py-16 w-full font-sans border-t border-b border-gray-100">
+  <section className="bg-white dark:bg-black py-16 w-full font-sans border-t border-b border-gray-100 dark:border-[#222]">
     <div className="w-full px-4 sm:px-8 md:px-16 mx-auto">
       <div className="text-center mb-12">
         <h2 className="notion-heading-2 mb-3">
@@ -72,17 +73,17 @@ const NotionFeatures = () => (
               key={idx}
               className={`
                 flex flex-col items-center px-5 py-8 rounded-2xl
-                border border-gray-200 bg-white shadow-md
-                hover:shadow-lg hover:border-blue-300 transition-all duration-300 ease-in-out
+                border border-gray-200 dark:border-[#232323] bg-white dark:bg-[#18181a] shadow-md
+                hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-400 transition-all duration-300 ease-in-out
                 hover:scale-[1.02] cursor-pointer
               `}
               style={{ minHeight: '270px' }}
             >
-              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-blue-50 shadow-sm mb-3">
-                <IconComponent className="h-8 w-8 text-blue-700" aria-hidden="true" />
+              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-blue-50 dark:bg-[#232a46] shadow-sm mb-3">
+                <IconComponent className="h-8 w-8 text-blue-700 dark:text-white" aria-hidden="true" />
               </div>
               <h3 className="notion-heading-3 text-center mt-2 mb-2">{feature.title}</h3>
-              <p className="text-gray-500 text-base text-center">{feature.description}</p>
+              <p className="text-gray-500 dark:text-gray-300 text-base text-center">{feature.description}</p>
             </div>
           );
         })}
@@ -92,3 +93,4 @@ const NotionFeatures = () => (
 );
 
 export default NotionFeatures;
+
