@@ -88,10 +88,10 @@
   background-color: black;
 }
 .border-gray-100 {
-  @apply border-gray-100;
+  border-color: #e5e7eb; /* explicit color instead of @apply */
 }
 .dark .border-gray-100 {
-  @apply border-[#222];
+  border-color: #222; /* explicit color instead of @apply */
 }
 
 .bg-gray-50 {
@@ -141,3 +141,4 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
