@@ -258,7 +258,7 @@ const NotionHero = () => {
           <div className="flex-1 flex justify-center items-center z-10 mt-10 md:mt-0 md:ml-8 lg:ml-14">
             <div className="relative shadow-2xl rounded-2xl border border-[#eff1f8] bg-white overflow-hidden w-[92vw] max-w-xl md:w-[490px] md:max-w-none lg:w-[570px]">
               <img
-                src="/lovable-uploads/25b9a189-5c5b-4737-933a-6a328fe06be4.png"
+                src="/lovable-uploads/dashboard-v3-dark-DkIL4YRw.webp"
                 alt="Dashboard preview"
                 className="w-full h-auto block"
                 draggable={false}
