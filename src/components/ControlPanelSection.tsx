@@ -4,17 +4,17 @@ import { Check, CalendarDays, UserRoundCog } from "lucide-react";
 
 const FEATURE_BADGES = [
   {
-    icon: <Check size={44} strokeWidth={1.6} className="mb-3 text-gray-900 dark:icon-dark" />,
+    icon: <Check size={44} strokeWidth={1.6} className="mb-3 text-gray-900 dark:text-white" />,
     title: "Effortless Server Control",
     description: "Deploy, reboot & manage your RDP with a click — instantly."
   },
   {
-    icon: <CalendarDays size={44} strokeWidth={1.6} className="mb-3 text-gray-900 dark:icon-dark" />,
+    icon: <CalendarDays size={44} strokeWidth={1.6} className="mb-3 text-gray-900 dark:text-white" />,
     title: "Flexible Scheduling",
     description: "Automate backup, resource scaling, and billing cycles."
   },
   {
-    icon: <UserRoundCog size={44} strokeWidth={1.6} className="mb-3 text-gray-900 dark:icon-dark" />,
+    icon: <UserRoundCog size={44} strokeWidth={1.6} className="mb-3 text-gray-900 dark:text-white" />,
     title: "Team Access",
     description: "Invite teammates, set permissions, collaborate securely."
   },
@@ -65,4 +65,3 @@ const ControlPanelSection = () => {
 };
 
 export default ControlPanelSection;
-
