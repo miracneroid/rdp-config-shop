@@ -1,51 +1,53 @@
 
 import React from "react";
-import { Badge } from "./ui/badge";
-import { BadgeCheck, BadgeInfo, BadgeDollarSign } from "lucide-react";
+import { Check, CalendarDays, UserRoundCog } from "lucide-react";
 
-const BADGES = [
+const FEATURE_BADGES = [
   {
-    icon: <BadgeCheck className="mr-1 h-4 w-4 text-blue-700" />,
-    label: "All-in-One Dashboard",
-    variant: "default" as const,
+    icon: <Check size={44} strokeWidth={1.6} className="mb-3 text-gray-900" />,
+    title: "Effortless Server Control",
+    description: "Deploy, reboot & manage your RDP with a click — instantly."
   },
   {
-    icon: <BadgeInfo className="mr-1 h-4 w-4 text-blue-700" />,
-    label: "Live Resource Adjustments",
-    variant: "outline" as const,
+    icon: <CalendarDays size={44} strokeWidth={1.6} className="mb-3 text-gray-900" />,
+    title: "Flexible Scheduling",
+    description: "Automate backup, resource scaling, and billing cycles."
   },
   {
-    icon: <BadgeDollarSign className="mr-1 h-4 w-4 text-blue-700" />,
-    label: "No Hidden Costs",
-    variant: "secondary" as const,
+    icon: <UserRoundCog size={44} strokeWidth={1.6} className="mb-3 text-gray-900" />,
+    title: "Team Access",
+    description: "Invite teammates, set permissions, collaborate securely."
   },
 ];
 
 const ControlPanelSection = () => {
   return (
     <section className="relative w-full bg-white py-20 border-t border-b border-gray-100 font-sans">
-      <div className="w-full px-4 sm:px-8 md:px-16 mx-auto">
-        <div className="flex flex-col sm:flex-row justify-between items-start gap-6 mb-10 text-left">
-          <div className="flex flex-col">
+      <div className="w-full px-4 sm:px-8 md:px-16 mx-auto max-w-7xl">
+        {/* Headline and description */}
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-10 mb-10 text-left">
+          <div className="flex flex-col max-w-2xl">
             <h2 className="notion-heading-2 text-6xl font-bold mb-2 text-black">
-              Your workflow. <br />
+              Your workflow.<br />
               Your way.
             </h2>
-              <p className="notion-paragraph max-w-lg mb-0 text-lg text-gray-600">
-                All-in-one panel to manage, scale, or secure your workspace. Designed for maximum control and simplicity.
-              </p>
+            <p className="notion-paragraph max-w-lg mb-4 text-lg text-gray-600">
+              All-in-one panel to manage, scale, or secure your workspace.<br />
+              Designed for maximum control and simplicity.
+            </p>
+            {/* Add "Explore" link if desired, like in Notion */}
+            {/* <a href="#" className="text-blue-600 font-medium mt-2 hover:underline transition">Explore features &rarr;</a> */}
           </div>
-          {/* Badges (Right) */}
-          <div className="flex gap-3 mt-1 flex-wrap">
-            {BADGES.map((b, idx) => (
-              <Badge
-                key={idx}
-                variant={b.variant}
-                className="flex items-center font-medium px-4 py-2 rounded-full shadow-sm border border-gray-200 bg-gray-50 text-gray-900"
-              >
-                {b.icon}
-                {b.label}
-              </Badge>
+          {/* Feature Badges Block */}
+          <div className="flex flex-row gap-10 md:gap-14 lg:gap-20 items-start w-full lg:w-auto justify-center mt-3">
+            {FEATURE_BADGES.map((f, idx) => (
+              <div key={idx} className="flex flex-col items-center text-center w-[220px] max-w-[96vw]">
+                <div className="mb-1 flex items-center justify-center">
+                  {f.icon}
+                </div>
+                <div className="font-bold text-[18px] text-gray-900 mb-1">{f.title}</div>
+                <div className="text-gray-500 text-base">{f.description}</div>
+              </div>
             ))}
           </div>
         </div>
