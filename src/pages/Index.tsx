@@ -1,4 +1,3 @@
-
 import React from "react";
 import NotionNavbar from "@/components/NotionNavbar";
 import NotionHero from "@/components/NotionHero";
@@ -14,7 +13,6 @@ const Index = () => {
       <NotionNavbar />
       <main className="w-full bg-transparent">
         <NotionHero />
-        {/* Insert the new control panel section right after PricingSection, inside NotionHero */}
         <ControlPanelSection />
         <NotionFeatures />
         <GlobalLocations />
@@ -26,4 +24,3 @@ const Index = () => {
 };
 
 export default Index;
-
