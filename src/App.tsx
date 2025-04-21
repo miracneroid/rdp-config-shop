@@ -24,33 +24,36 @@ import StatsBanner from './components/StatsBanner';
 import { Toaster } from './components/ui/toaster';
 import { CartProvider } from './context/CartContext';
 import { SettingsProvider } from './context/SettingsContext';
+import BorderPage from './components/BorderPage';
 
 function App() {
   return (
     <SettingsProvider>
       <CartProvider>
         <Router>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/configure" element={<Configure />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/admin-login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/users" element={<TestManagement />} />
-            <Route path="/dashboard" element={<UserDashboard />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/docs" element={<Documentation />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Toaster />
+          <BorderPage>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/configure" element={<Configure />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/admin-login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/users" element={<TestManagement />} />
+              <Route path="/dashboard" element={<UserDashboard />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/docs" element={<Documentation />} />
+              <Route path="/help" element={<Help />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Toaster />
+          </BorderPage>
         </Router>
       </CartProvider>
     </SettingsProvider>
