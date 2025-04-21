@@ -82,10 +82,10 @@
 /* Section background overrides */
 .bg-white {
   /* Used for content sections */
-  @apply bg-white;
+  background-color: white;
 }
 .dark .bg-white {
-  @apply bg-black;
+  background-color: black;
 }
 .border-gray-100 {
   @apply border-gray-100;
@@ -95,17 +95,17 @@
 }
 
 .bg-gray-50 {
-  @apply bg-gray-50;
+  background-color: #f9fafb;
 }
 .dark .bg-gray-50 {
-  @apply bg-[#222];
+  background-color: #222;
 }
 
 .bg-blue-50 {
-  @apply bg-blue-50;
+  background-color: #eff6ff;
 }
 .dark .bg-blue-50 {
-  @apply bg-[#22223b];
+  background-color: #22223b;
 }
 
 /* Utility for icon color swap */
@@ -141,4 +141,3 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
