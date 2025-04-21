@@ -1,47 +1,47 @@
 
 import React from 'react';
-import { BookText, BookOpen, Projector, Goal, FileText, Library, BookX, Template } from 'lucide-react';
+import { Server, Key, ShieldCheck, Users, Cloud, Terminal, Settings, Lock } from 'lucide-react';
 
 const featureList = [
   {
-    name: 'Docs',
-    description: 'Build any page, communicate any idea.',
-    icon: BookText,
+    name: 'Instant Setup',
+    description: 'Spin up your RDP server in seconds with automatic provisioning.',
+    icon: Server,
   },
   {
-    name: 'Wiki',
-    description: 'One home base for all your knowledge.',
-    icon: BookOpen,
+    name: 'Full Admin Access',
+    description: 'Get unrestricted administrator access for true control.',
+    icon: Key,
   },
   {
-    name: 'Projects',
-    description: 'Manage any project from beginning to end.',
-    icon: Projector,
+    name: 'DDoS Protection',
+    description: 'Proactive security keeps your sessions shielded and reliable.',
+    icon: ShieldCheck,
   },
   {
-    name: 'Notion AI',
-    description: 'Finds what you need. Does what you need.',
-    icon: Goal,
+    name: 'Multiple OS Options',
+    description: 'Deploy Windows or Linux — your choice, every time.',
+    icon: Terminal,
   },
   {
-    name: 'Calendar',
-    description: 'See all your commitments in one place.',
-    icon: FileText,
+    name: 'Global Locations',
+    description: 'Low latency RDP from worldwide datacenter options.',
+    icon: Cloud,
   },
   {
-    name: 'Goals',
-    description: "Track progress toward what's most important.",
-    icon: Goal,
+    name: '24/7 Support',
+    description: 'Reach our expert support team any time, day or night.',
+    icon: Users,
   },
   {
-    name: 'Sites',
-    description: 'Make any page a website in minutes.',
-    icon: Library,
+    name: 'Easy Management',
+    description: 'Simple control panel for fast reboots, rebuilds, and upgrades.',
+    icon: Settings,
   },
   {
-    name: 'Templates',
-    description: 'Get started with one of 30,000+ templates.',
-    icon: BookX,
+    name: 'Secure Connections',
+    description: 'All data is encrypted using strong protection protocols.',
+    icon: Lock,
   },
 ];
 
@@ -51,7 +51,7 @@ const NotionFeatures = () => {
       <div className="w-full px-2 sm:px-10">
         <h2 className="text-4xl sm:text-[44px] md:text-[52px] font-bold text-black leading-tight mb-14 mt-2" style={{ letterSpacing: "-0.03em" }}>
           Everything you need<br className="hidden sm:block" />
-          to do your best work.
+          for the best RDP experience.
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 w-full">
           {featureList.map(({ name, icon: Icon, description }) => (
