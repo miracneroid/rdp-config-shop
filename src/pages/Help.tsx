@@ -1,6 +1,7 @@
 
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import StatsBanner from "@/components/StatsBanner";
+import SimpleFooter from "@/components/SimpleFooter";
 
 const Help = () => {
   return (
@@ -28,7 +29,8 @@ const Help = () => {
           </div>
         </div>
       </div>
-      <Footer />
+      <StatsBanner />
+      <SimpleFooter />
     </div>
   );
 };

@@ -1,7 +1,8 @@
 
 import Navbar from "@/components/Navbar";
 import FAQ from "@/components/FAQ";
-import Footer from "@/components/Footer";
+import StatsBanner from "@/components/StatsBanner";
+import SimpleFooter from "@/components/SimpleFooter";
 
 const FAQPage = () => {
   return (
@@ -21,7 +22,8 @@ const FAQPage = () => {
           <FAQ />
         </div>
       </div>
-      <Footer />
+      <StatsBanner />
+      <SimpleFooter />
     </div>
   );
 };

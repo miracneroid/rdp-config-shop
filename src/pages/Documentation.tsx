@@ -1,6 +1,7 @@
 
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import SimpleFooter from "@/components/SimpleFooter";
+import StatsBanner from "@/components/StatsBanner";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -83,10 +84,10 @@ const Documentation = () => {
           </Tabs>
         </div>
       </div>
-      <Footer />
+      <StatsBanner />
+      <SimpleFooter />
     </div>
   );
 };
 
 export default Documentation;
-

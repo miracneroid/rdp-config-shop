@@ -1,8 +1,7 @@
-
 import React, { useState } from "react";
-import NotionNavbar from "@/components/NotionNavbar";
+import Navbar from "@/components/Navbar";
 import PricingSection from "@/components/PricingSection";
-import NotionFooter from "@/components/NotionFooter";
+import SimpleFooter from "@/components/SimpleFooter";
 import StatsBanner from "@/components/StatsBanner";
 import HomeFAQ from "@/components/HomeFAQ";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -140,8 +139,8 @@ const PricingPage = () => {
   const [tab, setTab] = useState<"windows" | "linux">("windows");
 
   return (
-    <div className="min-h-screen flex flex-col dark:bg-rdp-dark w-full">
-      <NotionNavbar />
+    <div className="min-h-screen flex flex-col bg-white w-full">
+      <Navbar />
       <div className="pt-16 bg-white dark:bg-rdp-dark py-16 flex-grow w-full">
         <div className="w-full px-2 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -180,9 +179,9 @@ const PricingPage = () => {
           </div>
         </div>
       </div>
-      <StatsBanner />
       <HomeFAQ />
-      <NotionFooter />
+      <StatsBanner />
+      <SimpleFooter />
     </div>
   );
 };

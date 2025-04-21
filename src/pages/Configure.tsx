@@ -1,7 +1,8 @@
 
 import Navbar from "@/components/Navbar";
 import ConfigBuilder from "@/components/ConfigBuilder";
-import Footer from "@/components/Footer";
+import StatsBanner from "@/components/StatsBanner";
+import SimpleFooter from "@/components/SimpleFooter";
 
 const Configure = () => {
   return (
@@ -21,7 +22,8 @@ const Configure = () => {
           <ConfigBuilder />
         </div>
       </div>
-      <Footer />
+      <StatsBanner />
+      <SimpleFooter />
     </div>
   );
 };
