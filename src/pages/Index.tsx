@@ -13,13 +13,22 @@ const Index = () => {
     <div className="w-full min-h-screen flex flex-col bg-notion-background font-sans">
       <NotionNavbar />
       <main className="flex-1 flex flex-col w-full">
-        {/* All major sections are now full-width */}
-        <NotionHero />
-        <ControlPanelSection />
-        <NotionFeatures />
-        <GlobalLocations />
+        <div className="animate-fade-in">
+          <NotionHero />
+        </div>
+        <div className="animate-fade-in" style={{ animationDelay: "0.12s" } as React.CSSProperties}>
+          <ControlPanelSection />
+        </div>
+        <div className="animate-fade-in" style={{ animationDelay: "0.18s" } as React.CSSProperties}>
+          <NotionFeatures />
+        </div>
+        <div className="animate-fade-in" style={{ animationDelay: "0.24s" } as React.CSSProperties}>
+          <GlobalLocations />
+        </div>
       </main>
-      <StatsBanner />
+      <div className="animate-fade-in" style={{ animationDelay: "0.30s" } as React.CSSProperties}>
+        <StatsBanner />
+      </div>
       <SimpleFooter />
     </div>
   );
