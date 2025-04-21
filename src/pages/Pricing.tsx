@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import PricingSection from "@/components/PricingSection";
@@ -6,7 +5,7 @@ import Footer from "@/components/Footer";
 import StatsBanner from "@/components/StatsBanner";
 import HomeFAQ from "@/components/HomeFAQ";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Window, Linux } from "lucide-react";
+import { Monitor, FileCode } from "lucide-react";
 
 const windowsPlans = [
   {
@@ -159,14 +158,14 @@ const PricingPage = () => {
                   value="windows"
                   className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white px-5 py-2 rounded-lg"
                 >
-                  <Window className="w-5 h-5" />
+                  <Monitor className="w-5 h-5" />
                   Windows
                 </TabsTrigger>
                 <TabsTrigger
                   value="linux"
                   className="flex items-center gap-2 data-[state=active]:bg-green-700 data-[state=active]:text-white px-5 py-2 rounded-lg"
                 >
-                  <Linux className="w-5 h-5" />
+                  <FileCode className="w-5 h-5" />
                   Linux
                 </TabsTrigger>
               </TabsList>
@@ -188,4 +187,3 @@ const PricingPage = () => {
 };
 
 export default PricingPage;
-
