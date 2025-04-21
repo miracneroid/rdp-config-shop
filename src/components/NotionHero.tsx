@@ -6,118 +6,115 @@ import PricingSection from './PricingSection';
 import DashboardCarousel from './DashboardCarousel';
 import React from "react";
 
-const defaultPricingPlans = [
-  {
-    name: "Basic",
-    price: 29,
-    cpu: "2 Cores",
-    ram: "4 GB",
-    storage: "64 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Basic Software Suite",
-      "24/7 Access",
-      "Standard Support"
-    ]
-  },
-  {
-    name: "Standard",
-    price: 59,
-    cpu: "4 Cores",
-    ram: "8 GB",
-    storage: "128 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Standard Software Suite",
-      "24/7 Access",
-      "Priority Support",
-      "Daily Backups"
-    ],
-    popular: true
-  },
-  {
-    name: "Premium",
-    price: 99,
-    cpu: "8 Cores",
-    ram: "16 GB",
-    storage: "256 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Professional Software Suite",
-      "24/7 Access",
-      "Priority Support",
-      "Daily Backups",
-      "Enhanced Security"
-    ]
-  },
-  {
-    name: "Enterprise",
-    price: 199,
-    cpu: "16 Cores",
-    ram: "32 GB",
-    storage: "512 GB SSD",
-    features: [
-      "Windows or Linux OS",
-      "Enterprise Software Suite",
-      "24/7 Access",
-      "Priority Support",
-      "Hourly Backups",
-      "Advanced Security",
-      "Dedicated Resources"
-    ]
-  }
+// Add a mock brand images (replace with actual logos if uploads exist)
+const SERVER_BRANDS = [
+  { name: "Intel® Xeon", color: "text-blue-900", bg: "bg-white", ring: "ring-[#0071C5]", img: null },
+  { name: "AMD EPYC™", color: "text-[#232C3B]", bg: "bg-white", ring: "ring-[#232C3B]", img: null },
+  { name: "ARM Neoverse", color: "text-green-900", bg: "bg-white", ring: "ring-[#AFE3A6]", img: null },
+  { name: "IBM Power", color: "text-yellow-900", bg: "bg-white", ring: "ring-[#FFD500]", img: null },
+  { name: "AWS Graviton", color: "text-green-900", bg: "bg-white", ring: "ring-[#E5FFDF]", img: null },
+  { name: "Apple M-Series", color: "text-black", bg: "bg-white", ring: "ring-[#D0D3D4]", img: null },
 ];
 
-// InfinityScroller component, reused and easy to customize
-const SERVER_BRANDS = [
-  { name: "Intel® Xeon", color: "text-blue-200", bg: "bg-[#0071C5]" },
-  { name: "AMD EPYC™", color: "text-white", bg: "bg-[#232C3B]" },
-  { name: "ARM Neoverse", color: "text-gray-900", bg: "bg-[#AFE3A6]" },
-  { name: "IBM Power", color: "text-black", bg: "bg-[#FFD500]" },
-  { name: "AWS Graviton", color: "text-green-900", bg: "bg-[#E5FFDF]" },
-  { name: "Apple M-Series", color: "text-black", bg: "bg-[#D0D3D4]" },
+// Optional: you can use simple SVG in place of brand logos, here using Lucide icons for demo
+const BRAND_ICONS = [
+  "circle", "square", "hexagon", "diamond", "star", "circle-dot"
 ];
+import {
+  Circle,
+  Square,
+  Hexagon,
+  Diamond,
+  Star,
+  CircleDot,
+} from "lucide-react";
+
+// Logo icon mapping helper (cycling through Lucide icons)
+const ICON_COMPONENTS = [Circle, Square, Hexagon, Diamond, Star, CircleDot];
 
 function InfinityScroller() {
   return (
-    <div className="w-full bg-gray-900 py-2 border-b border-gray-800 overflow-hidden">
-      <div className="relative flex items-center">
-        <Infinity className="text-white opacity-60 mx-6" />
-        {/* Marquee effect using extra wide, doubled brand list */}
-        <div
-          className="flex items-center gap-6 animate-infinite-scroll"
+    <div className="relative w-full flex justify-center z-10 py-8 pointer-events-none">
+      {/* Container with glass/blur effect */}
+      <div className="relative mx-auto w-full max-w-2xl">
+        {/* Gradient overlays for fading "trails" at both ends */}
+        <div className="pointer-events-none absolute top-0 left-0 h-full w-28 z-20"
           style={{
-            minWidth: "100%",
-            animation: "marquee-left 24s linear infinite",
-            // Responsive: wraps if space, but force single line/scroll on all except XS
-            whiteSpace: "nowrap"
+            background: 'linear-gradient(90deg, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%)',
+          }}
+        />
+        <div className="pointer-events-none absolute top-0 right-0 h-full w-28 z-20"
+          style={{
+            background: 'linear-gradient(270deg, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%)',
+          }}
+        />
+        <div
+          className="rounded-3xl bg-white/70 shadow-xl backdrop-blur-md border border-gray-100 overflow-hidden"
+          style={{
+            boxShadow: '0 6px 36px rgba(27,19,61,0.09), 0 2px 8px rgba(0,0,0,0.13)',
           }}
         >
-          {[...SERVER_BRANDS, ...SERVER_BRANDS].map((brand, idx) => (
-            <span
-              key={idx}
-              className={`px-4 py-1 rounded-md font-mono text-sm font-bold mx-1 shadow ${
-                brand.bg
-              } ${brand.color} transition-transform duration-200`}
-              style={{ minWidth: 110, display: 'inline-block' }}
+          {/* Marquee Animation */}
+          <div
+            className="relative w-full flex items-center overflow-hidden"
+            style={{ height: 64 }}
+          >
+            <div
+              className="flex items-center animate-infinite-scroll"
+              style={{
+                gap: '32px',
+                animation: 'brand-marquee 27s linear infinite',
+                minWidth: "100%",
+                whiteSpace: "nowrap"
+              }}
             >
-              {brand.name}
-            </span>
-          ))}
+              {[...SERVER_BRANDS, ...SERVER_BRANDS].map((brand, idx) => {
+                const Icon = ICON_COMPONENTS[idx % ICON_COMPONENTS.length];
+                return (
+                  <span
+                    key={idx}
+                    className={`
+                      group relative flex items-center gap-3 px-5 py-2 rounded-full
+                      shadow-md font-mono text-base font-bold hover:scale-105 transition-all duration-300
+                      ${brand.bg} ${brand.color}
+                      ring-2 ${brand.ring}
+                      pointer-events-auto
+                    `}
+                    style={{
+                      filter: "drop-shadow(0 2px 16px rgba(74,58,255,0.06))",
+                      minWidth: "170px"
+                    }}
+                  >
+                    <span
+                      className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-inner border border-gray-200 mr-2"
+                    >
+                      <Icon className="w-7 h-7 text-blue-400 group-hover:text-blue-700 transition-colors duration-200" />
+                    </span>
+                    <span
+                      className="font-mono font-semibold text-base tracking-tight select-none"
+                      style={{ textShadow: '0 1px 8px #fff9, 0 0 4px #fff9' }}
+                    >
+                      {brand.name}
+                    </span>
+                  </span>
+                );
+              })}
+            </div>
+          </div>
         </div>
+        {/* Inline keyframes for marquee */}
+        <style>{`
+          @keyframes brand-marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-infinite-scroll {
+            will-change: transform;
+            display: flex;
+            align-items: center;
+          }
+        `}</style>
       </div>
-      {/* Marquee animation */}
-      <style>{`
-      @keyframes marquee-left {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-      .animate-infinite-scroll {
-        will-change: transform;
-        display: flex;
-        align-items: center;
-      }
-      `}</style>
     </div>
   );
 }
@@ -125,7 +122,7 @@ function InfinityScroller() {
 const NotionHero = () => {
   return (
     <>
-      {/* HERO SECTION takes full height */}
+      {/* HERO SECTION */}
       <section className="bg-white w-full font-sans flex items-center min-h-screen relative">
         <div className="notion-page-container flex flex-col-reverse md:flex-row items-center w-full py-16 md:py-0">
           <div className="text-left flex-1">
@@ -155,16 +152,16 @@ const NotionHero = () => {
             />
           </div>
         </div>
-        {/* InfinityScroller strip replaces the arrow */}
-        <div className="absolute w-full left-0 bottom-0">
+        {/* Improved Infinity Scroller, centered */}
+        <div className="absolute w-full left-0 right-0 bottom-0 flex justify-center z-20">
           <InfinityScroller />
         </div>
       </section>
 
-      {/* SLIDESHOW SECTION (DashboardCarousel) and PRICING now below, visible on scroll */}
+      {/* SLIDESHOW SECTION and PRICING below */}
       <section className="bg-white w-full pt-8 pb-4 font-sans border-t border-gray-100">
         <div className="notion-page-container">
-          {/* Dashboard Slideshow - appears when user scrolls below hero */}
+          {/* Dashboard Slideshow */}
           <div className="mb-12">
             <DashboardCarousel />
           </div>
