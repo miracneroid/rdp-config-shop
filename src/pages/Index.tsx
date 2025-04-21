@@ -5,9 +5,7 @@ import NotionHero from "@/components/NotionHero";
 import NotionFeatures from "@/components/NotionFeatures";
 import SimpleFooter from "@/components/SimpleFooter";
 import StatsBanner from "@/components/StatsBanner";
-import ServiceOfferings from "@/components/ServiceOfferings";
 import HomeFAQ from "@/components/HomeFAQ";
-import ProcessorCards from "@/components/ProcessorCards";
 
 const Index = () => {
   return (
@@ -15,12 +13,9 @@ const Index = () => {
       <NotionNavbar />
       <main className="w-full bg-transparent">
         <NotionHero />
-        <ProcessorCards />
-        <StatsBanner />
         <NotionFeatures />
-        <ServiceOfferings />
-        {/* Removed HomeFAQ from home as requested */}
       </main>
+      <StatsBanner />
       <SimpleFooter />
     </div>
   );

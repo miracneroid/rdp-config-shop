@@ -1,37 +1,37 @@
 
-import { Shield, Cpu, Zap, Server, Globe, Clock } from 'lucide-react';
+import { Shield, Cpu, Zap, Server, Globe, Clock, MonitorPlay, ShieldCheck, Database, Layers, GitBranch } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const features = [
   {
-    name: 'High Performance',
-    description: 'Powerful CPUs, fast SSD storage, and ample RAM for smooth multitasking.',
-    icon: Cpu,
+    name: 'Remote Desktop',
+    description: 'Full access Windows and Linux environments for remote work and development.',
+    icon: MonitorPlay,
   },
   {
-    name: 'Enterprise Security',
-    description: 'Advanced security protocols to keep your remote desktop environment protected.',
-    icon: Shield,
-  },
-  {
-    name: 'Global Deployment',
-    description: 'Choose from data centers around the world for optimal latency and performance.',
-    icon: Globe,
-  },
-  {
-    name: 'Instant Setup',
-    description: 'Your configured RDP environment is ready within minutes, not hours or days.',
-    icon: Clock,
-  },
-  {
-    name: 'Optimized Performance',
-    description: 'Tuned for the best possible remote desktop experience, even over lower bandwidth.',
-    icon: Zap,
-  },
-  {
-    name: 'Reliable Infrastructure',
-    description: '99.9% uptime guarantee with redundant systems and regular backups.',
+    name: 'Dedicated Servers',
+    description: 'High-performance servers with dedicated resources for demanding workloads.',
     icon: Server,
+  },
+  {
+    name: 'Secure Access',
+    description: 'Enterprise-grade security with multi-factor authentication and encryption.',
+    icon: ShieldCheck,
+  },
+  {
+    name: 'Data Storage',
+    description: 'Reliable and fast SSD storage with automatic backups and redundancy.',
+    icon: Database,
+  },
+  {
+    name: 'Custom Stacks',
+    description: 'Pre-configured software stacks for development, design, and data science.',
+    icon: Layers,
+  },
+  {
+    name: 'DevOps Tools',
+    description: 'Integrated CI/CD pipelines and development tools for efficient workflows.',
+    icon: GitBranch,
   },
 ];
 
