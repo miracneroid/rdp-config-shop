@@ -70,7 +70,7 @@ const NotionHero = () => {
   return (
     <div className="bg-white w-full font-sans">
       <div className="notion-page-container py-12 sm:py-14 md:py-12">
-        <div className="max-w-7xl mx-auto">
+        <div>
           <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
             <div className="text-left">
               <h1 className="notion-heading-1">

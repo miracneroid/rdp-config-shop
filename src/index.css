@@ -23,7 +23,7 @@
 
 @layer components {
   .notion-page-container {
-    @apply w-full px-4 sm:px-8 md:px-16 mx-auto;
+    @apply w-full max-w-full px-4 sm:px-8 md:px-10;
   }
 
   .notion-heading-1 {
