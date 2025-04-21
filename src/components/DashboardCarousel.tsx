@@ -25,7 +25,11 @@ const DashboardCarousel = () => {
     });
 
     const interval = setInterval(() => {
-      api.scrollNext();
+      if (api.selectedScrollSnap() === images.length - 1) {
+        api.scrollTo(0);
+      } else {
+        api.scrollNext();
+      }
     }, 3000);
 
     return () => {

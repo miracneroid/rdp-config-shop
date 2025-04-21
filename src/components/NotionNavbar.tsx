@@ -15,10 +15,16 @@ import {
 const NotionNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+  // New state to control dropdown menu for hover interaction
+  const [isPricingOpen, setIsPricingOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen((v) => !v);
 
   const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
+
+  // Handlers for hover-to-open dropdown
+  const handlePricingMouseEnter = () => setIsPricingOpen(true);
+  const handlePricingMouseLeave = () => setIsPricingOpen(false);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 w-full bg-white border-b border-gray-100 transition-shadow px-0 m-0">
@@ -38,32 +44,45 @@ const NotionNavbar = () => {
             <Link to="/" className="mx-2 text-gray-600 hover:text-black text-base px-2 py-1.5 rounded transition-colors duration-150">
               Home
             </Link>
-            {/* Pricing as dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="mx-2 text-gray-600 hover:text-black text-base font-normal px-2 py-1.5 rounded transition-colors flex items-center gap-1 bg-transparent"
-                >
-                  Pricing
-                  <span className="ml-1">&#x25BE;</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="min-w-[260px] p-1 z-[100]">
-                <DropdownMenuItem asChild>
-                  <Link to="/pricing?type=windows" className="flex flex-col px-2 py-2 w-full">
-                    <span className="font-medium text-gray-900 text-base">Windows Server</span>
-                    <span className="text-xs text-gray-500 mt-0.5">Unmetered Windows RDPs</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/pricing?type=linux" className="flex flex-col px-2 py-2 w-full">
-                    <span className="font-medium text-gray-900 text-base">Linux VPS</span>
-                    <span className="text-xs text-gray-500 mt-0.5">Unmetered Linux Servers</span>
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Pricing as dropdown, open on hover */}
+            <div
+              className="relative"
+              onMouseEnter={handlePricingMouseEnter}
+              onMouseLeave={handlePricingMouseLeave}
+            >
+              <DropdownMenu open={isPricingOpen} onOpenChange={setIsPricingOpen}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="mx-2 text-gray-600 hover:text-black text-base font-normal px-2 py-1.5 rounded transition-colors flex items-center gap-1 bg-transparent"
+                    // Ensure focus styles for accessibility
+                    tabIndex={0}
+                  >
+                    Pricing
+                    <span className="ml-1 flex items-center">
+                      {/* Bigger chevron icon for dropdown arrow */}
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="min-w-[260px] p-1 z-[100]">
+                  <DropdownMenuItem asChild>
+                    <Link to="/pricing?type=windows" className="flex flex-col px-2 py-2 w-full">
+                      <span className="font-medium text-gray-900 text-base">Windows Server</span>
+                      <span className="text-xs text-gray-500 mt-0.5">Unmetered Windows RDPs</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/pricing?type=linux" className="flex flex-col px-2 py-2 w-full">
+                      <span className="font-medium text-gray-900 text-base">Linux VPS</span>
+                      <span className="text-xs text-gray-500 mt-0.5">Unmetered Linux Servers</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <Link to="/help" className="mx-2 text-gray-600 hover:text-black text-base px-2 py-1.5 rounded transition-colors duration-150">
               Help
             </Link>
