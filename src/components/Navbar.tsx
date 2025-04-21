@@ -1,107 +1,111 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { Monitor, Menu, X } from 'lucide-react';
+import { Monitor, Menu, X, LogIn } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import UserMenu from './UserMenu';
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  useEffect(() => {
+    // Simulated auth check - replace with your Supabase logic
+    const checkAuth = async () => {
+      const { data } = await supabase.auth.getSession();
+      setIsLoggedIn(!!data?.session);
+      setIsLoading(false);
+    };
+    checkAuth();
+  }, []);
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center">
-              <Monitor className="h-12 w-12 text-black" />
-              <span className="ml-3 text-2xl font-bold text-black">RDP Config</span>
-            </Link>
-          </div>
-          
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-600 hover:text-black transition-colors">
-              Home
-            </Link>
-            <Link to="/pricing" className="text-gray-600 hover:text-black transition-colors">
-              Pricing
-            </Link>
-            <Link to="/help" className="text-gray-600 hover:text-black transition-colors">
-              Help
-            </Link>
-            <Link to="/contact" className="text-gray-600 hover:text-black transition-colors">
-              Contact
-            </Link>
+    <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-16 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2">
+          <Monitor className="h-8 w-8 text-black" />
+          <span className="text-xl font-bold text-black font-mono">RDP Config</span>
+        </Link>
+
+        {/* Nav links */}
+        <ul className="hidden md:flex items-center gap-4 font-mono text-sm md:text-base">
+          {["Home", "Pricing", "Help", "Contact"].map((item, idx) => (
+            <li key={idx}>
+              <Link
+                to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                className="relative px-3 py-2 text-gray-800 hover:text-blue-600 transition-colors duration-150 group"
+              >
+                {item}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full" />
+              </Link>
+            </li>
+          ))}
+
+          {/* Divider */}
+          <li className="h-6 w-px bg-gray-300 mx-2" />
+
+          {/* Theme toggle */}
+          <li>
             <ThemeToggle />
-            
+          </li>
+
+          {/* Login / User */}
+          <li>
             {isLoading ? (
-              <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse"></div>
+              <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse" />
             ) : isLoggedIn ? (
               <UserMenu />
             ) : (
               <Link to="/login">
-                <Button variant="default" size="sm" className="bg-black text-white hover:bg-gray-800">
-                  Login
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white font-mono text-sm px-4 py-2 rounded-md flex gap-2 items-center transition-all duration-200 shadow-sm">
+                  <LogIn className="h-4 w-4" />
+                  <span>Log In</span>
                 </Button>
               </Link>
             )}
-          </div>
-          
-          <div className="md:hidden flex items-center space-x-4">
-            <ThemeToggle />
-            <button
-              onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-black focus:outline-none"
-            >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-          </div>
+          </li>
+        </ul>
+
+        {/* Mobile menu button */}
+        <div className="md:hidden flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            onClick={toggleMenu}
+            className="text-gray-700 hover:text-black focus:outline-none"
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
       </div>
-      
+
+      {/* Mobile Dropdown Menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-white shadow-lg">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link 
-              to="/" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link 
-              to="/pricing" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Pricing
-            </Link>
-            <Link 
-              to="/help" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Help
-            </Link>
-            <Link 
-              to="/contact" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Contact
-            </Link>
+          <div className="px-4 py-3 space-y-2 font-mono text-sm">
+            {["Home", "Pricing", "Help", "Contact"].map((item, idx) => (
+              <Link
+                key={idx}
+                to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                className="block px-3 py-2 rounded-md text-gray-800 hover:bg-gray-100 hover:text-blue-600 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item}
+              </Link>
+            ))}
+            {!isLoading && !isLoggedIn && (
+              <Link
+                to="/login"
+                className="block px-3 py-2 rounded-md text-gray-800 hover:bg-gray-100 hover:text-blue-600 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Log In
+              </Link>
+            )}
           </div>
         </div>
       )}
