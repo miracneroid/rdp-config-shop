@@ -175,14 +175,14 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
 
   return (
     <div className="w-full px-2 sm:px-4">
-      <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2 w-full">
+      <div className="grid gap-6 lg:grid-cols-4 md:grid-cols-2 w-full">
         {plans.map((plan, index) => (
           <div 
             key={index}
-            className="transition-all duration-300 transform hover:scale-105"
+            className="transition-all duration-300 transform hover:scale-105 flex"
           >
-            {/* Added shadow-sm and shadow-gray-300 for subtle shadow on border */}
-            <div className="border border-gray-300 rounded-xl shadow-sm">
+            {/* Flex-grow to make all cards the same height, and full height */}
+            <div className="border border-gray-300 rounded-xl shadow-sm flex-grow flex flex-col">
               <PricingCard plan={plan} />
             </div>
           </div>
@@ -190,7 +190,7 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
       </div>
       
       {showDetailedComparison && (
-        <div className="mt-16 w-full">
+        <div className="mt-12 sm:mt-16 w-full">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Plan Details</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
