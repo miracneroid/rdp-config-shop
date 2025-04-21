@@ -57,7 +57,7 @@ const FEATURES = [
 
 const NotionFeatures = () => (
   <section className="bg-white py-16 w-full font-sans border-t border-b border-gray-100">
-    <div className="notion-page-container max-w-7xl mx-auto">
+    <div className="w-full px-4 sm:px-8 md:px-16 mx-auto">
       <div className="text-center mb-12">
         <h2 className="notion-heading-2 mb-3">
           Everything you need for the best RDP experience
