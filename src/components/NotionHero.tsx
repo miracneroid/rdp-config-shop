@@ -276,26 +276,6 @@ const NotionHero = () => {
       </section>
 
       {/* SLIDESHOW SECTION and PRICING below */}
-      <section className="bg-white w-full pt-8 pb-4 font-sans border-t border-gray-100">
-        <div className="notion-page-container">
-          {/* Dashboard Slideshow */}
-          <div className="mb-12">
-            <DashboardCarousel />
-          </div>
-          {/* Pricing Section */}
-          <div>
-            <div className="text-center">
-              <h2 className="notion-heading-2">
-                Choose your puzzle pieces
-              </h2>
-              <p className="notion-paragraph max-w-2xl mx-auto mb-6">
-                Simple, transparent pricing for building your perfect workspace.
-              </p>
-            </div>
-            <PricingSection plans={defaultPricingPlans} showDetailedComparison={false} />
-          </div>
-        </div>
-      </section>
     </>
   );
 };
