@@ -95,10 +95,10 @@ const Index = () => {
         </section>
         {/* Slideshow Section */}
         <section
-          className="w-full min-h-screen flex flex-col justify-center items-center snap-start snap-always bg-white"
+          className="w-full min-h-screen max-h-screen flex flex-col justify-center items-center snap-start snap-always bg-white overflow-y-auto"
           style={{ scrollSnapAlign: "start" }}
         >
-          <div className="w-full max-w-7xl mx-auto flex flex-col items-center py-16">
+          <div className="w-full max-w-7xl mx-auto flex flex-col items-center py-16 px-4">
             <div className="mb-12 w-full">
               <DashboardCarousel />
             </div>
@@ -106,10 +106,10 @@ const Index = () => {
         </section>
         {/* Pricing Section */}
         <section
-          className="w-full min-h-screen flex flex-col justify-center items-center snap-start snap-always bg-white"
+          className="w-full min-h-screen max-h-screen flex flex-col justify-center items-center snap-start snap-always bg-white overflow-y-auto"
           style={{ scrollSnapAlign: "start" }}
         >
-          <div className="w-full max-w-7xl mx-auto py-16 flex flex-col items-center justify-center">
+          <div className="w-full max-w-7xl mx-auto py-16 flex flex-col items-center justify-center px-4">
             <div className="text-center mb-6">
               <h2 className="text-4xl sm:text-5xl font-extrabold mb-2">Choose your puzzle pieces</h2>
               <p className="text-lg text-gray-600">Simple, transparent pricing for building your perfect workspace.</p>
@@ -121,7 +121,7 @@ const Index = () => {
         </section>
         {/* Control Panel ("Your workflow. Your way.") Section */}
         <section
-          className="w-full min-h-screen flex flex-col justify-center items-center snap-start snap-always"
+          className="w-full min-h-screen max-h-screen flex flex-col justify-center items-center snap-start snap-always overflow-y-auto"
           style={{ scrollSnapAlign: "start" }}
         >
           <div className="w-full">
@@ -130,7 +130,7 @@ const Index = () => {
         </section>
         {/* Notion Features Section */}
         <section
-          className="w-full min-h-screen flex flex-col justify-center items-center snap-start snap-always"
+          className="w-full min-h-screen max-h-screen flex flex-col justify-center items-center snap-start snap-always overflow-y-auto"
           style={{ scrollSnapAlign: "start" }}
         >
           <div className="w-full">
@@ -139,13 +139,11 @@ const Index = () => {
         </section>
         {/* Global Server Network, center content */}
         <section
-          className="w-full min-h-screen flex flex-col justify-center items-center snap-start snap-always bg-white"
+          className="w-full min-h-screen max-h-screen flex flex-col justify-center items-center snap-start snap-always bg-white overflow-y-auto"
           style={{ scrollSnapAlign: "start" }}
         >
-          <div className="w-full flex-1 flex flex-col justify-center items-center">
-            <div className="w-full flex flex-col justify-center items-center">
-              <GlobalLocations />
-            </div>
+          <div className="w-full px-4 flex flex-col justify-center items-center">
+            <GlobalLocations />
           </div>
         </section>
       </main>
