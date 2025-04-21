@@ -1,46 +1,47 @@
 
-import { Docs, Wiki, Projects, NotionAi, Calendar, Goals, Sites, Templates } from 'lucide-react';
+import React from 'react';
+import { BookText, BookOpen, Projector, Goal, FileText, Library, BookX, Template } from 'lucide-react';
 
 const featureList = [
   {
     name: 'Docs',
     description: 'Build any page, communicate any idea.',
-    icon: Docs,
+    icon: BookText,
   },
   {
     name: 'Wiki',
     description: 'One home base for all your knowledge.',
-    icon: Wiki,
+    icon: BookOpen,
   },
   {
     name: 'Projects',
     description: 'Manage any project from beginning to end.',
-    icon: Projects,
+    icon: Projector,
   },
   {
     name: 'Notion AI',
     description: 'Finds what you need. Does what you need.',
-    icon: NotionAi,
+    icon: Goal,
   },
   {
     name: 'Calendar',
     description: 'See all your commitments in one place.',
-    icon: Calendar,
+    icon: FileText,
   },
   {
     name: 'Goals',
-    description: "Track progress toward what’s most important.",
-    icon: Goals,
+    description: "Track progress toward what's most important.",
+    icon: Goal,
   },
   {
     name: 'Sites',
     description: 'Make any page a website in minutes.',
-    icon: Sites,
+    icon: Library,
   },
   {
     name: 'Templates',
     description: 'Get started with one of 30,000+ templates.',
-    icon: Templates,
+    icon: BookX,
   },
 ];
 
