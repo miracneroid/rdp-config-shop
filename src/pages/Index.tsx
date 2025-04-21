@@ -9,7 +9,7 @@ import GlobalLocations from "@/components/GlobalLocations";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-notion-background w-full">
+    <div className="min-h-screen w-full bg-notion-background">
       <NotionNavbar />
       <main className="w-full bg-transparent">
         <NotionHero />
