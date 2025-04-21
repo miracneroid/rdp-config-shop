@@ -1,21 +1,21 @@
 
 import React from "react";
 import { Badge } from "./ui/badge";
-import { badge-check, badge-info, badge-dollar-sign } from "lucide-react";
+import { BadgeCheck, BadgeInfo, BadgeDollarSign } from "lucide-react";
 
 const BADGES = [
   {
-    icon: <badge-check className="mr-1 h-4 w-4 text-blue-700" />,
+    icon: <BadgeCheck className="mr-1 h-4 w-4 text-blue-700" />,
     label: "All-in-One Dashboard",
     variant: "default" as const,
   },
   {
-    icon: <badge-info className="mr-1 h-4 w-4 text-blue-700" />,
+    icon: <BadgeInfo className="mr-1 h-4 w-4 text-blue-700" />,
     label: "Live Resource Adjustments",
     variant: "outline" as const,
   },
   {
-    icon: <badge-dollar-sign className="mr-1 h-4 w-4 text-blue-700" />,
+    icon: <BadgeDollarSign className="mr-1 h-4 w-4 text-blue-700" />,
     label: "No Hidden Costs",
     variant: "secondary" as const,
   },
