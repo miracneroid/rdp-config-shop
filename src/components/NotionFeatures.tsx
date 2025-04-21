@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   Monitor,
@@ -10,18 +9,6 @@ import {
   Network,
   BarChartHorizontal,
 } from "lucide-react";
-
-// Soft unique backgrounds for each box
-const boxBgColors = [
-  "bg-[#E5DEFF]", // Soft Purple
-  "bg-[#F2FCE2]", // Soft Green
-  "bg-[#FEF7CD]", // Soft Yellow
-  "bg-[#D3E4FD]", // Soft Blue
-  "bg-[#FFDEE2]", // Soft Pink
-  "bg-[#FDE1D3]", // Soft Peach
-  "bg-[#FEC6A1]", // Soft Orange
-  "bg-[#F1F0FB]", // Soft Gray
-];
 
 const FEATURES = [
   {
@@ -84,16 +71,17 @@ const NotionFeatures = () => (
             <div
               key={idx}
               className={`
-                flex flex-col items-center px-4 py-7 rounded-2xl
-                transition hover:scale-105 hover:shadow-notion cursor-pointer
-                ${boxBgColors[idx % boxBgColors.length]}
+                flex flex-col items-center px-5 py-8 rounded-2xl
+                border border-gray-200 bg-white shadow-md
+                hover:shadow-lg hover:border-blue-300 transition-all duration-300 ease-in-out
+                hover:scale-[1.02] cursor-pointer
               `}
               style={{ minHeight: '270px' }}
             >
-              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-white shadow mb-2">
+              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-blue-50 shadow-sm mb-3">
                 <IconComponent className="h-8 w-8 text-blue-700" aria-hidden="true" />
               </div>
-              <h3 className="notion-heading-3 text-center mt-3 mb-2">{feature.title}</h3>
+              <h3 className="notion-heading-3 text-center mt-2 mb-2">{feature.title}</h3>
               <p className="text-gray-500 text-base text-center">{feature.description}</p>
             </div>
           );
@@ -104,4 +92,3 @@ const NotionFeatures = () => (
 );
 
 export default NotionFeatures;
-
