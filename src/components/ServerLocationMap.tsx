@@ -1,8 +1,8 @@
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { MapPin } from "lucide-react";
+import { MAPBOX_PUBLIC_TOKEN } from "@/constants/mapbox";
 
 // Server locations to display on the map
 const LOCATIONS = [
@@ -16,17 +16,14 @@ const LOCATIONS = [
   },
 ];
 
-const DEFAULT_TOKEN = ""; // Optionally provide your token here for production
-
 const ServerLocationMap: React.FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<mapboxgl.Map | null>(null);
-  const [token, setToken] = useState(DEFAULT_TOKEN);
 
   useEffect(() => {
-    if (!token || !mapContainer.current) return;
+    if (!MAPBOX_PUBLIC_TOKEN || !mapContainer.current) return;
 
-    mapboxgl.accessToken = token;
+    mapboxgl.accessToken = MAPBOX_PUBLIC_TOKEN;
 
     if (mapInstance.current) {
       mapInstance.current.remove();
@@ -49,7 +46,7 @@ const ServerLocationMap: React.FC = () => {
 
     // Add server markers
     LOCATIONS.forEach((loc) => {
-      // Create a node for Lucide icon
+      // Create a node for the marker
       const markerNode = document.createElement("div");
       markerNode.className = "group";
       markerNode.innerHTML = `
@@ -63,7 +60,6 @@ const ServerLocationMap: React.FC = () => {
           </div>
         </div>
       `;
-      // Make click highlight or tooltip if desired here
 
       new mapboxgl.Marker({ element: markerNode, anchor: "bottom" })
         .setLngLat(loc.coords)
@@ -83,30 +79,11 @@ const ServerLocationMap: React.FC = () => {
       mapInstance.current?.remove();
       mapInstance.current = null;
     };
-  }, [token]);
+  }, []);
 
   return (
-    <div className="relative w-full h-[520px] rounded-xl shadow-lg mb-10">
-      {!token ? (
-        <div className="absolute top-0 left-0 w-full h-full z-30 bg-white/90 flex flex-col items-center justify-center rounded-xl gap-4">
-          <div className="text-center">
-            <div className="font-bold text-lg text-blue-700 mb-1">
-              Enter Your Mapbox Public Token
-            </div>
-            <p className="text-sm text-gray-600 max-w-xs">
-              Please provide a Mapbox token to render the interactive server location map. Get one from <a href="https://mapbox.com/" target="_blank" rel="noopener" className="text-blue-600 underline">mapbox.com</a>.
-            </p>
-          </div>
-          <input
-            type="text"
-            className="border border-gray-300 px-3 py-2 rounded w-96 max-w-full focus:ring-2 focus:ring-blue-400 outline-none"
-            placeholder="pk.eyJ1Ijoia2luc2Nlc..." 
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-          />
-        </div>
-      ) : null}
-      <div ref={mapContainer} className="w-full h-full rounded-xl" />
+    <div className="relative w-full h-[640px] rounded-2xl shadow-lg mb-10 border border-gray-200 overflow-hidden">
+      <div ref={mapContainer} className="w-full h-full rounded-2xl" />
     </div>
   );
 };

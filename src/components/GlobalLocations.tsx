@@ -2,6 +2,7 @@
 import React from "react";
 import ServerLocationMap from "./ServerLocationMap";
 
+// Only show New York and San Francisco as locations
 const LOCATIONS = [
   {
     name: "New York",
@@ -32,8 +33,12 @@ const GlobalLocations = () => (
         </div>
       </div>
 
-      {/* Interactive map replaces the screenshot */}
-      <ServerLocationMap />
+      {/* Interactive map as the main visual */}
+      <div className="w-full flex justify-center mb-8">
+        <div className="w-full max-w-5xl">
+          <ServerLocationMap />
+        </div>
+      </div>
 
       {/* Region breakdown */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
