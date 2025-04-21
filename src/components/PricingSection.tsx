@@ -173,136 +173,133 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
   };
 
   return (
-      <div className="w-full px-2 sm:px-4 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2 w-full">
-          {plans.map((plan, index) => (
-            <div 
-              key={index}
-              className="transition-all duration-300 transform hover:scale-105"
-            >
-              <PricingCard plan={plan} />
-            </div>
-          ))}
-        </div>
-        
-        {showDetailedComparison && (
-          <div className="mt-16 w-full">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Plan Details</h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                See what's included in your selected plan
-              </p>
-            </div>
-            <div className="bg-gray-50 rounded-xl p-6 md:p-8 border border-gray-200 shadow-sm w-full">
-              <Tabs value={plans.find(p => p.popular)?.name || plans[0].name} onValueChange={() => {}} className="w-full">
-                <TabsList className="w-full flex justify-center mb-6 bg-transparent overflow-x-auto p-1 md:p-0 space-x-2">
-                  {plans.map((plan, index) => (
-                    <TabsTrigger 
-                      key={index} 
-                      value={plan.name}
-                      className={`px-4 py-2 rounded-lg font-medium 
-                        ${plan.popular ? 'data-[state=active]:bg-blue-600 data-[state=active]:text-white' : 
-                        'data-[state=active]:bg-gray-200'}`}
-                    >
-                      {plan.name}
-                      {plan.popular && (
-                        <span className="ml-2 text-xs font-semibold bg-green-500 text-white px-2 py-0.5 rounded-full">Popular</span>
-                      )}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-                
+    <div className="w-full px-2 sm:px-4">
+      <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2 w-full">
+        {plans.map((plan, index) => (
+          <div 
+            key={index}
+            className="transition-all duration-300 transform hover:scale-105"
+          >
+            <PricingCard plan={plan} />
+          </div>
+        ))}
+      </div>
+      
+      {showDetailedComparison && (
+        <div className="mt-16 w-full">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Plan Details</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              See what's included in your selected plan
+            </p>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-2 md:p-4 border border-gray-200 shadow-sm w-full overflow-x-auto">
+            <Tabs value={plans.find(p => p.popular)?.name || plans[0].name} onValueChange={() => {}} className="w-full">
+              <TabsList className="w-full flex justify-center mb-6 bg-transparent overflow-x-auto p-1 md:p-0 space-x-2">
                 {plans.map((plan, index) => (
-                  <TabsContent key={index} value={plan.name} className="space-y-6">
-                    <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-                        <div>
-                          <h3 className="text-2xl font-bold text-gray-900">{plan.name} Plan</h3>
-                          <p className="text-gray-600 mt-1">
-                            {settings.currency.symbol}{plan.price}/month
-                          </p>
-                        </div>
-                        
-                        <Link to="/configure" className="mt-4 md:mt-0">
-                          <Button className="bg-blue-600 hover:bg-blue-500 text-white">
-                            Choose {plan.name}
-                          </Button>
-                        </Link>
-                      </div>
-                      
-                      <div className="grid md:grid-cols-3 gap-4 mb-6">
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <p className="text-sm font-medium text-gray-500">CPU</p>
-                          <p className="text-lg font-semibold text-gray-900">{plan.cpu}</p>
-                        </div>
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <p className="text-sm font-medium text-gray-500">RAM</p>
-                          <p className="text-lg font-semibold text-gray-900">{plan.ram}</p>
-                        </div>
-                        <div className="bg-gray-50 p-4 rounded-lg">
-                          <p className="text-sm font-medium text-gray-500">Storage</p>
-                          <p className="text-lg font-semibold text-gray-900">{plan.storage}</p>
-                        </div>
-                      </div>
-                      
+                  <TabsTrigger 
+                    key={index} 
+                    value={plan.name}
+                    className={`px-4 py-2 rounded-lg font-medium 
+                      ${plan.popular ? 'data-[state=active]:bg-blue-600 data-[state=active]:text-white' : 
+                      'data-[state=active]:bg-gray-200'}`}
+                  >
+                    {plan.name}
+                    {plan.popular && (
+                      <span className="ml-2 text-xs font-semibold bg-green-500 text-white px-2 py-0.5 rounded-full">Popular</span>
+                    )}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              
+              {plans.map((plan, index) => (
+                <TabsContent key={index} value={plan.name} className="space-y-6">
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                       <div>
-                        {Object.entries(featureCategories).map(([category, features], i) => (
-                          <Collapsible
-                            key={category}
-                            open={openCategories[category]}
-                            onOpenChange={() => toggleCategory(category)}
-                            className="mb-4 border border-gray-200 rounded-lg overflow-hidden"
-                          >
-                            <CollapsibleTrigger className="w-full flex items-center justify-between p-4 bg-gray-100 text-left">
-                              <h4 className="text-lg font-semibold text-gray-900">{category}</h4>
-                              {openCategories[category] ? 
-                                <ChevronUp className="h-5 w-5 text-gray-500" /> : 
-                                <ChevronDown className="h-5 w-5 text-gray-500" />
-                              }
-                            </CollapsibleTrigger>
-                            <CollapsibleContent>
-                              <div className="p-4 space-y-3">
-                                {features.map((feature, j) => {
-                                  const featureData = planValues[plan.name as keyof typeof planValues][feature.name as keyof typeof planValues["Basic"]];
-                                  
-                                  if (featureData.status === 'x') return null;
-                                  
-                                  return (
-                                    <div key={j} className="flex items-start space-x-3 p-2 hover:bg-gray-50 rounded-lg">
-                                      <div className="mt-0.5">
-                                        {renderIcon(featureData.status)}
-                                      </div>
-                                      <div>
-                                        <TooltipProvider>
-                                          <Tooltip>
-                                            <TooltipTrigger asChild>
-                                              <p className="font-medium text-gray-800 cursor-help">
-                                                {feature.name}
-                                              </p>
-                                            </TooltipTrigger>
-                                            <TooltipContent side="right">
-                                              <p>{feature.tooltip}</p>
-                                            </TooltipContent>
-                                          </Tooltip>
-                                        </TooltipProvider>
-                                        <p className="text-sm text-gray-600">{featureData.value}</p>
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </CollapsibleContent>
-                          </Collapsible>
-                        ))}
+                        <h3 className="text-2xl font-bold text-gray-900">{plan.name} Plan</h3>
+                        <p className="text-gray-600 mt-1">
+                          {settings.currency.symbol}{plan.price}/month
+                        </p>
+                      </div>
+                      <Link to="/configure" className="mt-4 md:mt-0">
+                        <Button className="bg-blue-600 hover:bg-blue-500 text-white">
+                          Choose {plan.name}
+                        </Button>
+                      </Link>
+                    </div>
+                    <div className="grid md:grid-cols-3 gap-4 mb-6">
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <p className="text-sm font-medium text-gray-500">CPU</p>
+                        <p className="text-lg font-semibold text-gray-900">{plan.cpu}</p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <p className="text-sm font-medium text-gray-500">RAM</p>
+                        <p className="text-lg font-semibold text-gray-900">{plan.ram}</p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <p className="text-sm font-medium text-gray-500">Storage</p>
+                        <p className="text-lg font-semibold text-gray-900">{plan.storage}</p>
                       </div>
                     </div>
-                  </TabsContent>
-                ))}
-              </Tabs>
-            </div>
+                    <div>
+                      {Object.entries(featureCategories).map(([category, features], i) => (
+                        <Collapsible
+                          key={category}
+                          open={openCategories[category]}
+                          onOpenChange={() => toggleCategory(category)}
+                          className="mb-4 border border-gray-200 rounded-lg overflow-hidden"
+                        >
+                          <CollapsibleTrigger className="w-full flex items-center justify-between p-4 bg-gray-100 text-left">
+                            <h4 className="text-lg font-semibold text-gray-900">{category}</h4>
+                            {openCategories[category] ? 
+                              <ChevronUp className="h-5 w-5 text-gray-500" /> : 
+                              <ChevronDown className="h-5 w-5 text-gray-500" />
+                            }
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <div className="p-4 space-y-3">
+                              {features.map((feature, j) => {
+                                const featureData = planValues[plan.name as keyof typeof planValues][feature.name as keyof typeof planValues["Basic"]];
+                                
+                                if (featureData.status === 'x') return null;
+                                
+                                return (
+                                  <div key={j} className="flex items-start space-x-3 p-2 hover:bg-gray-50 rounded-lg">
+                                    <div className="mt-0.5">
+                                      {renderIcon(featureData.status)}
+                                    </div>
+                                    <div>
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger asChild>
+                                            <p className="font-medium text-gray-800 cursor-help">
+                                              {feature.name}
+                                            </p>
+                                          </TooltipTrigger>
+                                          <TooltipContent side="right">
+                                            <p>{feature.tooltip}</p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
+                                      <p className="text-sm text-gray-600">{featureData.value}</p>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </CollapsibleContent>
+                        </Collapsible>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+              ))}
+            </Tabs>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+    </div>
   );
 };
 
