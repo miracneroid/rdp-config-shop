@@ -1,120 +1,195 @@
 
-import { PuzzleIcon, Infinity } from 'lucide-react';
+import React from "react";
 import { Link } from 'react-router-dom';
-import { Badge } from '@/components/ui/badge';
+import { PuzzleIcon } from 'lucide-react';
 import PricingSection from './PricingSection';
 import DashboardCarousel from './DashboardCarousel';
-import React from "react";
 
-// Add a mock brand images (replace with actual logos if uploads exist)
-const SERVER_BRANDS = [
-  { name: "Intel® Xeon", color: "text-blue-900", bg: "bg-white", ring: "ring-[#0071C5]", img: null },
-  { name: "AMD EPYC™", color: "text-[#232C3B]", bg: "bg-white", ring: "ring-[#232C3B]", img: null },
-  { name: "ARM Neoverse", color: "text-green-900", bg: "bg-white", ring: "ring-[#AFE3A6]", img: null },
-  { name: "IBM Power", color: "text-yellow-900", bg: "bg-white", ring: "ring-[#FFD500]", img: null },
-  { name: "AWS Graviton", color: "text-green-900", bg: "bg-white", ring: "ring-[#E5FFDF]", img: null },
-  { name: "Apple M-Series", color: "text-black", bg: "bg-white", ring: "ring-[#D0D3D4]", img: null },
+// Fix: define defaultPricingPlans for PricingSection
+const defaultPricingPlans = [
+  {
+    name: "Basic",
+    price: 29,
+    cpu: "2 Cores",
+    ram: "4 GB",
+    storage: "64 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Basic Software Suite",
+      "24/7 Access",
+      "Standard Support"
+    ]
+  },
+  {
+    name: "Standard",
+    price: 59,
+    cpu: "4 Cores",
+    ram: "8 GB",
+    storage: "128 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Standard Software Suite",
+      "24/7 Access",
+      "Priority Support",
+      "Daily Backups"
+    ],
+    popular: true
+  },
+  {
+    name: "Premium",
+    price: 99,
+    cpu: "8 Cores",
+    ram: "16 GB",
+    storage: "256 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Professional Software Suite",
+      "24/7 Access",
+      "Priority Support",
+      "Daily Backups",
+      "Enhanced Security"
+    ]
+  },
+  {
+    name: "Enterprise",
+    price: 199,
+    cpu: "16 Cores",
+    ram: "32 GB",
+    storage: "512 GB SSD",
+    features: [
+      "Windows or Linux OS",
+      "Enterprise Software Suite",
+      "24/7 Access",
+      "Priority Support",
+      "Hourly Backups",
+      "Advanced Security",
+      "Dedicated Resources"
+    ]
+  }
 ];
 
-// Optional: you can use simple SVG in place of brand logos, here using Lucide icons for demo
-const BRAND_ICONS = [
-  "circle", "square", "hexagon", "diamond", "star", "circle-dot"
+// Minimalist grayscale SVG placeholders for brands
+const BRANDS = [
+  {
+    name: "AMD",
+    svg: (
+      <svg viewBox="0 0 80 32" fill="none" className="h-8 w-auto">
+        <text x="0" y="22" fontFamily="sans-serif" fontWeight="700" fontSize="28" fill="#bdbdbd" letterSpacing="-2">AMD</text>
+        <polygon points="65,8 74,8 74,24 65,24 69.5,16" fill="#bdbdbd" opacity="0.55" />
+      </svg>
+    ),
+  },
+  {
+    name: "ARISTA",
+    svg: (
+      <svg viewBox="0 0 98 32" fill="none" className="h-8 w-auto">
+        <text x="0" y="22" fontFamily="monospace" fontWeight="600" fontSize="25" fill="#c3c3c3" letterSpacing="3">ARISTA</text>
+      </svg>
+    ),
+  },
+  {
+    name: "corero",
+    svg: (
+      <svg viewBox="0 0 102 32" fill="none" className="h-8 w-auto">
+        <text x="0" y="22" fontFamily="sans-serif" fontWeight="400" fontSize="26" fill="#cecece" letterSpacing="0">corero</text>
+        {/* target/crosshair circle */}
+        <circle cx="89" cy="15" r="8" stroke="#cecece" strokeWidth="2" opacity="0.7" />
+        <line x1="89" y1="7" x2="89" y2="23" stroke="#cecece" strokeWidth="1.2" opacity="0.7" />
+        <line x1="81" y1="15" x2="97" y2="15" stroke="#cecece" strokeWidth="1.2" opacity="0.7" />
+        <text x="7" y="30" fontFamily="sans-serif" fontWeight="200" fontSize="9" fill="#dddddd" opacity="0.8" style={{ letterSpacing: 0.5 }}>FIRST LINE OF DEFENSE</text>
+      </svg>
+    ),
+  },
+  {
+    name: "Hewlett Packard Enterprise",
+    svg: (
+      <svg viewBox="0 0 108 32" fill="none" className="h-8 w-auto">
+        <rect x="5" y="8" width="40" height="5" rx="1" fill="#dadada" />
+        <text x="0" y="23" fontFamily="sans-serif" fontWeight="600" fontSize="11" fill="#cdcdcd">Hewlett Packard</text>
+        <text x="0" y="32" fontFamily="sans-serif" fontWeight="400" fontSize="10" fill="#cdcdcd" opacity="0.8">Enterprise</text>
+      </svg>
+    ),
+  },
+  {
+    name: "era1X",
+    svg: (
+      <svg viewBox="0 0 82 32" fill="none" className="h-8 w-auto">
+        <text x="0" y="22" fontFamily="sans-serif" fontWeight="500" fontSize="22" fill="#d1d1d1">era</text>
+        <rect x="43" y="8" width="8" height="7" rx="2" fill="#dadada" />
+        <rect x="51" y="17" width="8" height="7" rx="2" fill="#dadada" />
+      </svg>
+    ),
+  },
+  {
+    name: "RIPE NCC",
+    svg: (
+      <svg viewBox="0 0 112 32" fill="none" className="h-8 w-auto">
+        {/* network hexagons */}
+        <polygon points="20,10 27,14 27,22 20,26 13,22 13,14" fill="none" stroke="#c2c2c2" strokeWidth="1.5" />
+        <polygon points="33,14 40,18 40,26 33,30 26,26 26,18" fill="none" stroke="#c2c2c2" strokeWidth="1.5" />
+        <text x="48" y="20" fontFamily="sans-serif" fontWeight="700" fontSize="18" fill="#c2c2c2">RIPE NCC</text>
+        <text x="48" y="28" fontFamily="sans-serif" fontWeight="400" fontSize="9" fill="#c2c2c2" opacity="0.75">RIPE NETWORK COORDINATION CENTRE</text>
+      </svg>
+    ),
+  },
+  // Loop for repeat, as in image, we'll repeat AMD at the end
+  {
+    name: "AMD",
+    svg: (
+      <svg viewBox="0 0 80 32" fill="none" className="h-8 w-auto">
+        <text x="0" y="22" fontFamily="sans-serif" fontWeight="700" fontSize="28" fill="#bdbdbd" letterSpacing="-2">AMD</text>
+        <polygon points="65,8 74,8 74,24 65,24 69.5,16" fill="#bdbdbd" opacity="0.55" />
+      </svg>
+    ),
+  },
 ];
-import {
-  Circle,
-  Square,
-  Hexagon,
-  Diamond,
-  Star,
-  CircleDot,
-} from "lucide-react";
 
-// Logo icon mapping helper (cycling through Lucide icons)
-const ICON_COMPONENTS = [Circle, Square, Hexagon, Diamond, Star, CircleDot];
-
-function InfinityScroller() {
+// Infinity Marquee/Scroller, centered and aesthetic as requested 
+function InfinityBrandStrip() {
   return (
-    <div className="relative w-full flex justify-center z-10 py-8 pointer-events-none">
-      {/* Container with glass/blur effect */}
-      <div className="relative mx-auto w-full max-w-2xl">
-        {/* Gradient overlays for fading "trails" at both ends */}
-        <div className="pointer-events-none absolute top-0 left-0 h-full w-28 z-20"
-          style={{
-            background: 'linear-gradient(90deg, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%)',
-          }}
-        />
-        <div className="pointer-events-none absolute top-0 right-0 h-full w-28 z-20"
-          style={{
-            background: 'linear-gradient(270deg, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%)',
-          }}
-        />
+    <div className="relative w-full flex justify-center py-9 z-20 select-none">
+      <div className="relative w-[90vw] max-w-6xl mx-auto overflow-hidden rounded-xl shadow-none bg-transparent flex items-center h-24">
+        {/* Fade left */}
+        <div className="pointer-events-none absolute left-0 top-0 h-full w-32 z-20" style={{
+          background: 'linear-gradient(90deg, #fff 75%, rgba(255,255,255,0))'
+        }}/>
+        {/* Fade right */}
+        <div className="pointer-events-none absolute right-0 top-0 h-full w-32 z-20" style={{
+          background: 'linear-gradient(270deg, #fff 70%, rgba(255,255,255,0))'
+        }}/>
+        {/* Scroll Strip - doubled for seamless loop */}
         <div
-          className="rounded-3xl bg-white/70 shadow-xl backdrop-blur-md border border-gray-100 overflow-hidden"
+          className="relative flex items-center"
           style={{
-            boxShadow: '0 6px 36px rgba(27,19,61,0.09), 0 2px 8px rgba(0,0,0,0.13)',
+            minWidth: "100%",
+            whiteSpace: "nowrap",
+            animation: "brands-scroll-marquee 30s linear infinite"
           }}
         >
-          {/* Marquee Animation */}
-          <div
-            className="relative w-full flex items-center overflow-hidden"
-            style={{ height: 64 }}
-          >
-            <div
-              className="flex items-center animate-infinite-scroll"
+          {/* Render two sets in a row for infinite effect */}
+          {[...BRANDS, ...BRANDS].map((brand, i) => (
+            <span
+              key={i}
+              className="mx-12 inline-flex flex-col items-center justify-center opacity-60 transition-transform duration-300 hover:scale-105 hover:opacity-100"
               style={{
-                gap: '32px',
-                animation: 'brand-marquee 27s linear infinite',
-                minWidth: "100%",
-                whiteSpace: "nowrap"
+                minWidth: 150,
+                maxWidth: 170,
+                filter: "grayscale(1)",
               }}
+              aria-label={brand.name}
             >
-              {[...SERVER_BRANDS, ...SERVER_BRANDS].map((brand, idx) => {
-                const Icon = ICON_COMPONENTS[idx % ICON_COMPONENTS.length];
-                return (
-                  <span
-                    key={idx}
-                    className={`
-                      group relative flex items-center gap-3 px-5 py-2 rounded-full
-                      shadow-md font-mono text-base font-bold hover:scale-105 transition-all duration-300
-                      ${brand.bg} ${brand.color}
-                      ring-2 ${brand.ring}
-                      pointer-events-auto
-                    `}
-                    style={{
-                      filter: "drop-shadow(0 2px 16px rgba(74,58,255,0.06))",
-                      minWidth: "170px"
-                    }}
-                  >
-                    <span
-                      className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-inner border border-gray-200 mr-2"
-                    >
-                      <Icon className="w-7 h-7 text-blue-400 group-hover:text-blue-700 transition-colors duration-200" />
-                    </span>
-                    <span
-                      className="font-mono font-semibold text-base tracking-tight select-none"
-                      style={{ textShadow: '0 1px 8px #fff9, 0 0 4px #fff9' }}
-                    >
-                      {brand.name}
-                    </span>
-                  </span>
-                );
-              })}
-            </div>
-          </div>
+              {brand.svg}
+            </span>
+          ))}
         </div>
-        {/* Inline keyframes for marquee */}
-        <style>{`
-          @keyframes brand-marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .animate-infinite-scroll {
-            will-change: transform;
-            display: flex;
-            align-items: center;
-          }
-        `}</style>
       </div>
+      {/* Keyframes for marquee */}
+      <style>{`
+        @keyframes brands-scroll-marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
     </div>
   );
 }
@@ -152,9 +227,9 @@ const NotionHero = () => {
             />
           </div>
         </div>
-        {/* Improved Infinity Scroller, centered */}
-        <div className="absolute w-full left-0 right-0 bottom-0 flex justify-center z-20">
-          <InfinityScroller />
+        {/* New Infinity Brand Strip, centered and elegant */}
+        <div className="absolute w-full left-0 right-0 bottom-0 flex justify-center z-20 pointer-events-none">
+          <InfinityBrandStrip />
         </div>
       </section>
 
