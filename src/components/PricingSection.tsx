@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -180,7 +181,10 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
             key={index}
             className="transition-all duration-300 transform hover:scale-105"
           >
-            <PricingCard plan={plan} />
+            {/* Added shadow-sm and shadow-gray-300 for subtle shadow on border */}
+            <div className="border border-gray-300 rounded-xl shadow-sm">
+              <PricingCard plan={plan} />
+            </div>
           </div>
         ))}
       </div>
@@ -304,3 +308,4 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
 };
 
 export default PricingSection;
+
