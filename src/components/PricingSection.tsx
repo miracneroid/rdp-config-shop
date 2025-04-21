@@ -173,7 +173,6 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
   };
 
   return (
-    <section className="py-16 bg-white w-full">
       <div className="w-full px-2 sm:px-4 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2 w-full">
           {plans.map((plan, index) => (
@@ -304,7 +303,6 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
           </div>
         )}
       </div>
-    </section>
   );
 };
 

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Badge } from "./ui/badge";
 import { BadgeCheck, BadgeInfo, BadgeDollarSign } from "lucide-react";
@@ -24,17 +23,16 @@ const BADGES = [
 const ControlPanelSection = () => {
   return (
     <section className="relative w-full bg-white pt-14 pb-20 border-t border-b border-gray-100 font-sans">
-      <div className="notion-page-container max-w-7xl mx-auto">
-        {/* Header Row */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-start gap-6 mb-10">
-          {/* Heading/Description (Left) */}
+      <div className="notion-page-container max-w-7xl mx-auto px-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-6 mb-10 text-left">
           <div className="flex flex-col">
-            <h2 className="notion-heading-2 text-4xl font-bold mb-2 text-black">
-              Your Powerful Control Panel
+            <h2 className="notion-heading-2 text-6xl font-bold mb-2 text-black">
+              Your workflow. <br />
+              Your way.
             </h2>
-            <p className="notion-paragraph max-w-lg mb-0 text-lg text-gray-600">
-              All-in-one panel to manage, scale, or secure your workspace—quickly and visually. Designed for maximum control and simplicity.
-            </p>
+              <p className="notion-paragraph max-w-lg mb-0 text-lg text-gray-600">
+                All-in-one panel to manage, scale, or secure your workspace. Designed for maximum control and simplicity.
+              </p>
           </div>
           {/* Badges (Right) */}
           <div className="flex gap-3 mt-1">
@@ -55,8 +53,8 @@ const ControlPanelSection = () => {
           <img
             src="/lovable-uploads/e3cb316d-065e-4164-9419-1cacf07d64f1.png"
             alt="RDP Control Panel"
-            className="w-full max-w-3xl rounded-2xl shadow-notion-lg border border-gray-200 bg-gray-50 animate-float"
-            style={{ maxHeight: 470, objectFit: "cover" }}
+            className="w-full max-w-7xl rounded-2xl shadow-notion-lg border border-gray-200 bg-gray-50 animate-float"
+            style={{ maxHeight: 700, objectFit: "cover" }}
             draggable={false}
           />
         </div>
