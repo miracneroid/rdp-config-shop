@@ -81,35 +81,26 @@ const Index = () => {
   return (
     <div className="w-full min-h-screen flex flex-col bg-notion-background font-sans">
       <NotionNavbar />
+      
       {/* Enable vertical snap scroll */}
       <main className="flex-1 flex flex-col w-full scroll-smooth snap-y snap-mandatory overflow-y-auto">
-        {/* Landing/Hero Page, ends with Infinity brand strip */}
-        <section className="relative w-full min-h-screen h-screen flex flex-col snap-start snap-always bg-white">
-          <div className="flex-1 flex flex-col">
+        {/* Landing/Hero Page */}
+        <section className="relative w-full h-screen flex flex-col snap-start snap-always bg-white">
+          <div className="flex-1 flex flex-col justify-center">
             <NotionHero />
           </div>
-          {/* Visually ensure the Infinity Brand Strip is at the bottom */}
-          <div className="flex justify-center items-end">
-            {/* The NotionHero already includes the InfinityBrandStrip, so this is for demonstration */}
-          </div>
         </section>
+
         {/* Slideshow Section */}
-        <section
-          className="w-full min-h-screen max-h-screen flex flex-col justify-center items-center snap-start snap-always bg-white overflow-y-auto"
-          style={{ scrollSnapAlign: "start" }}
-        >
-          <div className="w-full max-w-7xl mx-auto flex flex-col items-center py-16 px-4">
-            <div className="mb-12 w-full">
-              <DashboardCarousel />
-            </div>
+        <section className="w-full h-screen flex flex-col justify-center items-center snap-start snap-always bg-white">
+          <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center">
+            <DashboardCarousel />
           </div>
         </section>
+
         {/* Pricing Section */}
-        <section
-          className="w-full min-h-screen max-h-screen flex flex-col justify-center items-center snap-start snap-always bg-white overflow-y-auto"
-          style={{ scrollSnapAlign: "start" }}
-        >
-          <div className="w-full max-w-7xl mx-auto py-16 flex flex-col items-center justify-center px-4">
+        <section className="w-full h-screen flex flex-col justify-center items-center snap-start snap-always bg-white">
+          <div className="w-full max-w-7xl mx-auto flex flex-col items-center justify-center px-4">
             <div className="text-center mb-6">
               <h2 className="text-4xl sm:text-5xl font-extrabold mb-2">Choose your puzzle pieces</h2>
               <p className="text-lg text-gray-600">Simple, transparent pricing for building your perfect workspace.</p>
@@ -119,34 +110,23 @@ const Index = () => {
             </div>
           </div>
         </section>
+
         {/* Control Panel ("Your workflow. Your way.") Section */}
-        <section
-          className="w-full min-h-screen max-h-screen flex flex-col justify-center items-center snap-start snap-always overflow-y-auto"
-          style={{ scrollSnapAlign: "start" }}
-        >
-          <div className="w-full">
-            <ControlPanelSection />
-          </div>
+        <section className="w-full h-screen flex flex-col justify-center items-center snap-start snap-always">
+          <ControlPanelSection />
         </section>
+
         {/* Notion Features Section */}
-        <section
-          className="w-full min-h-screen max-h-screen flex flex-col justify-center items-center snap-start snap-always overflow-y-auto"
-          style={{ scrollSnapAlign: "start" }}
-        >
-          <div className="w-full">
-            <NotionFeatures />
-          </div>
+        <section className="w-full h-screen flex flex-col justify-center items-center snap-start snap-always">
+          <NotionFeatures />
         </section>
+
         {/* Global Server Network, center content */}
-        <section
-          className="w-full min-h-screen max-h-screen flex flex-col justify-center items-center snap-start snap-always bg-white overflow-y-auto"
-          style={{ scrollSnapAlign: "start" }}
-        >
-          <div className="w-full px-4 flex flex-col justify-center items-center">
-            <GlobalLocations />
-          </div>
+        <section className="w-full h-screen flex flex-col justify-center items-center snap-start snap-always bg-white">
+          <GlobalLocations />
         </section>
       </main>
+
       {/* Keep stats banner and footer out of snap scroll */}
       <div className="w-full">
         <StatsBanner />

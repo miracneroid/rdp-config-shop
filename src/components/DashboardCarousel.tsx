@@ -41,7 +41,7 @@ const DashboardCarousel = () => {
   }, [api]);
 
   return (
-    <div className="w-full flex justify-center px-4">
+    <div className="w-full flex justify-center px-4 py-6">
       <div className="w-full max-w-7xl">
         <Carousel className="relative" setApi={setApi}>
           <CarouselContent>
@@ -52,7 +52,7 @@ const DashboardCarousel = () => {
                     <img
                       src={image}
                       alt={`Dashboard screenshot ${index + 1}`}
-                      className="w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover"
+                      className="w-full h-[300px] sm:h-[400px] lg:h-[500px] xl:h-[600px] object-cover"
                       onError={(e) => {
                         // Fallback to a placeholder if image fails to load
                         const target = e.target as HTMLImageElement;

@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   Monitor,
@@ -54,41 +55,43 @@ const FEATURES = [
 ];
 
 const NotionFeatures = () => (
-  <section className="bg-white py-16 w-full font-sans border-t border-b border-gray-100">
-    <div className="w-full px-4 sm:px-8 md:px-16 mx-auto">
-      <div className="text-center mb-12">
-        <h2 className="notion-heading-2 mb-3">
-          Everything you need for the best RDP experience
-        </h2>
-        <p className="notion-paragraph max-w-3xl mx-auto">
-          From deployment to security, our platform provides every feature for effortless and powerful RDP management.
-        </p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-7 mt-12">
-        {FEATURES.map((feature, idx) => {
-          const IconComponent = feature.icon;
-          return (
-            <div
-              key={idx}
-              className={`
-                flex flex-col items-center px-5 py-8 rounded-2xl
-                border border-gray-200 bg-white shadow-md
-                hover:shadow-lg hover:border-blue-300 transition-all duration-300 ease-in-out
-                hover:scale-[1.02] cursor-pointer
-              `}
-              style={{ minHeight: '270px' }}
-            >
-              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-blue-50 shadow-sm mb-3">
-                <IconComponent className="h-8 w-8 text-blue-700" aria-hidden="true" />
+  <div className="w-full h-full flex items-center justify-center">
+    <section className="bg-white py-10 w-full font-sans border-t border-b border-gray-100">
+      <div className="w-full px-4 sm:px-8 md:px-16 mx-auto max-w-7xl">
+        <div className="text-center mb-8">
+          <h2 className="notion-heading-2 mb-3">
+            Everything you need for the best RDP experience
+          </h2>
+          <p className="notion-paragraph max-w-3xl mx-auto">
+            From deployment to security, our platform provides every feature for effortless and powerful RDP management.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-8">
+          {FEATURES.map((feature, idx) => {
+            const IconComponent = feature.icon;
+            return (
+              <div
+                key={idx}
+                className={`
+                  flex flex-col items-center px-4 py-6 rounded-2xl
+                  border border-gray-200 bg-white shadow-md
+                  hover:shadow-lg hover:border-blue-300 transition-all duration-300 ease-in-out
+                  hover:scale-[1.02] cursor-pointer
+                `}
+                style={{ minHeight: '250px' }}
+              >
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-50 shadow-sm mb-3">
+                  <IconComponent className="h-6 w-6 text-blue-700" aria-hidden="true" />
+                </div>
+                <h3 className="notion-heading-3 text-center mt-2 mb-2">{feature.title}</h3>
+                <p className="text-gray-500 text-base text-center">{feature.description}</p>
               </div>
-              <h3 className="notion-heading-3 text-center mt-2 mb-2">{feature.title}</h3>
-              <p className="text-gray-500 text-base text-center">{feature.description}</p>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 );
 
 export default NotionFeatures;

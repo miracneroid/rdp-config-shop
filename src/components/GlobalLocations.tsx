@@ -20,25 +20,27 @@ const locationsByRegion = {
 };
 
 const GlobalLocations = () => (
-  <section className="w-full py-16 flex flex-col items-center justify-center">
-    <div className="w-full max-w-7xl px-4 sm:px-8 md:px-16 mx-auto">
-      <div className="text-center mb-12 flex flex-col items-center">
-        <h2 className="notion-heading-2 mb-3">
-          Global Server Network
-        </h2>
-        <p className="notion-paragraph max-w-2xl text-gray-500">
-          Our infrastructure currently provides high-performance access with server locations strategically placed in the United States.
-        </p>
-      </div>
+  <div className="w-full h-full flex items-center justify-center">
+    <section className="w-full py-6 md:py-10 flex flex-col items-center justify-center">
+      <div className="w-full max-w-7xl px-4 sm:px-8 md:px-16 mx-auto">
+        <div className="text-center mb-10 flex flex-col items-center">
+          <h2 className="notion-heading-2 mb-3">
+            Global Server Network
+          </h2>
+          <p className="notion-paragraph max-w-2xl text-gray-500">
+            Our infrastructure currently provides high-performance access with server locations strategically placed in the United States.
+          </p>
+        </div>
 
-      {/* Interactive map as the main visual */}
-      <div className="w-full flex justify-center mb-8">
-        <div className="w-full max-w-5xl">
-          <ServerLocationMap />
+        {/* Interactive map as the main visual */}
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-5xl">
+            <ServerLocationMap />
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 );
 
 export default GlobalLocations;
