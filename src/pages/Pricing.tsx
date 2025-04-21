@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import PricingSection from "@/components/PricingSection";
 import Footer from "@/components/Footer";
 import StatsBanner from "@/components/StatsBanner";
-import { Badge } from "@/components/ui/badge";
+import HomeFAQ from "@/components/HomeFAQ"; // import FAQ component for Pricing page
 
 const defaultPricingPlans = [
   {
@@ -86,9 +86,11 @@ const PricingPage = () => {
         </div>
       </div>
       <StatsBanner />
+      <HomeFAQ /> {/* FAQ added at the bottom of the Pricing page */}
       <Footer />
     </div>
   );
 };
 
 export default PricingPage;
+
