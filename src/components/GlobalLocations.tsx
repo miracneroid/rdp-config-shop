@@ -20,6 +20,7 @@ const locationsByRegion = {
 };
 
 const GlobalLocations = () => (
+  <section className="w-full py-16">
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-left mb-12 flex flex-col md:flex-row md:justify-between md:items-end gap-4">
         <div>
@@ -39,6 +40,7 @@ const GlobalLocations = () => (
         </div>
       </div>
     </div>
+  </section>
 );
 
 export default GlobalLocations;

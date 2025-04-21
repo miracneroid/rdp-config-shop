@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Badge } from "./ui/badge";
 import { BadgeCheck, BadgeInfo, BadgeDollarSign } from "lucide-react";
@@ -22,7 +23,7 @@ const BADGES = [
 
 const ControlPanelSection = () => {
   return (
-    <section className="relative w-full bg-white pt-14 pb-20 border-t border-b border-gray-100 font-sans">
+    <section className="relative w-full bg-white py-20 border-t border-b border-gray-100 font-sans">
       <div className="notion-page-container max-w-7xl mx-auto px-4">
         <div className="flex flex-col sm:flex-row justify-between items-start gap-6 mb-10 text-left">
           <div className="flex flex-col">
