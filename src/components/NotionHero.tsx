@@ -1,8 +1,10 @@
-import { PuzzleIcon } from 'lucide-react';
+
+import { PuzzleIcon, Infinity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import PricingSection from './PricingSection';
 import DashboardCarousel from './DashboardCarousel';
+import React from "react";
 
 const defaultPricingPlans = [
   {
@@ -66,6 +68,60 @@ const defaultPricingPlans = [
   }
 ];
 
+// InfinityScroller component, reused and easy to customize
+const SERVER_BRANDS = [
+  { name: "Intel® Xeon", color: "text-blue-200", bg: "bg-[#0071C5]" },
+  { name: "AMD EPYC™", color: "text-white", bg: "bg-[#232C3B]" },
+  { name: "ARM Neoverse", color: "text-gray-900", bg: "bg-[#AFE3A6]" },
+  { name: "IBM Power", color: "text-black", bg: "bg-[#FFD500]" },
+  { name: "AWS Graviton", color: "text-green-900", bg: "bg-[#E5FFDF]" },
+  { name: "Apple M-Series", color: "text-black", bg: "bg-[#D0D3D4]" },
+];
+
+function InfinityScroller() {
+  return (
+    <div className="w-full bg-gray-900 py-2 border-b border-gray-800 overflow-hidden">
+      <div className="relative flex items-center">
+        <Infinity className="text-white opacity-60 mx-6" />
+        {/* Marquee effect using extra wide, doubled brand list */}
+        <div
+          className="flex items-center gap-6 animate-infinite-scroll"
+          style={{
+            minWidth: "100%",
+            animation: "marquee-left 24s linear infinite",
+            // Responsive: wraps if space, but force single line/scroll on all except XS
+            whiteSpace: "nowrap"
+          }}
+        >
+          {[...SERVER_BRANDS, ...SERVER_BRANDS].map((brand, idx) => (
+            <span
+              key={idx}
+              className={`px-4 py-1 rounded-md font-mono text-sm font-bold mx-1 shadow ${
+                brand.bg
+              } ${brand.color} transition-transform duration-200`}
+              style={{ minWidth: 110, display: 'inline-block' }}
+            >
+              {brand.name}
+            </span>
+          ))}
+        </div>
+      </div>
+      {/* Marquee animation */}
+      <style>{`
+      @keyframes marquee-left {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+      .animate-infinite-scroll {
+        will-change: transform;
+        display: flex;
+        align-items: center;
+      }
+      `}</style>
+    </div>
+  );
+}
+
 const NotionHero = () => {
   return (
     <>
@@ -99,10 +155,9 @@ const NotionHero = () => {
             />
           </div>
         </div>
-        {/* Optional down arrow to cue scroll */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-          <span className="text-gray-400 animate-bounce mb-2" style={{ fontSize: 28 }}>▼</span>
-          <span className="sr-only">Scroll down</span>
+        {/* InfinityScroller strip replaces the arrow */}
+        <div className="absolute w-full left-0 bottom-0">
+          <InfinityScroller />
         </div>
       </section>
 
