@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Globe } from 'lucide-react';
 import { Button } from './ui/button';
@@ -44,10 +43,10 @@ const SimpleFooter = () => {
           <div>
             <h3 className="font-medium mb-4">USEFUL LINKS</h3>
             <ul className="space-y-3">
-              <li><Link to="/usa-vps" className="text-gray-500 hover:text-gray-900">USA VPS</Link></li>
-              <li><Link to="/europe-vps" className="text-gray-500 hover:text-gray-900">Europe VPS</Link></li>
-              <li><Link to="/buy-rdp" className="text-gray-500 hover:text-gray-900">Buy RDP</Link></li>
-              <li><Link to="/buy-vps" className="text-gray-500 hover:text-gray-900">Buy VPS</Link></li>
+              <li><Link to="/pricing" className="text-gray-500 hover:text-gray-900">Pricing</Link></li>
+              <li><Link to="/help" className="text-gray-500 hover:text-gray-900">Help Center</Link></li>
+              <li><Link to="/contact" className="text-gray-500 hover:text-gray-900">Contact Us</Link></li>
+              <li><Link to="/login" className="text-gray-500 hover:text-gray-900">Sign In</Link></li>
             </ul>
           </div>
 

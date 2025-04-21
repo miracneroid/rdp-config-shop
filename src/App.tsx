@@ -19,6 +19,17 @@ import Pricing from './pages/Pricing';
 import Documentation from './pages/Documentation';
 import Help from './pages/Help';
 import Contact from './pages/Contact';
+import Windows from './pages/Windows';
+import Linux from './pages/Linux';
+import Docs from './pages/Docs';
+import LookingGlass from './pages/LookingGlass';
+import Api from './pages/Api';
+import Blog from './pages/Blog';
+import Network from './pages/Network';
+import Status from './pages/Status';
+import Legal from './pages/Legal';
+import Privacy from './pages/Privacy';
+import Imprint from './pages/Imprint';
 
 import StatsBanner from './components/StatsBanner';
 import { Toaster } from './components/ui/toaster';
@@ -50,6 +61,17 @@ function App() {
               <Route path="/docs" element={<Documentation />} />
               <Route path="/help" element={<Help />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/windows" element={<Windows />} />
+              <Route path="/linux" element={<Linux />} />
+              <Route path="/docs" element={<Docs />} />
+              <Route path="/looking-glass" element={<LookingGlass />} />
+              <Route path="/api" element={<Api />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/network" element={<Network />} />
+              <Route path="/status" element={<Status />} />
+              <Route path="/legal" element={<Legal />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/imprint" element={<Imprint />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
