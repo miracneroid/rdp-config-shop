@@ -1,4 +1,3 @@
-
 import { PuzzleIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
@@ -69,25 +68,25 @@ const defaultPricingPlans = [
 
 const NotionHero = () => {
   return (
-    <div className="bg-white w-full">
+    <div className="bg-white w-full font-sans">
       <div className="notion-page-container py-12 sm:py-14 md:py-12">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
             <div className="text-left">
-              <h1 className="text-[80px] font-bold leading-[1.1] tracking-[-0.02em] text-black">
+              <h1 className="notion-heading-1">
                 The happier<br />
                 <span>workspace puzzle</span>
               </h1>
-              <p className="mt-6 text-xl text-gray-500 max-w-2xl">
-                Configure. Connect. Deploy. Put together your ideal remote desktop environment 
+              <p className="mt-6 notion-paragraph max-w-2xl">
+                Configure. Connect. Deploy. Put together your ideal remote desktop environment
                 with our easy-to-use building blocks.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <Link to="/register" className="inline-flex items-center justify-center bg-blue-500 text-white px-6 py-2.5 rounded-md transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-lg cursor-pointer">
+                <Link to="/register" className="inline-flex items-center justify-center notion-button cursor-pointer">
                   <PuzzleIcon className="mr-2 h-5 w-5 text-white" />
                   Start Building
                 </Link>
-                <Link to="/pricing" className="inline-flex items-center justify-center bg-[#e5e7eb] text-black px-6 py-2.5 rounded-md transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-lg cursor-pointer">
+                <Link to="/pricing" className="inline-flex items-center justify-center notion-button-outline cursor-pointer">
                   View Pricing
                 </Link>
               </div>
@@ -100,15 +99,13 @@ const NotionHero = () => {
               />
             </div>
           </div>
-          
           <DashboardCarousel />
-
           <div className="mt-12">
             <div className="text-center">
-              <h2 className="text-3xl font-bold mb-3 text-[#1e2537]">
+              <h2 className="notion-heading-2">
                 Choose your puzzle pieces
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
+              <p className="notion-paragraph max-w-2xl mx-auto mb-6">
                 Simple, transparent pricing for building your perfect workspace.
               </p>
             </div>
