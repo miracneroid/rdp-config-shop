@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 import { PuzzleIcon } from 'lucide-react';
-import PricingSection from './PricingSection';
-import DashboardCarousel from './DashboardCarousel';
 import { ArrowRight, LayoutGrid, Image } from 'lucide-react';
 
 // Fix: define defaultPricingPlans for PricingSection
@@ -274,8 +272,6 @@ const NotionHero = () => {
           <InfinityBrandStrip />
         </div>
       </section>
-
-      {/* SLIDESHOW SECTION and PRICING below */}
     </>
   );
 };
