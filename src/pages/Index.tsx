@@ -5,7 +5,7 @@ import NotionHero from "@/components/NotionHero";
 import NotionFeatures from "@/components/NotionFeatures";
 import SimpleFooter from "@/components/SimpleFooter";
 import StatsBanner from "@/components/StatsBanner";
-import HomeFAQ from "@/components/HomeFAQ";
+import GlobalLocations from "@/components/GlobalLocations";
 
 const Index = () => {
   return (
@@ -14,6 +14,7 @@ const Index = () => {
       <main className="w-full bg-transparent">
         <NotionHero />
         <NotionFeatures />
+        <GlobalLocations />
       </main>
       <StatsBanner />
       <SimpleFooter />
