@@ -1,3 +1,4 @@
+
 import {
   Carousel,
   CarouselContent,
@@ -5,12 +6,13 @@ import {
 } from "@/components/ui/carousel";
 import { useEffect, useState } from "react";
 
+// Use high-quality placeholder images from Unsplash that work well as dashboard previews
 const images = [
-  "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
-  "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
-  "https://images.unsplash.com/photo-1531297484001-80022131f5a1",
-  "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
-  "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+  "/lovable-uploads/25b9a189-5c5b-4737-933a-6a328fe06be4.png", // Use the same image as in NotionHero
+  "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=1600&q=80",
+  "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1600&q=80",
+  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80",
+  "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80",
 ];
 
 const DashboardCarousel = () => {
@@ -46,11 +48,17 @@ const DashboardCarousel = () => {
             {images.map((image, index) => (
               <CarouselItem key={index}>
                 <div className="relative overflow-hidden px-4 sm:px-6 lg:px-8">
-                  <div className="rounded-[2rem] overflow-hidden mx-auto">
+                  <div className="rounded-[2rem] overflow-hidden mx-auto shadow-xl border border-gray-100">
                     <img
                       src={image}
                       alt={`Dashboard screenshot ${index + 1}`}
                       className="w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover"
+                      onError={(e) => {
+                        // Fallback to a placeholder if image fails to load
+                        const target = e.target as HTMLImageElement;
+                        console.log(`Image failed to load: ${target.src}`);
+                        target.src = "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=1600&q=80";
+                      }}
                     />
                   </div>
                 </div>
