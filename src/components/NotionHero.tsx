@@ -1,8 +1,8 @@
-
 import { PuzzleIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import PricingSection from './PricingSection';
+import DashboardCarousel from './DashboardCarousel';
 
 const defaultPricingPlans = [
   {
@@ -111,11 +111,7 @@ const NotionHero = () => {
         <div className="notion-page-container">
           {/* Dashboard Slideshow - appears when user scrolls below hero */}
           <div className="mb-12">
-            {/* Removed inline in NotionHero, appears on scroll */}
-            {/**@ts-ignore */}
-            {require('./DashboardCarousel').default && (
-              require('./DashboardCarousel').default()
-            )}
+            <DashboardCarousel />
           </div>
           {/* Pricing Section */}
           <div>
@@ -136,4 +132,3 @@ const NotionHero = () => {
 };
 
 export default NotionHero;
-
