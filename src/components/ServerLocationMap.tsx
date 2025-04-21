@@ -56,14 +56,10 @@ const ServerLocationMap: React.FC = () => {
         <div class="flex flex-col items-center">
           <div class="mb-1.5 px-2 py-1 rounded-md text-xs font-semibold bg-blue-600 text-white shadow group-hover:bg-blue-700 transition-all">${loc.name}</div>
           <div>
-            <span style="display:inline-flex;align-items:center;">
-              ${MapPin({ size: 28, color: "#2563eb" }).props.children
-                ? `<svg width="28" height="28" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24" class="mapbox-marker" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21 10.5c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"></path>
-                    <circle cx="12" cy="10.5" r="3"></circle>
-                  </svg>`
-                : ""}
-            </span>
+            <svg width="28" height="28" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24" class="mapbox-marker" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 10.5c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0Z"></path>
+              <circle cx="12" cy="10.5" r="3"></circle>
+            </svg>
           </div>
         </div>
       `;
@@ -116,4 +112,3 @@ const ServerLocationMap: React.FC = () => {
 };
 
 export default ServerLocationMap;
-
