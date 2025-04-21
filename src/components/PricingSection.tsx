@@ -104,7 +104,14 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
     'Support': false,
   });
   
+  // Add state to track the selected plan in the tabs
+  const [selectedPlan, setSelectedPlan] = useState<string>("");
+  
   useEffect(() => {
+    // Initialize the selected plan to the popular plan or the first plan
+    const popularPlan = plans.find(p => p.popular);
+    setSelectedPlan(popularPlan?.name || plans[0].name);
+    
     const fetchStats = async () => {
       try {
         const { count: serversCount, error: serversError } = await supabase
@@ -130,7 +137,7 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
     };
 
     fetchStats();
-  }, []);
+  }, [plans]);
 
   const toggleCategory = (category: string) => {
     setOpenCategories(prev => ({
@@ -192,13 +199,17 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
       {showDetailedComparison && (
         <div className="mt-12 sm:mt-16 w-full">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Plan Details</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Plan Details</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
               See what's included in your selected plan
             </p>
           </div>
-          <div className="bg-gray-50 rounded-xl p-2 md:p-4 border border-gray-200 shadow-sm w-full overflow-x-auto">
-            <Tabs value={plans.find(p => p.popular)?.name || plans[0].name} onValueChange={() => {}} className="w-full">
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700 shadow-sm w-full overflow-x-auto">
+            <Tabs 
+              value={selectedPlan} 
+              onValueChange={setSelectedPlan} 
+              className="w-full"
+            >
               <TabsList className="w-full flex justify-center mb-6 bg-transparent overflow-x-auto p-1 md:p-0 space-x-2">
                 {plans.map((plan, index) => (
                   <TabsTrigger 
@@ -206,7 +217,7 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                     value={plan.name}
                     className={`px-4 py-2 rounded-lg font-medium 
                       ${plan.popular ? 'data-[state=active]:bg-blue-600 data-[state=active]:text-white' : 
-                      'data-[state=active]:bg-gray-200'}`}
+                      'data-[state=active]:bg-gray-200 dark:data-[state=active]:bg-gray-700'}`}
                   >
                     {plan.name}
                     {plan.popular && (
@@ -218,11 +229,11 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
               
               {plans.map((plan, index) => (
                 <TabsContent key={index} value={plan.name} className="space-y-6">
-                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                  <div className="bg-white dark:bg-gray-900 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-gray-800">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
                       <div>
-                        <h3 className="text-2xl font-bold text-gray-900">{plan.name} Plan</h3>
-                        <p className="text-gray-600 mt-1">
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{plan.name} Plan</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mt-1">
                           {settings.currency.symbol}{plan.price}/month
                         </p>
                       </div>
@@ -233,17 +244,17 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                       </Link>
                     </div>
                     <div className="grid md:grid-cols-3 gap-4 mb-6">
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <p className="text-sm font-medium text-gray-500">CPU</p>
-                        <p className="text-lg font-semibold text-gray-900">{plan.cpu}</p>
+                      <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">CPU</p>
+                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{plan.cpu}</p>
                       </div>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <p className="text-sm font-medium text-gray-500">RAM</p>
-                        <p className="text-lg font-semibold text-gray-900">{plan.ram}</p>
+                      <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">RAM</p>
+                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{plan.ram}</p>
                       </div>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <p className="text-sm font-medium text-gray-500">Storage</p>
-                        <p className="text-lg font-semibold text-gray-900">{plan.storage}</p>
+                      <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Storage</p>
+                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{plan.storage}</p>
                       </div>
                     </div>
                     <div>
@@ -252,32 +263,35 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                           key={category}
                           open={openCategories[category]}
                           onOpenChange={() => toggleCategory(category)}
-                          className="mb-4 border border-gray-200 rounded-lg overflow-hidden"
+                          className="mb-4 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
                         >
-                          <CollapsibleTrigger className="w-full flex items-center justify-between p-4 bg-gray-100 text-left">
-                            <h4 className="text-lg font-semibold text-gray-900">{category}</h4>
+                          <CollapsibleTrigger className="w-full flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 text-left">
+                            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">{category}</h4>
                             {openCategories[category] ? 
-                              <ChevronUp className="h-5 w-5 text-gray-500" /> : 
-                              <ChevronDown className="h-5 w-5 text-gray-500" />
+                              <ChevronUp className="h-5 w-5 text-gray-500 dark:text-gray-400" /> : 
+                              <ChevronDown className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                             }
                           </CollapsibleTrigger>
                           <CollapsibleContent>
                             <div className="p-4 space-y-3">
                               {features.map((feature, j) => {
-                                const featureData = planValues[plan.name as keyof typeof planValues][feature.name as keyof typeof planValues["Basic"]];
+                                // Safely access feature data
+                                const planKey = plan.name as keyof typeof planValues;
+                                const featureKey = feature.name as keyof typeof planValues["Basic"];
+                                const featureData = planValues[planKey]?.[featureKey];
                                 
-                                if (featureData.status === 'x') return null;
+                                if (featureData?.status === 'x') return null;
                                 
                                 return (
-                                  <div key={j} className="flex items-start space-x-3 p-2 hover:bg-gray-50 rounded-lg">
+                                  <div key={j} className="flex items-start space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
                                     <div className="mt-0.5">
-                                      {renderIcon(featureData.status)}
+                                      {featureData && renderIcon(featureData.status)}
                                     </div>
                                     <div>
                                       <TooltipProvider>
                                         <Tooltip>
                                           <TooltipTrigger asChild>
-                                            <p className="font-medium text-gray-800 cursor-help">
+                                            <p className="font-medium text-gray-800 dark:text-gray-200 cursor-help">
                                               {feature.name}
                                             </p>
                                           </TooltipTrigger>
@@ -286,7 +300,9 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                                           </TooltipContent>
                                         </Tooltip>
                                       </TooltipProvider>
-                                      <p className="text-sm text-gray-600">{featureData.value}</p>
+                                      {featureData && (
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">{featureData.value}</p>
+                                      )}
                                     </div>
                                   </div>
                                 );
@@ -308,4 +324,3 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
 };
 
 export default PricingSection;
-

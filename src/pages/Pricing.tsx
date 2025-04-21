@@ -1,7 +1,8 @@
+
 import React, { useState } from "react";
-import Navbar from "@/components/Navbar";
+import NotionNavbar from "@/components/NotionNavbar";
 import PricingSection from "@/components/PricingSection";
-import Footer from "@/components/Footer";
+import NotionFooter from "@/components/NotionFooter";
 import StatsBanner from "@/components/StatsBanner";
 import HomeFAQ from "@/components/HomeFAQ";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -140,8 +141,8 @@ const PricingPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col dark:bg-rdp-dark w-full">
-      <Navbar />
-      <div className="bg-white dark:bg-rdp-dark py-16 flex-grow w-full">
+      <NotionNavbar />
+      <div className="pt-16 bg-white dark:bg-rdp-dark py-16 flex-grow w-full">
         <div className="w-full px-2 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h1 className="text-4xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-5xl lg:text-6xl">
@@ -152,7 +153,7 @@ const PricingPage = () => {
             </p>
           </div>
           <div className="flex justify-center mb-10">
-            <Tabs value={tab} onValueChange={v => setTab(v as "windows" | "linux")}>
+            <Tabs value={tab} onValueChange={(v) => setTab(v as "windows" | "linux")}>
               <TabsList className="bg-gray-100 dark:bg-[#181927] p-1 rounded-lg w-fit gap-2">
                 <TabsTrigger
                   value="windows"
@@ -181,7 +182,7 @@ const PricingPage = () => {
       </div>
       <StatsBanner />
       <HomeFAQ />
-      <Footer />
+      <NotionFooter />
     </div>
   );
 };
