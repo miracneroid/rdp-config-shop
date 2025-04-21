@@ -24,7 +24,7 @@ const BADGES = [
 const ControlPanelSection = () => {
   return (
     <section className="relative w-full bg-white py-20 border-t border-b border-gray-100 font-sans">
-      <div className="notion-page-container max-w-7xl mx-auto px-4">
+      <div className="w-full px-4 sm:px-8 md:px-16 mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start gap-6 mb-10 text-left">
           <div className="flex flex-col">
             <h2 className="notion-heading-2 text-6xl font-bold mb-2 text-black">
@@ -36,7 +36,7 @@ const ControlPanelSection = () => {
               </p>
           </div>
           {/* Badges (Right) */}
-          <div className="flex gap-3 mt-1">
+          <div className="flex gap-3 mt-1 flex-wrap">
             {BADGES.map((b, idx) => (
               <Badge
                 key={idx}
@@ -54,7 +54,7 @@ const ControlPanelSection = () => {
           <img
             src="/lovable-uploads/e3cb316d-065e-4164-9419-1cacf07d64f1.png"
             alt="RDP Control Panel"
-            className="w-full max-w-7xl rounded-2xl shadow-notion-lg border border-gray-200 bg-gray-50 animate-float"
+            className="w-full rounded-2xl shadow-notion-lg border border-gray-200 bg-gray-50 animate-float"
             style={{ maxHeight: 700, objectFit: "cover" }}
             draggable={false}
           />
