@@ -592,10 +592,7 @@ const Checkout = () => {
                                   type="password" 
                                   placeholder="123" 
                                   maxLength={3} 
-                                  onChange={(e) => {
-                                    const value = e.target.value.replace(/\D/g, '');
-                                    field.onChange(value);
-                                  }}
+                                  formatAs="cvv"
                                 />
                               </FormControl>
                               <FormMessage />

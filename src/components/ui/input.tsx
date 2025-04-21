@@ -4,7 +4,7 @@ import { useCallback } from "react"
 import { cn } from "@/lib/utils"
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  formatAs?: "creditCard" | "expiryDate" | "phoneNumber"
+  formatAs?: "creditCard" | "expiryDate" | "phoneNumber" | "cvv"
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -36,6 +36,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         formattedValue = inputVal.substring(0, 2) + '/' + inputVal.substring(2);
       }
       
+      // Validate month
+      if (inputVal.length >= 2) {
+        const month = parseInt(inputVal.substring(0, 2));
+        if (month < 1 || month > 12) {
+          // Reset to valid month
+          formattedValue = '01' + (inputVal.length > 2 ? '/' + inputVal.substring(2) : '');
+        }
+      }
+      
       e.target.value = formattedValue;
       onChange?.(e);
     }, [onChange]);
@@ -63,6 +72,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       e.target.value = formattedValue;
       onChange?.(e);
     }, [onChange]);
+    
+    // Handle CVV formatting
+    const handleCvvChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+      const inputVal = e.target.value.replace(/\D/g, ''); // Remove non-digits
+      if (inputVal.length > 3) return; // Limit to 3 digits
+      
+      e.target.value = inputVal;
+      onChange?.(e);
+    }, [onChange]);
 
     // Choose which handler to use based on formatAs prop
     const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,10 +90,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         handleExpiryDateChange(e);
       } else if (formatAs === "phoneNumber") {
         handlePhoneNumberChange(e);
+      } else if (formatAs === "cvv") {
+        handleCvvChange(e);
       } else {
         onChange?.(e);
       }
-    }, [formatAs, handleCreditCardChange, handleExpiryDateChange, handlePhoneNumberChange, onChange]);
+    }, [formatAs, handleCreditCardChange, handleExpiryDateChange, handlePhoneNumberChange, handleCvvChange, onChange]);
 
     return (
       <input
