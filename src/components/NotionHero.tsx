@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 import { PuzzleIcon } from 'lucide-react';
+import PricingSection from './PricingSection';
+import DashboardCarousel from './DashboardCarousel';
 import { ArrowRight, LayoutGrid, Image } from 'lucide-react';
 
 // Fix: define defaultPricingPlans for PricingSection
@@ -270,6 +272,28 @@ const NotionHero = () => {
         {/* Infinity Brand Strip, below hero */}
         <div className="relative w-full max-w-7xl mx-auto z-10 mt-12" style={{marginBottom: "1.5rem"}}>
           <InfinityBrandStrip />
+        </div>
+      </section>
+
+      {/* SLIDESHOW SECTION and PRICING below */}
+      <section className="bg-white w-full pt-8 pb-4 font-sans border-t border-gray-100">
+        <div className="notion-page-container">
+          {/* Dashboard Slideshow */}
+          <div className="mb-12">
+            <DashboardCarousel />
+          </div>
+          {/* Pricing Section */}
+          <div>
+            <div className="text-center">
+              <h2 className="notion-heading-2">
+                Choose your puzzle pieces
+              </h2>
+              <p className="notion-paragraph max-w-2xl mx-auto mb-6">
+                Simple, transparent pricing for building your perfect workspace.
+              </p>
+            </div>
+            <PricingSection plans={defaultPricingPlans} showDetailedComparison={false} />
+          </div>
         </div>
       </section>
     </>
