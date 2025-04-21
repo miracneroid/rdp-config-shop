@@ -6,13 +6,16 @@ import NotionFeatures from "@/components/NotionFeatures";
 import SimpleFooter from "@/components/SimpleFooter";
 import StatsBanner from "@/components/StatsBanner";
 import GlobalLocations from "@/components/GlobalLocations";
+import ControlPanelSection from "@/components/ControlPanelSection";
 
 const Index = () => {
   return (
-    <div className="min-h-screen w-full bg-notion-background">
+    <div className="min-h-screen w-full bg-notion-background font-sans">
       <NotionNavbar />
       <main className="w-full bg-transparent">
         <NotionHero />
+        {/* Insert the new control panel section right after PricingSection, inside NotionHero */}
+        <ControlPanelSection />
         <NotionFeatures />
         <GlobalLocations />
       </main>
@@ -23,3 +26,4 @@ const Index = () => {
 };
 
 export default Index;
+

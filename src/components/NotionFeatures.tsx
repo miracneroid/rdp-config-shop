@@ -1,74 +1,82 @@
 
-import React from 'react';
-import { Server, Key, ShieldCheck, Users, Cloud, Terminal, Settings, Lock } from 'lucide-react';
+import React from "react";
+import {
+  Monitor,
+  SlidersHorizontal,
+  Users,
+  ShieldCheck,
+  LayoutDashboard,
+  Server,
+  Network,
+  BarChartHorizontal,
+  HardDrive,
+} from "lucide-react";
 
-const featureList = [
+const FEATURES = [
   {
-    name: 'Instant Setup',
-    description: 'Spin up your RDP server in seconds with automatic provisioning.',
-    icon: Server,
+    icon: <Monitor className="h-9 w-9 text-blue-700" />,
+    title: "Instant Access",
+    description: "Connect to your RDP desktops and servers from anywhere, on any device.",
   },
   {
-    name: 'Full Admin Access',
-    description: 'Get unrestricted administrator access for true control.',
-    icon: Key,
+    icon: <SlidersHorizontal className="h-9 w-9 text-blue-700" />,
+    title: "Custom Configurations",
+    description: "Easily upgrade CPU, memory, or storage without downtime—make your workspace fit your needs.",
   },
   {
-    name: 'DDoS Protection',
-    description: 'Proactive security keeps your sessions shielded and reliable.',
-    icon: ShieldCheck,
+    icon: <Users className="h-9 w-9 text-blue-700" />,
+    title: "Team Collaboration",
+    description: "Manage multiple users with granular access controls and simple invites.",
   },
   {
-    name: 'Multiple OS Options',
-    description: 'Deploy Windows or Linux — your choice, every time.',
-    icon: Terminal,
+    icon: <LayoutDashboard className="h-9 w-9 text-blue-700" />,
+    title: "Unified Dashboard",
+    description: "See all your RDP instances, health, and usage stats in one clear overview.",
   },
   {
-    name: 'Global Locations',
-    description: 'Low latency RDP from worldwide datacenter options.',
-    icon: Cloud,
+    icon: <ShieldCheck className="h-9 w-9 text-blue-700" />,
+    title: "Top-Tier Security",
+    description: "Advanced encryption, DDoS protection, and activity logging keep your data safe.",
   },
   {
-    name: '24/7 Support',
-    description: 'Reach our expert support team any time, day or night.',
-    icon: Users,
+    icon: <Server className="h-9 w-9 text-blue-700" />,
+    title: "Fast Deployments",
+    description: "1-click deployments bring new Windows or Linux desktops online within minutes.",
   },
   {
-    name: 'Easy Management',
-    description: 'Simple control panel for fast reboots, rebuilds, and upgrades.',
-    icon: Settings,
+    icon: <Network className="h-9 w-9 text-blue-700" />,
+    title: "Reliable Networking",
+    description: "High-speed connections and private networks for worry-free remote work.",
   },
   {
-    name: 'Secure Connections',
-    description: 'All data is encrypted using strong protection protocols.',
-    icon: Lock,
+    icon: <BarChartHorizontal className="h-9 w-9 text-blue-700" />,
+    title: "Usage Insights",
+    description: "Visual dashboards let you monitor usage, billing, and performance trends.",
   },
 ];
 
-const NotionFeatures = () => {
-  return (
-    <section className="w-full border-t border-gray-200 bg-white py-14 sm:py-20">
-      <div className="w-full px-2 sm:px-10">
-        <h2 className="text-4xl sm:text-[44px] md:text-[52px] font-bold text-black leading-tight mb-14 mt-2" style={{ letterSpacing: "-0.03em" }}>
-          Everything you need<br className="hidden sm:block" />
-          for the best RDP experience.
+const NotionFeatures = () => (
+  <section className="bg-white py-16 w-full font-sans border-t border-b border-gray-100">
+    <div className="notion-page-container max-w-7xl mx-auto">
+      <div className="text-center mb-12">
+        <h2 className="notion-heading-2 mb-3">
+          Everything you need for the best RDP experience
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16 w-full">
-          {featureList.map(({ name, icon: Icon, description }) => (
-            <div key={name} className="flex flex-col items-start group">
-              <Icon className="h-14 w-14 mb-4 text-black" strokeWidth={1.6} />
-              <div>
-                <h3 className="font-semibold text-lg md:text-xl text-black flex items-center gap-1 mb-1 group-hover:underline group-hover:underline-offset-4 transition">
-                  {name} <span aria-hidden>→</span>
-                </h3>
-                <p className="text-base text-gray-600">{description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <p className="notion-paragraph max-w-3xl mx-auto">
+          From deployment to security, our platform provides every feature for effortless and powerful RDP management.
+        </p>
       </div>
-    </section>
-  );
-};
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-7 mt-12">
+        {FEATURES.map((feature, idx) => (
+          <div key={idx} className="flex flex-col items-start px-4 py-6 rounded-lg hover:shadow-notion transition bg-white">
+            {feature.icon}
+            <h3 className="notion-heading-3 mt-4 mb-2">{feature.title}</h3>
+            <p className="text-gray-500 text-base">{feature.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
 
 export default NotionFeatures;
