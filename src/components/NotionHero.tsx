@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from 'react-router-dom';
 import { PuzzleIcon } from 'lucide-react';
@@ -147,15 +148,15 @@ const BRANDS = [
 // Updated Infinity Brand Strip with lighter style and subtle shadow
 function InfinityBrandStrip() {
   return (
-    <div className="relative w-full flex justify-center py-6 lg:py-10 bg-transparent z-10 select-none">
+    <div className="relative w-full flex justify-center py-6 lg:py-10 bg-transparent z-10 select-none overflow-hidden">
       {/* faint top border */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gray-100 dark:bg-[#181818]" />
+      <div className="absolute top-0 left-0 w-full h-px bg-gray-100 dark:bg-gray-800" />
       {/* lighter fade overlays (left/right) */}
       <div className="absolute left-0 top-0 h-full w-24 z-20 pointer-events-none" style={{
-        background: 'linear-gradient(90deg, #fafaff 75%, rgba(0,0,0,0))'
+        background: 'linear-gradient(90deg, var(--bg-gradient-start) 75%, rgba(0,0,0,0))'
       }}/>
       <div className="absolute right-0 top-0 h-full w-24 z-20 pointer-events-none" style={{
-        background: 'linear-gradient(270deg, #fafaff 70%, rgba(0,0,0,0))'
+        background: 'linear-gradient(270deg, var(--bg-gradient-start) 70%, rgba(0,0,0,0))'
       }}/>
       {/* Marquee */}
       <div
@@ -186,6 +187,14 @@ function InfinityBrandStrip() {
         @keyframes brands-scroll-marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
+        }
+        
+        :root {
+          --bg-gradient-start: #ffffff;
+        }
+        
+        .dark {
+          --bg-gradient-start: #000000;
         }
       `}</style>
     </div>
@@ -220,8 +229,14 @@ const NotionHero = () => {
       <section className="relative w-full font-sans flex flex-col items-center justify-center min-h-[70vh] bg-white dark:bg-black pt-8 lg:pt-14 transition-colors">
         {/* soft purple bg blur, behind headline+text (left) */}
         <div className="absolute left-0 top-16 z-0 pointer-events-none">
-          <div className="w-[320px] h-[320px] rounded-full bg-[#bca3fa]/30 blur-3xl" />
+          <div className="w-[320px] h-[320px] rounded-full bg-gradient-to-br from-purple-500/30 to-blue-500/20 dark:from-purple-700/40 dark:to-blue-600/30 blur-3xl" />
         </div>
+        
+        {/* Additional gradient for consistent design language */}
+        <div className="absolute right-0 bottom-0 z-0 pointer-events-none">
+          <div className="w-[250px] h-[250px] rounded-full bg-gradient-to-tl from-purple-400/20 to-blue-500/10 dark:from-purple-600/30 dark:to-blue-700/20 blur-3xl" />
+        </div>
+        
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center w-full z-10 relative px-4 lg:px-10">
           <div className="flex flex-col flex-1 items-start max-w-xl sm:mt-2 md:mt-8">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-[#111827] dark:text-white leading-tight mb-6 tracking-tight font-sans">
@@ -239,7 +254,7 @@ const NotionHero = () => {
               Cloud provider backed by EU-legislation and high quality standards from The Netherlands <span role="img" aria-label="NL">🇳🇱</span>, Phoenix <span role="img" aria-label="US">🇺🇸</span> and Poland <span role="img" aria-label="PL">🇵🇱</span>
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mb-5">
-              <Link to="/pricing" className="inline-flex items-center rounded-lg bg-[#272d45] hover:bg-[#393f60] px-7 py-3.5 text-white text-lg font-semibold shadow transition">
+              <Link to="/pricing" className="inline-flex items-center rounded-lg bg-gradient-to-r from-[#272d45] to-[#37336d] hover:from-[#393f60] hover:to-[#4a4390] dark:from-[#312545] dark:to-[#4a3870] dark:hover:from-[#3a2d52] dark:hover:to-[#57438a] px-7 py-3.5 text-white text-lg font-semibold shadow transition">
                 <span>Instant deployment</span>
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
@@ -276,7 +291,7 @@ const NotionHero = () => {
       </section>
 
       {/* SLIDESHOW SECTION and PRICING below */}
-      <section className="bg-white dark:bg-black w-full pt-8 pb-4 font-sans border-t border-gray-100 dark:border-[#222]">
+      <section className="bg-white dark:bg-black w-full pt-8 pb-4 font-sans border-t border-gray-100 dark:border-gray-800">
         <div className="notion-page-container">
           {/* Dashboard Slideshow */}
           <div className="mb-12">

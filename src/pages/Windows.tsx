@@ -9,22 +9,22 @@ import { Monitor, Lock, Cpu, Wifi } from "lucide-react";
 const Windows = () => {
   const features = [
     {
-      icon: <Monitor className="h-8 w-8 text-blue-500" />,
+      icon: <Monitor className="h-8 w-8 text-purple-500" />,
       title: "Remote Desktop Access",
       description: "Secure RDP access from anywhere in the world"
     },
     {
-      icon: <Lock className="h-8 w-8 text-blue-500" />,
+      icon: <Lock className="h-8 w-8 text-purple-500" />,
       title: "Enterprise Security",
       description: "Built-in Windows Defender and regular security updates"
     },
     {
-      icon: <Cpu className="h-8 w-8 text-blue-500" />,
+      icon: <Cpu className="h-8 w-8 text-purple-500" />,
       title: "Dedicated Resources",
       description: "Guaranteed CPU, RAM, and storage allocation"
     },
     {
-      icon: <Wifi className="h-8 w-8 text-blue-500" />,
+      icon: <Wifi className="h-8 w-8 text-purple-500" />,
       title: "High-Speed Network",
       description: "1Gbps network with unlimited bandwidth"
     }
@@ -33,17 +33,20 @@ const Windows = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
       <Navbar />
-      <div className="flex-grow container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto text-center mb-12">
+      <div className="relative flex-grow container mx-auto px-4 py-12">
+        {/* Purple gradient background */}
+        <div className="absolute top-0 left-0 z-0 w-full h-48 bg-gradient-to-br from-purple-500/10 to-blue-500/5 dark:from-purple-800/20 dark:to-blue-700/10 rounded-b-3xl" />
+        
+        <div className="relative z-10 max-w-4xl mx-auto text-center mb-12">
           <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Windows RDP Solutions</h1>
           <p className="text-lg text-gray-600 dark:text-gray-300">
             Professional Windows Remote Desktop Services with dedicated resources and premium support
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
+        <div className="relative z-10 grid md:grid-cols-2 gap-6 mb-12">
           {features.map((feature, index) => (
-            <Card key={index} className="border border-gray-200 dark:border-gray-700">
+            <Card key={index} className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-md transition-shadow">
               <CardContent className="p-6">
                 <div className="flex items-start">
                   <div className="mr-4">{feature.icon}</div>
@@ -57,10 +60,10 @@ const Windows = () => {
           ))}
         </div>
 
-        <div className="text-center">
+        <div className="relative z-10 text-center">
           <Button
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
             onClick={() => window.location.href = '/configure'}
           >
             Configure Your RDP

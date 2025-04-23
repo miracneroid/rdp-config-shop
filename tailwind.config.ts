@@ -31,6 +31,13 @@ export default {
         "dark-bg": "#000000",
         "dark-text": "#FFFFFF",
         "dark-border": "#222222",
+        // Purple palette for consistent design
+        "rdp-blue": "#6366f1",
+        "rdp-blue-light": "#818cf8",
+        "rdp-dark": "#1F2937",
+        "rdp-purple": "#9b87f5",
+        "rdp-purple-light": "#b8a8f8",
+        "rdp-purple-dark": "#7E69AB",
       },
       fontFamily: {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
@@ -43,4 +50,3 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-

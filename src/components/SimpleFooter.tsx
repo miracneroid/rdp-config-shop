@@ -1,73 +1,61 @@
-import { Link } from 'react-router-dom';
-import { Globe } from 'lucide-react';
-import { Button } from './ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from './ui/dropdown-menu';
+
+import { Link } from "react-router-dom";
 
 const SimpleFooter = () => {
-  const currentYear = new Date().getFullYear();
+  const footerLinks = {
+    "Windows RDP": [
+      { name: "Windows Server", path: "/windows" },
+      { name: "Remote Desktop", path: "/windows" },
+      { name: "Enterprise Solutions", path: "/windows" },
+      { name: "Security Features", path: "/windows" }
+    ],
+    "Linux VPS": [
+      { name: "Linux Servers", path: "/linux" },
+      { name: "VPS Hosting", path: "/linux" },
+      { name: "High Performance", path: "/linux" },
+      { name: "Root Access", path: "/linux" }
+    ],
+    "Resources": [
+      { name: "Documentation", path: "/docs" },
+      { name: "API", path: "/api" },
+      { name: "Status", path: "/status" },
+      { name: "System Requirements", path: "/docs" }
+    ],
+    "Company": [
+      { name: "About", path: "/about" },
+      { name: "Contact", path: "/contact" },
+      { name: "Privacy Policy", path: "/privacy" },
+      { name: "Terms of Service", path: "/legal" }
+    ]
+  };
 
   return (
-    <footer className="w-full border-t border-gray-200 bg-white">
-      <div className="w-full px-4 sm:px-8 md:px-16 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-          <div className="col-span-1">
-            <div className="flex items-center">
-              <img src="/lovable-uploads/ce82569c-c62b-488d-9d1d-7ac9fdbb14e6.png" alt="Logo" className="h-8 w-8" />
-              <span className="ml-2 text-xl font-bold">Puzzle RDP</span>
+    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 text-left">
+      <div className="max-w-7xl mx-auto pt-10 pb-8 px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {Object.entries(footerLinks).map(([category, links], idx) => (
+            <div key={idx}>
+              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300 tracking-wider uppercase mb-4">
+                {category}
+              </h3>
+              <ul className="space-y-3">
+                {links.map((link, linkIdx) => (
+                  <li key={linkIdx}>
+                    <Link 
+                      to={link.path} 
+                      className="text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-
-          <div>
-            <h3 className="font-medium mb-4">PRODUCTS</h3>
-            <ul className="space-y-3">
-              <li><Link to="/windows" className="text-gray-500 hover:text-gray-900">Windows RDP</Link></li>
-              <li><Link to="/linux" className="text-gray-500 hover:text-gray-900">Linux VPS</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-medium mb-4">RESOURCES</h3>
-            <ul className="space-y-3">
-              <li><Link to="/docs" className="text-gray-500 hover:text-gray-900">Documentation</Link></li>
-              <li><Link to="/looking-glass" className="text-gray-500 hover:text-gray-900">Looking Glass</Link></li>
-              <li><Link to="/api" className="text-gray-500 hover:text-gray-900">API</Link></li>
-              <li><Link to="/blog" className="text-gray-500 hover:text-gray-900">Blog</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-medium mb-4">USEFUL LINKS</h3>
-            <ul className="space-y-3">
-              <li><Link to="/pricing" className="text-gray-500 hover:text-gray-900">Pricing</Link></li>
-              <li><Link to="/help" className="text-gray-500 hover:text-gray-900">Help Center</Link></li>
-              <li><Link to="/contact" className="text-gray-500 hover:text-gray-900">Contact Us</Link></li>
-              <li><Link to="/login" className="text-gray-500 hover:text-gray-900">Sign In</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-medium mb-4">COMPANY</h3>
-            <ul className="space-y-3">
-              <li><Link to="/network" className="text-gray-500 hover:text-gray-900">Network</Link></li>
-              <li><Link to="/status" className="text-gray-500 hover:text-gray-900">Service Status</Link></li>
-              <li><Link to="/legal" className="text-gray-500 hover:text-gray-900">Legal</Link></li>
-              <li><Link to="/privacy" className="text-gray-500 hover:text-gray-900">Privacy Policy</Link></li>
-              <li><Link to="/imprint" className="text-gray-500 hover:text-gray-900">Imprint</Link></li>
-            </ul>
-          </div>
+          ))}
         </div>
-
-        <div className="mt-12 pt-8 border-t border-gray-200 flex justify-between items-center">
-          <p className="text-sm text-gray-500">
-            &copy; {currentYear} Puzzle RDP. All rights reserved since 2025
-          </p>
-          <p className="text-sm text-gray-500">
-            Made in Europe
+        <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
+          <p className="text-base text-gray-500 dark:text-gray-400">
+            &copy; {new Date().getFullYear()} RDP Config. All rights reserved.
           </p>
         </div>
       </div>

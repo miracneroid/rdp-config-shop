@@ -20,9 +20,15 @@
   body {
     @apply bg-white text-notion-text w-full min-h-screen m-0 p-0 font-sans;
   }
+  
   /* DARK MODE BASE */
   .dark body {
     @apply bg-black text-white;
+  }
+  
+  /* Remove any thin white lines in dark mode */
+  .dark * {
+    border-color: theme('colors.gray.800');
   }
 }
 
@@ -77,6 +83,19 @@
   .dark .notion-button-outline {
     @apply bg-[#212c42] text-white border border-[#306ecf] hover:bg-[#30569a];
   }
+  
+  /* Purple gradients for consistent design */
+  .purple-gradient-bg {
+    @apply bg-gradient-to-br from-purple-500/30 to-blue-500/20 dark:from-purple-700/40 dark:to-blue-600/30;
+  }
+  
+  .purple-gradient-text {
+    @apply bg-gradient-to-r from-purple-600 to-blue-600 text-transparent bg-clip-text;
+  }
+  
+  .purple-gradient-button {
+    @apply bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white transition-all;
+  }
 }
 
 /* Section background overrides */
@@ -98,14 +117,14 @@
   background-color: #f9fafb;
 }
 .dark .bg-gray-50 {
-  background-color: #222;
+  background-color: #111;
 }
 
 .bg-blue-50 {
   background-color: #eff6ff;
 }
 .dark .bg-blue-50 {
-  background-color: #22223b;
+  background-color: #191930;
 }
 
 /* Utility for icon color swap */
@@ -120,7 +139,7 @@
 
 /* Custom shadow for dark mode */
 .dark .shadow-notion-lg {
-  box-shadow: 0 6px 20px rgba(255,255,255,0.08), 0 2px 8px rgba(0,0,0,0.28) !important;
+  box-shadow: 0 6px 20px rgba(255,255,255,0.04), 0 2px 8px rgba(0,0,0,0.2) !important;
 }
 
 /* Animations remain unchanged */
@@ -141,4 +160,3 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
-
