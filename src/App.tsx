@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 
 import Index from './pages/Index';
@@ -37,43 +37,53 @@ import { CartProvider } from './context/CartContext';
 import { SettingsProvider } from './context/SettingsContext';
 import BorderPage from './components/BorderPage';
 
+function AnimatedRoutes() {
+  const location = useLocation();
+  
+  return (
+    <div className="animate-fade-in">
+      <Routes location={location}>
+        <Route path="/" element={<Index />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/configure" element={<Configure />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/users" element={<TestManagement />} />
+        <Route path="/dashboard" element={<UserDashboard />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/docs" element={<Documentation />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/windows" element={<Windows />} />
+        <Route path="/linux" element={<Linux />} />
+        <Route path="/docs" element={<Docs />} />
+        <Route path="/looking-glass" element={<LookingGlass />} />
+        <Route path="/api" element={<Api />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/network" element={<Network />} />
+        <Route path="/status" element={<Status />} />
+        <Route path="/legal" element={<Legal />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/imprint" element={<Imprint />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
+  );
+}
+
 function App() {
   return (
     <SettingsProvider>
       <CartProvider>
         <Router>
           <BorderPage>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/configure" element={<Configure />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/admin-login" element={<AdminLogin />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/users" element={<TestManagement />} />
-              <Route path="/dashboard" element={<UserDashboard />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="/docs" element={<Documentation />} />
-              <Route path="/help" element={<Help />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/windows" element={<Windows />} />
-              <Route path="/linux" element={<Linux />} />
-              <Route path="/docs" element={<Docs />} />
-              <Route path="/looking-glass" element={<LookingGlass />} />
-              <Route path="/api" element={<Api />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/network" element={<Network />} />
-              <Route path="/status" element={<Status />} />
-              <Route path="/legal" element={<Legal />} />
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/imprint" element={<Imprint />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <AnimatedRoutes />
             <Toaster />
           </BorderPage>
         </Router>
