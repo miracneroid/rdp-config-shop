@@ -7,26 +7,29 @@ import SimpleFooter from "@/components/SimpleFooter";
 import StatsBanner from "@/components/StatsBanner";
 import GlobalLocations from "@/components/GlobalLocations";
 import ControlPanelSection from "@/components/ControlPanelSection";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Index = () => {
+  useScrollAnimation();
+
   return (
     <div className="w-full min-h-screen flex flex-col bg-notion-background font-sans">
       <NotionNavbar />
       <main className="flex-1 flex flex-col w-full">
-        <div className="animate-fade-in">
+        <div className="scroll-animate opacity-0">
           <NotionHero />
         </div>
-        <div className="animate-fade-in" style={{ animationDelay: "0.12s" } as React.CSSProperties}>
+        <div className="scroll-animate opacity-0">
           <ControlPanelSection />
         </div>
-        <div className="animate-fade-in" style={{ animationDelay: "0.18s" } as React.CSSProperties}>
+        <div className="scroll-animate opacity-0">
           <NotionFeatures />
         </div>
-        <div className="animate-fade-in" style={{ animationDelay: "0.24s" } as React.CSSProperties}>
+        <div className="scroll-animate opacity-0">
           <GlobalLocations />
         </div>
       </main>
-      <div className="animate-fade-in" style={{ animationDelay: "0.30s" } as React.CSSProperties}>
+      <div className="scroll-animate opacity-0">
         <StatsBanner />
       </div>
       <SimpleFooter />
