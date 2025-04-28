@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -25,7 +24,7 @@ const NotionNavbar = () => {
   const handlePricingMouseLeave = () => setIsPricingOpen(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 w-full bg-white/80 dark:bg-[#1A1F2C]/90 border-b border-gray-100 dark:border-gray-800 transition-shadow px-0 m-0">
+    <nav className="fixed top-0 left-0 right-0 z-50 w-full bg-white/80 dark:bg-[#1A1F2C]/90 dark:border-none border-b border-gray-100 transition-shadow px-0 m-0">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 relative">
           <Link to="/" className="flex items-center gap-2 shrink-0">
@@ -127,22 +126,22 @@ const NotionNavbar = () => {
         aria-hidden={!isMenuOpen}
       />
       <div
-        className={`md:hidden fixed top-0 right-0 w-4/5 max-w-xs h-full bg-white border-l border-gray-100 shadow-lg transform transition-transform duration-300 z-50
+        className={`md:hidden fixed top-0 right-0 w-4/5 max-w-xs h-full bg-white dark:bg-[#1A1F2C] dark:border-gray-800 border-l border-gray-100 shadow-lg transform transition-transform duration-300 z-50
         ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
         role="dialog"
         aria-modal="true"
       >
-        <div className="flex items-center justify-between px-5 pt-4 pb-2 border-b border-gray-100">
-          <span className="font-semibold text-base text-black">Menu</span>
+        <div className="flex items-center justify-between px-5 pt-4 pb-2 border-b border-gray-100 dark:border-gray-800">
+          <span className="font-semibold text-base text-black dark:text-white">Menu</span>
           <button
             onClick={toggleMenu}
-            className="p-2 rounded-md text-gray-600 hover:text-black hover:bg-gray-100 transition"
+            className="p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition"
             aria-label="Close menu"
           >
             <X className="h-6 w-6" />
           </button>
         </div>
-        <nav className="flex flex-col text-base p-5 gap-2">
+        <nav className="flex flex-col text-base p-5 gap-2 dark:bg-[#1A1F2C]">
           <Link
             to="/"
             className="py-2 px-3 rounded text-gray-800 hover:bg-gray-100 transition"
