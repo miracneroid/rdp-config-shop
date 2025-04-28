@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -24,19 +25,19 @@ const NotionNavbar = () => {
   const handlePricingMouseLeave = () => setIsPricingOpen(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 w-full bg-white border-b border-gray-100 transition-shadow px-0 m-0">
+    <nav className="fixed top-0 left-0 right-0 z-50 w-full bg-white/80 dark:bg-[#1A1F2C]/90 border-b border-gray-100 dark:border-gray-800 transition-shadow px-0 m-0">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 relative">
           <Link to="/" className="flex items-center gap-2 shrink-0">
             <div className="flex items-center justify-center w-9 h-9 bg-gradient-to-br from-purple-500 to-blue-500 rounded">
               <PuzzleIcon className="h-5 w-5 text-white" />
             </div>
-            <span className="text-lg font-semibold tracking-tight text-black hidden sm:inline-block">
+            <span className="text-lg font-semibold tracking-tight text-black dark:text-[#9b87f5] hidden sm:inline-block">
               Puzzle RDP
             </span>
           </Link>
           <div className="hidden md:flex items-center gap-2">
-            <Link to="/" className="mx-2 text-gray-600 hover:text-black text-base px-2 py-1.5 rounded transition-colors duration-150">
+            <Link to="/" className="mx-2 text-gray-600 dark:text-gray-300 hover:text-[#9b87f5] dark:hover:text-[#9b87f5] text-base px-2 py-1.5 rounded transition-colors duration-150">
               Home
             </Link>
             <div
@@ -48,7 +49,7 @@ const NotionNavbar = () => {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="mx-2 text-gray-600 hover:text-black text-base font-normal px-2 py-1.5 rounded transition-colors flex items-center gap-1 bg-transparent"
+                    className="mx-2 text-gray-600 dark:text-gray-300 hover:text-[#9b87f5] dark:hover:text-[#9b87f5] text-base font-normal px-2 py-1.5 rounded transition-colors flex items-center gap-1 bg-transparent"
                     tabIndex={0}
                   >
                     Pricing
@@ -78,16 +79,16 @@ const NotionNavbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <Link to="/help" className="mx-2 text-gray-600 hover:text-black text-base px-2 py-1.5 rounded transition-colors duration-150">
+            <Link to="/help" className="mx-2 text-gray-600 dark:text-gray-300 hover:text-[#9b87f5] dark:hover:text-[#9b87f5] text-base px-2 py-1.5 rounded transition-colors duration-150">
               Help
             </Link>
-            <Link to="/contact" className="mx-2 text-gray-600 hover:text-black text-base px-2 py-1.5 rounded transition-colors duration-150">
+            <Link to="/contact" className="mx-2 text-gray-600 dark:text-gray-300 hover:text-[#9b87f5] dark:hover:text-[#9b87f5] text-base px-2 py-1.5 rounded transition-colors duration-150">
               Contact
             </Link>
             <button
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="ml-3 p-2 rounded-full text-gray-600 hover:text-black hover:bg-gray-100 transition-colors"
+              className="ml-3 p-2 rounded-full text-gray-600 dark:text-gray-300 hover:text-[#9b87f5] dark:hover:text-[#9b87f5] hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
@@ -95,7 +96,7 @@ const NotionNavbar = () => {
               <Button
                 variant="default"
                 size="sm"
-                className="bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-2 min-w-[80px]"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white flex items-center gap-2 min-w-[80px] transition-all duration-200"
               >
                 <LogIn className="h-4 w-4" />
                 <span>Log In</span>
@@ -106,14 +107,14 @@ const NotionNavbar = () => {
             <button
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-2 rounded-full text-gray-600 hover:text-black hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:text-[#9b87f5] dark:hover:text-[#9b87f5] hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
             <button
               onClick={toggleMenu}
               aria-label="Open menu"
-              className="ml-1 p-2 rounded-md text-gray-600 hover:text-black hover:bg-gray-100 transition"
+              className="ml-1 p-2 rounded-md text-gray-600 dark:text-gray-300 hover:text-[#9b87f5] dark:hover:text-[#9b87f5] hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
