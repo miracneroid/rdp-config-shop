@@ -1,10 +1,10 @@
 
 import React from "react";
 import ServerLocationMap from "./ServerLocationMap";
-import ServerLocations from "./ServerLocations";
+import ServerLocations, { ServerLocation } from "./ServerLocations";
 
-// Updated list of global server locations
-const LOCATIONS = [
+// Updated list of global server locations with properly typed status values
+const LOCATIONS: ServerLocation[] = [
   {
     name: "New York",
     region: "North America",
