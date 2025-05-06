@@ -1,59 +1,71 @@
 
 import React from "react";
 import ServerLocationMap from "./ServerLocationMap";
+import ServerLocations from "./ServerLocations";
 
 // Updated list of global server locations
 const LOCATIONS = [
   {
     name: "New York",
     region: "North America",
+    status: "operational",
+    pingMs: 42
   },
   {
     name: "San Francisco",
     region: "North America",
+    status: "operational",
+    pingMs: 38
   },
   {
     name: "Chicago",
     region: "North America",
+    status: "operational",
+    pingMs: 45
   },
   {
     name: "Miami",
     region: "North America",
+    status: "operational",
+    pingMs: 51
   },
   {
     name: "London",
     region: "Europe",
+    status: "operational",
+    pingMs: 89
   },
   {
     name: "Amsterdam",
     region: "Europe",
+    status: "maintenance",
+    pingMs: 95
   },
   {
     name: "Frankfurt",
     region: "Europe",
+    status: "operational",
+    pingMs: 92
   },
   {
     name: "Singapore",
     region: "Asia Pacific",
+    status: "operational",
+    pingMs: 124
   },
   {
     name: "Tokyo",
     region: "Asia Pacific",
+    status: "operational",
+    pingMs: 147
   },
   {
     name: "Sydney",
     region: "Asia Pacific",
+    status: "operational",
+    pingMs: 168
   },
 ];
-
-// Group locations by region
-const locationsByRegion = LOCATIONS.reduce((acc, location) => {
-  if (!acc[location.region]) {
-    acc[location.region] = [];
-  }
-  acc[location.region].push(location);
-  return acc;
-}, {} as Record<string, typeof LOCATIONS>);
 
 const GlobalLocations = () => (
   <section className="w-full py-12 sm:py-16 bg-white dark:bg-black border-t border-b border-gray-100 dark:border-[#222]">
@@ -75,21 +87,7 @@ const GlobalLocations = () => (
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-        {Object.entries(locationsByRegion).map(([region, locations]) => (
-          <div key={region} className="p-6 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-800">
-            <h3 className="text-xl font-semibold mb-3">{region}</h3>
-            <ul className="space-y-2">
-              {locations.map((location) => (
-                <li key={location.name} className="flex items-center">
-                  <span className="h-2 w-2 rounded-full bg-rdp-blue dark:bg-rdp-blue-light mr-2"></span>
-                  {location.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+      <ServerLocations locations={LOCATIONS} showStatus showPing />
     </div>
   </section>
 );

@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 
@@ -10,7 +11,7 @@ import Configure from './pages/Configure';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import AdminLogin from './pages/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
 import TestManagement from './pages/TestManagement';
 import FAQ from './pages/FAQ';
 import NotFound from './pages/NotFound';
