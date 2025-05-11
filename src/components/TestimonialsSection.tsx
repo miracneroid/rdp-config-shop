@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
-import PuzzleIcon from "@/components/ui/puzzle-icon";
 import { 
   Carousel, 
   CarouselContent, 
@@ -21,6 +20,7 @@ interface TestimonialProps {
   personImage: string;
   linkText?: string;
   linkUrl?: string;
+  isPersonal?: boolean;
 }
 
 const testimonials: TestimonialProps[] = [
@@ -73,6 +73,15 @@ const testimonials: TestimonialProps[] = [
     personName: "Alex Johnson",
     personTitle: "VP of Operations at Notion",
     personImage: "/avatars/elf.png"
+  },
+  {
+    companyName: "",
+    companyLogo: "",
+    quote: "As a freelancer, Puzzle simplified my accounting workflow tremendously. The automated categorization saves me hours every month.",
+    personName: "Emily Parker",
+    personTitle: "Independent Designer",
+    personImage: "/avatars/dwarf.png",
+    isPersonal: true
   }
 ];
 
@@ -129,7 +138,7 @@ const TestimonialsSection = () => {
 
         <div className="relative px-2">
           {/* Left shadow/smoke effect for partially visible testimonials */}
-          <div className="absolute left-0 top-0 h-full w-16 z-20 pointer-events-none bg-gradient-to-r from-[#0e0c1f] to-transparent"></div>
+          <div className="absolute left-0 top-0 h-full w-24 z-20 pointer-events-none bg-gradient-to-r from-[#0e0c1f] to-transparent"></div>
 
           <Carousel 
             className="w-full" 
@@ -140,18 +149,27 @@ const TestimonialsSection = () => {
               dragFree: true,
             }}
           >
-            <CarouselContent className="-ml-4 md:-ml-6">
+            <CarouselContent className="-ml-6 md:-ml-8">
               {testimonials.map((testimonial, idx) => (
-                <CarouselItem key={idx} className="pl-4 md:pl-6 sm:basis-4/5 md:basis-1/2 lg:basis-1/3">
-                  <div className="transition-all duration-300 transform hover:scale-105 h-full">
-                    <Card className="bg-[#1a192f] border-0 h-[350px] overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-sm border border-gray-700/20">
+                <CarouselItem key={idx} className="pl-6 md:pl-8 sm:basis-4/5 md:basis-1/2 lg:basis-1/3">
+                  <div className="transition-all duration-300 transform hover:scale-105 h-full px-1">
+                    <Card className="bg-[#1a192f]/80 border-0 h-[350px] overflow-hidden rounded-[2rem] rounded-tl-lg shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-sm border border-gray-700/20">
                       <CardContent className="p-8 flex flex-col h-full">
-                        <div className="mb-6">
-                          <img 
-                            src={testimonial.companyLogo} 
-                            alt={testimonial.companyName}
-                            className="h-7 object-contain"
-                          />
+                        <div className="mb-6 h-7 flex items-center">
+                          {testimonial.companyLogo ? (
+                            <img 
+                              src={testimonial.companyLogo} 
+                              alt={testimonial.companyName}
+                              className="h-7 object-contain"
+                            />
+                          ) : testimonial.isPersonal ? (
+                            <div className="flex items-center gap-2 text-sm text-emerald-400 font-medium">
+                              <div className="w-5 h-5 rounded-full bg-emerald-400/20 flex items-center justify-center">
+                                <span className="text-xs">👤</span>
+                              </div>
+                              <span>Personal Account</span>
+                            </div>
+                          ) : null}
                         </div>
 
                         <div className="flex-grow">
@@ -160,7 +178,7 @@ const TestimonialsSection = () => {
 
                         {testimonial.personName && (
                           <div className="flex items-center mt-4">
-                            <Avatar className="w-10 h-10 mr-4 border border-gray-700 ring-2 ring-gray-600/30">
+                            <Avatar className="w-10 h-10 mr-3 border border-gray-700 ring-2 ring-gray-600/30">
                               <AvatarImage 
                                 src={testimonial.personImage}
                                 alt={testimonial.personName}
@@ -169,7 +187,7 @@ const TestimonialsSection = () => {
                                 {testimonial.personName.charAt(0)}
                               </AvatarFallback>
                             </Avatar>
-                            <div>
+                            <div className="text-left">
                               <p className="font-medium text-white">{testimonial.personName}</p>
                               <p className="text-sm text-gray-400">{testimonial.personTitle}</p>
                             </div>
