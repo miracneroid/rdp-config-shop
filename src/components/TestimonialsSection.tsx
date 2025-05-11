@@ -1,14 +1,13 @@
 
 import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Quote, Star } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ArrowRight } from "lucide-react";
+import PuzzleIcon from "@/components/ui/puzzle-icon";
 import { 
   Carousel, 
   CarouselContent, 
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious
+  CarouselNext
 } from "@/components/ui/carousel";
 
 interface TestimonialProps {
@@ -20,38 +19,34 @@ interface TestimonialProps {
   personImage: string;
   linkText?: string;
   linkUrl?: string;
-  stars?: number;
 }
 
 const testimonials: TestimonialProps[] = [
   {
-    companyName: "Atlas Corp",
+    companyName: "Gusto",
     companyLogo: "/lovable-uploads/39d58574-fcd5-4ca1-92d0-a5f48152b4f9.png",
-    quote: "The RDP solution from rdp.sh completely transformed our remote workflow. Reliable, fast, and incredibly secure.",
-    personName: "Thomas Richards",
-    personTitle: "CTO at Atlas Corp",
-    personImage: "/avatars/human1.png",
-    stars: 5
+    quote: "Gosh, I wish this existed when we started Gusto. It's about time innovation comes to the business accounting space. Puzzle is going to be huge.",
+    personName: "Tomer London",
+    personTitle: "CO-Founder & CPO at Gusto",
+    personImage: "/avatars/human1.png"
   },
   {
-    companyName: "Nexus Tech",
+    companyName: "Burkland",
     companyLogo: "/lovable-uploads/ce82569c-c62b-488d-9d1d-7ac9fdbb14e6.png", 
-    quote: "How Nexus cut deployment time by 45% with rdp.sh's lightning-fast server provisioning and intuitive management panel",
-    personName: "Alex Morgan",
-    personTitle: "DevOps Lead at Nexus",
-    personImage: "/avatars/human2.png",
+    quote: "How Burkland cut 25% from month-end close with Ramp and Puzzle",
+    personName: "",
+    personTitle: "",
+    personImage: "",
     linkText: "CASE STUDY",
-    linkUrl: "/case-studies/nexus",
-    stars: 5
+    linkUrl: "/case-studies/burkland"
   },
   {
-    companyName: "Quantum Systems",
+    companyName: "Meow",
     companyLogo: "/lovable-uploads/8f2131b2-d7e7-42cb-bba7-d50ac84b91a2.png",
-    quote: "A must-have tool for tech teams. Automated provisioning, seamless scaling, and enterprise-grade security in one platform.",
-    personName: "Sarah Chen",
-    personTitle: "CEO & Founder at Quantum",
-    personImage: "/avatars/human3.png",
-    stars: 4
+    quote: "A must-have tool for founders. Autonomous accounting is no longer the future — it's arrived",
+    personName: "Brandon Arvanaghi",
+    personTitle: "CEO & CO-Founder at Meow",
+    personImage: "/avatars/human3.png"
   }
 ];
 
@@ -71,53 +66,42 @@ const TestimonialsSection = () => {
     };
   }, [api]);
 
-  const renderStars = (count: number = 5) => {
-    return Array(count)
-      .fill(0)
-      .map((_, i) => (
-        <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-      ));
-  };
-
   return (
-    <section className="w-full py-16 font-sans relative overflow-hidden">
-      {/* Premium gradient background with overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 opacity-95"></div>
+    <section className="w-full py-20 font-sans relative overflow-hidden">
+      {/* Dark background with subtle pattern */}
+      <div className="absolute inset-0 bg-[#0e0c1f] bg-opacity-95"></div>
       
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-10">
-        <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-blue-400 blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-64 h-64 rounded-full bg-purple-400 blur-3xl"></div>
+      {/* Circular gradient overlays */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute w-[800px] h-[800px] rounded-full bg-blue-500/10 blur-3xl -top-[300px] -left-[300px]"></div>
+        <div className="absolute w-[600px] h-[600px] rounded-full bg-purple-500/10 blur-3xl -bottom-[200px] -right-[200px]"></div>
+        <div className="absolute w-[1000px] h-[1000px] rounded-full border border-gray-700/30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute w-[1400px] h-[1400px] rounded-full border border-gray-700/20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
       </div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col items-center mb-12 text-center">
-          <Badge className="bg-blue-500/20 text-blue-200 border-blue-400/30 mb-4 px-3 py-1">
-            TESTIMONIALS
-          </Badge>
+        <div className="flex justify-between items-start mb-14">
+          <div className="flex items-center space-x-3">
+            <span className="text-4xl">❤️</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white flex items-center">
+              Customers Love <span className="ml-3">Puzzle</span>
+            </h2>
+          </div>
           
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 bg-gradient-to-r from-white via-blue-200 to-purple-100 bg-clip-text text-transparent">
-            Trusted by Industry Leaders
-          </h2>
-          
-          <p className="text-blue-200 max-w-2xl text-center mb-6">
-            See why thousands of tech teams worldwide choose our platform for their remote infrastructure needs.
-          </p>
-          
-          <div className="flex flex-wrap justify-center gap-12 mt-4">
-            <div className="text-center backdrop-blur-sm bg-white/5 rounded-lg px-6 py-4 border border-white/10">
-              <div className="text-4xl font-bold text-white">2K+</div>
-              <div className="text-sm text-blue-200">Ambitious Companies</div>
+          <div className="hidden md:flex space-x-12 text-white text-right">
+            <div>
+              <div className="text-3xl font-bold">2K+</div>
+              <div className="text-gray-400 text-sm">Ambitious Startups</div>
             </div>
             
-            <div className="text-center backdrop-blur-sm bg-white/5 rounded-lg px-6 py-4 border border-white/10">
-              <div className="text-4xl font-bold text-white">$20B+</div>
-              <div className="text-sm text-blue-200">Transactions Processed</div>
+            <div>
+              <div className="text-3xl font-bold">$20B+</div>
+              <div className="text-gray-400 text-sm">Transactions Categorized</div>
             </div>
           </div>
         </div>
 
-        <div className="relative px-10">
+        <div className="relative">
           <Carousel 
             className="w-full" 
             setApi={setApi}
@@ -129,44 +113,40 @@ const TestimonialsSection = () => {
             <CarouselContent>
               {testimonials.map((testimonial, idx) => (
                 <CarouselItem key={idx} className="md:basis-1/3 lg:basis-1/3 pl-4">
-                  <Card className="bg-white/10 backdrop-blur-md border-white/20 hover:border-blue-400/30 transition-all duration-300 h-full overflow-hidden shadow-xl">
-                    <CardContent className="p-6 flex flex-col h-full">
-                      <div className="flex justify-between items-start mb-4">
+                  <Card className="bg-[#1a192f] border-0 h-[350px] overflow-hidden rounded-xl shadow-xl">
+                    <CardContent className="p-8 flex flex-col h-full">
+                      <div className="mb-6">
                         <img 
                           src={testimonial.companyLogo} 
                           alt={testimonial.companyName}
-                          className="h-8 object-contain"
+                          className="h-7 object-contain"
                         />
-                        <div className="flex">
-                          {renderStars(testimonial.stars)}
-                        </div>
                       </div>
 
                       <div className="flex-grow">
-                        <Quote className="text-blue-400/30 h-12 w-12 mb-2 -ml-2 opacity-50" />
-                        <p className="text-white mb-6 font-light leading-relaxed">{testimonial.quote}</p>
+                        <p className="text-white text-xl font-light leading-relaxed mb-6">{testimonial.quote}</p>
                       </div>
 
-                      <div className="flex items-center mt-4 pt-4 border-t border-white/10">
-                        <img 
-                          src={testimonial.personImage}
-                          alt={testimonial.personName}
-                          className="w-12 h-12 rounded-full mr-4 ring-2 ring-white/20"
-                        />
-                        <div>
-                          <p className="font-medium text-white">{testimonial.personName}</p>
-                          <p className="text-sm text-blue-200">{testimonial.personTitle}</p>
+                      {testimonial.personName && (
+                        <div className="flex items-center mt-4">
+                          <img 
+                            src={testimonial.personImage}
+                            alt={testimonial.personName}
+                            className="w-10 h-10 rounded-full mr-4"
+                          />
+                          <div>
+                            <p className="font-medium text-white">{testimonial.personName}</p>
+                            <p className="text-sm text-gray-400">{testimonial.personTitle}</p>
+                          </div>
                         </div>
-                      </div>
+                      )}
                       
                       {testimonial.linkText && (
-                        <div className="mt-6 text-right">
-                          <a href={testimonial.linkUrl} className="inline-flex items-center">
-                            <Badge className="bg-blue-600 hover:bg-blue-700 gap-1 transition-all duration-300">
-                              {testimonial.linkText}
-                              <ArrowRight className="h-3 w-3" />
-                            </Badge>
-                          </a>
+                        <div className="mt-6 flex items-center">
+                          <div className="text-emerald-400 font-semibold text-sm flex items-center gap-2">
+                            {testimonial.linkText}
+                            <ArrowRight className="w-4 h-4" />
+                          </div>
                         </div>
                       )}
                     </CardContent>
@@ -174,9 +154,8 @@ const TestimonialsSection = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="hidden sm:flex">
-              <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white border-white/20 shadow-lg" />
-              <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white border-white/20 shadow-lg" />
+            <div className="absolute -right-4 top-1/2 -translate-y-1/2">
+              <CarouselNext className="bg-white/10 hover:bg-white/20 border-0 rounded-full w-12 h-12 shadow-lg" />
             </div>
           </Carousel>
         </div>
