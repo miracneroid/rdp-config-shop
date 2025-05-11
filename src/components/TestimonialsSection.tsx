@@ -1,8 +1,15 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Quote } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious
+} from "@/components/ui/carousel";
 
 interface TestimonialProps {
   companyName: string;
@@ -45,6 +52,21 @@ const testimonials: TestimonialProps[] = [
 ];
 
 const TestimonialsSection = () => {
+  const [api, setApi] = useState<any>(null);
+  
+  useEffect(() => {
+    if (!api) return;
+    
+    // Set up auto-scrolling
+    const autoScrollInterval = setInterval(() => {
+      api.scrollNext();
+    }, 5000); // Scroll every 5 seconds
+    
+    return () => {
+      clearInterval(autoScrollInterval);
+    };
+  }, [api]);
+
   return (
     <section className="w-full bg-gradient-to-br from-blue-900/95 to-indigo-900/95 dark:from-blue-950 dark:to-indigo-950 py-16 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -66,48 +88,65 @@ const TestimonialsSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map((testimonial, idx) => (
-            <Card key={idx} className="bg-gray-800/80 border-gray-700 hover:shadow-xl hover:border-blue-500/50 transition-all duration-300 h-full overflow-hidden">
-              <CardContent className="p-6 flex flex-col h-full">
-                <div className="mb-4">
-                  <img 
-                    src={testimonial.companyLogo} 
-                    alt={testimonial.companyName}
-                    className="h-8 object-contain"
-                  />
-                </div>
+        <div className="relative">
+          <Carousel 
+            className="w-full" 
+            setApi={setApi}
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+          >
+            <CarouselContent>
+              {testimonials.map((testimonial, idx) => (
+                <CarouselItem key={idx} className="md:basis-1/3 lg:basis-1/3 pl-4">
+                  <Card className="bg-gray-800/80 border-gray-700 hover:shadow-xl hover:border-blue-500/50 transition-all duration-300 h-full overflow-hidden">
+                    <CardContent className="p-6 flex flex-col h-full">
+                      <div className="mb-4">
+                        <img 
+                          src={testimonial.companyLogo} 
+                          alt={testimonial.companyName}
+                          className="h-8 object-contain"
+                        />
+                      </div>
 
-                <div className="flex-grow">
-                  <Quote className="text-blue-400/50 h-8 w-8 mb-2" />
-                  <p className="text-gray-100 mb-6">{testimonial.quote}</p>
-                </div>
+                      <div className="flex-grow">
+                        <Quote className="text-blue-400/50 h-8 w-8 mb-2" />
+                        <p className="text-gray-100 mb-6">{testimonial.quote}</p>
+                      </div>
 
-                <div className="flex items-center mt-4">
-                  <img 
-                    src={testimonial.personImage}
-                    alt={testimonial.personName}
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <p className="font-medium text-white">{testimonial.personName}</p>
-                    <p className="text-sm text-gray-400">{testimonial.personTitle}</p>
-                  </div>
-                </div>
-                
-                {testimonial.linkText && (
-                  <div className="mt-6 text-right">
-                    <a href={testimonial.linkUrl} className="inline-flex items-center">
-                      <Badge className="bg-green-600 hover:bg-green-700 gap-1">
-                        {testimonial.linkText}
-                        <ArrowRight className="h-3 w-3" />
-                      </Badge>
-                    </a>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+                      <div className="flex items-center mt-4">
+                        <img 
+                          src={testimonial.personImage}
+                          alt={testimonial.personName}
+                          className="w-12 h-12 rounded-full mr-4"
+                        />
+                        <div>
+                          <p className="font-medium text-white">{testimonial.personName}</p>
+                          <p className="text-sm text-gray-400">{testimonial.personTitle}</p>
+                        </div>
+                      </div>
+                      
+                      {testimonial.linkText && (
+                        <div className="mt-6 text-right">
+                          <a href={testimonial.linkUrl} className="inline-flex items-center">
+                            <Badge className="bg-green-600 hover:bg-green-700 gap-1">
+                              {testimonial.linkText}
+                              <ArrowRight className="h-3 w-3" />
+                            </Badge>
+                          </a>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="hidden sm:flex">
+              <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white border-0" />
+              <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white border-0" />
+            </div>
+          </Carousel>
         </div>
       </div>
     </section>
