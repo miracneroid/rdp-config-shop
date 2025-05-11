@@ -7,6 +7,7 @@ import SimpleFooter from "@/components/SimpleFooter";
 import StatsBanner from "@/components/StatsBanner";
 import GlobalLocations from "@/components/GlobalLocations";
 import ControlPanelSection from "@/components/ControlPanelSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Index = () => {
@@ -24,6 +25,9 @@ const Index = () => {
         </div>
         <div className="scroll-animate opacity-0">
           <NotionFeatures />
+        </div>
+        <div className="scroll-animate opacity-0">
+          <TestimonialsSection />
         </div>
         <div className="scroll-animate opacity-0">
           <GlobalLocations />
