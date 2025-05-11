@@ -7,8 +7,10 @@ import {
   Carousel, 
   CarouselContent, 
   CarouselItem,
-  CarouselNext
+  CarouselNext,
+  CarouselPrevious
 } from "@/components/ui/carousel";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface TestimonialProps {
   companyName: string;
@@ -47,6 +49,30 @@ const testimonials: TestimonialProps[] = [
     personName: "Brandon Arvanaghi",
     personTitle: "CEO & CO-Founder at Meow",
     personImage: "/avatars/human3.png"
+  },
+  {
+    companyName: "Loom",
+    companyLogo: "/lovable-uploads/e3cb316d-065e-4164-9419-1cacf07d64f1.png",
+    quote: "Puzzle has transformed our financial operations. It's the most intuitive accounting software we've ever used.",
+    personName: "Sarah Chen",
+    personTitle: "CFO at Loom",
+    personImage: "/avatars/human2.png"
+  },
+  {
+    companyName: "Segment",
+    companyLogo: "/lovable-uploads/e74400ca-7cb9-43c8-9512-6c417565b6b1.png",
+    quote: "Integration was seamless. Our team was up and running in minutes, not days. Puzzle just works.",
+    personName: "Michael Rodriguez",
+    personTitle: "Head of Finance at Segment",
+    personImage: "/avatars/mage.png"
+  },
+  {
+    companyName: "Notion",
+    companyLogo: "/lovable-uploads/a831c66a-d192-4fb2-a9a9-d7331e60b331.png",
+    quote: "We've tried everything, and Puzzle is by far the most powerful yet simple accounting solution for startups.",
+    personName: "Alex Johnson",
+    personTitle: "VP of Operations at Notion",
+    personImage: "/avatars/elf.png"
   }
 ];
 
@@ -102,17 +128,21 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="relative">
+          {/* Left shadow/smoke effect for partially visible testimonials */}
+          <div className="absolute left-0 top-0 h-full w-12 z-20 pointer-events-none bg-gradient-to-r from-[#0e0c1f] to-transparent"></div>
+
           <Carousel 
             className="w-full" 
             setApi={setApi}
             opts={{
               align: "start",
               loop: true,
+              dragFree: true,
             }}
           >
-            <CarouselContent>
+            <CarouselContent className="-ml-2 md:-ml-4">
               {testimonials.map((testimonial, idx) => (
-                <CarouselItem key={idx} className="md:basis-1/3 lg:basis-1/3 pl-4">
+                <CarouselItem key={idx} className="pl-2 md:pl-4 sm:basis-4/5 md:basis-1/2 lg:basis-1/3">
                   <Card className="bg-[#1a192f] border-0 h-[350px] overflow-hidden rounded-xl shadow-xl">
                     <CardContent className="p-8 flex flex-col h-full">
                       <div className="mb-6">
@@ -129,11 +159,15 @@ const TestimonialsSection = () => {
 
                       {testimonial.personName && (
                         <div className="flex items-center mt-4">
-                          <img 
-                            src={testimonial.personImage}
-                            alt={testimonial.personName}
-                            className="w-10 h-10 rounded-full mr-4"
-                          />
+                          <Avatar className="w-10 h-10 mr-4 border border-gray-700">
+                            <AvatarImage 
+                              src={testimonial.personImage}
+                              alt={testimonial.personName}
+                            />
+                            <AvatarFallback className="bg-purple-700 text-white">
+                              {testimonial.personName.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
                           <div>
                             <p className="font-medium text-white">{testimonial.personName}</p>
                             <p className="text-sm text-gray-400">{testimonial.personTitle}</p>
@@ -154,7 +188,15 @@ const TestimonialsSection = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <div className="absolute -right-4 top-1/2 -translate-y-1/2">
+
+            {/* Right shadow/smoke effect for partially visible testimonials */}
+            <div className="absolute right-0 top-0 h-full w-24 z-20 pointer-events-none bg-gradient-to-l from-[#0e0c1f] to-transparent"></div>
+
+            {/* Navigation controls */}
+            <div className="absolute -left-4 top-1/2 -translate-y-1/2 z-30">
+              <CarouselPrevious className="bg-white/10 hover:bg-white/20 border-0 rounded-full w-12 h-12 shadow-lg" />
+            </div>
+            <div className="absolute -right-4 top-1/2 -translate-y-1/2 z-30">
               <CarouselNext className="bg-white/10 hover:bg-white/20 border-0 rounded-full w-12 h-12 shadow-lg" />
             </div>
           </Carousel>
