@@ -1,9 +1,11 @@
+
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import PricingSection from "@/components/PricingSection";
 import SimpleFooter from "@/components/SimpleFooter";
 import StatsBanner from "@/components/StatsBanner";
 import HomeFAQ from "@/components/HomeFAQ";
+import FeatureHighlightSection from "@/components/FeatureHighlightSection";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Monitor, FileCode } from "lucide-react";
 
@@ -179,6 +181,10 @@ const PricingPage = () => {
           </div>
         </div>
       </div>
+      
+      {/* Add the new FeatureHighlightSection above HomeFAQ */}
+      <FeatureHighlightSection />
+      
       <HomeFAQ />
       <StatsBanner />
       <SimpleFooter />
