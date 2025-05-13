@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Shield, Zap, HardDrive, Support, Check } from "lucide-react";
+import { Shield, Zap, HardDrive, HeadphonesIcon, Check } from "lucide-react";
 
 interface FeatureProps {
   icon: React.ReactNode;
@@ -113,7 +113,7 @@ const FeatureHighlightSection = ({ planName = "Basic" }: FeatureHighlightSection
             
             <div className="space-y-3">
               <div className="bg-blue-900/30 rounded-full p-3 w-12 h-12 flex items-center justify-center">
-                <Support className="h-6 w-6 text-blue-400" />
+                <HeadphonesIcon className="h-6 w-6 text-blue-400" />
               </div>
               <h3 className="text-xl font-bold">Support</h3>
               <p className="text-gray-400">
