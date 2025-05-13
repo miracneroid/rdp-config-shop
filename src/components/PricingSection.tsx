@@ -112,6 +112,7 @@ const PricingSection = ({ plans, showDetailedComparison = true, onSelectPlan }: 
     
     // Call onSelectPlan with the initial plan if provided
     if (onSelectPlan) {
+      console.log("Initial plan selection in PricingSection:", initialPlan);
       onSelectPlan(initialPlan);
     }
     

@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import PricingSection from "@/components/PricingSection";
 import SimpleFooter from "@/components/SimpleFooter";
@@ -139,13 +139,22 @@ const linuxPlans = [
 
 const PricingPage = () => {
   const [tab, setTab] = useState<"windows" | "linux">("windows");
-  const [selectedPlan, setSelectedPlan] = useState("Basic");
+  const [selectedPlan, setSelectedPlan] = useState("Standard"); // Default to Standard as it's popular
   
   // Handler to update selected plan
   const handlePlanSelect = (planName: string) => {
     console.log("Selected plan in PricingPage:", planName);
     setSelectedPlan(planName);
   };
+  
+  // Use useEffect to make sure FeatureHighlightSection shows the selected plan on initial render
+  useEffect(() => {
+    // Find the popular plan or use the first plan
+    const plans = tab === "windows" ? windowsPlans : linuxPlans;
+    const popularPlan = plans.find(p => p.popular);
+    const initialPlan = popularPlan?.name || plans[0].name;
+    setSelectedPlan(initialPlan);
+  }, [tab]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 w-full">
