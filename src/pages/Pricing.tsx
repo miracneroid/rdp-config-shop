@@ -143,7 +143,7 @@ const PricingPage = () => {
   
   // Handler to update selected plan
   const handlePlanSelect = (planName: string) => {
-    console.log("Selected plan:", planName);
+    console.log("Selected plan in PricingPage:", planName);
     setSelectedPlan(planName);
   };
 

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -143,6 +144,7 @@ const PricingSection = ({ plans, showDetailedComparison = true, onSelectPlan }: 
 
   // Handle plan selection
   const handlePlanSelection = (planName: string) => {
+    console.log("Plan selected in PricingSection:", planName);
     setSelectedPlan(planName);
     if (onSelectPlan) {
       onSelectPlan(planName);
@@ -175,7 +177,6 @@ const PricingSection = ({ plans, showDetailedComparison = true, onSelectPlan }: 
           <div 
             key={index}
             className={`transition-all duration-300 transform ${selectedPlan === plan.name ? 'scale-105' : 'hover:scale-105'} flex`}
-            onClick={() => handlePlanSelection(plan.name)}
           >
             {/* Flex-grow to make all cards the same height, and full height */}
             <div className={`border ${selectedPlan === plan.name ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'} rounded-xl shadow-sm flex-grow flex flex-col`}>

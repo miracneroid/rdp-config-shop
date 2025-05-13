@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -51,9 +52,16 @@ const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
     navigate('/cart');
   };
 
+  const handleCardClick = () => {
+    console.log("Card clicked for plan:", plan.name);
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <div
-      onClick={onClick}
+      onClick={handleCardClick}
       className={`
         bg-white dark:bg-[#1e1e2d] rounded-xl p-8 flex flex-col h-full transition-all duration-300 
         shadow-sm hover:shadow-xl border border-transparent dark:border-gray-800

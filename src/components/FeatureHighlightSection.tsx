@@ -19,6 +19,7 @@ const FeatureHighlightSection = ({ planName = "Basic" }: FeatureHighlightSection
     if (sectionElement) {
       sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    console.log("FeatureHighlightSection received planName:", planName); // Debug log
   }, [planName]);
 
   return (
