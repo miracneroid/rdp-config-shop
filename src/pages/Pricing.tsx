@@ -139,6 +139,12 @@ const linuxPlans = [
 
 const PricingPage = () => {
   const [tab, setTab] = useState<"windows" | "linux">("windows");
+  const [selectedPlan, setSelectedPlan] = useState("Basic");
+  
+  // Handler to update selected plan
+  const handlePlanSelect = (planName: string) => {
+    setSelectedPlan(planName);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 w-full">
@@ -175,10 +181,10 @@ const PricingPage = () => {
               
               <div className="mt-8">
                 <TabsContent value="windows" className="w-full">
-                  <PricingSection plans={windowsPlans} showDetailedComparison={true} />
+                  <PricingSection plans={windowsPlans} showDetailedComparison={true} onSelectPlan={handlePlanSelect} />
                 </TabsContent>
                 <TabsContent value="linux" className="w-full">
-                  <PricingSection plans={linuxPlans} showDetailedComparison={true} />
+                  <PricingSection plans={linuxPlans} showDetailedComparison={true} onSelectPlan={handlePlanSelect} />
                 </TabsContent>
               </div>
             </Tabs>
@@ -186,8 +192,8 @@ const PricingPage = () => {
         </div>
       </div>
       
-      {/* Add the FeatureHighlightSection above HomeFAQ */}
-      <FeatureHighlightSection />
+      {/* Add the FeatureHighlightSection with the selected plan */}
+      <FeatureHighlightSection planName={selectedPlan} />
       
       <HomeFAQ />
       <StatsBanner />

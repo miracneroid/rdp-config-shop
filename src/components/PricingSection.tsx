@@ -25,6 +25,7 @@ export interface PricingPlan {
 interface PricingSectionProps {
   plans: PricingPlan[];
   showDetailedComparison?: boolean;
+  onSelectPlan?: (planName: string) => void;
 }
 
 interface StatsData {
@@ -91,7 +92,7 @@ const planValues = {
   }
 };
 
-const PricingSection = ({ plans, showDetailedComparison = true }: PricingSectionProps) => {
+const PricingSection = ({ plans, showDetailedComparison = true, onSelectPlan }: PricingSectionProps) => {
   const { settings } = useSettings();
   const [stats, setStats] = useState<StatsData>({
     deployedServers: 146402,
@@ -105,7 +106,13 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
   useEffect(() => {
     // Initialize the selected plan to the popular plan or the first plan
     const popularPlan = plans.find(p => p.popular);
-    setSelectedPlan(popularPlan?.name || plans[0].name);
+    const initialPlan = popularPlan?.name || plans[0].name;
+    setSelectedPlan(initialPlan);
+    
+    // Call onSelectPlan with the initial plan if provided
+    if (onSelectPlan) {
+      onSelectPlan(initialPlan);
+    }
     
     const fetchStats = async () => {
       try {
@@ -132,7 +139,15 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
     };
 
     fetchStats();
-  }, [plans]);
+  }, [plans, onSelectPlan]);
+
+  // Handle plan selection
+  const handlePlanSelection = (planName: string) => {
+    setSelectedPlan(planName);
+    if (onSelectPlan) {
+      onSelectPlan(planName);
+    }
+  };
 
   // Find the currently selected plan
   const currentPlan = plans.find(plan => plan.name === selectedPlan) || plans[0];
@@ -160,14 +175,14 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
           <div 
             key={index}
             className={`transition-all duration-300 transform ${selectedPlan === plan.name ? 'scale-105' : 'hover:scale-105'} flex`}
-            onClick={() => setSelectedPlan(plan.name)}
+            onClick={() => handlePlanSelection(plan.name)}
           >
             {/* Flex-grow to make all cards the same height, and full height */}
             <div className={`border ${selectedPlan === plan.name ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'} rounded-xl shadow-sm flex-grow flex flex-col`}>
               <PricingCard 
                 plan={plan} 
                 selected={selectedPlan === plan.name} 
-                onClick={() => setSelectedPlan(plan.name)}
+                onClick={() => handlePlanSelection(plan.name)}
               />
             </div>
           </div>
@@ -190,7 +205,7 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                 {plans.map((plan, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedPlan(plan.name)}
+                    onClick={() => handlePlanSelection(plan.name)}
                     className={`px-5 py-2 rounded-lg font-medium text-sm md:text-base whitespace-nowrap
                       ${selectedPlan === plan.name 
                         ? plan.popular 

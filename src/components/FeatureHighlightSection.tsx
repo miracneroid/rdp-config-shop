@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Shield, Zap, MonitorCheck, Globe } from "lucide-react";
+import { Shield, Zap, MonitorCheck, Globe, Check } from "lucide-react";
 
 interface FeatureProps {
   icon: React.ReactNode;
@@ -20,44 +20,62 @@ const Feature = ({ icon, title, description }: FeatureProps) => {
   );
 };
 
-const FeatureHighlightSection = () => {
+interface FeatureHighlightSectionProps {
+  planName?: string;
+}
+
+const FeatureHighlightSection = ({ planName = "Basic" }: FeatureHighlightSectionProps) => {
   return (
     <section className="w-full bg-black text-white py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
           <div className="inline-block rounded-lg bg-blue-600 px-4 py-2 mb-4">
-            <h2 className="text-xl font-bold text-white">Privacy-focused Windows RDPs</h2>
+            <h2 className="text-xl font-bold text-white">Plan Details - <span className="text-white font-extrabold">{planName} Plan</span></h2>
           </div>
           
           <p className="max-w-3xl text-xl mb-6">
-            Experience premium performance with our customizable Windows RDPs.
-            Deployed instantly with full admin/root access and unmetered bandwidth.
+            {planName === "Basic" && "Efficient performance with our essential Windows RDP solution. Get started quickly with reliable access and all the core functionality you need."}
+            {planName === "Standard" && "Enhanced performance with our balanced Windows RDP package. Perfect for daily operations with improved resources and priority support."}
+            {planName === "Premium" && "Superior performance with our advanced Windows RDP configuration. Designed for demanding workloads with premium resources and enhanced security."}
+            {planName === "Enterprise" && "Ultimate performance with our enterprise-grade Windows RDP infrastructure. Maximum resources for mission-critical applications with dedicated support."}
           </p>
           
           <div className="space-y-3 mt-6">
             <div className="flex items-center gap-2">
-              <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              <span className="text-gray-300">Dedicated resources with guaranteed performance</span>
+              <Check className="h-5 w-5 text-green-500" />
+              <span className="text-gray-300">
+                {planName === "Basic" && "Standard computing resources for everyday tasks"}
+                {planName === "Standard" && "Enhanced computing resources for improved multitasking"}
+                {planName === "Premium" && "Premium computing power for resource-intensive applications"}
+                {planName === "Enterprise" && "Maximum computing capacity for enterprise workloads"}
+              </span>
             </div>
             <div className="flex items-center gap-2">
-              <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              <span className="text-gray-300">Instant deployment after payment</span>
+              <Check className="h-5 w-5 text-green-500" />
+              <span className="text-gray-300">
+                {planName === "Basic" && "Standard deployment within minutes of payment"}
+                {planName === "Standard" && "Priority deployment after payment confirmation"}
+                {planName === "Premium" && "Expedited setup with priority provisioning"}
+                {planName === "Enterprise" && "Immediate deployment with highest priority"}
+              </span>
             </div>
             <div className="flex items-center gap-2">
-              <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              <span className="text-gray-300">Full administrative control</span>
+              <Check className="h-5 w-5 text-green-500" />
+              <span className="text-gray-300">
+                {planName === "Basic" && "Full administrator access to your RDP environment"}
+                {planName === "Standard" && "Complete control with enhanced administrative tools"}
+                {planName === "Premium" && "Advanced administrative capabilities with custom configurations"}
+                {planName === "Enterprise" && "Enterprise-level control with custom security policies"}
+              </span>
             </div>
             <div className="flex items-center gap-2">
-              <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
-              <span className="text-gray-300">DMCA ignored hosting</span>
+              <Check className="h-5 w-5 text-green-500" />
+              <span className="text-gray-300">
+                {planName === "Basic" && "DMCA ignored hosting for complete privacy"}
+                {planName === "Standard" && "Privacy-focused infrastructure with DMCA protection"}
+                {planName === "Premium" && "Enhanced privacy measures with comprehensive DMCA protection"}
+                {planName === "Enterprise" && "Maximum privacy guarantees with robust legal protections"}
+              </span>
             </div>
           </div>
         </div>
@@ -67,32 +85,52 @@ const FeatureHighlightSection = () => {
             <div className="bg-blue-900/30 rounded-full p-3 w-12 h-12 flex items-center justify-center">
               <Zap className="h-6 w-6 text-blue-400" />
             </div>
-            <h3 className="text-xl font-bold">Instant Deployment</h3>
-            <p className="text-gray-400">Servers ready within minutes after payment confirmation.</p>
+            <h3 className="text-xl font-bold">Performance</h3>
+            <p className="text-gray-400">
+              {planName === "Basic" && "2 CPU cores with standard performance"}
+              {planName === "Standard" && "4 CPU cores with enhanced performance"}
+              {planName === "Premium" && "8 CPU cores with high-performance compute"}
+              {planName === "Enterprise" && "16 CPU cores with maximum performance"}
+            </p>
           </div>
           
           <div className="space-y-3">
             <div className="bg-blue-900/30 rounded-full p-3 w-12 h-12 flex items-center justify-center">
               <Shield className="h-6 w-6 text-blue-400" />
             </div>
-            <h3 className="text-xl font-bold">100% Private</h3>
-            <p className="text-gray-400">Dedicated resources with guaranteed CPU and RAM.</p>
+            <h3 className="text-xl font-bold">Memory</h3>
+            <p className="text-gray-400">
+              {planName === "Basic" && "4 GB RAM with guaranteed allocation"}
+              {planName === "Standard" && "8 GB RAM with optimized memory management"}
+              {planName === "Premium" && "16 GB RAM for memory-intensive applications"}
+              {planName === "Enterprise" && "32 GB RAM for enterprise-grade operations"}
+            </p>
           </div>
           
           <div className="space-y-3">
             <div className="bg-blue-900/30 rounded-full p-3 w-12 h-12 flex items-center justify-center">
               <MonitorCheck className="h-6 w-6 text-blue-400" />
             </div>
-            <h3 className="text-xl font-bold">Full Admin Access</h3>
-            <p className="text-gray-400">Complete control with administrator privileges.</p>
+            <h3 className="text-xl font-bold">Storage</h3>
+            <p className="text-gray-400">
+              {planName === "Basic" && "64 GB SSD with reliable performance"}
+              {planName === "Standard" && "128 GB SSD with improved I/O speeds"}
+              {planName === "Premium" && "256 GB SSD for ample storage capacity"}
+              {planName === "Enterprise" && "512 GB SSD with enterprise-grade reliability"}
+            </p>
           </div>
           
           <div className="space-y-3">
             <div className="bg-blue-900/30 rounded-full p-3 w-12 h-12 flex items-center justify-center">
               <Globe className="h-6 w-6 text-blue-400" />
             </div>
-            <h3 className="text-xl font-bold">Global Network</h3>
-            <p className="text-gray-400">Multiple data center locations for optimal latency.</p>
+            <h3 className="text-xl font-bold">Support</h3>
+            <p className="text-gray-400">
+              {planName === "Basic" && "Standard support with 24-hour response time"}
+              {planName === "Standard" && "Priority support with 12-hour response time"}
+              {planName === "Premium" && "Premium support with 6-hour response time"}
+              {planName === "Enterprise" && "24/7 dedicated support with 1-hour response time"}
+            </p>
           </div>
         </div>
       </div>
