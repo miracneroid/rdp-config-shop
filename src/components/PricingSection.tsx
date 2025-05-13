@@ -1,16 +1,16 @@
-
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useSettings } from "@/context/SettingsContext";
 import PricingCard from "@/components/PricingCard";
-import { CheckCircle, XCircle, HelpCircle, ChevronUp, ChevronDown } from "lucide-react";
+import { CheckCircle, XCircle, HelpCircle, ChevronUp, ChevronDown, Zap, Shield, Monitor, Globe } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export interface PricingPlan {
   name: string;
@@ -98,13 +98,8 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
     ticketReplies: 130414
   });
   const [loading, setLoading] = useState(true);
-  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({
-    'Performance': true,
-    'Features': false,
-    'Support': false,
-  });
   
-  // Add state to track the selected plan in the tabs
+  // Selected plan state
   const [selectedPlan, setSelectedPlan] = useState<string>("");
   
   useEffect(() => {
@@ -139,45 +134,23 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
     fetchStats();
   }, [plans]);
 
-  const toggleCategory = (category: string) => {
-    setOpenCategories(prev => ({
-      ...prev,
-      [category]: !prev[category]
-    }));
-  };
+  // Find the currently selected plan
+  const currentPlan = plans.find(plan => plan.name === selectedPlan) || plans[0];
 
-  const featureCategories = {
-    "Performance": [
-      { name: "CPU Performance", tooltip: "Higher is better" },
-      { name: "SLA Uptime", tooltip: "Guaranteed server uptime" },
-      { name: "Storage Type", tooltip: "Type of storage used" },
-      { name: "Network Speed", tooltip: "Maximum network throughput" }
-    ],
-    "Features": [
-      { name: "Automated Backups", tooltip: "Regular system backups" },
-      { name: "Multiple OS Options", tooltip: "Choice of operating systems" },
-      { name: "Root Access", tooltip: "Full administrator access" },
-      { name: "Dedicated Resources", tooltip: "Non-shared CPU & RAM" }
-    ],
-    "Support": [
-      { name: "24/7 Technical Support", tooltip: "Round-the-clock assistance" },
-      { name: "Response Time", tooltip: "Average time to first response" },
-      { name: "Managed Services", tooltip: "We handle maintenance & updates" },
-      { name: "Priority Support Queue", tooltip: "Jump ahead in support queue" }
-    ]
-  };
-
-  const renderIcon = (status: string) => {
-    switch (status) {
-      case "check":
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case "x":
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      case "partial":
-        return <HelpCircle className="h-5 w-5 text-amber-500" />;
-      default:
-        return null;
-    }
+  // Function to render the feature value with appropriate icon
+  const renderFeatureValue = (status: string, value: string) => {
+    const icon = status === "check" ? 
+      <CheckCircle className="h-5 w-5 text-green-500" /> : 
+      status === "x" ? 
+      <XCircle className="h-5 w-5 text-red-500" /> : 
+      <HelpCircle className="h-5 w-5 text-amber-500" />;
+    
+    return (
+      <div className="flex items-center space-x-2">
+        {icon}
+        <span>{value}</span>
+      </div>
+    );
   };
 
   return (
@@ -186,11 +159,16 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
         {plans.map((plan, index) => (
           <div 
             key={index}
-            className="transition-all duration-300 transform hover:scale-105 flex"
+            className={`transition-all duration-300 transform ${selectedPlan === plan.name ? 'scale-105' : 'hover:scale-105'} flex`}
+            onClick={() => setSelectedPlan(plan.name)}
           >
             {/* Flex-grow to make all cards the same height, and full height */}
-            <div className="border border-gray-300 rounded-xl shadow-sm flex-grow flex flex-col">
-              <PricingCard plan={plan} />
+            <div className={`border ${selectedPlan === plan.name ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'} rounded-xl shadow-sm flex-grow flex flex-col`}>
+              <PricingCard 
+                plan={plan} 
+                selected={selectedPlan === plan.name} 
+                onClick={() => setSelectedPlan(plan.name)}
+              />
             </div>
           </div>
         ))}
@@ -204,118 +182,139 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
               See what's included in your selected plan
             </p>
           </div>
-          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-2 md:p-4 border border-gray-200 dark:border-gray-700 shadow-sm w-full overflow-x-auto">
-            <Tabs 
-              value={selectedPlan} 
-              onValueChange={setSelectedPlan} 
-              className="w-full"
-            >
-              <TabsList className="w-full flex justify-center mb-6 bg-transparent overflow-x-auto p-1 md:p-0 space-x-2">
+          
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 md:p-8 border border-gray-200 dark:border-gray-700 shadow-sm w-full">
+            {/* Plan Selection Pills */}
+            <div className="flex justify-center mb-10 overflow-x-auto">
+              <div className="inline-flex bg-white dark:bg-gray-900 p-1 rounded-lg shadow-sm">
                 {plans.map((plan, index) => (
-                  <TabsTrigger 
-                    key={index} 
-                    value={plan.name}
-                    className={`px-4 py-2 rounded-lg font-medium 
-                      ${plan.popular ? 'data-[state=active]:bg-blue-600 data-[state=active]:text-white' : 
-                      'data-[state=active]:bg-gray-200 dark:data-[state=active]:bg-gray-700'}`}
+                  <button
+                    key={index}
+                    onClick={() => setSelectedPlan(plan.name)}
+                    className={`px-5 py-2 rounded-lg font-medium text-sm md:text-base whitespace-nowrap
+                      ${selectedPlan === plan.name 
+                        ? plan.popular 
+                          ? 'bg-blue-600 text-white' 
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white' 
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      } relative flex items-center`}
                   >
                     {plan.name}
                     {plan.popular && (
-                      <span className="ml-2 text-xs font-semibold bg-green-500 text-white px-2 py-0.5 rounded-full">Popular</span>
+                      <span className="ml-2 text-[0.65rem] absolute -top-2 right-1 font-semibold bg-green-500 text-white px-1.5 py-0.5 rounded-full">
+                        Popular
+                      </span>
                     )}
-                  </TabsTrigger>
+                  </button>
                 ))}
-              </TabsList>
+              </div>
+            </div>
+
+            {/* Plan Detail Card */}
+            <div className="bg-white dark:bg-gray-900 rounded-lg p-6 shadow-sm border border-gray-100 dark:border-gray-800">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{currentPlan.name} Plan</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mt-1">
+                    {settings.currency.symbol}{currentPlan.price}/month
+                  </p>
+                </div>
+                <Link to="/configure" className="mt-4 md:mt-0">
+                  <Button className="bg-blue-600 hover:bg-blue-500 text-white">
+                    Choose {currentPlan.name}
+                  </Button>
+                </Link>
+              </div>
               
-              {plans.map((plan, index) => (
-                <TabsContent key={index} value={plan.name} className="space-y-6">
-                  <div className="bg-white dark:bg-gray-900 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-gray-800">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-                      <div>
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{plan.name} Plan</h3>
-                        <p className="text-gray-600 dark:text-gray-400 mt-1">
-                          {settings.currency.symbol}{plan.price}/month
-                        </p>
-                      </div>
-                      <Link to="/configure" className="mt-4 md:mt-0">
-                        <Button className="bg-blue-600 hover:bg-blue-500 text-white">
-                          Choose {plan.name}
-                        </Button>
-                      </Link>
+              <div className="grid md:grid-cols-3 gap-6 mb-10">
+                <div className="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">CPU</p>
+                  <p className="text-xl font-semibold text-gray-900 dark:text-white">{currentPlan.cpu}</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">RAM</p>
+                  <p className="text-xl font-semibold text-gray-900 dark:text-white">{currentPlan.ram}</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-5 rounded-lg">
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Storage</p>
+                  <p className="text-xl font-semibold text-gray-900 dark:text-white">{currentPlan.storage}</p>
+                </div>
+              </div>
+              
+              <Accordion type="single" collapsible className="space-y-4">
+                <AccordionItem value="performance" className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                  <AccordionTrigger className="px-5 py-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    Performance
+                  </AccordionTrigger>
+                  <AccordionContent className="px-5 py-4 bg-white dark:bg-gray-900">
+                    <div className="space-y-4">
+                      {["CPU Performance", "SLA Uptime", "Storage Type", "Network Speed"].map((feature, i) => {
+                        const planKey = currentPlan.name as keyof typeof planValues;
+                        const featureKey = feature as keyof typeof planValues["Basic"];
+                        const featureData = planValues[planKey]?.[featureKey];
+                        
+                        if (!featureData) return null;
+                        
+                        return (
+                          <div key={i} className="flex justify-between items-center space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
+                            <p className="font-medium text-gray-800 dark:text-gray-200">{feature}</p>
+                            {featureData && renderFeatureValue(featureData.status, featureData.value)}
+                          </div>
+                        );
+                      })}
                     </div>
-                    <div className="grid md:grid-cols-3 gap-4 mb-6">
-                      <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">CPU</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{plan.cpu}</p>
-                      </div>
-                      <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">RAM</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{plan.ram}</p>
-                      </div>
-                      <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Storage</p>
-                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{plan.storage}</p>
-                      </div>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="features" className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                  <AccordionTrigger className="px-5 py-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    Features
+                  </AccordionTrigger>
+                  <AccordionContent className="px-5 py-4 bg-white dark:bg-gray-900">
+                    <div className="space-y-4">
+                      {["Automated Backups", "Multiple OS Options", "Root Access", "Dedicated Resources"].map((feature, i) => {
+                        const planKey = currentPlan.name as keyof typeof planValues;
+                        const featureKey = feature as keyof typeof planValues["Basic"];
+                        const featureData = planValues[planKey]?.[featureKey];
+                        
+                        if (!featureData) return null;
+                        
+                        return (
+                          <div key={i} className="flex justify-between items-center space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
+                            <p className="font-medium text-gray-800 dark:text-gray-200">{feature}</p>
+                            {featureData && renderFeatureValue(featureData.status, featureData.value)}
+                          </div>
+                        );
+                      })}
                     </div>
-                    <div>
-                      {Object.entries(featureCategories).map(([category, features], i) => (
-                        <Collapsible
-                          key={category}
-                          open={openCategories[category]}
-                          onOpenChange={() => toggleCategory(category)}
-                          className="mb-4 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
-                        >
-                          <CollapsibleTrigger className="w-full flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 text-left">
-                            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">{category}</h4>
-                            {openCategories[category] ? 
-                              <ChevronUp className="h-5 w-5 text-gray-500 dark:text-gray-400" /> : 
-                              <ChevronDown className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                            }
-                          </CollapsibleTrigger>
-                          <CollapsibleContent>
-                            <div className="p-4 space-y-3">
-                              {features.map((feature, j) => {
-                                // Safely access feature data
-                                const planKey = plan.name as keyof typeof planValues;
-                                const featureKey = feature.name as keyof typeof planValues["Basic"];
-                                const featureData = planValues[planKey]?.[featureKey];
-                                
-                                if (featureData?.status === 'x') return null;
-                                
-                                return (
-                                  <div key={j} className="flex items-start space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg">
-                                    <div className="mt-0.5">
-                                      {featureData && renderIcon(featureData.status)}
-                                    </div>
-                                    <div>
-                                      <TooltipProvider>
-                                        <Tooltip>
-                                          <TooltipTrigger asChild>
-                                            <p className="font-medium text-gray-800 dark:text-gray-200 cursor-help">
-                                              {feature.name}
-                                            </p>
-                                          </TooltipTrigger>
-                                          <TooltipContent side="right">
-                                            <p>{feature.tooltip}</p>
-                                          </TooltipContent>
-                                        </Tooltip>
-                                      </TooltipProvider>
-                                      {featureData && (
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">{featureData.value}</p>
-                                      )}
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </CollapsibleContent>
-                        </Collapsible>
-                      ))}
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="support" className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                  <AccordionTrigger className="px-5 py-4 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    Support
+                  </AccordionTrigger>
+                  <AccordionContent className="px-5 py-4 bg-white dark:bg-gray-900">
+                    <div className="space-y-4">
+                      {["24/7 Technical Support", "Response Time", "Managed Services", "Priority Support Queue"].map((feature, i) => {
+                        const planKey = currentPlan.name as keyof typeof planValues;
+                        const featureKey = feature as keyof typeof planValues["Basic"];
+                        const featureData = planValues[planKey]?.[featureKey];
+                        
+                        if (!featureData) return null;
+                        
+                        return (
+                          <div key={i} className="flex justify-between items-center space-x-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
+                            <p className="font-medium text-gray-800 dark:text-gray-200">{feature}</p>
+                            {featureData && renderFeatureValue(featureData.status, featureData.value)}
+                          </div>
+                        );
+                      })}
                     </div>
-                  </div>
-                </TabsContent>
-              ))}
-            </Tabs>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
           </div>
         </div>
       )}

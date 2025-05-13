@@ -22,68 +22,77 @@ const Feature = ({ icon, title, description }: FeatureProps) => {
 
 const FeatureHighlightSection = () => {
   return (
-    <section className="w-full bg-white dark:bg-gray-950 py-16">
+    <section className="w-full bg-black text-white py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
           <div className="inline-block rounded-lg bg-blue-600 px-4 py-2 mb-4">
-            <h2 className="text-xl font-bold text-white">Enterprise-grade RDP Solutions</h2>
+            <h2 className="text-xl font-bold text-white">Privacy-focused Windows RDPs</h2>
           </div>
-          <h3 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white md:text-4xl mb-6">
-            Premium performance with uncompromising reliability
-          </h3>
-          <p className="max-w-3xl text-xl text-gray-600 dark:text-gray-300">
-            Experience enterprise-level Windows and Linux environments with guaranteed resources, 
-            deployed instantly with complete administrative control and unlimited bandwidth.
+          
+          <p className="max-w-3xl text-xl mb-6">
+            Experience premium performance with our customizable Windows RDPs.
+            Deployed instantly with full admin/root access and unmetered bandwidth.
           </p>
+          
+          <div className="space-y-3 mt-6">
+            <div className="flex items-center gap-2">
+              <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              <span className="text-gray-300">Dedicated resources with guaranteed performance</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              <span className="text-gray-300">Instant deployment after payment</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              <span className="text-gray-300">Full administrative control</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              <span className="text-gray-300">DMCA ignored hosting</span>
+            </div>
+          </div>
         </div>
         
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-          <Feature
-            icon={<Zap size={24} />}
-            title="Rapid Deployment"
-            description="Servers provisioned within minutes after payment confirmation for immediate access to your environment."
-          />
-          <Feature
-            icon={<Shield size={24} />}
-            title="Complete Privacy"
-            description="Dedicated resources with guaranteed CPU and RAM allocation for consistent performance."
-          />
-          <Feature
-            icon={<MonitorCheck size={24} />}
-            title="Full Administrative Access"
-            description="Total control with administrator/root privileges for complete customization of your server."
-          />
-          <Feature
-            icon={<Globe size={24} />}
-            title="Global Infrastructure"
-            description="Strategic data center locations worldwide ensuring optimal latency and connectivity."
-          />
-        </div>
-
-        <div className="mt-8 space-y-4">
-          <div className="flex items-center space-x-2">
-            <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-            <span className="text-gray-700 dark:text-gray-300">Guaranteed resource allocation with no overselling</span>
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 mt-12">
+          <div className="space-y-3">
+            <div className="bg-blue-900/30 rounded-full p-3 w-12 h-12 flex items-center justify-center">
+              <Zap className="h-6 w-6 text-blue-400" />
+            </div>
+            <h3 className="text-xl font-bold">Instant Deployment</h3>
+            <p className="text-gray-400">Servers ready within minutes after payment confirmation.</p>
           </div>
-          <div className="flex items-center space-x-2">
-            <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-            <span className="text-gray-700 dark:text-gray-300">Unmetered bandwidth with no transfer limits</span>
+          
+          <div className="space-y-3">
+            <div className="bg-blue-900/30 rounded-full p-3 w-12 h-12 flex items-center justify-center">
+              <Shield className="h-6 w-6 text-blue-400" />
+            </div>
+            <h3 className="text-xl font-bold">100% Private</h3>
+            <p className="text-gray-400">Dedicated resources with guaranteed CPU and RAM.</p>
           </div>
-          <div className="flex items-center space-x-2">
-            <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-            <span className="text-gray-700 dark:text-gray-300">Premium network connectivity with 99.9% uptime guarantee</span>
+          
+          <div className="space-y-3">
+            <div className="bg-blue-900/30 rounded-full p-3 w-12 h-12 flex items-center justify-center">
+              <MonitorCheck className="h-6 w-6 text-blue-400" />
+            </div>
+            <h3 className="text-xl font-bold">Full Admin Access</h3>
+            <p className="text-gray-400">Complete control with administrator privileges.</p>
           </div>
-          <div className="flex items-center space-x-2">
-            <svg className="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-            <span className="text-gray-700 dark:text-gray-300">Advanced security with DDoS protection included</span>
+          
+          <div className="space-y-3">
+            <div className="bg-blue-900/30 rounded-full p-3 w-12 h-12 flex items-center justify-center">
+              <Globe className="h-6 w-6 text-blue-400" />
+            </div>
+            <h3 className="text-xl font-bold">Global Network</h3>
+            <p className="text-gray-400">Multiple data center locations for optimal latency.</p>
           </div>
         </div>
       </div>

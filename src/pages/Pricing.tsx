@@ -141,21 +141,22 @@ const PricingPage = () => {
   const [tab, setTab] = useState<"windows" | "linux">("windows");
 
   return (
-    <div className="min-h-screen flex flex-col bg-white w-full">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 w-full">
       <Navbar />
-      <div className="pt-16 bg-white dark:bg-rdp-dark py-16 flex-grow w-full">
-        <div className="w-full px-2 sm:px-6 lg:px-8">
+      <div className="pt-16 bg-white dark:bg-gray-950 py-16 flex-grow w-full">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h1 className="text-4xl font-bold tracking-tight text-rdp-dark dark:text-white sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl lg:text-6xl">
               Simple, transparent pricing for everyone
             </h1>
-            <p className="mt-6 text-xl text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
+            <p className="mt-6 text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
               Choose the plan that works best for you. All plans include 24/7 support and a 99.9% uptime guarantee.
             </p>
           </div>
+          
           <div className="flex justify-center mb-10">
-            <Tabs value={tab} onValueChange={(v) => setTab(v as "windows" | "linux")}>
-              <TabsList className="bg-gray-100 dark:bg-[#181927] p-1 rounded-lg w-fit gap-2">
+            <Tabs value={tab} onValueChange={(v) => setTab(v as "windows" | "linux")} className="w-full">
+              <TabsList className="bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-fit gap-2 mx-auto">
                 <TabsTrigger
                   value="windows"
                   className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white px-5 py-2 rounded-lg"
@@ -171,18 +172,21 @@ const PricingPage = () => {
                   Linux
                 </TabsTrigger>
               </TabsList>
-              <TabsContent value="windows" className="w-full">
-                <PricingSection plans={windowsPlans} showDetailedComparison={true} />
-              </TabsContent>
-              <TabsContent value="linux" className="w-full">
-                <PricingSection plans={linuxPlans} showDetailedComparison={true} />
-              </TabsContent>
+              
+              <div className="mt-8">
+                <TabsContent value="windows" className="w-full">
+                  <PricingSection plans={windowsPlans} showDetailedComparison={true} />
+                </TabsContent>
+                <TabsContent value="linux" className="w-full">
+                  <PricingSection plans={linuxPlans} showDetailedComparison={true} />
+                </TabsContent>
+              </div>
             </Tabs>
           </div>
         </div>
       </div>
       
-      {/* Add the new FeatureHighlightSection above HomeFAQ */}
+      {/* Add the FeatureHighlightSection above HomeFAQ */}
       <FeatureHighlightSection />
       
       <HomeFAQ />
