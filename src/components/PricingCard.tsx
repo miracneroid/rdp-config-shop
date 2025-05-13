@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +25,9 @@ const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
   const { addToCart } = useCart();
   const { settings } = useSettings();
 
-  const handleChoosePlan = () => {
+  const handleChoosePlan = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering parent onClick
+    
     const cpuCores = parseInt(plan.cpu.split(' ')[0]) || 2;
     const ramGB = parseInt(plan.ram.split(' ')[0]) || 4;
     const storageGB = parseInt(plan.storage.split(' ')[0]) || 64;
@@ -103,10 +104,7 @@ const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
       </div>
 
       <button
-        onClick={(e) => {
-          e.stopPropagation();
-          handleChoosePlan();
-        }}
+        onClick={handleChoosePlan}
         className={`mt-8 w-full py-3 px-6 rounded-lg font-medium transition-all duration-300
           ${selected
             ? 'bg-blue-600 text-white hover:bg-blue-700'
