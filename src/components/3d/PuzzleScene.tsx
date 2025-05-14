@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { PuzzlePiece } from './PuzzlePiece';
 
@@ -8,20 +8,20 @@ interface PuzzleSceneProps {
   interactive?: boolean;
 }
 
-// Initial positions for puzzle pieces to form a pattern
+// Initial positions for puzzle pieces to form a pillar
 const initialPositions = [
-  // Center piece
-  { position: [0, 0, 0], color: '#6366f1', rotation: [0.1, 0.2, 0] },
-  // Surrounding pieces
-  { position: [1.5, 0, 0], color: '#818cf8', rotation: [0.2, 0, 0.1] },
-  { position: [-1.5, 0, 0], color: '#6366f1', rotation: [0.3, 0.1, 0] },
-  { position: [0, 0, 1.5], color: '#818cf8', rotation: [0, 0.3, 0.1] },
-  { position: [0, 0, -1.5], color: '#6366f1', rotation: [0.1, 0.4, 0] },
-  // Second layer
-  { position: [0, 1.5, 0], color: '#9b87f5', rotation: [0.2, 0.3, 0.1] },
-  { position: [1.5, 1.5, 0], color: '#7E69AB', rotation: [0.1, 0.2, 0.3] },
-  { position: [-1.5, 1.5, 0], color: '#9b87f5', rotation: [0, 0.1, 0.2] },
-  { position: [0, 1.5, 1.5], color: '#7E69AB', rotation: [0.3, 0, 0.1] },
+  // Bottom to top (stacked vertically)
+  { position: [0, -3, 0], color: '#6366f1', rotation: [0.1, 0.2, 0] },
+  { position: [0, -1.5, 0], color: '#818cf8', rotation: [0.2, 0, 0.1] },
+  { position: [0, 0, 0], color: '#9b87f5', rotation: [0.3, 0.1, 0] },
+  { position: [0, 1.5, 0], color: '#7E69AB', rotation: [0, 0.3, 0.1] },
+  { position: [0, 3, 0], color: '#8B5CF6', rotation: [0.1, 0.4, 0] },
+  
+  // Small pieces orbiting (will move in animation)
+  { position: [2, -2, 0], color: '#7E69AB', rotation: [0.2, 0.3, 0.1] },
+  { position: [-2, 0, -2], color: '#818cf8', rotation: [0.1, 0.2, 0.3] },
+  { position: [2, 2, 2], color: '#9b87f5', rotation: [0, 0.1, 0.2] },
+  { position: [-2, 3, 1], color: '#6366f1', rotation: [0.3, 0, 0.1] },
 ];
 
 const CameraController: React.FC = () => {
@@ -31,7 +31,7 @@ const CameraController: React.FC = () => {
   useEffect(() => {
     if (controlsRef.current) {
       // Set initial camera position
-      camera.position.set(5, 4, 5);
+      camera.position.set(5, 0, 8);
       camera.lookAt(0, 0, 0);
     }
   }, [camera]);
@@ -43,11 +43,74 @@ const CameraController: React.FC = () => {
       enableZoom={true}
       enablePan={false}
       enableRotate={true}
-      minDistance={4}
-      maxDistance={10}
+      minDistance={5}
+      maxDistance={15}
       autoRotate
       autoRotateSpeed={0.5}
     />
+  );
+};
+
+// Animation component for orbital pieces
+const AnimatedPieces: React.FC<{
+  positions: typeof initialPositions;
+  onHover: (index: number | null) => void;
+  onClick: (index: number) => void;
+  hoveredPiece: number | null;
+  clickedPieces: number[];
+  interactive: boolean;
+}> = ({ positions, onHover, onClick, hoveredPiece, clickedPieces, interactive }) => {
+  // References for the moving pieces (indices 5-8 in our array)
+  const movingPiecesIndices = [5, 6, 7, 8];
+  
+  // Use frame for animation
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    
+    // Animate only the orbital pieces (last 4)
+    movingPiecesIndices.forEach((index, i) => {
+      const pieceRef = document.querySelector(`[data-piece-index="${index}"]`);
+      if (pieceRef) {
+        const mesh = (pieceRef as any).__r3f.root.getState().scene.children.find(
+          (c: any) => c.userData && c.userData.index === index
+        );
+        
+        if (mesh) {
+          // Create orbital animation with some variation
+          const offset = i * (Math.PI / 2); // Offset each piece in the orbit
+          const radius = 3 + i * 0.3; // Slightly different radii
+          const height = Math.sin(t * 0.3 + i) * 2; // Vertical movement
+          
+          mesh.position.x = Math.cos(t * 0.5 + offset) * radius;
+          mesh.position.z = Math.sin(t * 0.5 + offset) * radius;
+          mesh.position.y = positions[index].position[1] + height * 0.3;
+          
+          // Additional rotation animation
+          mesh.rotation.x += 0.003;
+          mesh.rotation.y += 0.005;
+        }
+      }
+    });
+  });
+  
+  return (
+    <>
+      {positions.map((props, i) => (
+        <PuzzlePiece
+          key={i}
+          position={props.position as [number, number, number]}
+          rotation={props.rotation as [number, number, number]}
+          color={props.color}
+          scale={1}
+          hovered={hoveredPiece === i}
+          onClick={() => onClick(i)}
+          onPointerOver={() => interactive && onHover(i)}
+          onPointerOut={() => interactive && onHover(null)}
+          userData={{ index: i }}
+          data-piece-index={i}
+        />
+      ))}
+    </>
   );
 };
 
@@ -75,7 +138,7 @@ export const PuzzleScene: React.FC<PuzzleSceneProps> = ({
   return (
     <div className="w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden shadow-xl">
       <Canvas
-        camera={{ position: [5, 4, 5], fov: 50 }}
+        camera={{ position: [5, 0, 8], fov: 50 }}
         dpr={[1, 2]}
         style={{ background: 'transparent' }}
       >
@@ -89,19 +152,14 @@ export const PuzzleScene: React.FC<PuzzleSceneProps> = ({
         
         <CameraController />
         
-        {initialPositions.map((props, i) => (
-          <PuzzlePiece
-            key={i}
-            position={props.position as [number, number, number]}
-            rotation={props.rotation as [number, number, number]}
-            color={props.color}
-            scale={1}
-            hovered={hoveredPiece === i}
-            onClick={() => handlePieceClick(i)}
-            onPointerOver={() => interactive && setHoveredPiece(i)}
-            onPointerOut={() => interactive && setHoveredPiece(null)}
-          />
-        ))}
+        <AnimatedPieces 
+          positions={initialPositions}
+          onHover={setHoveredPiece}
+          onClick={handlePieceClick}
+          hoveredPiece={hoveredPiece}
+          clickedPieces={clickedPieces}
+          interactive={interactive}
+        />
       </Canvas>
     </div>
   );

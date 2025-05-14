@@ -10,7 +10,7 @@ const InteractivePuzzle: React.FC<InteractivePuzzleProps> = ({ className }) => {
   console.log("Rendering InteractivePuzzle component");
   
   return (
-    <div className={`${className || ''} w-full bg-transparent`}>
+    <div className={`${className || ''} w-full bg-transparent relative`}>
       <PuzzleScene interactive={true} />
       <div className="absolute bottom-4 right-4 text-white/70 text-sm flex items-center">
         <span className="mr-2">Click and drag to rotate</span>

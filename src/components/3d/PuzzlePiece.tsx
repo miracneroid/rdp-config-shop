@@ -12,6 +12,8 @@ interface PuzzlePieceProps {
   hovered?: boolean;
   onPointerOver?: () => void;
   onPointerOut?: () => void;
+  userData?: any;
+  "data-piece-index"?: number;
 }
 
 // Simple cube mesh representing a puzzle piece
@@ -23,21 +25,25 @@ export const PuzzlePiece: React.FC<PuzzlePieceProps> = ({
   onClick,
   hovered = false,
   onPointerOver,
-  onPointerOut
+  onPointerOut,
+  userData,
+  "data-piece-index": dataPieceIndex
 }) => {
   const meshRef = useRef<Mesh>(null);
   
-  // Subtle animation
+  // Subtle animation for main pillar pieces (not the orbital ones)
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.rotation.x = rotation[0] + Math.sin(state.clock.getElapsedTime() * 0.5) * 0.05;
-      meshRef.current.rotation.y = rotation[1] + Math.sin(state.clock.getElapsedTime() * 0.3) * 0.05;
+      // Only apply subtle animation to the main stack pieces (0-4)
+      if (dataPieceIndex !== undefined && dataPieceIndex < 5) {
+        meshRef.current.rotation.x = rotation[0] + Math.sin(state.clock.getElapsedTime() * 0.5) * 0.05;
+        meshRef.current.rotation.y = rotation[1] + Math.sin(state.clock.getElapsedTime() * 0.3) * 0.05;
+      }
+      
       // Apply scale based on hover state
       meshRef.current.scale.x = meshRef.current.scale.y = meshRef.current.scale.z = hovered ? scale * 1.1 : scale;
     }
   });
-
-  console.log("Rendering PuzzlePiece at position:", position);
 
   return (
     <mesh 
@@ -46,29 +52,33 @@ export const PuzzlePiece: React.FC<PuzzlePieceProps> = ({
       onClick={onClick}
       onPointerOver={onPointerOver}
       onPointerOut={onPointerOut}
+      userData={userData}
+      data-piece-index={dataPieceIndex}
     >
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial 
         color={hovered ? '#8B5CF6' : color}
         transparent
         opacity={0.8}
+        metalness={0.3}
+        roughness={0.4}
       />
       {/* Top cylinders (studs) */}
       <mesh position={[0.25, 0.5, 0.25]}>
         <cylinderGeometry args={[0.18, 0.18, 0.2, 16]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} metalness={0.5} roughness={0.3} />
       </mesh>
       <mesh position={[-0.25, 0.5, 0.25]}>
         <cylinderGeometry args={[0.18, 0.18, 0.2, 16]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} metalness={0.5} roughness={0.3} />
       </mesh>
       <mesh position={[0.25, 0.5, -0.25]}>
         <cylinderGeometry args={[0.18, 0.18, 0.2, 16]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} metalness={0.5} roughness={0.3} />
       </mesh>
       <mesh position={[-0.25, 0.5, -0.25]}>
         <cylinderGeometry args={[0.18, 0.18, 0.2, 16]} />
-        <meshStandardMaterial color={color} />
+        <meshStandardMaterial color={color} metalness={0.5} roughness={0.3} />
       </mesh>
     </mesh>
   );
