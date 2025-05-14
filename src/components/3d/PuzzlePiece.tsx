@@ -43,6 +43,8 @@ export const PuzzlePiece: React.FC<PuzzlePieceProps> = ({
     }
   });
 
+  console.log("Rendering PuzzlePiece at position:", position);
+
   return (
     <animated.mesh 
       ref={meshRef} 

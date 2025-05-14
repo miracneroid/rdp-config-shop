@@ -7,6 +7,8 @@ interface InteractivePuzzleProps {
 }
 
 const InteractivePuzzle: React.FC<InteractivePuzzleProps> = ({ className }) => {
+  console.log("Rendering InteractivePuzzle component");
+  
   return (
     <div className={`${className || ''} relative`}>
       <PuzzleScene interactive={true} />

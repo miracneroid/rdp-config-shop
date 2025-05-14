@@ -1,6 +1,5 @@
 
-import { useSpring as useReactSpring } from 'react-spring';
-import { animated as reactAnimated } from 'react-spring';
+import { useSpring as useReactSpring, animated as reactAnimated } from 'react-spring';
 import * as THREE from 'three';
 
 // Create a simplified version that works with ThreeJS elements

@@ -1,10 +1,12 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import InteractivePuzzle from './3d/InteractivePuzzle';
 
 const HeroWithPuzzle: React.FC = () => {
+  console.log("Rendering HeroWithPuzzle component");
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-16 pb-12 overflow-hidden bg-gradient-to-b from-[#0a0a29] via-[#121242] to-[#1a1a3a]">
       {/* Gradient blobs */}

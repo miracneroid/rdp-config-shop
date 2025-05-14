@@ -56,8 +56,11 @@ export const PuzzleScene: React.FC<PuzzleSceneProps> = ({
 }) => {
   const [hoveredPiece, setHoveredPiece] = useState<number | null>(null);
   const [clickedPieces, setClickedPieces] = useState<number[]>([]);
+  
+  console.log("Rendering PuzzleScene with interactive:", interactive);
 
   const handlePieceClick = (index: number) => {
+    console.log("Piece clicked:", index);
     if (!interactive) return;
     
     setClickedPieces(prev => {
