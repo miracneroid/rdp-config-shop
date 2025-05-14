@@ -1,4 +1,5 @@
-
+// We're not using this file anymore as we've simplified the approach
+// But keeping it to avoid breaking imports
 import { useSpring as useReactSpring, animated as reactAnimated } from 'react-spring';
 import * as THREE from 'three';
 

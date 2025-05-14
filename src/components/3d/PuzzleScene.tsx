@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { PuzzlePiece } from './PuzzlePiece';
 
 interface PuzzleSceneProps {
@@ -74,17 +74,20 @@ export const PuzzleScene: React.FC<PuzzleSceneProps> = ({
 
   return (
     <div className="w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden shadow-xl">
-      <Canvas shadows dpr={[1, 2]}>
-        <CameraController />
+      <Canvas
+        camera={{ position: [5, 4, 5], fov: 50 }}
+        dpr={[1, 2]}
+        style={{ background: 'transparent' }}
+      >
         <ambientLight intensity={0.6} />
         <directionalLight 
           position={[10, 10, 10]} 
           intensity={1} 
           castShadow
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
         />
         <spotLight position={[-10, -10, -10]} intensity={0.5} />
+        
+        <CameraController />
         
         {initialPositions.map((props, i) => (
           <PuzzlePiece
