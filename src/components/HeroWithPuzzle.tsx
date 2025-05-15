@@ -58,7 +58,7 @@ const HeroWithPuzzle: React.FC = () => {
             </div>
           </div>
           
-          {/* Right column: 3D Puzzle */}
+          {/* Right column: 3D Model (now Spline) */}
           <div className="order-first lg:order-last mb-8 lg:mb-0">
             <InteractivePuzzle />
           </div>

@@ -1,17 +1,19 @@
 
 import React from 'react';
-import { PuzzleScene } from './PuzzleScene';
+import Spline from '@splinetool/react-spline';
 
 interface InteractivePuzzleProps {
   className?: string;
 }
 
 const InteractivePuzzle: React.FC<InteractivePuzzleProps> = ({ className }) => {
-  console.log("Rendering InteractivePuzzle component");
+  console.log("Rendering InteractivePuzzle component with Spline");
   
   return (
-    <div className={`${className || ''} w-full bg-transparent relative`}>
-      <PuzzleScene interactive={true} />
+    <div className={`${className || ''} w-full h-[400px] md:h-[500px] bg-transparent relative`}>
+      <Spline
+        scene="https://prod.spline.design/cHlEY0DC2bYYtcYw/scene.splinecode" 
+      />
       <div className="absolute bottom-4 right-4 text-white/70 text-sm flex items-center">
         <span className="mr-2">Click and drag to rotate</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
