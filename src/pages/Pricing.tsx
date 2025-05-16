@@ -1,14 +1,13 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Check, ShieldCheck, Info } from "lucide-react";
+import { Check, ShieldCheck, Info, Code, Ban, HeadphonesIcon } from "lucide-react";
 import SimpleFooter from "@/components/SimpleFooter";
 import HomeFAQ from "@/components/HomeFAQ";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
+import PlanComparisonTable from "@/components/PlanComparisonTable";
 
 const PricingPage: React.FC = () => {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annually">("monthly");
@@ -18,6 +17,7 @@ const PricingPage: React.FC = () => {
       name: "Personal",
       icon: "circle",
       price: "Free",
+      iconColor: "[#4cc9f0]",
       description: "For individuals who want to securely connect personal devices, for free.",
       features: ["1 device"],
       buttonText: "Try Now",
@@ -28,6 +28,7 @@ const PricingPage: React.FC = () => {
       name: "Starter",
       icon: "square",
       price: "$2.99",
+      iconColor: "[#da7dff]",
       description: "For teams or organizations looking for an easy-to-use, secure, legacy VPN replacement.",
       features: ["Covers 5 devices"],
       buttonText: "Subscribe Now",
@@ -40,6 +41,7 @@ const PricingPage: React.FC = () => {
       name: "Premium",
       icon: "diamond",
       price: "$6.99",
+      iconColor: "[#926dff]",
       description: "For companies who need service and resource level authentication and access control.",
       features: ["Covers 10 devices"],
       buttonText: "Subscribe Now",
@@ -99,8 +101,10 @@ const PricingPage: React.FC = () => {
 
       {/* Pricing Section */}
       <div className="relative z-10 pt-24 pb-20 px-4 max-w-7xl mx-auto">
+        {/* Pricing title and tagline exactly as shown in screenshot */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+          <p className="text-blue-400 mb-4">Pricing</p>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
             Security. Privacy. Freedom.<br />
             for Everyone.
           </h1>
@@ -108,6 +112,27 @@ const PricingPage: React.FC = () => {
             Select a VPN plan to access your favorite content with lightning speed 
             and unlimited data.
           </p>
+          
+          {/* Feature pills */}
+          <div className="flex flex-wrap justify-center gap-4 mb-16">
+            <div className="flex items-center text-sm text-gray-300 bg-[#1e1e3a] px-4 py-2 rounded-full">
+              <Code size={16} className="mr-2" /> Open source
+            </div>
+            <div className="flex items-center text-sm text-gray-300 bg-[#1e1e3a] px-4 py-2 rounded-full">
+              <Ban size={16} className="mr-2" /> No-logs policy
+            </div>
+            <div className="flex items-center text-sm text-gray-300 bg-[#1e1e3a] px-4 py-2 rounded-full">
+              <HeadphonesIcon size={16} className="mr-2" /> 24/7 Live support
+            </div>
+          </div>
+          
+          {/* Curved line */}
+          <div className="relative w-full max-w-4xl mx-auto my-12">
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
+            <div 
+              className="absolute w-full h-12 border-t-0 border-x-0 border-b-2 border-gray-600/20 rounded-[50%]" 
+              style={{ top: "-24px" }}></div>
+          </div>
           
           {/* Billing toggle */}
           <div className="flex items-center justify-center mb-16">
@@ -231,7 +256,7 @@ const PricingPage: React.FC = () => {
           </div>
         </div>
         
-        {/* Compare Plans Section - New design based on reference image */}
+        {/* Compare Plans Section */}
         <div className="py-16">
           <div className="flex flex-col md:flex-row gap-10">
             {/* Left column: Compare Plans title */}
@@ -241,71 +266,7 @@ const PricingPage: React.FC = () => {
             
             {/* Right column: Comparison table */}
             <div className="w-full md:w-3/4">
-              <div className="grid grid-cols-4 gap-4">
-                {/* Headers for each plan */}
-                <div className="col-span-1"></div> {/* Empty space for features column */}
-                {plans.map((plan, index) => (
-                  <div key={index} className="p-3 flex flex-col items-center">
-                    {/* Plan icon */}
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      index === 0 ? 'bg-[#4cc9f0]' : 
-                      index === 1 ? 'bg-[#da7dff]' : 
-                      'bg-[#926dff]'
-                    }`}>
-                      {index === 0 && <div className="bg-[#4cc9f0] rounded-full w-10 h-10"></div>}
-                      {index === 1 && <div className="bg-[#da7dff] rounded-md w-10 h-10"></div>}
-                      {index === 2 && <div className="bg-[#926dff] rounded-md w-10 h-10"></div>}
-                    </div>
-                    
-                    {/* Plan name */}
-                    <h3 className="text-lg font-bold mt-2">{plan.name}</h3>
-                    
-                    {/* Plan price */}
-                    <div className="mt-2">
-                      <span className="text-2xl font-bold">{plan.price}</span>
-                      {plan.price !== "Free" && <span className="text-sm text-gray-400">/ month</span>}
-                    </div>
-                  </div>
-                ))}
-                
-                {/* Feature rows */}
-                {features.map((feature, idx) => (
-                  <React.Fragment key={idx}>
-                    <div className="col-span-1 flex items-center text-sm py-3 border-t border-[#222233]">
-                      <div className="flex items-center">
-                        <span className="text-gray-300">{feature.name}</span>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Info size={14} className="ml-2 text-gray-500 cursor-help" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{feature.tooltip}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </div>
-                    </div>
-                    
-                    {/* Check for each plan */}
-                    {plans.map((plan, planIdx) => {
-                      const planName = plan.name as keyof typeof featureAvailability;
-                      const isAvailable = featureAvailability[planName][idx];
-                      
-                      return (
-                        <div 
-                          key={`${idx}-${planIdx}`} 
-                          className="col-span-1 flex justify-center items-center py-3 border-t border-[#222233]"
-                        >
-                          {isAvailable ? (
-                            <Check className="h-5 w-5 text-white" />
-                          ) : null}
-                        </div>
-                      );
-                    })}
-                  </React.Fragment>
-                ))}
-              </div>
+              <PlanComparisonTable />
             </div>
           </div>
         </div>
