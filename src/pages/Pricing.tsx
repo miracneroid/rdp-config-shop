@@ -5,7 +5,7 @@ import PricingSection from "@/components/PricingSection";
 import SimpleFooter from "@/components/SimpleFooter";
 import StatsBanner from "@/components/StatsBanner";
 import HomeFAQ from "@/components/HomeFAQ";
-import FeatureHighlightSection from "@/components/FeatureHighlightSection";
+import FeatureHighlightGrid from "@/components/FeatureHighlightGrid";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Monitor, FileCode } from "lucide-react";
 
@@ -202,8 +202,8 @@ const PricingPage = () => {
         </div>
       </div>
       
-      {/* Add the FeatureHighlightSection with the selected plan */}
-      <FeatureHighlightSection planName={selectedPlan} />
+      {/* Add the Feature Highlight Grid with the selected plan */}
+      <FeatureHighlightGrid planName={selectedPlan} />
       
       <HomeFAQ />
       <StatsBanner />
