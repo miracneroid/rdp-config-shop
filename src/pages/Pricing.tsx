@@ -3,9 +3,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Check, ShieldCheck } from "lucide-react";
+import { Check, ShieldCheck, Info } from "lucide-react";
 import SimpleFooter from "@/components/SimpleFooter";
 import HomeFAQ from "@/components/HomeFAQ";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Separator } from "@/components/ui/separator";
 
 const PricingPage: React.FC = () => {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annually">("monthly");
@@ -50,6 +53,32 @@ const PricingPage: React.FC = () => {
   const partners = [
     "slack", "stripe", "airwallex", "spotify", "booking.com", "gusto"
   ];
+  
+  // Features for comparison table
+  const features = [
+    { name: "Block viruses, ransomware and malware", tooltip: "Protection against malicious software" },
+    { name: "Monitor your apps for any suspicious activity", tooltip: "Real-time app monitoring" },
+    { name: "Block intruders with advanced firewall", tooltip: "Prevents unauthorized access" },
+    { name: "Stop webcam spies", tooltip: "Blocks unauthorized webcam access" },
+    { name: "Avoid fake and dangerous websites", tooltip: "Web protection" },
+    { name: "Give your sensitive info extra protection", tooltip: "Enhanced data security" },
+    { name: "Enjoy unlimited VPN with 55 locations", tooltip: "Global VPN network" },
+    { name: "Monitor your online accounts for breaches", tooltip: "Account breach alerts" },
+    { name: "Avoid being tracked by advertisers", tooltip: "Anti-tracking protection" },
+    { name: "Update your drivers automatically", tooltip: "Automatic driver updates" },
+    { name: "Clean up and tune up your devices", tooltip: "Device optimization" },
+    { name: "Get an alert if your identity has been compromised", tooltip: "Identity monitoring" },
+    { name: "Get up to $2 million reimbursement for identity theft*", tooltip: "Financial protection" },
+    { name: "Enjoy 24/7 personal support for identity and tech issues", tooltip: "Premium customer support" },
+    { name: "Monitor credit reports from 3 leading credit bureaus", tooltip: "Credit monitoring" }
+  ];
+  
+  // Features availability by plan
+  const featureAvailability = {
+    "Personal": [true, true, true, false, false, false, false, false, false, false, false, false, false, false, false],
+    "Starter": [true, true, true, true, true, true, true, true, true, true, true, false, false, false, false],
+    "Premium": [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]
+  };
 
   return (
     <div className="min-h-screen bg-[#0c0c20] text-white">
@@ -202,29 +231,81 @@ const PricingPage: React.FC = () => {
           </div>
         </div>
         
-        {/* Compare Plans Section */}
+        {/* Compare Plans Section - New design based on reference image */}
         <div className="py-16">
-          <div className="flex items-start">
-            <div className="w-1/4">
+          <div className="flex flex-col md:flex-row gap-10">
+            {/* Left column: Compare Plans title */}
+            <div className="w-full md:w-1/4">
               <h2 className="text-4xl font-bold mb-4">Compare Plans</h2>
             </div>
             
-            <div className="w-3/4 grid grid-cols-3 gap-6">
-              {plans.map((plan, index) => (
-                <div 
-                  key={index} 
-                  className="bg-[#171728] rounded-xl p-6"
-                >
-                  <div className="mb-4">
-                    <div className="bg-[#222233] rounded-full p-3 w-10 h-10 flex items-center justify-center mb-4">
-                      {index === 0 && <div className="bg-[#4cc9f0] rounded-full w-3 h-3"></div>}
-                      {index === 1 && <div className="bg-[#da7dff] rounded-md w-4 h-4"></div>}
-                      {index === 2 && <div className="bg-[#926dff] rounded-md transform rotate-45 w-3 h-3"></div>}
+            {/* Right column: Comparison table */}
+            <div className="w-full md:w-3/4">
+              <div className="grid grid-cols-4 gap-4">
+                {/* Headers for each plan */}
+                <div className="col-span-1"></div> {/* Empty space for features column */}
+                {plans.map((plan, index) => (
+                  <div key={index} className="p-3 flex flex-col items-center">
+                    {/* Plan icon */}
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                      index === 0 ? 'bg-[#4cc9f0]' : 
+                      index === 1 ? 'bg-[#da7dff]' : 
+                      'bg-[#926dff]'
+                    }`}>
+                      {index === 0 && <div className="bg-[#4cc9f0] rounded-full w-10 h-10"></div>}
+                      {index === 1 && <div className="bg-[#da7dff] rounded-md w-10 h-10"></div>}
+                      {index === 2 && <div className="bg-[#926dff] rounded-md w-10 h-10"></div>}
                     </div>
-                    <h3 className="text-xl font-bold">{plan.name}</h3>
+                    
+                    {/* Plan name */}
+                    <h3 className="text-lg font-bold mt-2">{plan.name}</h3>
+                    
+                    {/* Plan price */}
+                    <div className="mt-2">
+                      <span className="text-2xl font-bold">{plan.price}</span>
+                      {plan.price !== "Free" && <span className="text-sm text-gray-400">/ month</span>}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+                
+                {/* Feature rows */}
+                {features.map((feature, idx) => (
+                  <React.Fragment key={idx}>
+                    <div className="col-span-1 flex items-center text-sm py-3 border-t border-[#222233]">
+                      <div className="flex items-center">
+                        <span className="text-gray-300">{feature.name}</span>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Info size={14} className="ml-2 text-gray-500 cursor-help" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{feature.tooltip}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    </div>
+                    
+                    {/* Check for each plan */}
+                    {plans.map((plan, planIdx) => {
+                      const planName = plan.name as keyof typeof featureAvailability;
+                      const isAvailable = featureAvailability[planName][idx];
+                      
+                      return (
+                        <div 
+                          key={`${idx}-${planIdx}`} 
+                          className="col-span-1 flex justify-center items-center py-3 border-t border-[#222233]"
+                        >
+                          {isAvailable ? (
+                            <Check className="h-5 w-5 text-white" />
+                          ) : null}
+                        </div>
+                      );
+                    })}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           </div>
         </div>
