@@ -266,7 +266,11 @@ const PricingPage: React.FC = () => {
             
             {/* Right column: Comparison table */}
             <div className="w-full md:w-3/4">
-              <PlanComparisonTable />
+              <PlanComparisonTable 
+                plans={plans} 
+                features={features} 
+                featureAvailability={featureAvailability} 
+              />
             </div>
           </div>
         </div>
