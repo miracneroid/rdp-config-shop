@@ -48,7 +48,7 @@ const PricingPage = () => {
     },
     {
       name: "Standard",
-      price: tab === "monthly" ? 29.99 : 299.99,
+      price: tab === "monthly" ? 2.99 : 29.99,
       popular: true,
       features: [
         { name: "4 Core CPU", included: true },
@@ -67,7 +67,7 @@ const PricingPage = () => {
     },
     {
       name: "Premium",
-      price: tab === "monthly" ? 69.99 : 699.99,
+      price: tab === "monthly" ? 6.99 : 69.99,
       features: [
         { name: "8 Core CPU", included: true },
         { name: "16 GB RAM", included: true },
@@ -203,7 +203,7 @@ const PricingPage = () => {
       </div>
       
       {/* Comparison Table */}
-      <div className="py-20 px-4">
+      <div className="py-20 px-4 bg-black">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold mb-16">Compare Plans</h2>
           
@@ -277,7 +277,7 @@ const PricingPage = () => {
         </div>
       </div>
       
-      {/* Feature Highlight Grid */}
+      {/* Feature Highlight Grid - Add-Ons Section */}
       <FeatureHighlightGrid planName={selectedPlan} />
       
       {/* FAQ Section */}
