@@ -3,387 +3,194 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, Check, X, ChevronDown } from "lucide-react";
+import { Code, Shield, Phone } from "lucide-react";
 import SimpleFooter from "@/components/SimpleFooter";
-import HomeFAQ from "@/components/HomeFAQ";
-import InteractivePuzzle from "@/components/3d/InteractivePuzzle";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
-const pricingPlans = [
-  {
-    name: "Free",
-    price: 0,
-    highlight: false,
-    features: [
-      "1 user",
-      "1 GB storage",
-      "Community support",
-      "Basic features"
-    ],
-    button: "Get started",
-    buttonVariant: "outline"
-  },
-  {
-    name: "Pro",
-    price: 2.99,
-    highlight: true,
-    features: [
-      "Unlimited users",
-      "10 GB storage",
-      "Priority support",
-      "Advanced features",
-      "Custom branding"
-    ],
-    button: "Get started",
-    buttonVariant: "default"
-  },
-  {
-    name: "Business",
-    price: 6.99,
-    highlight: false,
-    features: [
-      "Unlimited users",
-      "100 GB storage",
-      "24/7 support",
-      "All features",
-      "Custom branding",
-      "Advanced security"
-    ],
-    button: "Contact us",
-    buttonVariant: "outline"
-  }
-];
-
-const comparisonFeatures = [
-  "Custom branding",
-  "Custom domain",
-  "Priority support",
-  "Advanced analytics",
-  "Team collaboration",
-  "API access",
-  "SSO integration",
-  "Data export",
-  "Custom templates",
-  "Dedicated account manager",
-  "SLA uptime guarantee",
-  "Advanced security"
-];
-
-const addOns = [
-  {
-    name: "Microsoft Office",
-    price: 2.50,
-    description: "Access to all Microsoft Office apps",
-    button: "Add to plan"
-  },
-  {
-    name: "Premium Security",
-    price: 3.99,
-    description: "Enhanced security features and firewall",
-    button: "Add to plan"
-  }
-];
-
-const trustedBy = [
-  "slack",
-  "stripe",
-  "airwallex",
-  "spotify",
-  "booking.com",
-  "gusto"
-];
 
 const PricingPage: React.FC = () => {
-  const [selectedPlan, setSelectedPlan] = useState<string>("Pro");
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "annually">("monthly");
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-[#090918] text-white">
+    <div className="min-h-screen bg-[#0c0c20] bg-gradient-to-br from-[#0c0c20] via-[#111133] to-[#0c0c20] text-white relative overflow-hidden">
+      {/* Starry background effect */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute h-2 w-2 rounded-full bg-white/30 top-[10%] left-[20%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/30 top-[15%] left-[50%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/30 top-[20%] left-[80%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/30 top-[40%] left-[10%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/30 top-[50%] left-[30%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/30 top-[30%] left-[60%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/30 top-[60%] left-[70%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/30 top-[70%] left-[90%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/30 top-[80%] left-[40%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/30 top-[90%] left-[20%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/20 top-[25%] left-[15%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/20 top-[35%] left-[45%]"></div>
+        <div className="absolute h-2 w-2 rounded-full bg-white/20 top-[85%] left-[85%]"></div>
+      </div>
+
       {/* Hero Section */}
-      <div className="relative pt-16 pb-32 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center rounded-full bg-indigo-100/10 px-3 py-1 text-sm font-medium text-indigo-300 mb-5">
+      <div className="relative pt-24 pb-20 px-4 max-w-6xl mx-auto">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center rounded-full bg-indigo-100/10 px-3 py-1 text-sm font-medium text-blue-300 mb-5">
             Pricing
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             Security. Privacy. Freedom.<br />
             for Everyone.
           </h1>
-          <p className="text-gray-400 max-w-2xl mx-auto mb-12">
-            Choose a plan that works best for you and your team. All plans include a 30-day free trial.
+          <p className="text-gray-400 max-w-2xl mx-auto mb-14 text-lg">
+            Select a VPN plan to access your favorite content with lightning speed 
+            and unlimited data.
           </p>
           
-          {/* Pricing Toggle - Monthly/Annual */}
-          <div className="flex items-center justify-center mb-12">
-            <span className="text-gray-400 mr-3">Monthly</span>
-            <div className="w-12 h-6 bg-indigo-500/30 rounded-full p-1">
-              <div className="w-4 h-4 bg-indigo-500 rounded-full transform translate-x-6"></div>
+          {/* Features */}
+          <div className="flex flex-wrap items-center justify-center gap-8 mb-16">
+            <div className="flex items-center">
+              <div className="mr-2 p-1">
+                <Code size={18} className="text-blue-400" />
+              </div>
+              <span className="text-gray-300">Open source</span>
             </div>
-            <span className="text-white ml-3">Annual</span>
-            <span className="ml-2 bg-indigo-500/20 text-indigo-300 text-xs px-2 py-1 rounded-full">
-              Save 20%
-            </span>
+            <div className="flex items-center">
+              <div className="mr-2 p-1">
+                <Shield size={18} className="text-blue-400" />
+              </div>
+              <span className="text-gray-300">No-logs policy</span>
+            </div>
+            <div className="flex items-center">
+              <div className="mr-2 p-1">
+                <Phone size={18} className="text-blue-400" />
+              </div>
+              <span className="text-gray-300">24/7 Live support</span>
+            </div>
+          </div>
+          
+          {/* Curved line */}
+          <div className="relative w-full max-w-2xl mx-auto h-16 mb-8">
+            <svg className="absolute inset-0 w-full" viewBox="0 0 400 50" preserveAspectRatio="none">
+              <path d="M0,50 C100,0 300,0 400,50" stroke="rgba(255,255,255,0.2)" strokeWidth="2" fill="none" />
+            </svg>
+          </div>
+          
+          {/* Billing toggle */}
+          <div className="flex items-center justify-center mb-16">
+            <button 
+              onClick={() => setBillingCycle("monthly")}
+              className={`px-6 py-2 rounded-l-full ${billingCycle === "monthly" 
+                ? "bg-blue-500 bg-opacity-20 text-white" 
+                : "bg-[#1e1e3a] text-gray-400"}`}
+            >
+              Monthly
+            </button>
+            <button 
+              onClick={() => setBillingCycle("annually")}
+              className={`px-6 py-2 rounded-r-full ${billingCycle === "annually" 
+                ? "bg-blue-500 bg-opacity-20 text-white" 
+                : "bg-[#1e1e3a] text-gray-400"}`}
+            >
+              Annually
+            </button>
           </div>
           
           {/* Pricing Cards */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {pricingPlans.map((plan) => (
-              <div 
-                key={plan.name}
-                className={`bg-[#0D0D1F] rounded-xl p-6 border transition-all ${
-                  plan.highlight 
-                    ? "border-indigo-500 shadow-lg shadow-indigo-500/20 transform scale-105" 
-                    : "border-gray-800"
-                }`}
-              >
-                <div className="text-xl font-semibold">{plan.name}</div>
-                <div className="mt-2 flex items-end">
-                  {plan.price === 0 ? (
-                    <span className="text-3xl font-bold">Free</span>
-                  ) : (
-                    <>
-                      <span className="text-2xl font-bold mr-1">$</span>
-                      <span className="text-4xl font-bold">{plan.price}</span>
-                      <span className="text-gray-400 ml-1">/mo</span>
-                    </>
-                  )}
-                </div>
-                
-                <div className="mt-6 space-y-3">
-                  {plan.features.map((feature) => (
-                    <div key={feature} className="flex items-start">
-                      <Check className="h-5 w-5 text-indigo-500 mr-2 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                <Button 
-                  variant={plan.buttonVariant as "outline" | "default"}
-                  className={`w-full mt-6 ${
-                    plan.buttonVariant === "default" 
-                      ? "bg-indigo-600 hover:bg-indigo-700" 
-                      : "border-gray-700 hover:border-indigo-500 text-white"
-                  }`}
-                >
-                  {plan.button}
-                </Button>
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {/* Personal Plan */}
+            <div className="bg-[#171728] rounded-3xl p-8 flex flex-col">
+              <div className="bg-[#222233] rounded-full p-4 w-12 h-12 flex items-center justify-center mb-6">
+                <div className="bg-white rounded-full w-4 h-4"></div>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      {/* Trusted By */}
-      <div className="py-12 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-8">
-            {trustedBy.map((company) => (
-              <div key={company} className="flex justify-center items-center opacity-50 hover:opacity-75 transition">
-                <span className="text-gray-400 font-semibold">{company}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      {/* Compare Plans */}
-      <div className="py-24 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 mb-12">
-            <h2 className="text-3xl font-bold">Compare Plans</h2>
-          </div>
-          
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead>
-                <tr className="text-left">
-                  <th className="pb-6 text-gray-400 font-medium"></th>
-                  {pricingPlans.map((plan) => (
-                    <th key={plan.name} className="pb-6 px-6">
-                      <div className="flex items-center">
-                        <div className="size-6 rounded-full bg-indigo-500/20 flex items-center justify-center mr-2">
-                          <div className={plan.name === "Pro" ? "size-3 bg-indigo-500 rounded-full" : ""}></div>
-                        </div>
-                        <span>{plan.name}</span>
-                      </div>
-                      <div className="mt-1">
-                        {plan.price === 0 ? (
-                          <span className="text-lg font-bold">Free</span>
-                        ) : (
-                          <span className="text-lg font-bold">${plan.price}/mo</span>
-                        )}
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonFeatures.map((feature, index) => (
-                  <tr key={index} className="border-t border-gray-800">
-                    <td className="py-4 text-gray-400">{feature}</td>
-                    <td className="py-4 px-6">
-                      {index < 2 ? <X className="text-gray-600" size={18} /> : <Check className="text-green-500" size={18} />}
-                    </td>
-                    <td className="py-4 px-6">
-                      <Check className="text-green-500" size={18} />
-                    </td>
-                    <td className="py-4 px-6">
-                      <Check className="text-green-500" size={18} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          
-          <div className="grid grid-cols-3 mt-8 max-w-5xl mx-auto">
-            <div className="px-6 text-center">
-              <Button variant="outline" className="border-gray-700 text-gray-400 hover:border-gray-600">
-                Get started
-              </Button>
-            </div>
-            <div className="px-6 text-center">
-              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white">
-                Get started
-              </Button>
-            </div>
-            <div className="px-6 text-center">
-              <Button variant="outline" className="border-gray-700 text-gray-400 hover:border-gray-600">
-                Contact us
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Need help section */}
-      <div className="py-12 px-4">
-        <div className="max-w-4xl mx-auto bg-[#0D0D1F] rounded-xl p-6 border border-gray-800 flex items-center">
-          <div className="bg-indigo-500/20 rounded-full p-2 mr-4">
-            <HelpCircle className="h-6 w-6 text-indigo-400" />
-          </div>
-          <div className="flex-1">
-            <h3 className="font-semibold">Need a little help deciding?</h3>
-            <p className="text-gray-400 text-sm">Our experts are just a click away to help you choose the right plan.</p>
-          </div>
-          <Button variant="outline" className="border-gray-700 hover:border-indigo-500 whitespace-nowrap">
-            Contact us
-          </Button>
-        </div>
-      </div>
-      
-      {/* Add-Ons */}
-      <div className="py-24 px-4">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold mb-6 text-center">Add-Ons</h2>
-          <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
-            Enhance your experience with powerful add-ons tailored to your needs
-          </p>
-          
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-16">
-            {addOns.map((addon) => (
-              <div key={addon.name} className="bg-[#0D0D1F] rounded-xl p-6 border border-gray-800">
-                <div className="bg-indigo-500/20 size-10 rounded-full flex items-center justify-center mb-4">
-                  <div className="size-4 bg-indigo-500 rounded-full"></div>
-                </div>
-                <h3 className="text-xl font-semibold mb-1">{addon.name}</h3>
-                <div className="flex items-baseline mb-3">
-                  <span className="text-2xl font-bold">${addon.price}</span>
-                  <span className="text-gray-400 ml-1">/mo</span>
-                </div>
-                <p className="text-gray-400 text-sm mb-6">{addon.description}</p>
-                <Button variant="outline" className="border-gray-700 hover:border-indigo-500 w-full">
-                  {addon.button}
-                </Button>
-              </div>
-            ))}
-          </div>
-          
-          {/* Try for Free Section */}
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            <div className="bg-[#0D0D1F] rounded-xl p-8 border border-gray-800">
-              <h3 className="text-2xl font-bold mb-3">Try Pivien for Free</h3>
-              <p className="text-gray-400 mb-6">
-                Get started with our free plan. No credit card required.
+              <h3 className="text-2xl font-bold mb-2">Personal</h3>
+              <p className="text-gray-400 text-sm mb-4">
+                For individuals who want to securely connect personal devices, for free.
               </p>
-              <Button className="bg-indigo-600 hover:bg-indigo-700">
-                Sign up now
-              </Button>
+              <div className="mt-6 mb-6">
+                <span className="text-5xl font-bold">Free</span>
+              </div>
+              
+              <div className="flex items-center mt-auto mb-4">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                </svg>
+                <span className="text-gray-300 text-sm">1 device</span>
+              </div>
             </div>
-            <div className="bg-[#0D0D1F] rounded-xl p-8 border border-gray-800 flex items-center justify-center">
-              <div className="relative w-full h-full">
-                <div className="absolute inset-0">
-                  <img 
-                    src="/lovable-uploads/0f4f4047-517b-42aa-9666-c8a130a5a0ca.png" 
-                    alt="App preview" 
-                    className="object-contain w-full h-full opacity-70"
-                  />
+            
+            {/* Starter Plan */}
+            <div className="bg-[#171728] rounded-3xl p-8 flex flex-col relative">
+              {/* Best Deal Label */}
+              <div className="absolute -top-5 left-0 right-0 flex justify-center">
+                <div className="bg-[#696cff] bg-opacity-30 text-blue-300 px-4 py-1.5 rounded-full flex items-center text-sm font-medium">
+                  <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 mr-1.5" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z" />
+                  </svg>
+                  Best Deal
                 </div>
+              </div>
+              
+              <div className="relative">
+                <div className="bg-[#696cff] bg-opacity-20 rounded-xl p-4 w-12 h-12 flex items-center justify-center mb-6">
+                  <div className="bg-[#696cff] rounded-md w-5 h-5"></div>
+                </div>
+                <div className="absolute top-0 right-0">
+                  <div className="bg-blue-500 text-xs rounded-full px-2 py-0.5 font-medium">
+                    Save 65%
+                  </div>
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-bold mb-2">Starter</h3>
+              <p className="text-gray-400 text-sm mb-4">
+                For teams or organizations looking for an easy-to-use, secure, legacy VPN replacement.
+              </p>
+              <div className="mt-6 mb-2">
+                <span className="text-5xl font-bold">$2.99</span>
+                <span className="text-gray-400 ml-1">/ month</span>
+              </div>
+              <div className="text-[#696cff] mb-6 font-semibold">+3 EXTRA months</div>
+              
+              <div className="flex items-center mt-auto mb-4">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                </svg>
+                <span className="text-gray-300 text-sm">Covers 5 devices</span>
+              </div>
+            </div>
+            
+            {/* Premium Plan */}
+            <div className="bg-[#171728] rounded-3xl p-8 flex flex-col">
+              <div className="relative">
+                <div className="bg-[#222233] rounded-full p-4 w-12 h-12 flex items-center justify-center mb-6">
+                  <div className="bg-white rounded-md transform rotate-45 w-4 h-4"></div>
+                </div>
+                <div className="absolute top-0 right-0">
+                  <div className="bg-blue-500 text-xs rounded-full px-2 py-0.5 font-medium">
+                    Save 75%
+                  </div>
+                </div>
+              </div>
+              
+              <h3 className="text-2xl font-bold mb-2">Premium</h3>
+              <p className="text-gray-400 text-sm mb-4">
+                For companies who need service and resource level authentication and access control.
+              </p>
+              <div className="mt-6 mb-2">
+                <span className="text-5xl font-bold">$6.99</span>
+                <span className="text-gray-400 ml-1">/ month</span>
+              </div>
+              <div className="text-[#696cff] mb-6 font-semibold">+3 EXTRA months</div>
+              
+              <div className="flex items-center mt-auto mb-4">
+                <svg viewBox="0 0 24 24" className="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                </svg>
+                <span className="text-gray-300 text-sm">Covers 10 devices</span>
               </div>
             </div>
           </div>
         </div>
       </div>
       
-      {/* FAQ Section */}
-      <div className="py-24 px-4 bg-black">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-12 text-center">Frequently Asked Questions</h2>
-          
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1" className="border-gray-800">
-              <AccordionTrigger className="text-left hover:no-underline">
-                How does Pivien's free trial work?
-              </AccordionTrigger>
-              <AccordionContent className="text-gray-400">
-                Our free trial gives you full access to all features for 30 days. No credit card required to sign up.
-              </AccordionContent>
-            </AccordionItem>
-            
-            <AccordionItem value="item-2" className="border-gray-800">
-              <AccordionTrigger className="text-left hover:no-underline">
-                What happens after my free trial?
-              </AccordionTrigger>
-              <AccordionContent className="text-gray-400">
-                After your trial ends, you can choose to upgrade to a paid plan or continue with our limited free tier.
-              </AccordionContent>
-            </AccordionItem>
-            
-            <AccordionItem value="item-3" className="border-gray-800">
-              <AccordionTrigger className="text-left hover:no-underline">
-                Can I change my plan later?
-              </AccordionTrigger>
-              <AccordionContent className="text-gray-400">
-                Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.
-              </AccordionContent>
-            </AccordionItem>
-            
-            <AccordionItem value="item-4" className="border-gray-800">
-              <AccordionTrigger className="text-left hover:no-underline">
-                What payment methods do you accept?
-              </AccordionTrigger>
-              <AccordionContent className="text-gray-400">
-                We accept all major credit cards, PayPal, and select cryptocurrencies.
-              </AccordionContent>
-            </AccordionItem>
-            
-            <AccordionItem value="item-5" className="border-gray-800">
-              <AccordionTrigger className="text-left hover:no-underline">
-                Is there a setup fee?
-              </AccordionTrigger>
-              <AccordionContent className="text-gray-400">
-                No, there are no setup fees or hidden costs associated with any of our plans.
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
-      </div>
-      
+      {/* Simple footer */}
       <SimpleFooter />
     </div>
   );
