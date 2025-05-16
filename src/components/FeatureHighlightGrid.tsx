@@ -15,7 +15,7 @@ const FeatureHighlightGrid: React.FC<FeatureHighlightGridProps> = ({ planName = 
             <span className="text-lg font-semibold">Privacy-focused Windows RDPs</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Experience premium performance with our customizable Windows RDPs.
+            Experience premium performance with our {planName} Windows RDPs.
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Deployed instantly with full admin/root access and unmetered bandwidth.
