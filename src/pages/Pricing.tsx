@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
@@ -276,7 +277,7 @@ const PricingPage: React.FC = () => {
         </div>
       </div>
       
-      {/* FAQ Section */}
+      {/* FAQ Section - Now uses the updated HomeFAQ component */}
       <HomeFAQ />
       
       {/* Simple footer */}
