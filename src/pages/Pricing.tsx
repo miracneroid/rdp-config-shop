@@ -96,7 +96,7 @@ const PricingPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-950 text-white w-full">
+    <div className="min-h-screen flex flex-col w-full bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white">
       <Navbar />
       
       {/* Hero Section */}
