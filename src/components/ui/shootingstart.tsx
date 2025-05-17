@@ -1,8 +1,9 @@
+
 import React from 'react';
 
 const ShootingStar = () => {
   return (
-    <div className="relative w-full max-w-2xl mx-auto h-16 mb-8 overflow-visible">
+    <div className="relative w-full max-w-2xl mx-auto h-16 mb-8 overflow-visible pointer-events-none">
       <svg
         className="absolute inset-0 w-full h-full"
         viewBox="0 0 230 50"
@@ -15,7 +16,6 @@ const ShootingStar = () => {
                 <stop offset="100%" stopColor="rgb(255, 255, 255)" />
             </linearGradient>
 
-
           {/* Mask that starts large and shrinks, creating the tapered effect */}
           <mask id="brushStrokeMask">
             <rect width="100%" height="100%" fill="black" />
@@ -24,7 +24,7 @@ const ShootingStar = () => {
               <animateMotion
                 dur="2s"
                 repeatCount="indefinite"
-                path="M0,40 C75,0 200,0 200,0"  // Changed path here
+                path="M0,40 C75,0 200,0 200,0"
               />
               {/* Simulates paint stroke shrinking from thick to thin */}
               <animate
@@ -36,15 +36,6 @@ const ShootingStar = () => {
                 keySplines="0.4 0 0.2 1"
                 calcMode="spline"
               />
-              <animate
-                    attributeName="r"
-                    values="6;1"
-                    dur="2s"
-                    repeatCount="indefinite"
-                    keyTimes="0;1"
-                    keySplines="0.4 0 0.2 1"
-                    calcMode="spline"
-                />
             </circle>
           </mask>
 
@@ -63,12 +54,11 @@ const ShootingStar = () => {
               keyTimes="0; 0.5; 1"
             />
           </filter>
-
         </defs>
 
         {/* Light background trail path */}
         <path
-            d="M0,40 C75,0 200,0 200,0" // Changed path here
+            d="M0,40 C75,0 200,0 200,0"
             fill="none"
             stroke="url(#shootingGradient)"
             strokeWidth="5"
@@ -86,7 +76,7 @@ const ShootingStar = () => {
         {/* Main animated trail with thickening and glow */}
         <path
           id="shootingPath"
-          d="M0,40 C75,0 200,0 200,0" // Changed path here
+          d="M0,40 C75,0 200,0 200,0"
           fill="none"
           stroke="url(#shootingGradient)"
           strokeWidth="7"

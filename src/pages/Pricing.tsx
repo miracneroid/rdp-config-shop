@@ -212,87 +212,88 @@ const PricingPage = () => {
           <ShootingStar />
           <Star />
           
-          {/* Pricing Cards */}
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {/* Personal Plan */}
-            <div className="bg-[#171728] rounded-3xl p-8 flex flex-col">
-              <div className="bg-[#222233] rounded-full p-4 w-12 h-12 flex items-center justify-center mb-6">
-                <div className="bg-white rounded-full w-4 h-4"></div>
-              </div>
-              <h3 className="text-2xl font-bold mb-2">Personal</h3>
-              <p className="text-gray-400 text-sm mb-4">
-                For individuals who want to securely connect personal devices, for free.
-              </p>
-              <div className="mt-6 mb-6">
-                <span className="text-5xl font-bold">Free</span>
-              </div>
-              
-              <div className="flex items-center mt-auto mb-4">
-              </div>
-            </div>
-            
-            {/* Starter Plan */}
-            <div className="bg-[#171728] rounded-3xl p-8 flex flex-col relative">
-              {/* Best Deal Label */}
-              <div className="absolute -top-5 left-0 right-0 flex justify-center">
-                <div className="bg-[#696cff] bg-opacity-30 text-blue-300 px-4 py-1.5 rounded-full flex items-center text-sm font-medium">
-                  <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 mr-1.5" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z" />
-                  </svg>
-                  Best Deal
-                </div>
-              </div>
-              
-              <div className="relative">
-                <div className="bg-[#696cff] bg-opacity-20 rounded-xl p-4 w-12 h-12 flex items-center justify-center mb-6">
-                  <div className="bg-[#696cff] rounded-md w-5 h-5"></div>
-                </div>
-                <div className="absolute top-0 right-0">
-                  <div className="bg-blue-500 text-xs rounded-full px-2 py-0.5 font-medium">
-                    Save 65%
-                  </div>
-                </div>
-              </div>
-              
-              <h3 className="text-2xl font-bold mb-2">Starter</h3>
-              <p className="text-gray-400 text-sm mb-4">
-                For teams or organizations looking for an easy-to-use, secure, legacy VPN replacement.
-              </p>
-              <div className="mt-6 mb-2">
-                <span className="text-5xl font-bold">$2.99</span>
-                <span className="text-gray-400 ml-1">/ month</span>
-              </div>
-              <div className="text-[#696cff] mb-6 font-semibold">+3 EXTRA months</div>
-              
-              <div className="flex items-center mt-auto mb-4">
-              </div>
-            </div>
-            
-            {/* Premium Plan */}
-            <div className="bg-[#171728] rounded-3xl p-8 flex flex-col">
-              <div className="relative">
+          {/* Pricing Cards - Centered with max-width */}
+          <div className="flex justify-center">
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {/* Personal Plan */}
+              <div className="bg-[#171728] rounded-3xl p-8 flex flex-col">
                 <div className="bg-[#222233] rounded-full p-4 w-12 h-12 flex items-center justify-center mb-6">
-                  <div className="bg-white rounded-md transform rotate-45 w-4 h-4"></div>
+                  <div className="bg-white rounded-full w-4 h-4"></div>
                 </div>
-                <div className="absolute top-0 right-0">
-                  <div className="bg-blue-500 text-xs rounded-full px-2 py-0.5 font-medium">
-                    Save 75%
+                <h3 className="text-2xl font-bold mb-2">Personal</h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  For individuals who want to securely connect personal devices, for free.
+                </p>
+                <div className="mt-6 mb-6">
+                  <span className="text-5xl font-bold">Free</span>
+                </div>
+                
+                <div className="flex items-center mt-auto mb-4">
+                </div>
+              </div>
+              
+              {/* Starter Plan */}
+              <div className="bg-[#171728] rounded-3xl p-8 flex flex-col relative">
+                {/* Best Deal Label */}
+                <div className="absolute -top-5 left-0 right-0 flex justify-center">
+                  <div className="bg-[#696cff] bg-opacity-30 text-blue-300 px-4 py-1.5 rounded-full flex items-center text-sm font-medium">
+                    <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 mr-1.5" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z" />
+                    </svg>
+                    Best Deal
                   </div>
                 </div>
+                
+                <div className="relative">
+                  <div className="bg-[#696cff] bg-opacity-20 rounded-xl p-4 w-12 h-12 flex items-center justify-center mb-6">
+                    <div className="bg-[#696cff] rounded-md w-5 h-5"></div>
+                  </div>
+                  <div className="absolute top-0 right-0">
+                    <div className="bg-blue-500 text-xs rounded-full px-2 py-0.5 font-medium">
+                      Save 65%
+                    </div>
+                  </div>
+                </div>
+                
+                <h3 className="text-2xl font-bold mb-2">Starter</h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  For teams or organizations looking for an easy-to-use, secure, legacy VPN replacement.
+                </p>
+                <div className="mt-6 mb-2">
+                  <span className="text-5xl font-bold">$2.99</span>
+                  <span className="text-gray-400 ml-1">/ month</span>
+                </div>
+                <div className="text-[#696cff] mb-6 font-semibold">+3 EXTRA months</div>
+                
+                <div className="flex items-center mt-auto mb-4">
+                </div>
               </div>
               
-              <h3 className="text-2xl font-bold mb-2">Premium</h3>
-              <p className="text-gray-400 text-sm mb-4">
-                For companies who need service and resource level authentication and access control.
-              </p>
-              <div className="mt-6 mb-2">
-                <span className="text-5xl font-bold">$6.99</span>
-                <span className="text-gray-400 ml-1">/ month</span>
-              </div>
-              <div className="text-[#696cff] mb-6 font-semibold">+3 EXTRA months</div>
-              
-              <div className="flex items-center mt-auto mb-4">
-
+              {/* Premium Plan - Using the first card style */}
+              <div className="bg-[#171728] rounded-3xl p-8 flex flex-col">
+                <div className="relative">
+                  <div className="bg-[#222233] rounded-full p-4 w-12 h-12 flex items-center justify-center mb-6">
+                    <div className="bg-white rounded-md transform rotate-45 w-4 h-4"></div>
+                  </div>
+                  <div className="absolute top-0 right-0">
+                    <div className="bg-blue-500 text-xs rounded-full px-2 py-0.5 font-medium">
+                      Save 75%
+                    </div>
+                  </div>
+                </div>
+                
+                <h3 className="text-2xl font-bold mb-2">Premium</h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  For companies who need service and resource level authentication and access control.
+                </p>
+                <div className="mt-6 mb-2">
+                  <span className="text-5xl font-bold">$6.99</span>
+                  <span className="text-gray-400 ml-1">/ month</span>
+                </div>
+                <div className="text-[#696cff] mb-6 font-semibold">+3 EXTRA months</div>
+                
+                <div className="flex items-center mt-auto mb-4">
+                </div>
               </div>
             </div>
           </div>
