@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
@@ -232,8 +231,8 @@ const PricingPage = () => {
                 </div>
               </div>
               
-              {/* Starter Plan */}
-              <div className="bg-[#171728] rounded-3xl p-8 flex flex-col relative">
+              {/* Starter Plan - Now centered and semitransparent */}
+              <div className="bg-[#171728]/90 rounded-3xl p-8 flex flex-col relative transform md:scale-110 z-10">
                 {/* Best Deal Label */}
                 <div className="absolute -top-5 left-0 right-0 flex justify-center">
                   <div className="bg-[#696cff] bg-opacity-30 text-blue-300 px-4 py-1.5 rounded-full flex items-center text-sm font-medium">
@@ -269,7 +268,7 @@ const PricingPage = () => {
                 </div>
               </div>
               
-              {/* Premium Plan - Using the first card style */}
+              {/* Premium Plan */}
               <div className="bg-[#171728] rounded-3xl p-8 flex flex-col">
                 <div className="relative">
                   <div className="bg-[#222233] rounded-full p-4 w-12 h-12 flex items-center justify-center mb-6">
