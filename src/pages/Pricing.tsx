@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
@@ -133,6 +132,31 @@ const PricingPage: React.FC = () => {
             <div 
               className="absolute w-full h-12 border-t-0 border-x-0 border-b-2 border-gray-600/20 rounded-[50%]" 
               style={{ top: "-24px" }}></div>
+          </div>
+          
+          {/* Shooting star effect */}
+          <div className="relative w-full max-w-4xl mx-auto mb-8">
+            {/* Main shooting star */}
+            <div 
+              className="absolute -top-8 right-0 w-[70%] h-px bg-gradient-to-r from-transparent via-white to-white"
+              style={{
+                transform: "rotate(-3deg)",
+                boxShadow: "0 0 8px 1px rgba(255,255,255,0.8)",
+              }}
+            ></div>
+            
+            {/* Star at the end of trail */}
+            <div 
+              className="absolute -top-8 right-0 h-2 w-2 rounded-full bg-white"
+              style={{
+                boxShadow: "0 0 10px 2px rgba(255,255,255,0.9), 0 0 20px 6px rgba(255,255,255,0.5)",
+              }}
+            ></div>
+            
+            {/* Smaller stars near trail */}
+            <div className="absolute -top-14 right-1/4 h-1 w-1 rounded-full bg-white/80"></div>
+            <div className="absolute -top-6 right-1/3 h-1.5 w-1.5 rounded-full bg-white/60"></div>
+            <div className="absolute top-0 right-2/3 h-1 w-1 rounded-full bg-white/70"></div>
           </div>
           
           {/* Billing toggle */}
