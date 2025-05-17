@@ -134,29 +134,123 @@ const PricingPage: React.FC = () => {
               style={{ top: "-24px" }}></div>
           </div>
           
-          {/* Shooting star effect */}
-          <div className="relative w-full max-w-4xl mx-auto mb-8">
-            {/* Main shooting star */}
+          {/* Enhanced Shooting star effect */}
+          <div className="relative w-full max-w-4xl mx-auto mb-8 overflow-hidden">
+            {/* Main shooting star with animation */}
             <div 
-              className="absolute -top-8 right-0 w-[70%] h-px bg-gradient-to-r from-transparent via-white to-white"
+              className="absolute -top-10 right-0 w-[80%] h-0.5 bg-gradient-to-r from-transparent via-blue-300 to-white"
               style={{
-                transform: "rotate(-3deg)",
-                boxShadow: "0 0 8px 1px rgba(255,255,255,0.8)",
+                transform: "rotate(-5deg) translateX(100%)",
+                boxShadow: "0 0 8px 1px rgba(255,255,255,0.9), 0 0 15px 2px rgba(135,206,250,0.8)",
+                animation: "shootingStar 3s ease-out infinite",
               }}
             ></div>
             
-            {/* Star at the end of trail */}
+            {/* Star at the end of trail with pulse animation */}
             <div 
-              className="absolute -top-8 right-0 h-2 w-2 rounded-full bg-white"
+              className="absolute -top-10 right-0 h-2.5 w-2.5 rounded-full bg-white"
               style={{
-                boxShadow: "0 0 10px 2px rgba(255,255,255,0.9), 0 0 20px 6px rgba(255,255,255,0.5)",
+                boxShadow: "0 0 10px 2px rgba(255,255,255,1), 0 0 20px 6px rgba(135,206,250,0.8)",
+                transform: "translateX(100%)",
+                animation: "shootingStarHead 3s ease-out infinite, starPulse 1s infinite alternate",
               }}
             ></div>
             
-            {/* Smaller stars near trail */}
-            <div className="absolute -top-14 right-1/4 h-1 w-1 rounded-full bg-white/80"></div>
-            <div className="absolute -top-6 right-1/3 h-1.5 w-1.5 rounded-full bg-white/60"></div>
-            <div className="absolute top-0 right-2/3 h-1 w-1 rounded-full bg-white/70"></div>
+            {/* Particle effects along the trail */}
+            <div className="absolute -top-12 right-1/4 h-1 w-1 rounded-full bg-blue-200/90"
+                 style={{
+                   animation: "starTwinkle 4s ease-in-out infinite",
+                   animationDelay: "0.2s",
+                 }}></div>
+            <div className="absolute -top-8 right-1/3 h-1.5 w-1.5 rounded-full bg-white/70"
+                 style={{
+                   animation: "starTwinkle 3s ease-in-out infinite",
+                   animationDelay: "0.5s",
+                 }}></div>
+            <div className="absolute -top-6 right-2/3 h-1 w-1 rounded-full bg-blue-100/60"
+                 style={{
+                   animation: "starTwinkle 5s ease-in-out infinite",
+                   animationDelay: "1s",
+                 }}></div>
+            
+            {/* Extra stardust particles */}
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div 
+                key={i}
+                className="absolute h-0.5 w-0.5 rounded-full bg-white/80"
+                style={{
+                  top: `-${8 + Math.random() * 10}px`,
+                  right: `${20 + Math.random() * 60}%`,
+                  opacity: 0.3 + Math.random() * 0.7,
+                  animation: `stardustFloat ${3 + Math.random() * 5}s ease-in-out infinite`,
+                  animationDelay: `${Math.random() * 2}s`,
+                }}
+              ></div>
+            ))}
+            
+            {/* Add keyframe animations to the <style> tag */}
+            <style jsx>{`
+              @keyframes shootingStar {
+                0% {
+                  transform: rotate(-5deg) translateX(100%);
+                  opacity: 0;
+                }
+                10% {
+                  opacity: 1;
+                }
+                50%, 100% {
+                  transform: rotate(-5deg) translateX(-100%);
+                  opacity: 0;
+                }
+              }
+              
+              @keyframes shootingStarHead {
+                0% {
+                  transform: translateX(100%);
+                  opacity: 0;
+                }
+                10% {
+                  opacity: 1;
+                }
+                50%, 100% {
+                  transform: translateX(-100%);
+                  opacity: 0;
+                }
+              }
+              
+              @keyframes starPulse {
+                0% {
+                  opacity: 0.7;
+                  transform: translateX(100%) scale(0.9);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateX(100%) scale(1.1);
+                }
+              }
+              
+              @keyframes starTwinkle {
+                0%, 100% {
+                  opacity: 0.3;
+                  transform: scale(0.8);
+                }
+                50% {
+                  opacity: 1;
+                  transform: scale(1.2);
+                }
+              }
+              
+              @keyframes stardustFloat {
+                0%, 100% {
+                  opacity: 0.2;
+                  transform: translateY(0);
+                }
+                50% {
+                  opacity: 0.8;
+                  transform: translateY(-3px);
+                }
+              }
+            `}</style>
           </div>
           
           {/* Billing toggle */}
