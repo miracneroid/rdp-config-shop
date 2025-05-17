@@ -189,7 +189,8 @@ const PricingPage: React.FC = () => {
             ))}
             
             {/* Add keyframe animations to the <style> tag */}
-            <style jsx>{`
+            <style>
+              {`
               @keyframes shootingStar {
                 0% {
                   transform: rotate(-5deg) translateX(100%);
@@ -250,7 +251,8 @@ const PricingPage: React.FC = () => {
                   transform: translateY(-3px);
                 }
               }
-            `}</style>
+              `}
+            </style>
           </div>
           
           {/* Billing toggle */}
