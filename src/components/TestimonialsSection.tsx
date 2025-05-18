@@ -102,43 +102,43 @@ const TestimonialsSection = () => {
   }, [api]);
 
   return (
-    <section className="w-full py-20 font-sans relative overflow-hidden bg-gray-50 dark:bg-[#0e0c1f]">
-      {/* Background with subtle pattern */}
-      <div className="absolute inset-0 bg-opacity-95 dark:bg-opacity-95"></div>
+    <section className="w-full py-20 font-sans relative overflow-hidden">
+      {/* Dark background with subtle pattern */}
+      <div className="absolute inset-0 bg-[#0e0c1f] bg-opacity-95"></div>
       
       {/* Circular gradient overlays */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute w-[800px] h-[800px] rounded-full bg-blue-400/10 dark:bg-blue-500/10 blur-3xl -top-[300px] -left-[300px]"></div>
-        <div className="absolute w-[600px] h-[600px] rounded-full bg-purple-400/10 dark:bg-purple-500/10 blur-3xl -bottom-[200px] -right-[200px]"></div>
-        <div className="absolute w-[1000px] h-[1000px] rounded-full border border-gray-300/30 dark:border-gray-700/30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute w-[1400px] h-[1400px] rounded-full border border-gray-300/20 dark:border-gray-700/20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute w-[800px] h-[800px] rounded-full bg-blue-500/10 blur-3xl -top-[300px] -left-[300px]"></div>
+        <div className="absolute w-[600px] h-[600px] rounded-full bg-purple-500/10 blur-3xl -bottom-[200px] -right-[200px]"></div>
+        <div className="absolute w-[1000px] h-[1000px] rounded-full border border-gray-700/30 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute w-[1400px] h-[1400px] rounded-full border border-gray-700/20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
       </div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex justify-between items-start mb-14">
           <div className="flex items-center space-x-3">
             <span className="text-4xl">❤️</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white flex items-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-white flex items-center">
               Customers Love <span className="ml-3">Puzzle</span>
             </h2>
           </div>
           
-          <div className="hidden md:flex space-x-12 text-gray-800 dark:text-white text-right">
+          <div className="hidden md:flex space-x-12 text-white text-right">
             <div>
               <div className="text-3xl font-bold">2K+</div>
-              <div className="text-gray-600 dark:text-gray-400 text-sm">Ambitious Startups</div>
+              <div className="text-gray-400 text-sm">Ambitious Startups</div>
             </div>
             
             <div>
               <div className="text-3xl font-bold">$20B+</div>
-              <div className="text-gray-600 dark:text-gray-400 text-sm">Transactions Categorized</div>
+              <div className="text-gray-400 text-sm">Transactions Categorized</div>
             </div>
           </div>
         </div>
 
         <div className="relative px-2">
           {/* Left shadow/smoke effect for partially visible testimonials */}
-          <div className="absolute left-0 top-0 h-full w-24 z-20 pointer-events-none bg-gradient-to-r from-gray-50 to-transparent dark:from-[#0e0c1f]"></div>
+          <div className="absolute left-0 top-0 h-full w-24 z-20 pointer-events-none bg-gradient-to-r from-[#0e0c1f] to-transparent"></div>
 
           <Carousel 
             className="w-full" 
@@ -153,7 +153,7 @@ const TestimonialsSection = () => {
               {testimonials.map((testimonial, idx) => (
                 <CarouselItem key={idx} className="pl-6 md:pl-8 sm:basis-4/5 md:basis-1/2 lg:basis-1/3">
                   <div className="transition-all duration-300 transform hover:scale-105 h-full px-1">
-                    <Card className="bg-white dark:bg-[#1a192f]/80 border border-gray-200/60 dark:border-gray-700/20 h-[350px] overflow-hidden rounded-[2rem] rounded-tl-lg shadow-md hover:shadow-xl transition-all duration-300 backdrop-blur-sm">
+                    <Card className="bg-[#1a192f]/80 border-0 h-[350px] overflow-hidden rounded-[2rem] rounded-tl-lg shadow-xl hover:shadow-2xl transition-all duration-300 backdrop-blur-sm border border-gray-700/20">
                       <CardContent className="p-8 flex flex-col h-full">
                         <div className="mb-6 h-7 flex items-center">
                           {testimonial.companyLogo ? (
@@ -163,8 +163,8 @@ const TestimonialsSection = () => {
                               className="h-7 object-contain"
                             />
                           ) : testimonial.isPersonal ? (
-                            <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400 font-medium">
-                              <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-400/20 flex items-center justify-center">
+                            <div className="flex items-center gap-2 text-sm text-emerald-400 font-medium">
+                              <div className="w-5 h-5 rounded-full bg-emerald-400/20 flex items-center justify-center">
                                 <span className="text-xs">👤</span>
                               </div>
                               <span>Personal Account</span>
@@ -173,30 +173,30 @@ const TestimonialsSection = () => {
                         </div>
 
                         <div className="flex-grow">
-                          <p className="text-gray-700 dark:text-white text-xl font-light leading-relaxed mb-6">{testimonial.quote}</p>
+                          <p className="text-white text-xl font-light leading-relaxed mb-6">{testimonial.quote}</p>
                         </div>
 
                         {testimonial.personName && (
                           <div className="flex items-center mt-4">
-                            <Avatar className="w-10 h-10 mr-3 border border-gray-300 dark:border-gray-700 ring-2 ring-gray-200/60 dark:ring-gray-600/30">
+                            <Avatar className="w-10 h-10 mr-3 border border-gray-700 ring-2 ring-gray-600/30">
                               <AvatarImage 
                                 src={testimonial.personImage}
                                 alt={testimonial.personName}
                               />
-                              <AvatarFallback className="bg-purple-100 text-purple-700 dark:bg-purple-700 dark:text-white">
+                              <AvatarFallback className="bg-purple-700 text-white">
                                 {testimonial.personName.charAt(0)}
                               </AvatarFallback>
                             </Avatar>
                             <div className="text-left">
-                              <p className="font-medium text-gray-800 dark:text-white">{testimonial.personName}</p>
-                              <p className="text-sm text-gray-600 dark:text-gray-400">{testimonial.personTitle}</p>
+                              <p className="font-medium text-white">{testimonial.personName}</p>
+                              <p className="text-sm text-gray-400">{testimonial.personTitle}</p>
                             </div>
                           </div>
                         )}
                         
                         {testimonial.linkText && (
                           <div className="mt-6 flex items-center">
-                            <div className="text-blue-600 dark:text-emerald-400 font-semibold text-sm flex items-center gap-2 hover:text-blue-700 dark:hover:text-emerald-300 transition-colors cursor-pointer">
+                            <div className="text-emerald-400 font-semibold text-sm flex items-center gap-2 hover:text-emerald-300 transition-colors cursor-pointer">
                               {testimonial.linkText}
                               <ArrowRight className="w-4 h-4" />
                             </div>
@@ -210,14 +210,14 @@ const TestimonialsSection = () => {
             </CarouselContent>
 
             {/* Right shadow/smoke effect for partially visible testimonials */}
-            <div className="absolute right-0 top-0 h-full w-24 z-20 pointer-events-none bg-gradient-to-l from-gray-50 to-transparent dark:from-[#0e0c1f]"></div>
+            <div className="absolute right-0 top-0 h-full w-24 z-20 pointer-events-none bg-gradient-to-l from-[#0e0c1f] to-transparent"></div>
 
             {/* Navigation controls */}
             <div className="absolute -left-4 top-1/2 -translate-y-1/2 z-30">
-              <CarouselPrevious className="bg-white/80 dark:bg-white/10 hover:bg-gray-100 dark:hover:bg-white/20 border border-gray-200 dark:border-0 rounded-full w-12 h-12 shadow-lg text-gray-700 dark:text-white" />
+              <CarouselPrevious className="bg-white/10 hover:bg-white/20 border-0 rounded-full w-12 h-12 shadow-lg" />
             </div>
             <div className="absolute -right-4 top-1/2 -translate-y-1/2 z-30">
-              <CarouselNext className="bg-white/80 dark:bg-white/10 hover:bg-gray-100 dark:hover:bg-white/20 border border-gray-200 dark:border-0 rounded-full w-12 h-12 shadow-lg text-gray-700 dark:text-white" />
+              <CarouselNext className="bg-white/10 hover:bg-white/20 border-0 rounded-full w-12 h-12 shadow-lg" />
             </div>
           </Carousel>
         </div>

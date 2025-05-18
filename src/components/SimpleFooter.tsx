@@ -1,63 +1,62 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Monitor } from 'lucide-react';
+import { Link } from "react-router-dom";
 
 const SimpleFooter = () => {
+  const footerLinks = {
+    "Windows RDP": [
+      { name: "Windows Server", path: "/windows" },
+      { name: "Remote Desktop", path: "/windows" },
+      { name: "Enterprise Solutions", path: "/windows" },
+      { name: "Security Features", path: "/windows" }
+    ],
+    "Linux VPS": [
+      { name: "Linux Servers", path: "/linux" },
+      { name: "VPS Hosting", path: "/linux" },
+      { name: "High Performance", path: "/linux" },
+      { name: "Root Access", path: "/linux" }
+    ],
+    "Resources": [
+      { name: "Documentation", path: "/docs" },
+      { name: "API", path: "/api" },
+      { name: "Status", path: "/status" },
+      { name: "System Requirements", path: "/docs" }
+    ],
+    "Company": [
+      { name: "About", path: "/about" },
+      { name: "Contact", path: "/contact" },
+      { name: "Privacy Policy", path: "/privacy" },
+      { name: "Terms of Service", path: "/legal" }
+    ]
+  };
+
   return (
-    <footer className="bg-black pt-16 pb-8 text-white border-t border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16">
-          <div className="col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <Monitor className="h-8 w-8 text-indigo-400" />
-              <span className="text-xl font-bold text-white font-mono">RDP Config</span>
-            </Link>
-            <p className="text-gray-400 mb-6 max-w-xs">
-              Deploy Windows RDP and Linux VPS servers with a few clicks.
-            </p>
-          </div>
-          
-          <div>
-            <h3 className="font-medium mb-4">Product</h3>
-            <ul className="space-y-2">
-              <li><Link to="/pricing" className="text-gray-400 hover:text-white">Pricing</Link></li>
-              <li><Link to="/features" className="text-gray-400 hover:text-white">Features</Link></li>
-              <li><Link to="/docs" className="text-gray-400 hover:text-white">Documentation</Link></li>
-              <li><Link to="/status" className="text-gray-400 hover:text-white">Status</Link></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="font-medium mb-4">Company</h3>
-            <ul className="space-y-2">
-              <li><Link to="/about" className="text-gray-400 hover:text-white">About</Link></li>
-              <li><Link to="/blog" className="text-gray-400 hover:text-white">Blog</Link></li>
-              <li><Link to="/careers" className="text-gray-400 hover:text-white">Careers</Link></li>
-              <li><Link to="/contact" className="text-gray-400 hover:text-white">Contact</Link></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="font-medium mb-4">Legal</h3>
-            <ul className="space-y-2">
-              <li><Link to="/privacy" className="text-gray-400 hover:text-white">Privacy</Link></li>
-              <li><Link to="/terms" className="text-gray-400 hover:text-white">Terms</Link></li>
-              <li><Link to="/sla" className="text-gray-400 hover:text-white">SLA</Link></li>
-              <li><Link to="/imprint" className="text-gray-400 hover:text-white">Imprint</Link></li>
-            </ul>
-          </div>
+    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 text-left">
+      <div className="max-w-7xl mx-auto pt-10 pb-8 px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {Object.entries(footerLinks).map(([category, links], idx) => (
+            <div key={idx}>
+              <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-300 tracking-wider uppercase mb-4">
+                {category}
+              </h3>
+              <ul className="space-y-3">
+                {links.map((link, linkIdx) => (
+                  <li key={linkIdx}>
+                    <Link 
+                      to={link.path} 
+                      className="text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-        
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm mb-4 md:mb-0">
+        <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
+          <p className="text-base text-gray-500 dark:text-gray-400">
             &copy; {new Date().getFullYear()} RDP Config. All rights reserved.
           </p>
-          <div className="flex gap-4">
-            <Link to="#" className="text-gray-400 hover:text-white">Twitter</Link>
-            <Link to="#" className="text-gray-400 hover:text-white">LinkedIn</Link>
-            <Link to="#" className="text-gray-400 hover:text-white">GitHub</Link>
-          </div>
         </div>
       </div>
     </footer>

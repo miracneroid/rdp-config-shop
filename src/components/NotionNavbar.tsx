@@ -1,26 +1,27 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogIn, Moon, Sun, Terminal, Monitor } from 'lucide-react';
+import { Menu, X, LogIn, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import PuzzleIcon from './ui/puzzle-icon';
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from "@/components/ui/dropdown-menu";
 
 const NotionNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+  const [isPricingOpen, setIsPricingOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen((v) => !v);
 
   const toggleTheme = () => setTheme(theme === 'dark' ? 'light' : 'dark');
+
+  const handlePricingMouseEnter = () => setIsPricingOpen(true);
+  const handlePricingMouseLeave = () => setIsPricingOpen(false);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 w-full bg-white/80 dark:bg-[#1A1F2C]/90 dark:border-none border-b border-gray-100 transition-shadow px-0 m-0">
@@ -38,48 +39,45 @@ const NotionNavbar = () => {
             <Link to="/" className="mx-2 text-gray-600 dark:text-gray-300 hover:text-[#9b87f5] dark:hover:text-[#9b87f5] text-base px-2 py-1.5 rounded transition-colors duration-150">
               Home
             </Link>
-            
-            {/* New Pricing Dropdown using NavigationMenu */}
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="mx-2 text-gray-600 dark:text-gray-300 hover:text-[#9b87f5] dark:hover:text-[#9b87f5] text-base font-normal bg-transparent hover:bg-transparent focus:bg-transparent">
+            <div
+              className="relative"
+              onMouseEnter={handlePricingMouseEnter}
+              onMouseLeave={handlePricingMouseLeave}
+            >
+              <DropdownMenu open={isPricingOpen} onOpenChange={setIsPricingOpen}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="mx-2 text-gray-600 dark:text-gray-300 hover:text-[#9b87f5] dark:hover:text-[#9b87f5] text-base font-normal px-2 py-1.5 rounded transition-colors flex items-center gap-1 bg-transparent"
+                    tabIndex={0}
+                  >
                     Pricing
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent className="min-w-[400px] bg-white dark:bg-[#1A1F2C] p-2 rounded-lg shadow-lg border border-gray-200 dark:border-gray-800">
-                    <ul className="grid gap-3 p-2">
-                      <li className="row-span-1">
-                        <NavigationMenuLink asChild>
-                          <Link to="/pricing?type=windows" className="flex items-start gap-4 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors">
-                            <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
-                              <Monitor className="h-6 w-6 text-gray-700 dark:text-gray-300" />
-                            </div>
-                            <div className="space-y-1">
-                              <h3 className="text-base font-medium text-gray-900 dark:text-white">Windows Servers</h3>
-                              <p className="text-sm text-gray-500 dark:text-gray-400">Unmetered Windows RDPs</p>
-                            </div>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                      <li className="row-span-1">
-                        <NavigationMenuLink asChild>
-                          <Link to="/pricing?type=linux" className="flex items-start gap-4 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors">
-                            <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
-                              <Terminal className="h-6 w-6 text-gray-700 dark:text-gray-300" />
-                            </div>
-                            <div className="space-y-1">
-                              <h3 className="text-base font-medium text-gray-900 dark:text-white">Linux VPS</h3>
-                              <p className="text-sm text-gray-500 dark:text-gray-400">Unmetered Linux servers</p>
-                            </div>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-            
+                    <span className="ml-1 flex items-center">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth={2.8} strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="start"
+                  className="min-w-[300px] p-3 z-[150] bg-[#1A1F2C] text-gray-200 border border-gray-700 rounded-md shadow-lg"
+                >
+                  <DropdownMenuItem asChild>
+                    <Link to="/pricing?type=windows" className="flex flex-col px-3 py-3 w-full hover:bg-gray-700 rounded-md transition-colors">
+                      <span className="font-medium text-white text-base">Windows Server</span>
+                      <span className="text-xs text-gray-300 mt-1">Unmetered Windows RDPs</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/pricing?type=linux" className="flex flex-col px-3 py-3 w-full hover:bg-gray-700 rounded-md transition-colors">
+                      <span className="font-medium text-white text-base">Linux VPS</span>
+                      <span className="text-xs text-gray-300 mt-1">Unmetered Linux Servers</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <Link to="/help" className="mx-2 text-gray-600 dark:text-gray-300 hover:text-[#9b87f5] dark:hover:text-[#9b87f5] text-base px-2 py-1.5 rounded transition-colors duration-150">
               Help
             </Link>
@@ -146,46 +144,40 @@ const NotionNavbar = () => {
         <nav className="flex flex-col text-base p-5 gap-2 dark:bg-[#1A1F2C]">
           <Link
             to="/"
-            className="py-2 px-3 rounded text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            className="py-2 px-3 rounded text-gray-800 hover:bg-gray-100 transition"
             onClick={() => setIsMenuOpen(false)}
           >
             Home
           </Link>
           <div className="flex flex-col gap-0.5">
-            <span className="text-[15px] font-semibold text-gray-900 dark:text-gray-200 px-3 pt-2 pb-1">Pricing</span>
+            <span className="text-[15px] font-semibold text-gray-900 px-3 pt-2 pb-1">Pricing</span>
             <Link
               to="/pricing?type=windows"
-              className="flex items-start gap-2 px-3 py-2 rounded text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              className="flex flex-col px-4 py-2 rounded text-gray-800 hover:bg-gray-100 transition"
               onClick={() => setIsMenuOpen(false)}
             >
-              <Monitor className="h-5 w-5 mt-0.5 text-gray-600 dark:text-gray-400" />
-              <div>
-                <div>Windows Server</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">Unmetered Windows RDPs</div>
-              </div>
+              <span className="text-base font-medium">Windows Server</span>
+              <span className="text-xs text-gray-500 -mt-0.5">Unmetered Windows RDPs</span>
             </Link>
             <Link
               to="/pricing?type=linux"
-              className="flex items-start gap-2 px-3 py-2 rounded text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+              className="flex flex-col px-4 py-2 rounded text-gray-800 hover:bg-gray-100 transition"
               onClick={() => setIsMenuOpen(false)}
             >
-              <Terminal className="h-5 w-5 mt-0.5 text-gray-600 dark:text-gray-400" />
-              <div>
-                <div>Linux VPS</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">Unmetered Linux servers</div>
-              </div>
+              <span className="text-base font-medium">Linux VPS</span>
+              <span className="text-xs text-gray-500 -mt-0.5">Unmetered Linux Servers</span>
             </Link>
           </div>
           <Link
             to="/help"
-            className="py-2 px-3 rounded text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            className="py-2 px-3 rounded text-gray-800 hover:bg-gray-100 transition"
             onClick={() => setIsMenuOpen(false)}
           >
             Help
           </Link>
           <Link
             to="/contact"
-            className="py-2 px-3 rounded text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            className="py-2 px-3 rounded text-gray-800 hover:bg-gray-100 transition"
             onClick={() => setIsMenuOpen(false)}
           >
             Contact

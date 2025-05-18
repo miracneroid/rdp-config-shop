@@ -1,7 +1,7 @@
 
 import React from "react";
 import MainNavbar from "@/components/MainNavbar";
-import HeroWithPuzzle from "@/components/HeroWithPuzzle";
+import NotionHero from "@/components/NotionHero";
 import NotionFeatures from "@/components/NotionFeatures";
 import SimpleFooter from "@/components/SimpleFooter";
 import StatsBanner from "@/components/StatsBanner";
@@ -16,9 +16,10 @@ const Index = () => {
   return (
     <div className="w-full min-h-screen flex flex-col bg-notion-background font-sans">
       <MainNavbar />
-      <main className="flex-1 flex flex-col w-full">
-        <HeroWithPuzzle />
-        
+      <main className="flex-1 flex flex-col w-full mt-16"> {/* Added margin-top to account for fixed navbar */}
+        <div className="scroll-animate opacity-0">
+          <NotionHero />
+        </div>
         <div className="scroll-animate opacity-0">
           <ControlPanelSection />
         </div>
