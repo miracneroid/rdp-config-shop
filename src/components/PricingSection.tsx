@@ -108,11 +108,8 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
       {showDetailedComparison && (
         <div className="py-16">
           <div className="flex flex-col">
-            <div className="w-full mb-8 text-center">
-              <h2 className="text-4xl font-bold mb-4">Compare Plans</h2>
-              <p className="text-gray-400 max-w-3xl mx-auto">
-                Choose the plan that best fits your needs. All plans include core protection.
-              </p>
+            <div className="w-full mb-4 flex justify-center">
+              <span className="text-lg text-blue-400 font-medium">Compare Plans</span>
             </div>
 
             <div className="w-full overflow-auto bg-[#121218] rounded-xl border border-gray-800">
