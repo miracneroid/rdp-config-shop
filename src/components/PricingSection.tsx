@@ -112,14 +112,17 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
               <span className="text-lg text-blue-400 font-medium">Compare Plans</span>
             </div>
 
-            <div className="w-full overflow-auto bg-[#121218] rounded-xl border border-gray-800">
+            <div className="w-full overflow-auto backdrop-blur-sm bg-[#12121880] rounded-xl border border-gray-800">
               {/* Header Row */}
-              <Table className="border-collapse">
+              <Table className="border-collapse border-spacing-2">
                 <TableHeader className="bg-transparent">
-                  <TableRow className="border-b border-gray-800">
-                    <TableHead className="w-[250px] text-left p-6"></TableHead>
+                  <TableRow className="border-none">
+                    <TableHead className="w-[250px] text-left p-6 border-none"></TableHead>
                     {plans.map((plan, index) => (
-                      <TableHead key={index} className="min-w-[140px] text-center p-6 border-l border-gray-800">
+                      <TableHead 
+                        key={index} 
+                        className="min-w-[140px] text-center p-6 border-none"
+                      >
                         <div className="mb-3 flex justify-center">
                           <div className={`w-12 h-12 rounded-full flex items-center justify-center
                             ${plan.name === "Personal" ? "bg-[#99ddff30]" : 
@@ -155,16 +158,16 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
 
                 <TableBody>
                   {/* Category Header */}
-                  <TableRow className="bg-[#1a1a24]">
-                    <TableCell colSpan={5} className="p-4 text-left">
+                  <TableRow className="bg-[#1a1a2480] border-none">
+                    <TableCell colSpan={5} className="p-4 text-left border-none">
                       <h4 className="font-semibold text-lg text-blue-400">Features</h4>
                     </TableCell>
                   </TableRow>
 
                   {/* Feature Rows */}
                   {features.map((feature, idx) => (
-                    <TableRow key={idx} className={`${idx % 2 === 0 ? 'bg-[#1a1a24]' : 'bg-[#121218]'}`}>
-                      <TableCell className="p-5 text-left">
+                    <TableRow key={idx} className={`${idx % 2 === 0 ? 'bg-[#1a1a2440]' : 'bg-[#12121840]'} border-none`}>
+                      <TableCell className="p-5 text-left border-none">
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -190,7 +193,10 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                         return (
                           <TableCell 
                             key={planIdx} 
-                            className={`p-5 text-center ${isAvailable ? 'bg-opacity-10 bg-green-500' : ''}`}
+                            className={`
+                              p-5 text-center border-none
+                              ${isAvailable ? 'm-2 rounded-md border border-gray-700 bg-green-500/10' : 'm-2'}
+                            `}
                           >
                             {isAvailable ? (
                               <div className="flex justify-center">
