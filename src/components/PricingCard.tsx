@@ -2,8 +2,6 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '@/context/CartContext';
-import { useSettings } from '@/context/SettingsContext';
 
 export interface PricingPlan {
   name: string;
@@ -23,8 +21,6 @@ interface PricingCardProps {
 
 const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
   const navigate = useNavigate();
-  const { addToCart } = useCart();
-  const { settings } = useSettings();
 
   const handleChoosePlan = () => {
     const cpuCores = parseInt(plan.cpu.split(' ')[0]) || 2;
@@ -46,7 +42,6 @@ const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
       }
     };
 
-    addToCart(rdpItem);
     navigate('/cart');
   };
 
@@ -72,7 +67,7 @@ const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
         <h3 className="text-2xl font-bold text-[#1e2537] dark:text-white mb-4">{plan.name}</h3>
         <div className="flex items-baseline">
           <span className="text-4xl font-bold text-[#1e2537] dark:text-white">
-            {settings.currency.symbol}{plan.price}
+            {"€"}{plan.price}
           </span>
           <span className="ml-1 text-gray-500 dark:text-gray-400">/month</span>
         </div>
