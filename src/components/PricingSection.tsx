@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -103,31 +104,55 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
 
       {showDetailedComparison && (
         <div className="py-16">
-          <div className="flex flex-col md:flex-row gap-10">
-            <div className="w-full md:w-1/4">
+          <div className="flex flex-col">
+            <div className="w-full mb-8">
               <h2 className="text-4xl font-bold mb-4">Compare Plans</h2>
             </div>
 
-            <div className="w-full md:w-3/4 overflow-auto">
-              <div className="grid grid-cols-[250px_repeat(3,minmax(150px,1fr))] gap-4">
-                <div></div>
+            <div className="w-full overflow-auto bg-[#121218] rounded-xl">
+              {/* Header Row */}
+              <div className="grid grid-cols-[1fr_repeat(3,minmax(150px,1fr))] w-full">
+                <div className="p-6"></div>
                 {plans.map((plan, index) => (
-                  <div key={index} className="text-center">
-                    <h3 className="text-lg font-bold">{plan.name}</h3>
-                    <div className="mt-2">
-                      <span className="text-2xl font-bold">{plan.price}</span>
-                      {plan.price > 0 && <span className="text-sm text-gray-400">/ mo</span>}
+                  <div key={index} className="text-center p-6">
+                    <div className="mb-2 flex justify-center">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center
+                        ${plan.name === "Personal" ? "bg-[#99ddff30]" : 
+                          plan.name === "Starter" ? "bg-[#c4b1ff30]" : 
+                          "bg-[#a6b1ff30]"}`
+                      }>
+                        <div className={`
+                          ${plan.name === "Personal" ? "w-3 h-3 bg-[#99ddff] rounded-full" : 
+                            plan.name === "Starter" ? "w-3 h-3 bg-[#c4b1ff] rounded-full" : 
+                            "w-3 h-3 transform rotate-45 bg-[#a6b1ff]"}`
+                        }></div>
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-semibold mb-1">{plan.name}</h3>
+                    <div className="mt-2 text-2xl font-bold">
+                      {plan.price === 0 ? "Free" : (
+                        <span>{`$${plan.price}`} <span className="text-sm text-gray-400">/ month</span></span>
+                      )}
                     </div>
                   </div>
                 ))}
+              </div>
 
-                {features.map((feature, idx) => (
-                  <React.Fragment key={idx}>
+              {/* Feature Rows */}
+              {features.map((feature, idx) => (
+                <div 
+                  key={idx} 
+                  className={`grid grid-cols-[1fr_repeat(3,minmax(150px,1fr))] w-full 
+                    ${idx % 2 === 0 ? 'bg-[#1a1a24]' : 'bg-[#121218]'}`
+                  }
+                >
+                  <div className="p-5 flex items-center">
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <div className="flex items-center cursor-pointer">
-                            <span className="font-medium text-sm">{feature.name}</span>
+                          <div className="flex items-center gap-2 cursor-pointer text-sm font-medium">
+                            <span>{feature.name}</span>
+                            <HelpCircle className="h-4 w-4 text-gray-500" />
                           </div>
                         </TooltipTrigger>
                         <TooltipContent>
@@ -135,14 +160,18 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
-                    {plans.map((plan, planIdx) => (
-                      <div key={planIdx} className="flex justify-center items-center">
-                        {renderIcon(featureAvailability[plan.name as keyof typeof featureAvailability]?.[idx])}
-                      </div>
-                    ))}
-                  </React.Fragment>
-                ))}
-              </div>
+                  </div>
+                  {plans.map((plan, planIdx) => (
+                    <div key={planIdx} className="flex justify-center items-center p-5">
+                      {featureAvailability[plan.name as keyof typeof featureAvailability][idx] ? (
+                        <CheckCircle className="h-5 w-5 text-green-500" />
+                      ) : (
+                        <span className="h-5 w-5 flex items-center justify-center text-gray-700">—</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
         </div>
