@@ -7,6 +7,8 @@ import { CheckCircle, XCircle, HelpCircle, ChevronUp, ChevronDown } from "lucide
 import PricingCard from "@/components/PricingCard";
 import { supabase } from "@/integrations/supabase/client";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Separator } from "@/components/ui/separator";
 
 export interface PricingPlan {
   name: string;
@@ -115,93 +117,98 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
 
             <div className="w-full overflow-auto bg-[#121218] rounded-xl border border-gray-800">
               {/* Header Row */}
-              <div className="grid grid-cols-[1.5fr_repeat(4,minmax(140px,1fr))] w-full border-b border-gray-800">
-                <div className="p-6 text-left"></div>
-                {plans.map((plan, index) => (
-                  <div key={index} className="text-center p-6 border-l border-gray-800">
-                    <div className="mb-3 flex justify-center">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center
-                        ${plan.name === "Personal" ? "bg-[#99ddff30]" : 
-                          plan.name === "Starter" ? "bg-[#c4b1ff30]" : 
-                          plan.name === "Premium" ? "bg-[#a6b1ff30]" :
-                          "bg-[#f9a8d430]"}`
-                      }>
-                        <div className={`
-                          ${plan.name === "Personal" ? "w-4 h-4 bg-[#99ddff] rounded-full" : 
-                            plan.name === "Starter" ? "w-4 h-4 bg-[#c4b1ff] rounded-full" : 
-                            plan.name === "Premium" ? "w-4 h-4 transform rotate-45 bg-[#a6b1ff]" :
-                            "w-4 h-4 bg-[#f9a8d4] rounded-md"}`
-                        }></div>
-                      </div>
-                    </div>
-                    <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-                    <div className="text-2xl font-bold">
-                      {plan.price === 0 ? "Free" : (
-                        <span>{`$${plan.price}`} <span className="text-sm text-gray-400">/ month</span></span>
-                      )}
-                    </div>
-                    {plan.popular && (
-                      <div className="mt-2">
-                        <span className="bg-blue-600/30 text-blue-400 text-xs px-2 py-1 rounded-full">
-                          Most Popular
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Feature Categories */}
-              <div className="border-b border-gray-800 bg-[#1a1a24]">
-                <div className="grid grid-cols-[1.5fr_repeat(4,minmax(140px,1fr))] w-full">
-                  <div className="p-4 text-left">
-                    <h4 className="font-semibold text-lg text-blue-400">Features</h4>
-                  </div>
-                  <div className="p-4 border-l border-gray-800"></div>
-                  <div className="p-4 border-l border-gray-800"></div>
-                  <div className="p-4 border-l border-gray-800"></div>
-                  <div className="p-4 border-l border-gray-800"></div>
-                </div>
-              </div>
-
-              {/* Feature Rows */}
-              {features.map((feature, idx) => (
-                <div 
-                  key={idx} 
-                  className={`grid grid-cols-[1.5fr_repeat(4,minmax(140px,1fr))] w-full 
-                    ${idx % 2 === 0 ? 'bg-[#1a1a24]' : 'bg-[#121218]'} border-b border-gray-800 last:border-b-0`
-                  }
-                >
-                  <div className="p-5 flex items-center text-left">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className="flex items-center gap-2 cursor-pointer text-sm font-medium">
-                            <span>{feature.name}</span>
-                            <HelpCircle className="h-4 w-4 text-gray-500" />
+              <Table className="border-collapse">
+                <TableHeader className="bg-transparent">
+                  <TableRow className="border-b border-gray-800">
+                    <TableHead className="w-[250px] text-left p-6"></TableHead>
+                    {plans.map((plan, index) => (
+                      <TableHead key={index} className="min-w-[140px] text-center p-6 border-l border-gray-800">
+                        <div className="mb-3 flex justify-center">
+                          <div className={`w-12 h-12 rounded-full flex items-center justify-center
+                            ${plan.name === "Personal" ? "bg-[#99ddff30]" : 
+                              plan.name === "Starter" ? "bg-[#c4b1ff30]" : 
+                              plan.name === "Premium" ? "bg-[#a6b1ff30]" :
+                              "bg-[#f9a8d430]"}`
+                          }>
+                            <div className={`
+                              ${plan.name === "Personal" ? "w-4 h-4 bg-[#99ddff] rounded-full" : 
+                                plan.name === "Starter" ? "w-4 h-4 bg-[#c4b1ff] rounded-full" : 
+                                plan.name === "Premium" ? "w-4 h-4 transform rotate-45 bg-[#a6b1ff]" :
+                                "w-4 h-4 bg-[#f9a8d4] rounded-md"}`
+                            }></div>
                           </div>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          {feature.tooltip}
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  {plans.map((plan, planIdx) => {
-                    // Check if the plan name exists in featureAvailability, if not default to Personal
-                    const planKey = featureAvailability[plan.name] ? plan.name : "Personal";
-                    return (
-                      <div key={planIdx} className="flex justify-center items-center p-5 border-l border-gray-800">
-                        {featureAvailability[planKey][idx] ? (
-                          <CheckCircle className="h-5 w-5 text-green-500" />
-                        ) : (
-                          <span className="h-5 w-5 flex items-center justify-center text-gray-700">—</span>
+                        </div>
+                        <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
+                        <div className="text-2xl font-bold">
+                          {plan.price === 0 ? "Free" : (
+                            <span>{`$${plan.price}`} <span className="text-sm text-gray-400">/ month</span></span>
+                          )}
+                        </div>
+                        {plan.popular && (
+                          <div className="mt-2">
+                            <span className="bg-blue-600/30 text-blue-400 text-xs px-2 py-1 rounded-full">
+                              Most Popular
+                            </span>
+                          </div>
                         )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                  {/* Category Header */}
+                  <TableRow className="bg-[#1a1a24]">
+                    <TableCell colSpan={5} className="p-4 text-left">
+                      <h4 className="font-semibold text-lg text-blue-400">Features</h4>
+                    </TableCell>
+                  </TableRow>
+
+                  {/* Feature Rows */}
+                  {features.map((feature, idx) => (
+                    <TableRow key={idx} className={`${idx % 2 === 0 ? 'bg-[#1a1a24]' : 'bg-[#121218]'}`}>
+                      <TableCell className="p-5 text-left">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <div className="flex items-center gap-2 cursor-pointer text-sm font-medium">
+                                <span>{feature.name}</span>
+                                <HelpCircle className="h-4 w-4 text-gray-500" />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              {feature.tooltip}
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </TableCell>
+
+                      {plans.map((plan, planIdx) => {
+                        // Determine plan key with fallback to Personal
+                        const planKey = Object.keys(featureAvailability).includes(plan.name) 
+                          ? plan.name 
+                          : "Personal";
+                        const isAvailable = featureAvailability[planKey]?.[idx] ?? false;
+                        
+                        return (
+                          <TableCell 
+                            key={planIdx} 
+                            className={`p-5 text-center ${isAvailable ? 'bg-opacity-10 bg-green-500' : ''}`}
+                          >
+                            {isAvailable ? (
+                              <div className="flex justify-center">
+                                <CheckCircle className="h-5 w-5 text-green-500" />
+                              </div>
+                            ) : (
+                              <span className="h-5 w-5 flex items-center justify-center text-gray-700">—</span>
+                            )}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           </div>
         </div>
