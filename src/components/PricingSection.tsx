@@ -106,48 +106,73 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
       {showDetailedComparison && (
         <div className="py-16">
           <div className="flex flex-col">
-            <div className="w-full mb-8">
+            <div className="w-full mb-8 text-center">
               <h2 className="text-4xl font-bold mb-4">Compare Plans</h2>
+              <p className="text-gray-400 max-w-3xl mx-auto">
+                Choose the plan that best fits your needs. All plans include core protection.
+              </p>
             </div>
 
-            <div className="w-full overflow-auto bg-[#121218] rounded-xl">
+            <div className="w-full overflow-auto bg-[#121218] rounded-xl border border-gray-800">
               {/* Header Row */}
-              <div className="grid grid-cols-[1fr_repeat(3,minmax(150px,1fr))] w-full">
-                <div className="p-6"></div>
+              <div className="grid grid-cols-[1.5fr_repeat(4,minmax(140px,1fr))] w-full border-b border-gray-800">
+                <div className="p-6 text-left"></div>
                 {plans.map((plan, index) => (
-                  <div key={index} className="text-center p-6">
-                    <div className="mb-2 flex justify-center">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center
+                  <div key={index} className="text-center p-6 border-l border-gray-800">
+                    <div className="mb-3 flex justify-center">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center
                         ${plan.name === "Personal" ? "bg-[#99ddff30]" : 
                           plan.name === "Starter" ? "bg-[#c4b1ff30]" : 
-                          "bg-[#a6b1ff30]"}`
+                          plan.name === "Premium" ? "bg-[#a6b1ff30]" :
+                          "bg-[#f9a8d430]"}`
                       }>
                         <div className={`
-                          ${plan.name === "Personal" ? "w-3 h-3 bg-[#99ddff] rounded-full" : 
-                            plan.name === "Starter" ? "w-3 h-3 bg-[#c4b1ff] rounded-full" : 
-                            "w-3 h-3 transform rotate-45 bg-[#a6b1ff]"}`
+                          ${plan.name === "Personal" ? "w-4 h-4 bg-[#99ddff] rounded-full" : 
+                            plan.name === "Starter" ? "w-4 h-4 bg-[#c4b1ff] rounded-full" : 
+                            plan.name === "Premium" ? "w-4 h-4 transform rotate-45 bg-[#a6b1ff]" :
+                            "w-4 h-4 bg-[#f9a8d4] rounded-md"}`
                         }></div>
                       </div>
                     </div>
-                    <h3 className="text-xl font-semibold mb-1">{plan.name}</h3>
-                    <div className="mt-2 text-2xl font-bold">
+                    <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
+                    <div className="text-2xl font-bold">
                       {plan.price === 0 ? "Free" : (
                         <span>{`$${plan.price}`} <span className="text-sm text-gray-400">/ month</span></span>
                       )}
                     </div>
+                    {plan.popular && (
+                      <div className="mt-2">
+                        <span className="bg-blue-600/30 text-blue-400 text-xs px-2 py-1 rounded-full">
+                          Most Popular
+                        </span>
+                      </div>
+                    )}
                   </div>
                 ))}
+              </div>
+
+              {/* Feature Categories */}
+              <div className="border-b border-gray-800 bg-[#1a1a24]">
+                <div className="grid grid-cols-[1.5fr_repeat(4,minmax(140px,1fr))] w-full">
+                  <div className="p-4 text-left">
+                    <h4 className="font-semibold text-lg text-blue-400">Features</h4>
+                  </div>
+                  <div className="p-4 border-l border-gray-800"></div>
+                  <div className="p-4 border-l border-gray-800"></div>
+                  <div className="p-4 border-l border-gray-800"></div>
+                  <div className="p-4 border-l border-gray-800"></div>
+                </div>
               </div>
 
               {/* Feature Rows */}
               {features.map((feature, idx) => (
                 <div 
                   key={idx} 
-                  className={`grid grid-cols-[1fr_repeat(3,minmax(150px,1fr))] w-full 
-                    ${idx % 2 === 0 ? 'bg-[#1a1a24]' : 'bg-[#121218]'}`
+                  className={`grid grid-cols-[1.5fr_repeat(4,minmax(140px,1fr))] w-full 
+                    ${idx % 2 === 0 ? 'bg-[#1a1a24]' : 'bg-[#121218]'} border-b border-gray-800 last:border-b-0`
                   }
                 >
-                  <div className="p-5 flex items-center">
+                  <div className="p-5 flex items-center text-left">
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -166,7 +191,7 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                     // Check if the plan name exists in featureAvailability, if not default to Personal
                     const planKey = featureAvailability[plan.name] ? plan.name : "Personal";
                     return (
-                      <div key={planIdx} className="flex justify-center items-center p-5">
+                      <div key={planIdx} className="flex justify-center items-center p-5 border-l border-gray-800">
                         {featureAvailability[planKey][idx] ? (
                           <CheckCircle className="h-5 w-5 text-green-500" />
                         ) : (
