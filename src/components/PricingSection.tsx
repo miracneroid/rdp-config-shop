@@ -49,7 +49,8 @@ const features = [
 const featureAvailability = {
   "Personal": [true, true, true, false, false, false, false, false, false, false, false, false, false, false, false],
   "Starter": [true, true, true, true, true, true, true, true, true, true, true, false, false, false, false],
-  "Premium": [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]
+  "Premium": [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true],
+  "Enterprise": [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]
 };
 
 const renderIcon = (available: boolean) => {
@@ -161,15 +162,19 @@ const PricingSection = ({ plans, showDetailedComparison = true }: PricingSection
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  {plans.map((plan, planIdx) => (
-                    <div key={planIdx} className="flex justify-center items-center p-5">
-                      {featureAvailability[plan.name as keyof typeof featureAvailability][idx] ? (
-                        <CheckCircle className="h-5 w-5 text-green-500" />
-                      ) : (
-                        <span className="h-5 w-5 flex items-center justify-center text-gray-700">—</span>
-                      )}
-                    </div>
-                  ))}
+                  {plans.map((plan, planIdx) => {
+                    // Check if the plan name exists in featureAvailability, if not default to Personal
+                    const planKey = featureAvailability[plan.name] ? plan.name : "Personal";
+                    return (
+                      <div key={planIdx} className="flex justify-center items-center p-5">
+                        {featureAvailability[planKey][idx] ? (
+                          <CheckCircle className="h-5 w-5 text-green-500" />
+                        ) : (
+                          <span className="h-5 w-5 flex items-center justify-center text-gray-700">—</span>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               ))}
             </div>
