@@ -38,6 +38,12 @@ export default {
         "rdp-purple": "#9b87f5",
         "rdp-purple-light": "#b8a8f8",
         "rdp-purple-dark": "#7E69AB",
+        // Spotlight effect colors
+        spotlight: {
+          purple: "#8B5CF6",
+          violet: "#7C3AED",
+          indigo: "#4F46E5",
+        },
       },
       fontFamily: {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
@@ -45,6 +51,7 @@ export default {
       boxShadow: {
         notion: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
         "notion-lg": "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
+        spotlight: "0 0 30px 10px rgba(139, 92, 246, 0.3)",
       },
       keyframes: {
         "accordion-down": {
@@ -72,6 +79,21 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.5" },
         },
+        spotlight: {
+          "0%": {
+            opacity: "0",
+            transform: "scale(0.8) translate(-50%, -50%)"
+          },
+          "100%": {
+            opacity: "1",
+            transform: "scale(1) translate(-50%, -50%)"
+          }
+        },
+        glow: {
+          "0%": { boxShadow: "0 0 15px 5px rgba(139, 92, 246, 0.3)" },
+          "50%": { boxShadow: "0 0 30px 15px rgba(139, 92, 246, 0.5)" },
+          "100%": { boxShadow: "0 0 15px 5px rgba(139, 92, 246, 0.3)" }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -80,6 +102,8 @@ export default {
         "fade-in": "fade-in 0.6s ease-out",
         shine: "shine 1.5s",
         pulse: "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        spotlight: "spotlight 1.5s ease-out forwards",
+        glow: "glow 3s infinite ease-in-out",
       },
       transitionDelay: {
         "2000": "2000ms",
