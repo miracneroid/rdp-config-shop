@@ -1,286 +1,212 @@
 
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Check, ShieldCheck, Info, Code, Ban, HeadphonesIcon } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import Navbar from "@/components/Navbar";
+import PricingSection from "@/components/PricingSection";
 import SimpleFooter from "@/components/SimpleFooter";
+import StatsBanner from "@/components/StatsBanner";
 import HomeFAQ from "@/components/HomeFAQ";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Separator } from "@/components/ui/separator";
-import PlanComparisonTable from "@/components/PlanComparisonTable";
+import FeatureHighlightGrid from "@/components/FeatureHighlightGrid";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Monitor, FileCode } from "lucide-react";
 
-const PricingPage: React.FC = () => {
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "annually">("monthly");
+const windowsPlans = [
+  {
+    name: "Basic",
+    price: 29,
+    cpu: "2 Cores",
+    ram: "4 GB",
+    storage: "64 GB SSD",
+    features: [
+      "Windows OS",
+      "Basic Software Suite",
+      "24/7 Access",
+      "Standard Support"
+    ]
+  },
+  {
+    name: "Standard",
+    price: 59,
+    cpu: "4 Cores",
+    ram: "8 GB",
+    storage: "128 GB SSD",
+    features: [
+      "Windows OS",
+      "Standard Software Suite",
+      "24/7 Access",
+      "Priority Support",
+      "Daily Backups"
+    ],
+    popular: true
+  },
+  {
+    name: "Premium",
+    price: 99,
+    cpu: "8 Cores",
+    ram: "16 GB",
+    storage: "256 GB SSD",
+    features: [
+      "Windows OS",
+      "Professional Software Suite",
+      "24/7 Access",
+      "Priority Support",
+      "Daily Backups",
+      "Enhanced Security"
+    ]
+  },
+  {
+    name: "Enterprise",
+    price: 199,
+    cpu: "16 Cores",
+    ram: "32 GB",
+    storage: "512 GB SSD",
+    features: [
+      "Windows OS",
+      "Enterprise Software Suite",
+      "24/7 Access",
+      "Priority Support",
+      "Hourly Backups",
+      "Advanced Security",
+      "Dedicated Resources"
+    ]
+  }
+];
 
-  const plans = [
-    {
-      name: "Personal",
-      icon: "circle",
-      price: "Free",
-      iconColor: "[#4cc9f0]",
-      description: "For individuals who want to securely connect personal devices, for free.",
-      features: ["1 device"],
-      buttonText: "Try Now",
-      buttonVariant: "outline",
-      popular: false,
-    },
-    {
-      name: "Starter",
-      icon: "square",
-      price: "$2.99",
-      iconColor: "[#da7dff]",
-      description: "For teams or organizations looking for an easy-to-use, secure, legacy VPN replacement.",
-      features: ["Covers 5 devices"],
-      buttonText: "Subscribe Now",
-      buttonVariant: "primary",
-      popular: true,
-      discount: "Save 65%",
-      extraMonths: "+3 EXTRA months"
-    },
-    {
-      name: "Premium",
-      icon: "diamond",
-      price: "$6.99",
-      iconColor: "[#926dff]",
-      description: "For companies who need service and resource level authentication and access control.",
-      features: ["Covers 10 devices"],
-      buttonText: "Subscribe Now",
-      buttonVariant: "outline",
-      popular: false,
-      discount: "Save 75%",
-      extraMonths: "+3 EXTRA months"
-    }
-  ];
+const linuxPlans = [
+  {
+    name: "Basic",
+    price: 19,
+    cpu: "2 Cores",
+    ram: "4 GB",
+    storage: "64 GB SSD",
+    features: [
+      "Linux OS",
+      "Basic Tools",
+      "SSH Access",
+      "24/7 Access",
+      "Standard Support"
+    ]
+  },
+  {
+    name: "Standard",
+    price: 39,
+    cpu: "4 Cores",
+    ram: "8 GB",
+    storage: "128 GB SSD",
+    features: [
+      "Linux OS",
+      "Development Tools",
+      "SSH Access",
+      "24/7 Access",
+      "Priority Support",
+      "Daily Backups"
+    ],
+    popular: true
+  },
+  {
+    name: "Premium",
+    price: 79,
+    cpu: "8 Cores",
+    ram: "16 GB",
+    storage: "256 GB SSD",
+    features: [
+      "Linux OS",
+      "Advanced Tools",
+      "SSH Access",
+      "24/7 Access",
+      "Priority Support",
+      "Daily Backups",
+      "Enhanced Security"
+    ]
+  },
+  {
+    name: "Enterprise",
+    price: 149,
+    cpu: "16 Cores",
+    ram: "32 GB",
+    storage: "512 GB SSD",
+    features: [
+      "Linux OS",
+      "Enterprise Suite",
+      "SSH Access",
+      "24/7 Access",
+      "Priority Support",
+      "Hourly Backups",
+      "Advanced Security",
+      "Dedicated Resources"
+    ]
+  }
+];
 
-  const partners = [
-    "slack", "stripe", "airwallex", "spotify", "booking.com", "gusto"
-  ];
+const PricingPage = () => {
+  const [tab, setTab] = useState<"windows" | "linux">("windows");
+  const [selectedPlan, setSelectedPlan] = useState("Standard"); // Default to Standard as it's popular
   
-  // Features for comparison table
-  const features = [
-    { name: "Block viruses, ransomware and malware", tooltip: "Protection against malicious software" },
-    { name: "Monitor your apps for any suspicious activity", tooltip: "Real-time app monitoring" },
-    { name: "Block intruders with advanced firewall", tooltip: "Prevents unauthorized access" },
-    { name: "Stop webcam spies", tooltip: "Blocks unauthorized webcam access" },
-    { name: "Avoid fake and dangerous websites", tooltip: "Web protection" },
-    { name: "Give your sensitive info extra protection", tooltip: "Enhanced data security" },
-    { name: "Enjoy unlimited VPN with 55 locations", tooltip: "Global VPN network" },
-    { name: "Monitor your online accounts for breaches", tooltip: "Account breach alerts" },
-    { name: "Avoid being tracked by advertisers", tooltip: "Anti-tracking protection" },
-    { name: "Update your drivers automatically", tooltip: "Automatic driver updates" },
-    { name: "Clean up and tune up your devices", tooltip: "Device optimization" },
-    { name: "Get an alert if your identity has been compromised", tooltip: "Identity monitoring" },
-    { name: "Get up to $2 million reimbursement for identity theft*", tooltip: "Financial protection" },
-    { name: "Enjoy 24/7 personal support for identity and tech issues", tooltip: "Premium customer support" },
-    { name: "Monitor credit reports from 3 leading credit bureaus", tooltip: "Credit monitoring" }
-  ];
-  
-  // Features availability by plan
-  const featureAvailability = {
-    "Personal": [true, true, true, false, false, false, false, false, false, false, false, false, false, false, false],
-    "Starter": [true, true, true, true, true, true, true, true, true, true, true, false, false, false, false],
-    "Premium": [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true]
+  // Handler to update selected plan
+  const handlePlanSelect = (planName: string) => {
+    console.log("Selected plan in PricingPage:", planName);
+    setSelectedPlan(planName);
   };
+  
+  // Use useEffect to make sure FeatureHighlightSection shows the selected plan on initial render
+  useEffect(() => {
+    // Find the popular plan or use the first plan
+    const plans = tab === "windows" ? windowsPlans : linuxPlans;
+    const popularPlan = plans.find(p => p.popular);
+    const initialPlan = popularPlan?.name || plans[0].name;
+    setSelectedPlan(initialPlan);
+  }, [tab]);
 
   return (
-    <div className="min-h-screen bg-[#0c0c20] text-white">
-      {/* Star background with small dots */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        {Array.from({ length: 50 }).map((_, i) => (
-          <div 
-            key={i}
-            className={`absolute h-1 w-1 rounded-full bg-white/20`}
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              opacity: Math.random() * 0.5 + 0.1
-            }}
-          ></div>
-        ))}
-      </div>
-
-      {/* Pricing Section */}
-      <div className="relative z-10 pt-24 pb-20 px-4 max-w-7xl mx-auto">
-        {/* Pricing title and tagline exactly as shown in screenshot */}
-        <div className="text-center mb-16">
-          <p className="text-blue-400 mb-4">Pricing</p>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            Security. Privacy. Freedom.<br />
-            for Everyone.
-          </h1>
-          <p className="text-gray-400 max-w-2xl mx-auto mb-10 text-lg">
-            Select a VPN plan to access your favorite content with lightning speed 
-            and unlimited data.
-          </p>
-          
-          {/* Feature pills */}
-          <div className="flex flex-wrap justify-center gap-4 mb-16">
-            <div className="flex items-center text-sm text-gray-300 bg-[#1e1e3a] px-4 py-2 rounded-full">
-              <Code size={16} className="mr-2" /> Open source
-            </div>
-            <div className="flex items-center text-sm text-gray-300 bg-[#1e1e3a] px-4 py-2 rounded-full">
-              <Ban size={16} className="mr-2" /> No-logs policy
-            </div>
-            <div className="flex items-center text-sm text-gray-300 bg-[#1e1e3a] px-4 py-2 rounded-full">
-              <HeadphonesIcon size={16} className="mr-2" /> 24/7 Live support
-            </div>
-          </div>
-          
-          {/* Curved line */}
-          <div className="relative w-full max-w-4xl mx-auto my-12">
-            <div className="h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent"></div>
-            <div 
-              className="absolute w-full h-12 border-t-0 border-x-0 border-b-2 border-gray-600/20 rounded-[50%]" 
-              style={{ top: "-24px" }}></div>
-          </div>
-          
-          {/* Billing toggle */}
-          <div className="flex items-center justify-center mb-16">
-            <button 
-              onClick={() => setBillingCycle("monthly")}
-              className={`px-6 py-2 rounded-l-full ${billingCycle === "monthly" 
-                ? "bg-blue-500 bg-opacity-20 text-white" 
-                : "bg-[#1e1e3a] text-gray-400"}`}
-            >
-              Monthly
-            </button>
-            <button 
-              onClick={() => setBillingCycle("annually")}
-              className={`px-6 py-2 rounded-r-full ${billingCycle === "annually" 
-                ? "bg-blue-500 bg-opacity-20 text-white" 
-                : "bg-[#1e1e3a] text-gray-400"}`}
-            >
-              Annually
-            </button>
-          </div>
-          
-          {/* Pricing Cards */}
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {plans.map((plan, index) => (
-              <div 
-                key={index} 
-                className={`relative bg-[#171728] rounded-3xl overflow-hidden ${plan.popular ? 'border border-indigo-400/30' : ''}`}
-              >
-                {plan.popular && (
-                  <div className="absolute top-0 left-0 right-0 flex justify-center">
-                    <div className="bg-indigo-400/30 text-blue-300 px-4 py-1.5 rounded-b-xl flex items-center text-sm font-medium">
-                      <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 mr-1.5" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z" />
-                      </svg>
-                      Best Deal
-                    </div>
-                  </div>
-                )}
-                
-                <div className="p-8">
-                  <div className="flex justify-between items-start">
-                    <div className="bg-[#222233] rounded-full p-4 w-12 h-12 flex items-center justify-center mb-6">
-                      {index === 0 && <div className="bg-white rounded-full w-4 h-4"></div>}
-                      {index === 1 && <div className="bg-[#696cff] rounded-md w-5 h-5"></div>}
-                      {index === 2 && <div className="bg-white rounded-md transform rotate-45 w-4 h-4"></div>}
-                    </div>
-                    
-                    {plan.discount && (
-                      <div className="bg-blue-500 text-xs rounded-full px-2 py-0.5 font-medium">
-                        {plan.discount}
-                      </div>
-                    )}
-                  </div>
-                  
-                  <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                  <p className="text-gray-400 text-sm mb-4 min-h-[40px]">
-                    {plan.description}
-                  </p>
-                  
-                  <div className="mt-6 mb-2">
-                    <span className="text-5xl font-bold">{plan.price}</span>
-                    {plan.price !== "Free" && <span className="text-gray-400 ml-1">/ month</span>}
-                  </div>
-                  
-                  {plan.extraMonths && (
-                    <div className="text-[#696cff] mb-6 font-semibold">{plan.extraMonths}</div>
-                  )}
-                  
-                  <div className="mt-auto space-y-4">
-                    {plan.features.map((feature, i) => (
-                      <div key={i} className="flex items-center text-sm">
-                        <div className="mr-2 p-1">
-                          <Check size={16} className="text-gray-400" />
-                        </div>
-                        <span className="text-gray-300">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <Button 
-                    className={`w-full mt-8 ${plan.popular 
-                      ? 'bg-indigo-500 hover:bg-indigo-600 text-white' 
-                      : 'bg-[#222233] hover:bg-[#2a2a40] text-white border-0'}`}
-                  >
-                    {plan.buttonText}
-                  </Button>
-                  
-                  {plan.popular && (
-                    <div className="text-center mt-4 text-sm text-gray-400 flex items-center justify-center">
-                      <ShieldCheck size={14} className="mr-1" />
-                      <span>30-day money-back guarantee</span>
-                    </div>
-                  )}
-                  
-                  {!plan.popular && plan.price !== "Free" && (
-                    <div className="text-center mt-4 text-sm text-gray-400 flex items-center justify-center">
-                      <ShieldCheck size={14} className="mr-1" />
-                      <span>30-day money-back guarantee</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        {/* Partners Section */}
-        <div className="py-20">
-          <div className="text-center mb-12">
-            <p className="text-xl text-gray-400 mb-10">
-              Our trusted partners and companies, relying on our safe services.
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 w-full">
+      <Navbar />
+      <div className="pt-16 bg-white dark:bg-gray-950 py-16 flex-grow w-full">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl lg:text-6xl">
+              Simple, transparent pricing for everyone
+            </h1>
+            <p className="mt-6 text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+              Choose the plan that works best for you. All plans include 24/7 support and a 99.9% uptime guarantee.
             </p>
-            
-            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-              {partners.map((partner, index) => (
-                <div key={index} className="text-gray-500 text-2xl md:text-3xl font-bold">
-                  {partner}
-                </div>
-              ))}
-            </div>
           </div>
-        </div>
-        
-        {/* Compare Plans Section */}
-        <div className="py-16">
-          <div className="flex flex-col md:flex-row gap-10">
-            {/* Left column: Compare Plans title */}
-            <div className="w-full md:w-1/4">
-              <h2 className="text-4xl font-bold mb-4">Compare Plans</h2>
-            </div>
-            
-            {/* Right column: Comparison table */}
-            <div className="w-full md:w-3/4">
-              <PlanComparisonTable 
-                plans={plans} 
-                features={features} 
-                featureAvailability={featureAvailability} 
-              />
-            </div>
+          
+          <div className="flex justify-center mb-10">
+            <Tabs value={tab} onValueChange={(v) => setTab(v as "windows" | "linux")} className="w-full">
+              <TabsList className="bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-fit gap-2 mx-auto">
+                <TabsTrigger
+                  value="windows"
+                  className="flex items-center gap-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white px-5 py-2 rounded-lg"
+                >
+                  <Monitor className="w-5 h-5" />
+                  Windows
+                </TabsTrigger>
+                <TabsTrigger
+                  value="linux"
+                  className="flex items-center gap-2 data-[state=active]:bg-green-700 data-[state=active]:text-white px-5 py-2 rounded-lg"
+                >
+                  <FileCode className="w-5 h-5" />
+                  Linux
+                </TabsTrigger>
+              </TabsList>
+              
+              <div className="mt-8">
+                <TabsContent value="windows" className="w-full">
+                  <PricingSection plans={windowsPlans} showDetailedComparison={true} onSelectPlan={handlePlanSelect} />
+                </TabsContent>
+                <TabsContent value="linux" className="w-full">
+                  <PricingSection plans={linuxPlans} showDetailedComparison={true} onSelectPlan={handlePlanSelect} />
+                </TabsContent>
+              </div>
+            </Tabs>
           </div>
         </div>
       </div>
       
-      {/* FAQ Section - Now uses the updated HomeFAQ component */}
-      <HomeFAQ />
+      {/* Add the Feature Highlight Grid with the selected plan */}
+      <FeatureHighlightGrid planName={selectedPlan} />
       
-      {/* Simple footer */}
+      <HomeFAQ />
+      <StatsBanner />
       <SimpleFooter />
     </div>
   );
