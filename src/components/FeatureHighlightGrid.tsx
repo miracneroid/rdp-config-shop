@@ -1,114 +1,130 @@
-
 import React from 'react';
-import { Zap, Shield, MonitorCheck, Globe } from 'lucide-react';
+import { Zap, ShieldCheck, Server, Globe, Settings, Cpu, HardDrive, LayoutList } from 'lucide-react'; // Added Settings, Cpu, HardDrive, LayoutList
+import { Button } from "@/components/ui/button"; // Assuming you have a Button component
+import { Link } from 'react-router-dom'; // For navigation
 
 interface FeatureHighlightGridProps {
-  planName?: string;
+  planName?: string; // Keep this if needed elsewhere, but not directly used for this section's text
 }
 
 const FeatureHighlightGrid: React.FC<FeatureHighlightGridProps> = ({ planName = "Standard" }) => {
   return (
-    <div className="w-full bg-gray-950 py-20">
+    <div className="w-full bg-gray-950 py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <div className="inline-block bg-blue-700 text-white px-4 py-1 rounded-md mb-3">
-            <span className="text-lg font-semibold">Privacy-focused Windows RDPs</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Experience premium performance with our customizable Windows RDPs.
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Deployed instantly with full admin/root access and unmetered bandwidth.
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Left side list */}
-          <div className="space-y-6">
-            <div className="flex items-start">
-              <div className="flex-shrink-0 mt-1">
-                <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
+        {/* Overall grid container for left and right sections */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* Left Column: Main heading, subheading, and ticked features */}
+          <div>
+            <div className="mb-8 text-left">
+              {/* Main heading for customization */}
+              <div className="flex items-baseline mb-4">
+                <div className="inline-block bg-blue-700 text-white px-4 py-1 rounded-md mr-3">
+                  <span className="text-3xl font-semibold">Can't Find Your Perfect Plan?</span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-white">Tailor Your RDP.</h2>
               </div>
-              <p className="ml-3 text-lg text-gray-300">
-                Dedicated resources with guaranteed performance
+              
+              <p className="text-xl text-gray-300">
+                Design your ideal Windows RDP server from scratch. Choose every detail, from CPU to software, and get a machine built just for you.
               </p>
             </div>
             
-            <div className="flex items-start">
-              <div className="flex-shrink-0 mt-1">
-                <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
+            {/* Left side list (benefits of customization) */}
+            <div className="space-y-6">
+              <div className="flex items-start">
+                <div className="flex-shrink-0 mt-1">
+                  <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p className="ml-3 text-lg text-gray-300">
+                  Choose your exact CPU, RAM, and Storage
+                </p>
               </div>
-              <p className="ml-3 text-lg text-gray-300">
-                Instant deployment after payment
-              </p>
-            </div>
-            
-            <div className="flex items-start">
-              <div className="flex-shrink-0 mt-1">
-                <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
+              
+              <div className="flex items-start">
+                <div className="flex-shrink-0 mt-1">
+                  <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p className="ml-3 text-lg text-gray-300">
+                  Select your preferred Operating System
+                </p>
               </div>
-              <p className="ml-3 text-lg text-gray-300">
-                Full administrative control
-              </p>
-            </div>
-            
-            <div className="flex items-start">
-              <div className="flex-shrink-0 mt-1">
-                <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
+              
+              <div className="flex items-start">
+                <div className="flex-shrink-0 mt-1">
+                  <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p className="ml-3 text-lg text-gray-300">
+                  Add specialized software and applications
+                </p>
               </div>
-              <p className="ml-3 text-lg text-gray-300">
-                DMCA ignored hosting
-              </p>
+              
+              <div className="flex items-start">
+                <div className="flex-shrink-0 mt-1">
+                  <svg className="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p className="ml-3 text-lg text-gray-300">
+                  Optimize for your specific workload
+                </p>
+              </div>
+
+              {/* Call to action button */}
+              <div className="mt-10">
+                <Link to="/config-builder"> {/* Link to your ConfigBuilder page */}
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg rounded-full shadow-lg">
+                    Customize Your RDP
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
           
-          {/* Right side grid */}
+          {/* Right Column: Grid of 4 Feature Cards (Customization Aspects) */}
           <div className="grid sm:grid-cols-2 gap-8">
-            <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
-              <div className="mb-4">
-                <Zap size={32} className="text-blue-400" />
+            <div className="p-6 text-left rounded-lg bg-gray-900 border border-gray-800"> {/* Added bg and border */}
+              <div className="mb-4 ml-2">
+                <Settings size={32} className="text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Instant Deployment</h3>
+              <h3 className="text-xl font-bold text-white mb-2">Precision Control</h3>
               <p className="text-gray-400">
-                Servers ready within minutes after payment confirmation.
+                Fine-tune every hardware spec to your exact requirements.
               </p>
             </div>
             
-            <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
-              <div className="mb-4">
-                <Shield size={32} className="text-blue-400" />
+            <div className="p-6 text-left rounded-lg bg-gray-900 border border-gray-800"> {/* Added bg and border */}
+              <div className="mb-4 ml-2">
+                <LayoutList size={32} className="text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">100% Private</h3>
+              <h3 className="text-xl font-bold text-white mb-2">Software Freedom</h3>
               <p className="text-gray-400">
-                Dedicated resources with guaranteed CPU and RAM.
+                Install any application you need without limitations.
               </p>
             </div>
             
-            <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
-              <div className="mb-4">
-                <MonitorCheck size={32} className="text-blue-400" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">Full Admin Access</h3>
-              <p className="text-gray-400">
-                Complete control with administrator privileges.
-              </p>
-            </div>
-            
-            <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
-              <div className="mb-4">
+            <div className="p-6 text-left rounded-lg bg-gray-900 border border-gray-800"> {/* Added bg and border */}
+              <div className="mb-4 ml-2">
                 <Globe size={32} className="text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Global Network</h3>
+              <h3 className="text-xl font-bold text-white mb-2">Global Reach</h3>
               <p className="text-gray-400">
-                Multiple data center locations for optimal latency.
+                Pick the perfect server location for optimal latency.
+              </p>
+            </div>
+            
+            <div className="p-6 text-left rounded-lg bg-gray-900 border border-gray-800"> {/* Added bg and border */}
+              <div className="mb-4 ml-2">
+                <Zap size={32} className="text-blue-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">Scalable Power</h3>
+              <p className="text-gray-400">
+                Adjust resources as your needs evolve, effortlessly.
               </p>
             </div>
           </div>
