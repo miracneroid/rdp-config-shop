@@ -1,12 +1,20 @@
 
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Monitor, Menu, X, LogIn, ChevronDown } from 'lucide-react';
+import { Monitor, Menu, X, LogIn, ChevronDown, Terminal } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import UserMenu from './UserMenu';
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -16,7 +24,6 @@ import {
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isPricingOpen, setIsPricingOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,34 +53,46 @@ const Navbar = () => {
             Home
           </Link>
           
-          {/* Pricing Dropdown */}
-          <div className="relative">
-            <DropdownMenu open={isPricingOpen} onOpenChange={setIsPricingOpen}>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white text-sm font-medium flex items-center gap-1"
-                >
-                  <span>Pricing</span>
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-48 bg-white dark:bg-gray-900 border dark:border-gray-800">
-                <DropdownMenuItem asChild>
-                  <Link to="/windows" className="flex flex-col w-full">
-                    <span className="font-medium">Windows Server</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">Unmetered Windows RDPs</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/linux" className="flex flex-col w-full">
-                    <span className="font-medium">Linux VPS</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">Unmetered Linux Servers</span>
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          {/* New Pricing Dropdown using NavigationMenu */}
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white text-sm font-medium bg-transparent hover:bg-transparent focus:bg-transparent">
+                  Pricing
+                </NavigationMenuTrigger>
+                <NavigationMenuContent className="min-w-[400px] bg-white dark:bg-gray-900 p-2 rounded-lg shadow-lg border border-gray-200 dark:border-gray-800">
+                  <ul className="grid gap-3 p-2">
+                    <li className="row-span-1">
+                      <NavigationMenuLink asChild>
+                        <Link to="/windows" className="flex items-start gap-4 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors">
+                          <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+                            <Monitor className="h-6 w-6 text-gray-700 dark:text-gray-300" />
+                          </div>
+                          <div className="space-y-1">
+                            <h3 className="text-base font-medium text-gray-900 dark:text-white">Windows Servers</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">Unmetered Windows RDPs</p>
+                          </div>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li className="row-span-1">
+                      <NavigationMenuLink asChild>
+                        <Link to="/linux" className="flex items-start gap-4 p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors">
+                          <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md">
+                            <Terminal className="h-6 w-6 text-gray-700 dark:text-gray-300" />
+                          </div>
+                          <div className="space-y-1">
+                            <h3 className="text-base font-medium text-gray-900 dark:text-white">Linux VPS</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">Unmetered Linux servers</p>
+                          </div>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
 
           <Link to="/help" className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 text-sm font-medium">
             Help
@@ -129,13 +148,34 @@ const Navbar = () => {
             >
               Home
             </Link>
-            <Link
-              to="/pricing"
-              className="block px-3 py-2 rounded-md text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Pricing
-            </Link>
+            
+            {/* Pricing section in mobile menu */}
+            <div className="space-y-2 ml-3">
+              <div className="px-3 py-2 font-medium text-gray-800 dark:text-gray-200">Pricing</div>
+              <Link
+                to="/windows"
+                className="flex items-start gap-2 px-3 py-2 rounded-md text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Monitor className="h-5 w-5 mt-0.5" />
+                <div>
+                  <div>Windows Servers</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">Unmetered Windows RDPs</div>
+                </div>
+              </Link>
+              <Link
+                to="/linux"
+                className="flex items-start gap-2 px-3 py-2 rounded-md text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Terminal className="h-5 w-5 mt-0.5" />
+                <div>
+                  <div>Linux VPS</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">Unmetered Linux servers</div>
+                </div>
+              </Link>
+            </div>
+            
             <Link
               to="/help"
               className="block px-3 py-2 rounded-md text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"

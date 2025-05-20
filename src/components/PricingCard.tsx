@@ -2,6 +2,8 @@
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '@/context/CartContext';
+import { useSettings } from '@/context/SettingsContext';
 
 export interface PricingPlan {
   name: string;
@@ -21,8 +23,12 @@ interface PricingCardProps {
 
 const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const { settings } = useSettings();
 
-  const handleChoosePlan = () => {
+  const handleChoosePlan = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering parent onClick
+    
     const cpuCores = parseInt(plan.cpu.split(' ')[0]) || 2;
     const ramGB = parseInt(plan.ram.split(' ')[0]) || 4;
     const storageGB = parseInt(plan.storage.split(' ')[0]) || 64;
@@ -42,12 +48,20 @@ const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
       }
     };
 
+    addToCart(rdpItem);
     navigate('/cart');
+  };
+
+  const handleCardClick = () => {
+    console.log("Card clicked for plan:", plan.name);
+    if (onClick) {
+      onClick();
+    }
   };
 
   return (
     <div
-      onClick={onClick}
+      onClick={handleCardClick}
       className={`
         bg-white dark:bg-[#1e1e2d] rounded-xl p-8 flex flex-col h-full transition-all duration-300 
         shadow-sm hover:shadow-xl border border-transparent dark:border-gray-800
@@ -67,7 +81,7 @@ const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
         <h3 className="text-2xl font-bold text-[#1e2537] dark:text-white mb-4">{plan.name}</h3>
         <div className="flex items-baseline">
           <span className="text-4xl font-bold text-[#1e2537] dark:text-white">
-            {"€"}{plan.price}
+            {settings.currency.symbol}{plan.price}
           </span>
           <span className="ml-1 text-gray-500 dark:text-gray-400">/month</span>
         </div>
@@ -98,10 +112,7 @@ const PricingCard = ({ plan, selected = false, onClick }: PricingCardProps) => {
       </div>
 
       <button
-        onClick={(e) => {
-          e.stopPropagation();
-          handleChoosePlan();
-        }}
+        onClick={handleChoosePlan}
         className={`mt-8 w-full py-3 px-6 rounded-lg font-medium transition-all duration-300
           ${selected
             ? 'bg-blue-600 text-white hover:bg-blue-700'
