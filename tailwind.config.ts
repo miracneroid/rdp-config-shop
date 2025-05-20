@@ -43,6 +43,7 @@ export default {
           purple: "#8B5CF6",
           violet: "#7C3AED",
           indigo: "#4F46E5",
+          white: "#FFFFFF",  // Add white for star-like effect
         },
       },
       fontFamily: {
@@ -51,7 +52,7 @@ export default {
       boxShadow: {
         notion: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
         "notion-lg": "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
-        spotlight: "0 0 30px 10px rgba(139, 92, 246, 0.3)",
+        spotlight: "0 0 30px 10px rgba(255, 255, 255, 0.3)",  // Updated to be whiter
       },
       keyframes: {
         "accordion-down": {
@@ -90,9 +91,14 @@ export default {
           }
         },
         glow: {
-          "0%": { boxShadow: "0 0 15px 5px rgba(139, 92, 246, 0.3)" },
-          "50%": { boxShadow: "0 0 30px 15px rgba(139, 92, 246, 0.5)" },
-          "100%": { boxShadow: "0 0 15px 5px rgba(139, 92, 246, 0.3)" }
+          "0%": { boxShadow: "0 0 15px 5px rgba(255, 255, 255, 0.4)" },  // Whiter glow
+          "50%": { boxShadow: "0 0 30px 15px rgba(255, 255, 255, 0.6)" }, // Whiter glow
+          "100%": { boxShadow: "0 0 15px 5px rgba(255, 255, 255, 0.4)" }  // Whiter glow
+        },
+        star: {
+          "0%": { opacity: "0.3", transform: "scale(0.95)" },
+          "50%": { opacity: "1", transform: "scale(1.05)" },
+          "100%": { opacity: "0.3", transform: "scale(0.95)" }
         }
       },
       animation: {
@@ -104,6 +110,7 @@ export default {
         pulse: "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         spotlight: "spotlight 1.5s ease-out forwards",
         glow: "glow 3s infinite ease-in-out",
+        star: "star 4s infinite ease-in-out",  // New animation for star effect
       },
       transitionDelay: {
         "2000": "2000ms",
