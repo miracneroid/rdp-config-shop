@@ -48,6 +48,10 @@ const HeroGradient: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-[#5525a7]/40 via-transparent to-[#5525a7]/40 rounded-2xl"></div>
           <div className="absolute -inset-0.5 bg-gradient-to-r from-[#6f42c1] to-[#5525a7] rounded-2xl blur-lg opacity-50"></div>
           <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
+            {/* Top corner spotlight gradients - NEW */}
+            <div className="absolute top-0 left-0 w-1/3 h-1/3 bg-gradient-to-br from-[#ffffff]/70 to-transparent z-10"></div>
+            <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-[#ffffff]/70 to-transparent z-10"></div>
+            
             {/* Browser-like top bar */}
             <div className="flex items-center gap-1.5 bg-black p-3 px-4">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>
