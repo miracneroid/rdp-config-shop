@@ -44,9 +44,15 @@ const HeroGradient: React.FC = () => {
           </Link>
         </div>
 
-        {/* Dashboard Image */}
+        {/* Dashboard Image with Diagonal Light Beams */}
         <div className="w-full max-w-5xl mx-auto relative">
-          <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
+          {/* Left diagonal light beam */}
+          <div className="absolute -top-4 -left-4 w-[400px] h-[600px] bg-white/10 blur-2xl rotate-[125deg] rounded-full transform -translate-x-1/4 -translate-y-1/2 opacity-70 z-10"></div>
+          
+          {/* Right diagonal light beam */}
+          <div className="absolute -top-4 -right-4 w-[400px] h-[600px] bg-white/10 blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-10"></div>
+          
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl z-20">
             <div className="flex items-center gap-1.5 bg-black p-3 px-4">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>
               <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
