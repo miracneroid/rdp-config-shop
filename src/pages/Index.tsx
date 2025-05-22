@@ -14,7 +14,7 @@ const Index = () => {
   useScrollAnimation();
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-notion-background font-sans">
+    <div className="w-full min-h-screen flex flex-col bg-notion-background font-sora">
       <MainNavbar />
       <main className="flex-1 flex flex-col w-full">
         <HeroGradient />

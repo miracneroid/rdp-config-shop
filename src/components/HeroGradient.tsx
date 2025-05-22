@@ -5,7 +5,7 @@ import { Sparkles } from 'lucide-react';
 
 const HeroGradient: React.FC = () => {
   return (
-    <section className="relative min-h-screen w-full overflow-hidden">
+    <section className="relative min-h-screen w-full overflow-hidden font-sora">
       {/* Background with deep purple gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#341d6d] via-[#2d1a67] to-[#1c0c55] z-0">
         {/* Grid pattern overlay */}
@@ -26,10 +26,10 @@ const HeroGradient: React.FC = () => {
         </div>
 
         {/* Headline & Subheadline */}
-        <h1 className="text-5xl md:text-7xl font-bold text-center text-white leading-tight mb-6 max-w-5xl">
+        <h1 className="text-5xl md:text-7xl font-bold text-center text-white leading-tight mb-6 max-w-5xl font-sora">
           Revolutionize Your Workflow
         </h1>
-        <p className="text-lg md:text-xl text-center text-white/80 max-w-3xl mb-12">
+        <p className="text-lg md:text-xl text-center text-white/80 max-w-3xl mb-12 font-sora">
           Empowering you to work smarter, not harder, with cutting-edge AI solutions tailored for enhanced productivity.
         </p>
 

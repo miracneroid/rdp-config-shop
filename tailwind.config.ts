@@ -47,7 +47,9 @@ export default {
         },
       },
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["Sora", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        sora: ["Sora", "sans-serif"],
+        inter: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       boxShadow: {
         notion: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
@@ -125,4 +127,3 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-
