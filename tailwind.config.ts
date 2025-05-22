@@ -99,6 +99,10 @@ export default {
           "0%": { opacity: "0.3", transform: "scale(0.95)" },
           "50%": { opacity: "1", transform: "scale(1.05)" },
           "100%": { opacity: "0.3", transform: "scale(0.95)" }
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" }
         }
       },
       animation: {
@@ -111,6 +115,7 @@ export default {
         spotlight: "spotlight 1.5s ease-out forwards",
         glow: "glow 3s infinite ease-in-out",
         star: "star 4s infinite ease-in-out",  // New animation for star effect
+        float: "float 6s infinite ease-in-out",
       },
       transitionDelay: {
         "2000": "2000ms",
