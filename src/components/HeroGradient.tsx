@@ -8,11 +8,42 @@ const HeroGradient: React.FC = () => {
     <section className="relative min-h-screen w-full overflow-hidden font-sora">
       {/* Background with deep purple gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#341d6d] via-[#2d1a67] to-[#1c0c55] z-0">
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNMCAwaDJWNjBoLTJWMHptMjAgMGgyVjYwaC0yVjB6bTIwIDBoMlY2MGgtMlYwek0xMCAwaDJWNjBoLTJWMHptMjAgMGgyVjYwaC0yVjB6bTIwIDBoMlY2MGgtMlYwek01OSAwaDFWNjBoLTFWMHpNMCAwdjJoNjBWMEgwem0wIDIwdjJoNjB2LTJIMHptMCAyMHYyaDYwdi0ySDB6TTAgMTB2Mmg2MHYtMkgwem0wIDIwdjJoNjB2LTJIMHptMCAyMHYyaDYwdi0ySDB6IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIuMDUiLz48L2c+PC9zdmc+')] opacity-30"></div>
+        {/* Large grid pattern overlay */}
+        <div className="absolute inset-0 opacity-30">
+          {/* Horizontal grid lines */}
+          <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+            {[...Array(5)].map((_, i) => (
+              <div key={`h-${i}`} className="w-full border-t border-white/20" style={{ top: `${(i + 1) * 20}%` }}></div>
+            ))}
+          </div>
+          
+          {/* Vertical grid lines */}
+          <div className="absolute inset-0 grid grid-rows-1 md:grid-rows-3 lg:grid-rows-4">
+            {[...Array(5)].map((_, i) => (
+              <div key={`v-${i}`} className="h-full border-l border-white/20" style={{ left: `${(i + 1) * 20}%` }}></div>
+            ))}
+          </div>
+          
+          {/* Grid intersection stars */}
+          {[...Array(16)].map((_, i) => {
+            const row = Math.floor(i / 4);
+            const col = i % 4;
+            return (
+              <div 
+                key={`star-${i}`} 
+                className="absolute w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.6)] animate-star"
+                style={{ 
+                  left: `${(col + 1) * 20}%`, 
+                  top: `${(row + 1) * 20}%`,
+                  animationDelay: `${(col + row) * 0.2}s`
+                }}
+              ></div>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Small star-like particles */}
+      {/* Additional star-like particles */}
       <div className="absolute top-20 right-40 w-2 h-2 rounded-full bg-white shadow-[0_0_10px_3px_rgba(255,255,255,0.5)] animate-star" style={{ animationDelay: '1.2s' }}></div>
       <div className="absolute top-60 left-20 w-1 h-1 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.5)] animate-star" style={{ animationDelay: '0.5s' }}></div>
       <div className="absolute bottom-40 right-80 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_12px_3px_rgba(255,255,255,0.5)] animate-star" style={{ animationDelay: '0.8s' }}></div>
