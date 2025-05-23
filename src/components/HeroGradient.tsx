@@ -4,42 +4,52 @@ import { Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 
 const HeroGradient: React.FC = () => {
+  // Pre-calculate grid points for better performance
+  const gridPoints = React.useMemo(() => {
+    const points = [];
+    // Only generate 16 points (4x4 grid) for better performance
+    for (let i = 0; i < 16; i++) {
+      const row = Math.floor(i / 4);
+      const col = i % 4;
+      points.push({
+        left: `${(col + 1) * 20}%`,
+        top: `${(row + 1) * 20}%`,
+        delay: `${(col + row) * 0.2}s`
+      });
+    }
+    return points;
+  }, []);
+
   return (
     <section className="relative min-h-screen w-full overflow-hidden font-sora">
       {/* Background with deep purple gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#341d6d] via-[#2d1a67] to-[#1c0c55] z-0">
         {/* Large grid pattern overlay */}
         <div className="absolute inset-0 opacity-30">
-          {/* Horizontal grid lines */}
-          <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-            {[...Array(5)].map((_, i) => (
-              <div key={`h-${i}`} className="w-full border-t border-white/20" style={{ top: `${(i + 1) * 20}%` }}></div>
-            ))}
-          </div>
+          {/* Horizontal grid lines - using static JSX instead of array mapping */}
+          <div className="absolute w-full border-t border-white/20" style={{ top: '20%' }}></div>
+          <div className="absolute w-full border-t border-white/20" style={{ top: '40%' }}></div>
+          <div className="absolute w-full border-t border-white/20" style={{ top: '60%' }}></div>
+          <div className="absolute w-full border-t border-white/20" style={{ top: '80%' }}></div>
           
-          {/* Vertical grid lines */}
-          <div className="absolute inset-0 grid grid-rows-1 md:grid-rows-3 lg:grid-rows-4">
-            {[...Array(5)].map((_, i) => (
-              <div key={`v-${i}`} className="h-full border-l border-white/20" style={{ left: `${(i + 1) * 20}%` }}></div>
-            ))}
-          </div>
+          {/* Vertical grid lines - using static JSX instead of array mapping */}
+          <div className="absolute h-full border-l border-white/20" style={{ left: '20%' }}></div>
+          <div className="absolute h-full border-l border-white/20" style={{ left: '40%' }}></div>
+          <div className="absolute h-full border-l border-white/20" style={{ left: '60%' }}></div>
+          <div className="absolute h-full border-l border-white/20" style={{ left: '80%' }}></div>
           
-          {/* Grid intersection stars */}
-          {[...Array(16)].map((_, i) => {
-            const row = Math.floor(i / 4);
-            const col = i % 4;
-            return (
-              <div 
-                key={`star-${i}`} 
-                className="absolute w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.6)] animate-star"
-                style={{ 
-                  left: `${(col + 1) * 20}%`, 
-                  top: `${(row + 1) * 20}%`,
-                  animationDelay: `${(col + row) * 0.2}s`
-                }}
-              ></div>
-            );
-          })}
+          {/* Grid intersection stars - using pre-calculated points */}
+          {gridPoints.map((point, i) => (
+            <div 
+              key={`star-${i}`} 
+              className="absolute w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.6)] animate-star"
+              style={{ 
+                left: point.left, 
+                top: point.top,
+                animationDelay: point.delay
+              }}
+            ></div>
+          ))}
         </div>
       </div>
 

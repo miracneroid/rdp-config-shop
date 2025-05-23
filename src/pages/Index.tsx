@@ -11,6 +11,7 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Index = () => {
+  // Call the hook outside of render for better performance
   useScrollAnimation();
 
   return (
