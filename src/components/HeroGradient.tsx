@@ -84,41 +84,44 @@ const HeroGradient1: React.FC = () => {
 
           {/* Headline & Subheadline */}
           <h1 className="text-6xl text-center text-white leading-tight mb-6 max-w-5xl font-sora z-10">
-            Puzzle RDP{" "}
-            <span className="inline-block bg-[#e6eeff] dark:bg-[#191970] text-[#202f5a] dark:text-[#f1eefc] rounded-md px-2 py-1 animate-[pulse_2.5s_ease-in-out_infinite]">
-              Made Simple
+            Revolutionize Your{" "}
+            <span className="inline-block bg-gradient-to-r from-purple-400 to-blue-400 text-transparent bg-clip-text animate-[pulse_2.5s_ease-in-out_infinite]">
+              Workflow
             </span>
           </h1>
           <p className="text-base text-center text-white/90 max-w-5xl -mt-5 mb-8 font-sora z-10">
-            Deploy secure, high-performance remote desktop environments tailored to your exact specifications within minutes.
+            Empowering you to work smarter, not harder, with cutting-edge AI solutions tailored for enhanced productivity.
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-4 justify-center mb-16 z-10">
-            <Link to="/configure" className="bg-[#1241b8] hover:bg-[#2525cf] text-white/95 px-6 py-3.5 rounded-full transition-all flex items-center gap-2">
+            <Link to="/configure" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3.5 rounded-full transition-all flex items-center gap-2">
               <Sparkles className="h-5 w-5" />
               Get Started Now
             </Link>
-            <Link to="/pricing" className="text-[#3b1694] bg-gray-100 px-7 py-3.5 rounded-full transition-all">
+            <Link to="/pricing" className="text-purple-900 bg-white hover:bg-gray-100 px-7 py-3.5 rounded-full transition-all">
               Explore Free
             </Link>
           </div>
 
           <div className="w-full max-w-[65rem] mx-auto relative">
-            {/* Purple gradient glow effect behind dashboard - matching screenshot */}
+            {/* Exact purple gradient glow effect matching the screenshot */}
             <div className="absolute inset-0 w-full h-full">
-              {/* Main purple gradient background */}
-              <div className="absolute inset-0 bg-gradient-to-b from-purple-600/30 via-purple-800/40 to-purple-900/50 blur-3xl transform scale-110"></div>
+              {/* Main intense purple gradient - positioned higher and more concentrated */}
+              <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[120%] h-[140%] bg-gradient-radial from-purple-500/60 via-purple-600/40 to-transparent blur-[80px]"></div>
               
-              {/* Secondary gradient for depth */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/25 to-transparent blur-2xl"></div>
+              {/* Secondary purple layer for depth */}
+              <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[100%] h-[120%] bg-gradient-radial from-purple-400/50 via-purple-500/30 to-transparent blur-[60px]"></div>
               
-              {/* Bottom gradient glow */}
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-3/5 bg-gradient-to-t from-purple-600/40 via-purple-700/30 to-transparent blur-3xl"></div>
+              {/* Bottom purple glow to match screenshot */}
+              <div className="absolute bottom-[-30%] left-1/2 -translate-x-1/2 w-[140%] h-[80%] bg-gradient-radial from-purple-600/70 via-purple-700/40 to-transparent blur-[100px]"></div>
               
-              {/* Side gradients for width */}
-              <div className="absolute top-1/4 left-0 w-1/3 h-1/2 bg-gradient-to-r from-purple-600/20 to-transparent blur-2xl"></div>
-              <div className="absolute top-1/4 right-0 w-1/3 h-1/2 bg-gradient-to-l from-purple-600/20 to-transparent blur-2xl"></div>
+              {/* Side purple glows */}
+              <div className="absolute top-1/4 left-[-20%] w-[60%] h-[60%] bg-gradient-radial from-purple-500/40 to-transparent blur-[60px]"></div>
+              <div className="absolute top-1/4 right-[-20%] w-[60%] h-[60%] bg-gradient-radial from-purple-500/40 to-transparent blur-[60px]"></div>
+              
+              {/* Inner intense glow */}
+              <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[80%] h-[50%] bg-gradient-radial from-purple-400/60 via-purple-500/40 to-transparent blur-[40px]"></div>
             </div>
 
             {/* Dashboard Image */}
