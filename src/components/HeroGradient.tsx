@@ -94,35 +94,24 @@ const HeroGradient1: React.FC = () => {
         </div>
 
         <div className="w-full max-w-[65rem] mx-auto relative">
+          {/* Purple gradient glow effect behind dashboard - matching screenshot */}
+          <div className="absolute inset-0 w-full h-full">
+            {/* Main purple gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-b from-purple-600/30 via-purple-800/40 to-purple-900/50 blur-3xl transform scale-110"></div>
+            
+            {/* Secondary gradient for depth */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/25 to-transparent blur-2xl"></div>
+            
+            {/* Bottom gradient glow */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-3/5 bg-gradient-to-t from-purple-600/40 via-purple-700/30 to-transparent blur-3xl"></div>
+            
+            {/* Side gradients for width */}
+            <div className="absolute top-1/4 left-0 w-1/3 h-1/2 bg-gradient-to-r from-purple-600/20 to-transparent blur-2xl"></div>
+            <div className="absolute top-1/4 right-0 w-1/3 h-1/2 bg-gradient-to-l from-purple-600/20 to-transparent blur-2xl"></div>
+          </div>
 
-        {/* Left diagonal light beam Layer-1 (Superset)*/}
-        <div className="absolute -top-4 -left-4 w-[850px] h- bg-[#5902ed] blur-2xl rotate-[125deg] rounded-full transform -translate-x-1/4 -translate-y-1/2 opacity-70 z-1"></div> {/* Changed from z-5 to z-5 */}
-        {/* Left diagonal light beam Layer-2 (Superset)*/}
-        <div className="absolute -top-4 -left-4 w-[750px] h- bg-[#502894] blur-2xl rotate-[125deg] rounded-full transform -translate-x-1/4 -translate-y-1/2 opacity-70 z-2"></div> {/* Changed from z-5 to z-5 */}
-        {/* Left diagonal light beam Layer-3 (Superset)*/}
-        <div className="absolute -top-4 -left-4 w-[650px] h- bg-[#3c2478] blur-2xl rotate-[125deg] rounded-full transform -translate-x-1/4 -translate-y-1/2 opacity-70 z-3"></div> {/* Changed from z-5 to z-5 */}
-        {/* Left diagonal light beam Layer-4 (Subset of 1, Superset of 3)*/}
-        <div className="absolute -top-4 -left-4 w-[375px] h- bg-[#643fb9] blur-2xl rotate-[125deg] rounded-full transform -translate-x-1/4 -translate-y-1/2 opacity-70 z-4"></div> {/* Changed from z-5 to z-5 */}
-        {/* Left diagonal light beam Layer-5 (Smallest Subset)*/}
-        <div className="absolute -top-8 -left-4 w-[315px] h-[400px] bg-[#b29cd8] blur-2xl rotate-[125deg] rounded-full transform -translate-x-1/4 -translate-y-1/2 opacity-70 z-5"></div> {/* Changed from z-5 to z-5 */}
-
-        {/* Right diagonal light beam Layer-1 (Superset)*/}
-        <div className="absolute -top-4 -right-4 w-[850px] h- bg-[#5902ed] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-1"></div> {/* Changed from z-5 to z-5 */}
-        {/* Right diagonal light beam Layer-2 (Superset)*/}
-        <div className="absolute -top-4 -right-4 w-[750px] h- bg-[#502894] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-2"></div> {/* Changed from z-5 to z-5 */}
-        {/* Right diagonal light beam Layer-3 (Superset)*/}
-        <div className="absolute -top-4 -right-4 w-[650px] h- bg-[#3c2478] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-3"></div> {/* Changed from z-5 to z-5 */}
-        {/* Right diagonal light beam Layer-4 (Subset of 1, Superset of 3)*/}
-        <div className="absolute -top-4 -right-4 w-[375px] h- bg-[#643fb9] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-4"></div> {/* Changed from z-5 to z-5 */}
-        {/* Right diagonal light beam Layer-5 (Smallest Subset)*/}
-        <div className="absolute -top-8 -right-4 w-[315px] h-[400px] bg-[#b29cd8] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-5"></div> {/* Changed from z-5 to z-5 */}
-
-        {/* Dashboard Image with Heart Shape Light Behind */}
-        <div className="w-full max-w-[65rem] mx-auto relative">
-          {/* Heart Shape Light Behind Dashboard */}
-          <div className="heart-light-behind-dashboard"></div>
-
-          <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl z-20"> {/* z-20 for dashboard */}
+          {/* Dashboard Image */}
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl z-20">
             <div className="flex items-center gap-1.5 bg-black p-3 px-4">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>
               <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -142,50 +131,9 @@ const HeroGradient1: React.FC = () => {
               draggable="false"
             />
           </div>
-
-          {/* This bottom lighting effect remains */}
-          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 h-40 bg-[#6f42c1]/30 blur-3xl rounded-full"></div>
         </div>
       </div>
       </div>      
-      
-      {/* Inlined CSS for the heart shape light */}
-      <style dangerouslySetInnerHTML={{
-          __html: `
-            .heart-light-behind-dashboard {
-              position: absolute;
-              width: 500px; /* Adjust size of the heart */
-              height: 500px;
-              top: %; /* Position to center it behind the dashboard */
-              left: 50%;
-              transform: translate(-50%, -50%) rotate(-45deg); /* Center and rotate to form heart */
-              background-color:#643fb9; /* Base pink/purple color for the heart */
-              filter: blur(100px); /* Strong blur for diffuse glow */
-              opacity: 0.3; /* Subtle opacity for the glow */
-              z-index: 15; /* Behind dashboard (z-20) but in front of content (z-10) */
-            }
-
-            .heart-light-behind-dashboard::before,
-            .heart-light-behind-dashboard::after {
-              content: '';
-              position: absolute;
-              width: 100%;
-              height: 100%;
-              background-color:rgb(85, 16, 202); /* Same color as parent */
-              border-radius: 50%; /* Make top parts rounded */
-            }
-
-            .heart-light-behind-dashboard::before {
-              top: -50%;
-              left: 0;
-            }
-
-            .heart-light-behind-dashboard::after {
-              top: 0;
-              left: 50%;
-            }
-          `
-        }} />
     </section>
   );
 };
