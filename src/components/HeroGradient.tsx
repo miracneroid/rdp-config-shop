@@ -2,7 +2,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
-import Star from '@/components/ui/star';
 
 const HeroGradient1: React.FC = () => {
   // Pre-calculate grid points for better performance
@@ -26,8 +25,20 @@ const HeroGradient1: React.FC = () => {
       {/* Background with deep purple gradient */}
       <div className="absolute inset-0 bg-black">
       
-        {/* Stars*/}
-        <Star />
+        {/* Simple star field effect */}
+        <div className="absolute inset-0">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-white rounded-full opacity-50 animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`
+              }}
+            />
+          ))}
+        </div>
         
         {/* Large grid pattern overlay */}
         <div className="absolute inset-0 opacity-30 z-10">
