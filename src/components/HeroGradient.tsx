@@ -105,24 +105,27 @@ const HeroGradient1: React.FC = () => {
           </div>
 
           <div className="w-full max-w-[65rem] mx-auto relative">
-            {/* Exact purple gradient glow effect matching the screenshot */}
-            <div className="absolute inset-0 w-full h-full">
-              {/* Main intense purple gradient - positioned higher and more concentrated */}
-              <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[120%] h-[140%] bg-gradient-radial from-purple-500/60 via-purple-600/40 to-transparent blur-[80px]"></div>
-              
-              {/* Secondary purple layer for depth */}
-              <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[100%] h-[120%] bg-gradient-radial from-purple-400/50 via-purple-500/30 to-transparent blur-[60px]"></div>
-              
-              {/* Bottom purple glow to match screenshot */}
-              <div className="absolute bottom-[-30%] left-1/2 -translate-x-1/2 w-[140%] h-[80%] bg-gradient-radial from-purple-600/70 via-purple-700/40 to-transparent blur-[100px]"></div>
-              
-              {/* Side purple glows */}
-              <div className="absolute top-1/4 left-[-20%] w-[60%] h-[60%] bg-gradient-radial from-purple-500/40 to-transparent blur-[60px]"></div>
-              <div className="absolute top-1/4 right-[-20%] w-[60%] h-[60%] bg-gradient-radial from-purple-500/40 to-transparent blur-[60px]"></div>
-              
-              {/* Inner intense glow */}
-              <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[80%] h-[50%] bg-gradient-radial from-purple-400/60 via-purple-500/40 to-transparent blur-[40px]"></div>
-            </div>
+            {/* Left diagonal light beam Layer-1 (Superset)*/}
+            <div className="absolute -top-4 -left-4 w-[850px] h-[600px] bg-[#5902ed] blur-2xl rotate-[125deg] rounded-full transform -translate-x-1/4 -translate-y-1/2 opacity-70 z-1"></div>
+            {/* Left diagonal light beam Layer-2 (Superset)*/}
+            <div className="absolute -top-4 -left-4 w-[750px] h-[500px] bg-[#502894] blur-2xl rotate-[125deg] rounded-full transform -translate-x-1/4 -translate-y-1/2 opacity-70 z-2"></div>
+            {/* Left diagonal light beam Layer-3 (Superset)*/}
+            <div className="absolute -top-4 -left-4 w-[650px] h-[450px] bg-[#3c2478] blur-2xl rotate-[125deg] rounded-full transform -translate-x-1/4 -translate-y-1/2 opacity-70 z-3"></div>
+            {/* Left diagonal light beam Layer-4 (Subset of 1, Superset of 3)*/}
+            <div className="absolute -top-4 -left-4 w-[375px] h-[350px] bg-[#643fb9] blur-2xl rotate-[125deg] rounded-full transform -translate-x-1/4 -translate-y-1/2 opacity-70 z-4"></div>
+            {/* Left diagonal light beam Layer-5 (Smallest Subset)*/}
+            <div className="absolute -top-8 -left-4 w-[315px] h-[400px] bg-[#b29cd8] blur-2xl rotate-[125deg] rounded-full transform -translate-x-1/4 -translate-y-1/2 opacity-70 z-5"></div>
+
+            {/* Right diagonal light beam Layer-1 (Superset)*/}
+            <div className="absolute -top-4 -right-4 w-[850px] h-[600px] bg-[#5902ed] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-1"></div>
+            {/* Right diagonal light beam Layer-2 (Superset)*/}
+            <div className="absolute -top-4 -right-4 w-[750px] h-[500px] bg-[#502894] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-2"></div>
+            {/* Right diagonal light beam Layer-3 (Superset)*/}
+            <div className="absolute -top-4 -right-4 w-[650px] h-[450px] bg-[#3c2478] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-3"></div>
+            {/* Right diagonal light beam Layer-4 (Subset of 1, Superset of 3)*/}
+            <div className="absolute -top-4 -right-4 w-[375px] h-[350px] bg-[#643fb9] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-4"></div>
+            {/* Right diagonal light beam Layer-5 (Smallest Subset)*/}
+            <div className="absolute -top-8 -right-4 w-[315px] h-[400px] bg-[#b29cd8] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-5"></div>
 
             {/* Dashboard Image */}
             <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl z-20">
@@ -145,6 +148,9 @@ const HeroGradient1: React.FC = () => {
                 draggable="false"
               />
             </div>
+
+            {/* This bottom lighting effect remains */}
+            <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 h-40 bg-[#6f42c1]/30 blur-3xl rounded-full"></div>
           </div>
         </div>
       </div>      
