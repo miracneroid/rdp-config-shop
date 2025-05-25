@@ -136,7 +136,7 @@ const HeroGradient1: React.FC = () => {
                 <div className="flex-1"></div>
               </div>
               <img
-                src="/assets/images/dashboard.png"
+                src="/public/lovable-uploads/dashboard-v3-dark-DkIL4YRw.webp"
                 alt="TaskFlow AI Dashboard"
                 className="w-full h-auto object-cover object-top"
                 draggable="false"
