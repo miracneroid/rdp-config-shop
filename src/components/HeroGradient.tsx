@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, ArrowRight, Shield, Zap, Globe } from 'lucide-react';
 
-const HeroGradient1: React.FC = () => {
+const HeroGradient: React.FC = () => {
   // Pre-calculate grid points for better performance
   const gridPoints = React.useMemo(() => {
     const points = [];
@@ -19,6 +19,21 @@ const HeroGradient1: React.FC = () => {
     }
     return points;
   }, []);
+
+  const features = [
+    {
+      icon: <Zap className="h-5 w-5" />,
+      text: "Deploy in 5 minutes"
+    },
+    {
+      icon: <Shield className="h-5 w-5" />,
+      text: "99.9% uptime guarantee"
+    },
+    {
+      icon: <Globe className="h-5 w-5" />,
+      text: "Global data centers"
+    }
+  ];
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden font-sora bg-black">
@@ -79,28 +94,43 @@ const HeroGradient1: React.FC = () => {
           {/* Badge */}
           <div className="bg-[rgba(255,255,255,0.1)] mt-24 backdrop-blur-sm px-4 py-1.5 rounded-full flex items-center gap-2 mb-8 border border-white/20 text-white">
             <Sparkles className="h-4 w-4 text-white" />
-            <span className="text-sm font-medium tracking-wide">#1 BEST AI-POWERED TASKFLOW</span>
+            <span className="text-sm font-medium tracking-wide">#1 PREMIUM RDP HOSTING</span>
           </div>
 
           {/* Headline & Subheadline */}
           <h1 className="text-6xl text-center text-white leading-tight mb-6 max-w-5xl font-sora z-10">
-            Revolutionize Your{" "}
+            Professional{" "}
             <span className="inline-block bg-gradient-to-r from-purple-400 to-blue-400 text-transparent bg-clip-text animate-[pulse_2.5s_ease-in-out_infinite]">
-              Workflow
+              Remote Desktop
             </span>
+            <br />
+            Solutions
           </h1>
-          <p className="text-base text-center text-white/90 max-w-5xl -mt-5 mb-8 font-sora z-10">
-            Empowering you to work smarter, not harder, with cutting-edge AI solutions tailored for enhanced productivity.
+          <p className="text-xl text-center text-white/90 max-w-4xl -mt-5 mb-6 font-sora z-10">
+            Deploy secure, high-performance RDP servers in minutes. Choose from Windows or Linux environments with enterprise-grade security and 24/7 support.
           </p>
+
+          {/* Feature highlights */}
+          <div className="flex flex-wrap gap-6 justify-center mb-8 z-10">
+            {features.map((feature, index) => (
+              <div key={index} className="flex items-center gap-2 text-white/80 text-sm">
+                <div className="text-green-400">
+                  {feature.icon}
+                </div>
+                <span>{feature.text}</span>
+              </div>
+            ))}
+          </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-4 justify-center mb-16 z-10">
-            <Link to="/configure" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3.5 rounded-full transition-all flex items-center gap-2">
+            <Link to="/pricing" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 rounded-full transition-all flex items-center gap-2 text-lg font-semibold transform hover:scale-105">
               <Sparkles className="h-5 w-5" />
               Get Started Now
+              <ArrowRight className="h-5 w-5" />
             </Link>
-            <Link to="/pricing" className="text-purple-900 bg-white hover:bg-gray-100 px-7 py-3.5 rounded-full transition-all">
-              Explore Free
+            <Link to="/pricing" className="text-gray-300 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 px-8 py-4 rounded-full transition-all text-lg font-semibold">
+              View Pricing
             </Link>
           </div>
 
@@ -125,7 +155,7 @@ const HeroGradient1: React.FC = () => {
             {/* Right diagonal light beam Layer-4 (Subset of 1, Superset of 3)*/}
             <div className="absolute -top-4 -right-4 w-[375px] h-[350px] bg-[#643fb9] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-4"></div>
             {/* Right diagonal light beam Layer-5 (Smallest Subset)*/}
-            <div className="absolute -top-8 -right-4 w-[315px] h-[400px] bg-[#b29cd8] blur-2xl rotate-[235deg] rounded-full transform translate-x-1/4 -translate-y-1/2 opacity-70 z-5"></div>
+            <div className="absolute -top-8 -right-4 w-[315px] h-[400px] bg-[#b29cd8] blur-2xl rotate-[235deg] rounded-full transform translate_x-1/4 -translate-y-1/2 opacity-70 z-5"></div>
 
             {/* Dashboard Image */}
             <div className="relative overflow-hidden rounded-2xl border border-white/10 shadow-2xl z-20">
@@ -135,15 +165,15 @@ const HeroGradient1: React.FC = () => {
                 <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 <div className="flex-1"></div>
                 <div className="flex gap-3 text-white/50 text-xs">
-                  <span>Dashboard</span>
-                  <span>Digital tokens</span>
-                  <span>Analytics</span>
+                  <span>Puzzle RDP</span>
+                  <span>Control Panel</span>
+                  <span>Management</span>
                 </div>
                 <div className="flex-1"></div>
               </div>
               <img
-                src="/public/lovable-uploads/dashboard-v3-dark-DkIL4YRw.webp"
-                alt="TaskFlow AI Dashboard"
+                src="/lovable-uploads/dashboard-v3-dark-DkIL4YRw.webp"
+                alt="Puzzle RDP Dashboard"
                 className="w-full h-auto object-cover object-top"
                 draggable="false"
               />
@@ -152,10 +182,22 @@ const HeroGradient1: React.FC = () => {
             {/* This bottom lighting effect remains */}
             <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-3/4 h-40 bg-[#6f42c1]/30 blur-3xl rounded-full"></div>
           </div>
+
+          {/* Trust indicators */}
+          <div className="mt-16 text-center z-10">
+            <p className="text-white/60 text-sm mb-4">Trusted by thousands of professionals worldwide</p>
+            <div className="flex flex-wrap justify-center gap-8 items-center opacity-60">
+              <div className="text-white/50 text-sm font-medium">Enterprise Grade Security</div>
+              <div className="w-1 h-1 bg-white/30 rounded-full"></div>
+              <div className="text-white/50 text-sm font-medium">ISO 27001 Certified</div>
+              <div className="w-1 h-1 bg-white/30 rounded-full"></div>
+              <div className="text-white/50 text-sm font-medium">24/7 Expert Support</div>
+            </div>
+          </div>
         </div>
       </div>      
     </section>
   );
 };
 
-export default HeroGradient1;
+export default HeroGradient;
